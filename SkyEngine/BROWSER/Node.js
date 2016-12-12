@@ -1,5 +1,8 @@
 /**
  * 트리 구조를 정의하기 위한 Node 클래스 
+ * 
+ * + 이동 처리
+ * + 회전 처리
  */
 SkyEngine.Node = CLASS({
 
@@ -61,6 +64,9 @@ SkyEngine.Node = CLASS({
 		// off.
 		off,
 		
+		// fire event.
+		fireEvent,
+		
 		// on meet.
 		onMeet,
 		
@@ -91,6 +97,12 @@ SkyEngine.Node = CLASS({
 		// get z.
 		getZ,
 		
+		// add collider.
+		addCollider,
+		
+		// add touch area.
+		addTouchArea,
+		
 		// move.
 		move,
 		
@@ -101,21 +113,21 @@ SkyEngine.Node = CLASS({
 		draw;
 		
 		if (params !== undefined) {
-			
 			x = params.x;
-			if (x === undefined) {
-				x = 0;
-			}
-			
 			y = params.y;
-			if (y === undefined) {
-				y = 0;
-			}
-			
 			z = params.z;
-			if (z === undefined) {
-				z = 0;
-			}
+		}
+		
+		if (x === undefined) {
+			x = 0;
+		}
+		
+		if (y === undefined) {
+			y = 0;
+		}
+		
+		if (z === undefined) {
+			z = 0;
 		}
 		
 		self.getChildren = getChildren = function() {
@@ -132,7 +144,7 @@ SkyEngine.Node = CLASS({
 			minIndex = 0,
 			
 			// max index
-			maxIndex = parentChildren.length - 1,
+			maxIndex = parentChildren.length,
 			
 			// index
 			index = 0,
@@ -142,15 +154,16 @@ SkyEngine.Node = CLASS({
 
 			while (minIndex <= maxIndex) {
 				
-				index = Math.floor((minIndex + maxIndex) / 2);
+				index = Math.ceil((minIndex + maxIndex) / 2);
+				if (index === maxIndex) {
+					break;
+				}
+				
 				node = parentChildren[index];
-
-				if (node.getZ() < z) {
+				if (node.getZ() <= z) {
 					minIndex = index + 1;
 				} else if (node.getZ() > z) {
 					maxIndex = index - 1;
-				} else {
-					break;
 				}
 			}
 			
@@ -167,7 +180,7 @@ SkyEngine.Node = CLASS({
 			minIndex = 0,
 			
 			// max index
-			maxIndex = parentChildren.length - 1,
+			maxIndex = parentChildren.length,
 			
 			// index
 			index = 0,
@@ -180,10 +193,13 @@ SkyEngine.Node = CLASS({
 
 			while (minIndex <= maxIndex) {
 				
-				index = Math.floor((minIndex + maxIndex) / 2);
+				index = Math.ceil((minIndex + maxIndex) / 2);
+				if (index === maxIndex) {
+					break;
+				}
+				
 				node = parentChildren[index];
-
-				if (node.getZ() < z) {
+				if (node.getZ() <= z) {
 					minIndex = index + 1;
 				} else if (node.getZ() > z) {
 					maxIndex = index - 1;
@@ -241,6 +257,26 @@ SkyEngine.Node = CLASS({
 			
 		};
 		
+		self.fireEvent = fireEvent = function() {
+			
+		};
+		
+		self.setX = setX = function(_x) {
+			x = _x;
+		};
+		
+		self.getX = getX = function() {
+			return x;
+		};
+		
+		self.setY = setY = function(_y) {
+			y = _y;
+		};
+		
+		self.getY = getY = function() {
+			return y;
+		};
+		
 		self.setZ = setZ = function(_z) {
 			
 			if (parentNode !== undefined) {
@@ -250,12 +286,15 @@ SkyEngine.Node = CLASS({
 			}
 		};
 		
-		self.draw = draw = function(gl) {
+		self.getZ = getZ = function() {
+			return z;
+		};
+		
+		self.draw = draw = function(context, deltaTime, parentRealX, parentRealY) {
 			
-			gl.clearColor(255.0, 255.0, 255.0, 1.0);
-			gl.enable(gl.DEPTH_TEST);
-			gl.depthFunc(gl.LEQUAL);
-			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+			childNodes.forEach(function(childNode) {
+				childNode.draw(context, deltaTime, parentRealX + x, parentRealY + y);
+			});
 		};
 	}
 });
