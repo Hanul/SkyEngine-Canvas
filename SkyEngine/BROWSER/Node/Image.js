@@ -18,10 +18,14 @@ SkyEngine.Image = CLASS({
 		//OPTIONAL: params.y
 		//OPTIONAL: params.z
 		//REQUIRED: params.src
+		//OPTIONAL: params.scale
 		
 		var
 		// src
 		src = params.src,
+		
+		// scale
+		scale = params.scale,
 		
 		// img
 		img,
@@ -37,6 +41,10 @@ SkyEngine.Image = CLASS({
 		
 		// draw.
 		draw;
+		
+		if (scale === undefined) {
+			scale = 1;
+		}
 		
 		self.setSrc = setSrc = function(_src) {
 			src = _src;
@@ -58,11 +66,16 @@ SkyEngine.Image = CLASS({
 		
 		OVERRIDE(self.draw, function(origin) {
 			
-			self.draw = draw = function(context, deltaTime, parentRealX, parentRealY) {
+			self.draw = draw = function(context, parentRealX, parentRealY) {
 				
-				context.drawImage(img, parentRealX + self.getX() - width / 2, parentRealY + self.getY() - height / 2);
+				context.drawImage(
+					img,
+					parentRealX + self.getX() - width * scale / 2,
+					parentRealY + self.getY() - height * scale / 2,
+					width * scale,
+					height * scale);
 				
-				origin(context, deltaTime, parentRealX, parentRealY);
+				origin(context, parentRealX, parentRealY);
 			};
 		});
 	}

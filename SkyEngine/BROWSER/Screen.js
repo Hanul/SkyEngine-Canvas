@@ -28,6 +28,12 @@ SkyEngine.Screen = OBJECT({
 		// context
 		context = canvas.getContext('2d'),
 		
+		// canvas width
+		canvasWidth,
+		
+		// canvas height
+		canvasHeight,
+		
 		// loop
 		loop,
 		
@@ -42,23 +48,21 @@ SkyEngine.Screen = OBJECT({
 		
 		loop = LOOP(function(deltaTime) {
 			
-			var
-			// canvas width
-			canvasWidth = canvas.getWidth(),
-			
-			// canvas height
-			canvasHeight = canvas.getHeight();
+			self.step(deltaTime);
 			
 			context.clearRect(0, 0, canvasWidth, canvasHeight);
 			
-			self.draw(context, deltaTime, canvasWidth / 2, canvasHeight / 2);
+			self.draw(context, canvasWidth / 2, canvasHeight / 2);
 		});
 		
 		EVENT('resize', RAR(function() {
 			
+			canvasWidth = WIN_WIDTH();
+			canvasHeight = WIN_HEIGHT();
+			
 			canvas.setSize({
-				width : WIN_WIDTH(),
-				height : WIN_HEIGHT()
+				width : canvasWidth,
+				height : canvasHeight
 			});
 		}));
 		

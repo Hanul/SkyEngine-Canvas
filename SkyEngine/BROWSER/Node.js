@@ -31,6 +31,12 @@ SkyEngine.Node = CLASS({
 		// z
 		z,
 		
+		// speed x
+		speedX = 0,
+		
+		// speed y
+		speedY = 0,
+		
 		// get children.
 		getChildren,
 
@@ -103,11 +109,35 @@ SkyEngine.Node = CLASS({
 		// add touch area.
 		addTouchArea,
 		
-		// move.
-		move,
+		// move left.
+		moveLeft,
+		
+		// stop left.
+		stopLeft,
+		
+		// move right.
+		moveRight,
+		
+		// stop right.
+		stopRight,
+		
+		// move up.
+		moveUp,
+		
+		// stop up.
+		stopUp,
+		
+		// move down.
+		moveDown,
+		
+		// stop down.
+		stopDown,
 		
 		// stop.
 		stop,
+		
+		// step.
+		step,
 		
 		// draw.
 		draw;
@@ -144,30 +174,30 @@ SkyEngine.Node = CLASS({
 			minIndex = 0,
 			
 			// max index
-			maxIndex = parentChildren.length,
+			maxIndex = parentChildren.length - 1,
 			
 			// index
-			index = 0,
+			index = -1,
 			
 			// node
 			node;
-
+			
 			while (minIndex <= maxIndex) {
 				
 				index = Math.ceil((minIndex + maxIndex) / 2);
-				if (index === maxIndex) {
-					break;
-				}
 				
 				node = parentChildren[index];
-				if (node.getZ() <= z) {
+				
+				if (node.getZ() < z) {
 					minIndex = index + 1;
 				} else if (node.getZ() > z) {
 					maxIndex = index - 1;
+				} else {
+					break;
 				}
 			}
 			
-			parentChildren.splice(index, 0, self);
+			parentChildren.splice(index + 1, 0, self);
 		};
 		
 		removeFromParent = function() {
@@ -180,10 +210,10 @@ SkyEngine.Node = CLASS({
 			minIndex = 0,
 			
 			// max index
-			maxIndex = parentChildren.length,
+			maxIndex = parentChildren.length - 1,
 			
 			// index
-			index = 0,
+			index = -1,
 			
 			// node
 			node,
@@ -194,18 +224,14 @@ SkyEngine.Node = CLASS({
 			while (minIndex <= maxIndex) {
 				
 				index = Math.ceil((minIndex + maxIndex) / 2);
-				if (index === maxIndex) {
-					break;
-				}
 				
 				node = parentChildren[index];
-				if (node.getZ() <= z) {
+				
+				if (node.getZ() < z) {
 					minIndex = index + 1;
 				} else if (node.getZ() > z) {
 					maxIndex = index - 1;
-				}
-				
-				else if (node.getZ() === z) {
+				} else {
 					
 					while (true) {
 						
@@ -253,6 +279,16 @@ SkyEngine.Node = CLASS({
 			node.appendTo(self);
 		};
 		
+		self.remove = remove = function() {
+			
+			if (parentNode !== undefined) {
+				
+				removeFromParent();
+				
+				parentNode = undefined;
+			}
+		};
+		
 		self.on = on = function() {
 			
 		};
@@ -290,10 +326,70 @@ SkyEngine.Node = CLASS({
 			return z;
 		};
 		
-		self.draw = draw = function(context, deltaTime, parentRealX, parentRealY) {
+		self.moveLeft = moveLeft = function(speed) {
+			speedX = -speed;
+		};
+		
+		self.stopLeft = stopLeft = function() {
+			if (speedX < 0) {
+				speedX = 0;
+			}
+		};
+		
+		self.moveRight = moveRight = function(speed) {
+			speedX = speed;
+		};
+		
+		self.stopRight = stopRight = function() {
+			if (speedX > 0) {
+				speedX = 0;
+			}
+		};
+		
+		self.moveUp = moveUp = function(speed) {
+			speedY = -speed;
+		};
+		
+		self.stopUp = stopUp = function() {
+			if (speedY < 0) {
+				speedY = 0;
+			}
+		};
+		
+		self.moveDown = moveDown = function(speed) {
+			speedY = speed;
+		};
+		
+		self.stopDown = stopDown = function() {
+			if (speedY > 0) {
+				speedY = 0;
+			}
+		};
+		
+		self.stop = stop = function() {
+			speedX = 0;
+			speedY = 0;
+		};
+		
+		self.step = step = function(deltaTime) {
+			
+			if (speedX !== 0) {
+				x += speedX * 1 / deltaTime;
+			}
+			
+			if (speedY !== 0) {
+				y += speedY * 1 / deltaTime;
+			}
 			
 			childNodes.forEach(function(childNode) {
-				childNode.draw(context, deltaTime, parentRealX + x, parentRealY + y);
+				childNode.step(deltaTime);
+			});
+		};
+		
+		self.draw = draw = function(context, parentRealX, parentRealY) {
+			
+			childNodes.forEach(function(childNode) {
+				childNode.draw(context, parentRealX + x, parentRealY + y);
 			});
 		};
 	}

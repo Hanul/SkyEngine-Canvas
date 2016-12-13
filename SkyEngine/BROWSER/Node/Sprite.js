@@ -17,15 +17,20 @@ SkyEngine.Sprite = CLASS({
 		//OPTIONAL: params.x
 		//OPTIONAL: params.y
 		//OPTIONAL: params.z
-		//REQUIRED: params.src
+		//OPTIONAL: params.src
+		//OPTIONAL: params.srcs
 		//OPTIONAL: params.spriteWidth
 		//OPTIONAL: params.spriteHeight
 		//OPTIONAL: params.frameCount
 		//OPTIONAL: params.fps
+		//OPTIONAL: params.scale
 		
 		var
 		// src
 		src = params.src,
+		
+		// srcs
+		srcs = params.srcs,
 		
 		// sprite width
 		spriteWidth = params.spriteWidth,
@@ -39,8 +44,14 @@ SkyEngine.Sprite = CLASS({
 		// fps
 		fps = params.fps,
 		
+		// scale
+		scale = params.scale,
+		
 		// img
 		img,
+		
+		// imgs
+		imgs,
 		
 		// width
 		width,
@@ -54,11 +65,21 @@ SkyEngine.Sprite = CLASS({
 		// set src.
 		setSrc,
 		
+		// add src.
+		addSrc,
+		
+		// step.
+		step,
+		
 		// draw.
 		draw;
 		
 		if (fps === undefined) {
 			fps = 0;
+		}
+		
+		if (scale === undefined) {
+			scale = 1;
 		}
 		
 		self.setSrc = setSrc = function(_src) {
@@ -89,11 +110,84 @@ SkyEngine.Sprite = CLASS({
 			img.src = src;
 		};
 		
-		setSrc(src);
+		if (src !== undefined) {
+			setSrc(src);
+		}
+		
+		self.addSrc = addSrc = function(src) {
+			
+			var
+			// img
+			img = new Image();
+			
+			if (imgs === undefined) {
+				imgs = [];
+				
+				img.onload = function() {
+					
+					width = img.width;
+					height = img.height;
+					
+					if (spriteWidth === undefined) {
+						spriteWidth = width;
+					}
+					
+					if (spriteHeight === undefined) {
+						spriteHeight = height;
+					}
+					
+					if (frameCount === undefined) {
+						frameCount = 1;
+					} else {
+						frameCount += 1;
+					}
+					
+					self.fireEvent('load');
+				};
+			}
+			
+			else {
+				
+				img.onload = function() {
+					
+					if (frameCount === undefined) {
+						frameCount = 1;
+					} else {
+						frameCount += 1;
+					}
+				};
+			}
+			
+			img.src = src;
+			
+			imgs.push(img);
+		};
+		
+		if (srcs !== undefined) {
+			EACH(srcs, addSrc);
+		}
+		
+		OVERRIDE(self.step, function(origin) {
+			
+			self.step = step = function(deltaTime) {
+				
+				if (fps > 0) {
+					frame += fps * 1 / deltaTime;
+				}
+				
+				if (frameCount !== undefined) {
+					if (frame >= frameCount) {
+						frame = 0;
+					}
+				}
+				
+				origin(deltaTime);
+			};
+		});
 		
 		OVERRIDE(self.draw, function(origin) {
 			
-			self.draw = draw = function(context, deltaTime, parentRealX, parentRealY) {
+			self.draw = draw = function(context, parentRealX, parentRealY) {
 				
 				var
 				// x frame
@@ -102,7 +196,18 @@ SkyEngine.Sprite = CLASS({
 				// y frame
 				yFrame;
 				
-				if (
+				if (imgs !== undefined) {
+					if (frameCount !== undefined) {
+						context.drawImage(
+							imgs[Math.floor(frame)],
+							parentRealX + self.getX() - width * scale / 2,
+							parentRealY + self.getY() - height * scale / 2,
+							width * scale,
+							height * scale);
+					}
+				}
+				
+				else if (
 				width !== undefined && height !== undefined &&
 				spriteWidth !== undefined && spriteHeight !== undefined) {
 					
@@ -110,21 +215,12 @@ SkyEngine.Sprite = CLASS({
 						img,
 						spriteWidth * Math.floor(frame % (width / spriteWidth)), spriteHeight * Math.floor(frame / (width / spriteWidth)),
 						spriteWidth, spriteHeight,
-						parentRealX + self.getX() - spriteWidth / 2, parentRealY + self.getY() - spriteHeight / 2,
-						spriteWidth, spriteHeight);
+						parentRealX + self.getX() - spriteWidth * scale / 2, parentRealY + self.getY() - spriteHeight * scale / 2,
+						spriteWidth * scale,
+						spriteHeight * scale);
 				}
 				
-				if (fps > 0) {
-					frame += fps * 1 / deltaTime;
-				}
-				
-				if (frameCount !== undefined) {
-					if (frame > frameCount) {
-						frame = 0;
-					}
-				}
-				
-				origin(context, deltaTime, parentRealX, parentRealY);
+				origin(context, parentRealX, parentRealY);
 			};
 		});
 	}
