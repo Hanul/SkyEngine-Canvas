@@ -34,11 +34,23 @@ SkyEngine.Screen = OBJECT({
 		// canvas height
 		canvasHeight,
 		
+		// fps dom
+		fpsDom,
+		
 		// loop
 		loop,
 		
+		// delta time
+		deltaTime,
+		
 		// registered nodes
 		registeredNodes = {},
+		
+		// step all.
+		stepAll,
+		
+		// draw all.
+		drawAll,
 		
 		// register node.
 		registerNode,
@@ -46,13 +58,67 @@ SkyEngine.Screen = OBJECT({
 		// unregister node.
 		unregisterNode;
 		
-		loop = LOOP(function(deltaTime) {
+		if (CONFIG.isDevMode === true) {
 			
-			self.step(deltaTime);
+			fpsDom = DIV({
+				style : {
+					position : 'fixed',
+					left : 5,
+					top : 5
+				}
+			}).appendTo(BODY);
+			
+			INTERVAL(0.1, function() {
+				
+				if (deltaTime !== undefined) {
+					fpsDom.empty();
+					fpsDom.append('FPS: ' + parseInt(1 / deltaTime * 1000));
+				}
+			});
+		}
+		
+		stepAll = function(node, deltaTime) {
+			
+			node.step(deltaTime);
+			
+			node.getChildren().forEach(function(childNode) {
+				stepAll(childNode, deltaTime);
+			});
+		}
+		
+		drawAll = function(node, context, realX, realY, realAlpha) {
+			
+			realX += node.getX();
+			realY += node.getY();
+			
+			if (node.getAlpha() < 1) {
+				realAlpha *= node.getAlpha();
+			}
+			
+			if (realAlpha < 1) {
+				context.globalAlpha = realAlpha;
+			}
+			
+			node.draw(context, realX, realY, realAlpha);
+			
+			node.getChildren().forEach(function(childNode) {
+				drawAll(childNode, context, realX, realY, realAlpha);
+			});
+			
+			if (context.globalAlpha < 1) {
+				context.globalAlpha = 1;
+			}
+		}
+		
+		loop = LOOP(function(_deltaTime) {
+			
+			deltaTime = _deltaTime;
+			
+			stepAll(self, deltaTime);
 			
 			context.clearRect(0, 0, canvasWidth, canvasHeight);
 			
-			self.draw(context, canvasWidth / 2, canvasHeight / 2);
+			drawAll(self, context, canvasWidth / 2, canvasHeight / 2, self.getAlpha());
 		});
 		
 		EVENT('resize', RAR(function() {

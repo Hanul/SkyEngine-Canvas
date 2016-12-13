@@ -66,16 +66,16 @@ SkyEngine.Image = CLASS({
 		
 		OVERRIDE(self.draw, function(origin) {
 			
-			self.draw = draw = function(context, parentRealX, parentRealY) {
+			self.draw = draw = function(context, realX, realY, realAlpha) {
 				
 				context.drawImage(
 					img,
-					parentRealX + self.getX() - width * scale / 2,
-					parentRealY + self.getY() - height * scale / 2,
+					realX - width * scale / 2,
+					realY - height * scale / 2,
 					width * scale,
 					height * scale);
 				
-				origin(context, parentRealX, parentRealY);
+				origin(context, realX, realY, realAlpha);
 			};
 		});
 	}

@@ -172,7 +172,7 @@ SkyEngine.Sprite = CLASS({
 			self.step = step = function(deltaTime) {
 				
 				if (fps > 0) {
-					frame += fps * 1 / deltaTime;
+					frame += fps * deltaTime / 1000;
 				}
 				
 				if (frameCount !== undefined) {
@@ -187,7 +187,7 @@ SkyEngine.Sprite = CLASS({
 		
 		OVERRIDE(self.draw, function(origin) {
 			
-			self.draw = draw = function(context, parentRealX, parentRealY) {
+			self.draw = draw = function(context, realX, realY, realAlpha) {
 				
 				var
 				// x frame
@@ -200,8 +200,8 @@ SkyEngine.Sprite = CLASS({
 					if (frameCount !== undefined) {
 						context.drawImage(
 							imgs[Math.floor(frame)],
-							parentRealX + self.getX() - width * scale / 2,
-							parentRealY + self.getY() - height * scale / 2,
+							realX - width * scale / 2,
+							realY - height * scale / 2,
 							width * scale,
 							height * scale);
 					}
@@ -215,12 +215,12 @@ SkyEngine.Sprite = CLASS({
 						img,
 						spriteWidth * Math.floor(frame % (width / spriteWidth)), spriteHeight * Math.floor(frame / (width / spriteWidth)),
 						spriteWidth, spriteHeight,
-						parentRealX + self.getX() - spriteWidth * scale / 2, parentRealY + self.getY() - spriteHeight * scale / 2,
+						realX - spriteWidth * scale / 2, realY - spriteHeight * scale / 2,
 						spriteWidth * scale,
 						spriteHeight * scale);
 				}
 				
-				origin(context, parentRealX, parentRealY);
+				origin(context, realX, realY, realAlpha);
 			};
 		});
 	}

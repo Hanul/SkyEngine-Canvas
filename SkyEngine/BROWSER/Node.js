@@ -14,6 +14,9 @@ SkyEngine.Node = CLASS({
 		//OPTIONAL: params.x
 		//OPTIONAL: params.y
 		//OPTIONAL: params.z
+		//OPTIONAL: params.accelX
+		//OPTIONAL: params.accelY
+		//OPTIONAL: params.alpha
 		
 		var
 		// parent node
@@ -36,6 +39,27 @@ SkyEngine.Node = CLASS({
 		
 		// speed y
 		speedY = 0,
+		
+		// accel x
+		accelX,
+		
+		// accel y
+		accelY,
+		
+		// max speed x (undefined면 무제한)
+		maxSpeedX,
+		
+		// max speed y (undefined면 무제한)
+		maxSpeedY,
+		
+		// to x
+		toX,
+		
+		// to y
+		toY,
+		
+		// alpha
+		alpha,
 		
 		// get children.
 		getChildren,
@@ -103,11 +127,17 @@ SkyEngine.Node = CLASS({
 		// get z.
 		getZ,
 		
+		// get alpha.
+		getAlpha,
+		
 		// add collider.
 		addCollider,
 		
 		// add touch area.
 		addTouchArea,
+		
+		// move.
+		move,
 		
 		// move left.
 		moveLeft,
@@ -133,6 +163,9 @@ SkyEngine.Node = CLASS({
 		// stop down.
 		stopDown,
 		
+		// move to.
+		moveTo,
+		
 		// stop.
 		stop,
 		
@@ -140,12 +173,21 @@ SkyEngine.Node = CLASS({
 		step,
 		
 		// draw.
-		draw;
+		draw,
+		
+		// hide.
+		hide,
+		
+		// show.
+		show;
 		
 		if (params !== undefined) {
 			x = params.x;
 			y = params.y;
 			z = params.z;
+			accelX = params.accelX;
+			accelY = params.accelY;
+			alpha = params.alpha;
 		}
 		
 		if (x === undefined) {
@@ -158,6 +200,18 @@ SkyEngine.Node = CLASS({
 		
 		if (z === undefined) {
 			z = 0;
+		}
+		
+		if (accelX === undefined) {
+			accelX = 0;
+		}
+		
+		if (accelY === undefined) {
+			accelY = 0;
+		}
+		
+		if (alpha === undefined) {
+			alpha = 1;
 		}
 		
 		self.getChildren = getChildren = function() {
@@ -326,6 +380,10 @@ SkyEngine.Node = CLASS({
 			return z;
 		};
 		
+		self.getAlpha = getAlpha = function() {
+			return alpha;
+		};
+		
 		self.moveLeft = moveLeft = function(speed) {
 			speedX = -speed;
 		};
@@ -366,31 +424,56 @@ SkyEngine.Node = CLASS({
 			}
 		};
 		
-		self.stop = stop = function() {
-			speedX = 0;
-			speedY = 0;
+		self.moveTo = moveTo = function(params) {
+			//REQUIRED: params
+			//OPTIONAL: params.x
+			//OPTIONAL: params.y
+			//REQUIRED: params.speed
 		};
 		
 		self.step = step = function(deltaTime) {
 			
+			if (accelX !== 0) {
+				speedX += accelX * deltaTime / 1000;
+			}
+			
+			if (maxSpeedX !== undefined) {
+				
+				if (maxSpeedX >= 0 && speedX > maxSpeedX) {
+					speedX = maxSpeedX;
+				}
+				
+				if (maxSpeedX < 0 && speedX < maxSpeedX) {
+					speedX = maxSpeedX;
+				}
+			}
+			
+			if (accelY !== 0) {
+				speedY += accelY * deltaTime / 1000;
+			}
+			
+			if (maxSpeedY !== undefined) {
+				
+				if (maxSpeedY >= 0 && speedX > maxSpeedY) {
+					speedX = maxSpeedY;
+				}
+				
+				if (maxSpeedY < 0 && speedX < maxSpeedY) {
+					speedX = maxSpeedY;
+				}
+			}
+			
 			if (speedX !== 0) {
-				x += speedX * 1 / deltaTime;
+				x += speedX * deltaTime / 1000;
 			}
 			
 			if (speedY !== 0) {
-				y += speedY * 1 / deltaTime;
+				y += speedY * deltaTime / 1000;
 			}
-			
-			childNodes.forEach(function(childNode) {
-				childNode.step(deltaTime);
-			});
 		};
 		
-		self.draw = draw = function(context, parentRealX, parentRealY) {
-			
-			childNodes.forEach(function(childNode) {
-				childNode.draw(context, parentRealX + x, parentRealY + y);
-			});
+		self.draw = draw = function(context, realX, realY, realAlpha) {
+			// to implement.
 		};
 	}
 });

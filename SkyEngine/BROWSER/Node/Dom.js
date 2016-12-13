@@ -35,6 +35,9 @@ SkyEngine.Dom = CLASS({
 		// origin y
 		originY,
 		
+		// origin alpha
+		originAlpha,
+		
 		// dom
 		dom = DIV({
 			style : {
@@ -80,27 +83,25 @@ SkyEngine.Dom = CLASS({
 		
 		OVERRIDE(self.draw, function(origin) {
 			
-			self.draw = draw = function(context, parentRealX, parentRealY) {
+			self.draw = draw = function(context, realX, realY, realAlpha) {
 				
-				var
-				// x
-				x = parentRealX + self.getX(),
-				
-				// y
-				y = parentRealY + self.getY();
-				
-				if (originX !== x || originY !== y) {
+				if (
+				originX !== realX ||
+				originY !== realY ||
+				originAlpha !== realAlpha) {
 					
 					dom.addStyle({
-						left : x - dom.getWidth() / 2,
-						top : y - dom.getHeight() / 2
+						left : realX - dom.getWidth() / 2,
+						top : realY - dom.getHeight() / 2,
+						opacity : realAlpha
 					});
 					
-					originX = x;
-					originY = y;
+					originX = realX;
+					originY = realY;
+					originAlpha = realAlpha;
 				}
 				
-				origin(context, parentRealX, parentRealY);
+				origin(context, realX, realY, realAlpha);
 			};
 		});
 		
