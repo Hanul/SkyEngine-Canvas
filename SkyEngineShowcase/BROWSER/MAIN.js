@@ -13,7 +13,7 @@ SkyEngineShowcase.MAIN = METHOD({
 			src : 'R/sprite.png',
 			spriteWidth : 128,
 			spriteHeight : 128,
-			fps : 1
+			fps : 10
 		}).appendTo(node1);
 	}
 });

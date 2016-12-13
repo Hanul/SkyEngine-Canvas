@@ -106,19 +106,16 @@ SkyEngine.Sprite = CLASS({
 				width !== undefined && height !== undefined &&
 				spriteWidth !== undefined && spriteHeight !== undefined) {
 					
-					xFrame = Math.floor(frame % (width / spriteWidth));
-					yFrame = Math.floor(frame / (width / spriteWidth));
-					
 					context.drawImage(
 						img,
-						spriteWidth * xFrame, spriteHeight * yFrame,
-						spriteWidth * (xFrame + 1), spriteHeight * (yFrame + 1),
+						spriteWidth * Math.floor(frame % (width / spriteWidth)), spriteHeight * Math.floor(frame / (width / spriteWidth)),
+						spriteWidth, spriteHeight,
 						parentRealX + self.getX() - spriteWidth / 2, parentRealY + self.getY() - spriteHeight / 2,
 						spriteWidth, spriteHeight);
 				}
 				
 				if (fps > 0) {
-					frame += 1 / deltaTime;
+					frame += fps * 1 / deltaTime;
 				}
 				
 				if (frameCount !== undefined) {
