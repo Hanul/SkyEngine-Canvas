@@ -18,14 +18,10 @@ SkyEngine.Image = CLASS({
 		//OPTIONAL: params.y
 		//OPTIONAL: params.z
 		//REQUIRED: params.src
-		//OPTIONAL: params.scale
 		
 		var
 		// src
 		src = params.src,
-		
-		// scale
-		scale = params.scale,
 		
 		// img
 		img,
@@ -40,11 +36,10 @@ SkyEngine.Image = CLASS({
 		setSrc,
 		
 		// draw.
-		draw;
+		draw,
 		
-		if (scale === undefined) {
-			scale = 1;
-		}
+		// remove.
+		remove;
 		
 		self.setSrc = setSrc = function(_src) {
 			src = _src;
@@ -66,17 +61,31 @@ SkyEngine.Image = CLASS({
 		
 		OVERRIDE(self.draw, function(origin) {
 			
-			self.draw = draw = function(context, realX, realY, realAlpha) {
+			self.draw = draw = function(context, realScaleX, realScaleY, realX, realY, realAngle, realAlpha) {
 				
 				context.drawImage(
 					img,
-					realX - width * scale / 2,
-					realY - height * scale / 2,
-					width * scale,
-					height * scale);
+					-width * realScaleX / 2,
+					-height * realScaleY / 2,
+					width * realScaleX,
+					height * realScaleY);
 				
-				origin(context, realX, realY, realAlpha);
+				origin(context, realScaleX, realScaleY, realX, realY, realAngle, realAlpha);
 			};
 		});
+		
+		OVERRIDE(self.remove, function(origin) {
+			
+			self.remove = remove = function() {
+				
+				img = undefined;
+				
+				origin();
+			};
+		});
+		
+		// 사각형 충돌 체크
+		// 원 충돌 체크
+		// 이미지 충돌 체크
 	}
 });

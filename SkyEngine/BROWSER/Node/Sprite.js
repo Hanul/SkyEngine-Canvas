@@ -23,7 +23,6 @@ SkyEngine.Sprite = CLASS({
 		//OPTIONAL: params.spriteHeight
 		//OPTIONAL: params.frameCount
 		//OPTIONAL: params.fps
-		//OPTIONAL: params.scale
 		
 		var
 		// src
@@ -43,9 +42,6 @@ SkyEngine.Sprite = CLASS({
 		
 		// fps
 		fps = params.fps,
-		
-		// scale
-		scale = params.scale,
 		
 		// img
 		img,
@@ -72,14 +68,13 @@ SkyEngine.Sprite = CLASS({
 		step,
 		
 		// draw.
-		draw;
+		draw,
+		
+		// remove.
+		remove;
 		
 		if (fps === undefined) {
 			fps = 0;
-		}
-		
-		if (scale === undefined) {
-			scale = 1;
 		}
 		
 		self.setSrc = setSrc = function(_src) {
@@ -187,7 +182,7 @@ SkyEngine.Sprite = CLASS({
 		
 		OVERRIDE(self.draw, function(origin) {
 			
-			self.draw = draw = function(context, realX, realY, realAlpha) {
+			self.draw = draw = function(context, realScaleX, realScaleY, realX, realY, realAngle, realAlpha) {
 				
 				var
 				// x frame
@@ -200,10 +195,10 @@ SkyEngine.Sprite = CLASS({
 					if (frameCount !== undefined) {
 						context.drawImage(
 							imgs[Math.floor(frame)],
-							realX - width * scale / 2,
-							realY - height * scale / 2,
-							width * scale,
-							height * scale);
+							-width * realScaleX / 2,
+							-height * realScaleY / 2,
+							width * realScaleX,
+							height * realScaleY);
 					}
 				}
 				
@@ -215,13 +210,31 @@ SkyEngine.Sprite = CLASS({
 						img,
 						spriteWidth * Math.floor(frame % (width / spriteWidth)), spriteHeight * Math.floor(frame / (width / spriteWidth)),
 						spriteWidth, spriteHeight,
-						realX - spriteWidth * scale / 2, realY - spriteHeight * scale / 2,
-						spriteWidth * scale,
-						spriteHeight * scale);
+						-spriteWidth * realScaleX / 2, -spriteHeight * realScaleY / 2,
+						spriteWidth * realScaleX,
+						spriteHeight * realScaleY);
 				}
 				
-				origin(context, realX, realY, realAlpha);
+				origin(context, realScaleX, realScaleY, realX, realY, realAngle, realAlpha);
 			};
 		});
+		
+		OVERRIDE(self.remove, function(origin) {
+			
+			self.remove = remove = function() {
+				
+				srcs = undefined;
+				
+				img = undefined;
+				imgs = undefined;
+				
+				origin();
+			};
+		});
+		
+		// 사각형 충돌 체크
+		// 원 충돌 체크
+		// 이미지 충돌 체크
+		// 스프라이트 충돌 체크
 	}
 });

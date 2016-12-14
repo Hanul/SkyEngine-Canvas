@@ -35,6 +35,9 @@ SkyEngine.Dom = CLASS({
 		// origin y
 		originY,
 		
+		// origin angle
+		originAngle,
+		
 		// origin alpha
 		originAlpha,
 		
@@ -83,25 +86,28 @@ SkyEngine.Dom = CLASS({
 		
 		OVERRIDE(self.draw, function(origin) {
 			
-			self.draw = draw = function(context, realX, realY, realAlpha) {
+			self.draw = draw = function(context, realScaleX, realScaleY, realX, realY, realAngle, realAlpha) {
 				
 				if (
 				originX !== realX ||
 				originY !== realY ||
+				originAngle !== realAngle ||
 				originAlpha !== realAlpha) {
 					
 					dom.addStyle({
 						left : realX - dom.getWidth() / 2,
 						top : realY - dom.getHeight() / 2,
+						transform : 'rotate(' + realAngle + 'deg)',
 						opacity : realAlpha
 					});
 					
 					originX = realX;
 					originY = realY;
+					originAngle = realAngle;
 					originAlpha = realAlpha;
 				}
 				
-				origin(context, realX, realY, realAlpha);
+				origin(context, realScaleX, realScaleY, realX, realY, realAngle, realAlpha);
 			};
 		});
 		

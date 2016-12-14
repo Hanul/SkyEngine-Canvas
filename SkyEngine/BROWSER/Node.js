@@ -11,12 +11,34 @@ SkyEngine.Node = CLASS({
 		//OPTIONAL: params
 		//OPTIONAL: params.c		자식 노드. 하나의 노드를 지정하거나, 노드들의 배열을 지정할 수 있습니다.
 		//OPTIONAL: params.on		이벤트
+		
+		//OPTIONAL: params.scale
+		//OPTIONAL: params.scaleX
+		//OPTIONAL: params.scaleY
+		
 		//OPTIONAL: params.x
 		//OPTIONAL: params.y
 		//OPTIONAL: params.z
+		//OPTIONAL: params.speedX
+		//OPTIONAL: params.speedY
 		//OPTIONAL: params.accelX
 		//OPTIONAL: params.accelY
+		//OPTIONAL: params.maxSpeedX
+		//OPTIONAL: params.maxSpeedY
+		//OPTIONAL: params.toX
+		//OPTIONAL: params.toY
+		
+		//OPTIONAL: params.angle
+		//OPTIONAL: params.rotationSpeed
+		//OPTIONAL: params.rotationAccel
+		//OPTIONAL: params.maxRotationSpeed
+		//OPTIONAL: params.toAngle
+		
 		//OPTIONAL: params.alpha
+		//OPTIONAL: params.fadingSpeed
+		//OPTIONAL: params.fadingAccel
+		//OPTIONAL: params.maxFadingSpeed
+		//OPTIONAL: params.toAlpha
 		
 		var
 		// parent node
@@ -25,65 +47,53 @@ SkyEngine.Node = CLASS({
 		// child nodes
 		childNodes = [],
 		
-		// x
-		x,
+		// scale
+		scaleX, scaleY,
 		
-		// y
-		y,
+		// position
+		x, y, z,
 		
-		// z
-		z,
+		// speed
+		speedX, speedY,
 		
-		// speed x
-		speedX = 0,
+		// accel
+		accelX, accelY,
 		
-		// speed y
-		speedY = 0,
+		// max speed (undefined면 무제한)
+		maxSpeedX, maxSpeedY,
 		
-		// accel x
-		accelX,
+		// to position
+		toX, toY,
 		
-		// accel y
-		accelY,
+		// for rotation
+		angle, rotationSpeed, rotationAccel, maxRotationSpeed, toAngle,
 		
-		// max speed x (undefined면 무제한)
-		maxSpeedX,
-		
-		// max speed y (undefined면 무제한)
-		maxSpeedY,
-		
-		// to x
-		toX,
-		
-		// to y
-		toY,
-		
-		// alpha
-		alpha,
+		// for fading
+		alpha, fadingSpeed, fadingAccel, maxFadingSpeed, toAlpha,
 		
 		// get children.
 		getChildren,
-
-		// set parent.
-		setParent,
-
+		
 		// get parent.
 		getParent,
-
+		
+		// set parent.
+		setParent,
+		
 		// empty.
 		empty,
-		
-		// append.
-		append,
-		
-		// append to.
-		appendTo,
 		
 		// append to parent.
 		appendToParent,
 		
 		// remove from parent.
 		removeFromParent,
+		
+		// append.
+		append,
+		
+		// append to.
+		appendTo,
 
 		// remove.
 		remove,
@@ -109,26 +119,59 @@ SkyEngine.Node = CLASS({
 		// off part.
 		offPart,
 		
-		// set x.
-		setX,
+		// set/get scale.
+		setScaleX, getScaleX, setScaleY, getScaleY, setScale,
 		
-		// get x.
-		getX,
+		// set/get position.
+		setX, getX, setY, getY, setZ, getZ,
 		
-		// set y.
-		setY,
+		// set/get speed.
+		setSpeedX, getSpeedX, setSpeedY, getSpeedY,
 		
-		// get y.
-		getY,
+		// set/get accel.
+		setAccelX, getAccelX, setAccelY, getAccelY,
 		
-		// set z.
-		setZ,
+		// set/get max speed.
+		setMaxSpeedX, getMaxSpeedX, setMaxSpeedY, getMaxSpeedY,
 		
-		// get z.
-		getZ,
+		// set/get to position.
+		setToX, getToX, setToY, getToY,
 		
-		// get alpha.
-		getAlpha,
+		// for rotation.
+		setAngle, getAngle, setRotationSpeed, getRotationSpeed, setRotationAccel, getRotationAccel, setMaxRotationSpeed, getMaxRotationSpeed, setToAngle, getToAngle,
+		
+		// for fading.
+		setAlpha, getAlpha, setFadingSpeed, getFadingSpeed, setFadingAccel, getFadingAccel, setMaxFadingSpeed, getMaxFadingSpeed, setToAlpha, getToAlpha,
+		
+		// move.
+		move,
+		
+		// move/stop left.
+		moveLeft, stopLeft,
+		
+		// move/stop right.
+		moveRight, stopRight,
+		
+		// move/stop up.
+		moveUp, stopUp,
+		
+		// move/stop down.
+		moveDown, stopDown,
+		
+		// move to.
+		moveTo,
+		
+		// rotate.
+		rotate, stopRotation,
+		
+		// stop. (모든 움직임을 멈춘다.)
+		stop,
+		
+		// fade.
+		fadeIn, fadeOut, stopFading,
+		
+		// hide/show.
+		hide, show,
 		
 		// add collider.
 		addCollider,
@@ -136,86 +179,110 @@ SkyEngine.Node = CLASS({
 		// add touch area.
 		addTouchArea,
 		
-		// move.
-		move,
+		// check collision.
+		checkCollision,
 		
-		// move left.
-		moveLeft,
-		
-		// stop left.
-		stopLeft,
-		
-		// move right.
-		moveRight,
-		
-		// stop right.
-		stopRight,
-		
-		// move up.
-		moveUp,
-		
-		// stop up.
-		stopUp,
-		
-		// move down.
-		moveDown,
-		
-		// stop down.
-		stopDown,
-		
-		// move to.
-		moveTo,
-		
-		// stop.
-		stop,
+		// check touch.
+		checkTouch,
 		
 		// step.
 		step,
 		
 		// draw.
-		draw,
+		draw;
 		
-		// hide.
-		hide,
+		self.setScale = setScale = function(scale) {
+			scaleX = scale;
+			scaleY = scale;
+		};
 		
-		// show.
-		show;
-		
+		// 파라미터 초기화
 		if (params !== undefined) {
+			
+			if (params.scale !== undefined)		{ setScale(params.scale); }
+			if (params.scaleX !== undefined)	{ scaleX = params.scaleX; }
+			if (params.scaleY !== undefined)	{ scaleY = params.scaleY; }
+			
 			x = params.x;
 			y = params.y;
 			z = params.z;
+			
+			speedX = params.speedX;
+			speedY = params.speedY;
+			
 			accelX = params.accelX;
 			accelY = params.accelY;
+			
+			maxSpeedX = params.maxSpeedX;
+			maxSpeedY = params.maxSpeedY;
+			
+			toX = params.toX;
+			toY = params.toY;
+			
+			angle = params.angle;
+			rotationSpeed = params.rotationSpeed;
+			rotationAccel = params.rotationAccel;
+			maxRotationSpeed = params.maxRotationSpeed;
+			toAngle = params.toAngle;
+			
 			alpha = params.alpha;
+			fadingSpeed = params.fadingSpeed;
+			fadingAccel = params.fadingAccel;
+			maxFadingSpeed = params.maxFadingSpeed;
+			toAlpha = params.toAlpha;
 		}
 		
-		if (x === undefined) {
-			x = 0;
-		}
+		if (scaleX === undefined)			{ scaleX = 1; }
+		if (scaleY === undefined)			{ scaleY = 1; }
 		
-		if (y === undefined) {
-			y = 0;
-		}
+		if (x === undefined)				{ x = 0; }
+		if (y === undefined)				{ y = 0; }
+		if (z === undefined)				{ z = 0; }
 		
-		if (z === undefined) {
-			z = 0;
-		}
+		if (speedX === undefined)			{ speedX = 0; }
+		if (speedY === undefined)			{ speedY = 0; }
 		
-		if (accelX === undefined) {
-			accelX = 0;
-		}
+		if (accelX === undefined)			{ accelX = 0; }
+		if (accelY === undefined)			{ accelY = 0; }
 		
-		if (accelY === undefined) {
-			accelY = 0;
-		}
+		if (maxSpeedX === undefined)		{ maxSpeedX = 0; }
+		if (maxSpeedY === undefined)		{ maxSpeedY = 0; }
 		
-		if (alpha === undefined) {
-			alpha = 1;
-		}
+		if (toX === undefined)				{ toX = 0; }
+		if (toY === undefined)				{ toY = 0; }
+		
+		if (angle === undefined)			{ angle = 0; }
+		if (rotationSpeed === undefined)	{ rotationSpeed = 0; }
+		if (rotationAccel === undefined)	{ rotationAccel = 0; }
+		if (maxRotationSpeed === undefined)	{ maxRotationSpeed = 0; }
+		if (toAngle === undefined)			{ toAngle = 0; }
+		
+		if (alpha === undefined)			{ alpha = 1; }
+		if (fadingSpeed === undefined)		{ fadingSpeed = 0; }
+		if (fadingAccel === undefined)		{ fadingAccel = 0; }
+		if (maxFadingSpeed === undefined)	{ maxFadingSpeed = 0; }
+		if (toAlpha === undefined)			{ toAlpha = 1; }
 		
 		self.getChildren = getChildren = function() {
 			return childNodes;
+		};
+		
+		self.getParent = getParent = function() {
+			return parentNode;
+		};
+		
+		self.setParent = setParent = function(_parentNode) {
+			parentNode = _parentNode;
+		};
+		
+		self.empty = empty = function() {
+			
+			childNodes.forEach(function(childNode) {
+				childNode.setParent(undefined);
+				childNode.remove();
+			});
+			
+			childNodes = undefined;
 		};
 		
 		appendToParent = function() {
@@ -319,8 +386,8 @@ SkyEngine.Node = CLASS({
 			if (parentNode !== undefined) {
 				removeFromParent();
 			}
-
-			parentNode = node;
+			
+			setParent(node);
 			
 			appendToParent();
 
@@ -335,11 +402,13 @@ SkyEngine.Node = CLASS({
 		
 		self.remove = remove = function() {
 			
+			empty();
+			
 			if (parentNode !== undefined) {
 				
 				removeFromParent();
 				
-				parentNode = undefined;
+				setParent(undefined);
 			}
 		};
 		
@@ -347,8 +416,44 @@ SkyEngine.Node = CLASS({
 			
 		};
 		
+		self.off = off = function() {
+			
+		};
+		
 		self.fireEvent = fireEvent = function() {
 			
+		};
+		
+		self.onMeet = onMeet = function() {
+			
+		};
+		
+		self.offMeet = offMeet = function() {
+			
+		};
+		
+		self.onPart = onPart = function() {
+			
+		};
+		
+		self.offPart = offPart = function() {
+			
+		};
+		
+		self.setScaleX = setScaleX = function(_scaleX) {
+			scaleX = _scaleX;
+		};
+		
+		self.getScaleX = getScaleX = function() {
+			return scaleX;
+		};
+		
+		self.setScaleY = setScaleY = function(_scaleX) {
+			scaleX = _scaleX;
+		};
+		
+		self.getScaleY = getScaleY = function() {
+			return scaleY;
 		};
 		
 		self.setX = setX = function(_x) {
@@ -380,8 +485,151 @@ SkyEngine.Node = CLASS({
 			return z;
 		};
 		
+		self.setSpeedX = setSpeedX = function(_speedX) {
+			speedX = _speedX;
+		};
+		
+		self.getSpeedX = getSpeedX = function() {
+			return speedX;
+		};
+		
+		self.setSpeedY = setSpeedY = function(_speedY) {
+			speedY = _speedY;
+		};
+		
+		self.getSpeedY = getSpeedY = function() {
+			return speedY;
+		};
+		
+		self.setAccelX = setAccelX = function(_accelX) {
+			accelX = _accelX;
+		};
+		
+		self.getAccelX = getAccelX = function() {
+			return accelX;
+		};
+		
+		self.setAccelY = setAccelY = function(_accelY) {
+			accelY = _accelY;
+		};
+		
+		self.getAccelY = getAccelY = function() {
+			return accelY;
+		};
+		
+		self.setMaxSpeedX = setMaxSpeedX = function(_maxSpeedX) {
+			maxSpeedX = _maxSpeedX;
+		};
+		
+		self.getMaxSpeedX = getMaxSpeedX = function() {
+			return maxSpeedX;
+		};
+		
+		self.setMaxSpeedY = setMaxSpeedY = function(_maxSpeedY) {
+			maxSpeedY = _maxSpeedY;
+		};
+		
+		self.getMaxSpeedY = getMaxSpeedY = function() {
+			return maxSpeedY;
+		};
+		
+		self.setToX = setToX = function(_toX) {
+			toX = _toX;
+		};
+		
+		self.getToX = getToX = function() {
+			return toX;
+		};
+		
+		self.setToY = setToY = function(_toY) {
+			toY = _toY;
+		};
+		
+		self.getToY = getToY = function() {
+			return toY;
+		};
+		
+		self.setAngle = setAngle = function(_angle) {
+			angle = _angle;
+		};
+		
+		self.getAngle = getAngle = function() {
+			return angle;
+		};
+		
+		self.setRotationSpeed = setRotationSpeed = function(_rotationSpeed) {
+			rotationSpeed = _rotationSpeed;
+		};
+		
+		self.getRotationSpeed = getRotationSpeed = function() {
+			return rotationSpeed;
+		};
+		
+		self.setRotationAccel = setRotationAccel = function(_rotationAccel) {
+			rotationAccel = _rotationAccel;
+		};
+		
+		self.getRotationAccel = getRotationAccel = function() {
+			return rotationAccel;
+		};
+		
+		self.setMaxRotationSpeed = setMaxRotationSpeed = function(_maxRotationSpeed) {
+			maxRotationSpeed = _maxRotationSpeed;
+		};
+		
+		self.getMaxRotationSpeed = getMaxRotationSpeed = function() {
+			return maxRotationSpeed;
+		};
+		
+		self.setToAngle = setToAngle = function(_toAngle) {
+			toAngle = _toAngle;
+		};
+		
+		self.getToAngle = getToAngle = function() {
+			return toAngle;
+		};
+		
+		self.setAlpha = setAlpha = function(_alpha) {
+			alpha = _alpha
+		};
+		
 		self.getAlpha = getAlpha = function() {
 			return alpha;
+		};
+		
+		self.setFadingSpeed = setFadingSpeed = function(_fadingSpeed) {
+			fadingSpeed = _fadingSpeed;
+		};
+		
+		self.getFadingSpeed = getFadingSpeed = function() {
+			return fadingSpeed;
+		};
+		
+		self.setFadingAccel = setFadingAccel = function(_fadingAccel) {
+			fadingAccel = _fadingAccel;
+		};
+		
+		self.getFadingAccel = getFadingAccel = function() {
+			return fadingAccel;
+		};
+		
+		self.setMaxFadingSpeed = setMaxFadingSpeed = function(_maxFadingSpeed) {
+			maxFadingSpeed = _maxFadingSpeed;
+		};
+		
+		self.getMaxFadingSpeed = getMaxFadingSpeed = function() {
+			return maxFadingSpeed;
+		};
+		
+		self.setToAlpha = setToAlpha = function(_toAlpha) {
+			toAlpha = _toAlpha;
+		};
+		
+		self.getToAlpha = getToAlpha = function() {
+			return toAlpha;
+		};
+		
+		self.move = move = function() {
 		};
 		
 		self.moveLeft = moveLeft = function(speed) {
@@ -431,6 +679,54 @@ SkyEngine.Node = CLASS({
 			//REQUIRED: params.speed
 		};
 		
+		self.rotate = rotate = function() {
+			
+		};
+		
+		self.stopRotation = stopRotation = function() {
+			
+		};
+		
+		self.stop = stop = function() {
+			
+		};
+		
+		self.fadeIn = fadeIn = function() {
+			
+		};
+		
+		self.fadeOut = fadeOut = function() {
+			
+		};
+		
+		self.stopFading = stopFading = function() {
+			
+		};
+		
+		self.hide = hide = function() {
+			
+		};
+		
+		self.show = show = function() {
+			
+		};
+		
+		self.addCollider = addCollider = function() {
+			
+		};
+		
+		self.addTouchArea = addTouchArea = function() {
+			
+		};
+		
+		self.checkCollision = checkCollision = function() {
+			
+		};
+		
+		self.checkTouch = checkTouch = function() {
+			
+		};
+		
 		self.step = step = function(deltaTime) {
 			
 			if (accelX !== 0) {
@@ -472,7 +768,7 @@ SkyEngine.Node = CLASS({
 			}
 		};
 		
-		self.draw = draw = function(context, realX, realY, realAlpha) {
+		self.draw = draw = function(context, realScaleX, realScaleY, realX, realY, realAngle, realAlpha) {
 			// to implement.
 		};
 	}

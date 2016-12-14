@@ -86,28 +86,45 @@ SkyEngine.Screen = OBJECT({
 			});
 		}
 		
-		drawAll = function(node, context, realX, realY, realAlpha) {
+		drawAll = function(node, context, realScaleX, realScaleY, realX, realY, realAngle, realAlpha) {
 			
-			realX += node.getX();
-			realY += node.getY();
+			var
+			// radian
+			radian = realAngle * Math.PI / 180,
 			
-			if (node.getAlpha() < 1) {
-				realAlpha *= node.getAlpha();
-			}
+			// plus x
+			plusX = node.getX() * realScaleX,
 			
-			if (realAlpha < 1) {
-				context.globalAlpha = realAlpha;
-			}
+			// plus y
+			plusY = node.getY() * realScaleY;
 			
-			node.draw(context, realX, realY, realAlpha);
+			realX += plusX * Math.cos(radian) - plusY * Math.sin(radian);
+			realY += plusX * Math.sin(radian) + plusY * Math.cos(radian);
+			
+			realScaleX *= node.getScaleX();
+			realScaleY *= node.getScaleY();
+			
+			realAngle += node.getAngle();
+			
+			radian = realAngle * Math.PI / 180;
+			
+			realAlpha *= node.getAlpha();
+			
+			context.translate(realX, realY);
+			context.rotate(radian);
+			
+			context.globalAlpha = realAlpha;
+			
+			node.draw(context, realScaleX, realScaleY, realX, realY, realAngle, realAlpha);
+			
+			context.rotate(-radian);
+			context.translate(-realX, -realY);
+			
+			context.globalAlpha = 1;
 			
 			node.getChildren().forEach(function(childNode) {
-				drawAll(childNode, context, realX, realY, realAlpha);
+				drawAll(childNode, context, realScaleX, realScaleY, realX, realY, realAngle, realAlpha);
 			});
-			
-			if (context.globalAlpha < 1) {
-				context.globalAlpha = 1;
-			}
 		}
 		
 		loop = LOOP(function(_deltaTime) {
@@ -118,7 +135,7 @@ SkyEngine.Screen = OBJECT({
 			
 			context.clearRect(0, 0, canvasWidth, canvasHeight);
 			
-			drawAll(self, context, canvasWidth / 2, canvasHeight / 2, self.getAlpha());
+			drawAll(self, context, self.getScaleX(), self.getScaleY(), canvasWidth / 2, canvasHeight / 2, self.getAngle(), self.getAlpha());
 		});
 		
 		EVENT('resize', RAR(function() {
