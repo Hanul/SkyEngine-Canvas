@@ -182,7 +182,7 @@ SkyEngine.Sprite = CLASS({
 		
 		OVERRIDE(self.draw, function(origin) {
 			
-			self.draw = draw = function(context, realScaleX, realScaleY, realX, realY, realAngle, realAlpha) {
+			self.draw = draw = function(context, realX, realY, realScaleX, realScaleY, realAngle, realAlpha) {
 				
 				var
 				// x frame
@@ -215,7 +215,7 @@ SkyEngine.Sprite = CLASS({
 						spriteHeight * realScaleY);
 				}
 				
-				origin(context, realScaleX, realScaleY, realX, realY, realAngle, realAlpha);
+				origin(context, realX, realY, realScaleX, realScaleY, realAngle, realAlpha);
 			};
 		});
 		

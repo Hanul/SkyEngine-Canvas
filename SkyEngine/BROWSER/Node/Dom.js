@@ -86,7 +86,7 @@ SkyEngine.Dom = CLASS({
 		
 		OVERRIDE(self.draw, function(origin) {
 			
-			self.draw = draw = function(context, realScaleX, realScaleY, realX, realY, realAngle, realAlpha) {
+			self.draw = draw = function(context, realX, realY, realScaleX, realScaleY, realAngle, realAlpha) {
 				
 				if (
 				originX !== realX ||
@@ -107,7 +107,7 @@ SkyEngine.Dom = CLASS({
 					originAlpha = realAlpha;
 				}
 				
-				origin(context, realScaleX, realScaleY, realX, realY, realAngle, realAlpha);
+				origin(context, realX, realY, realScaleX, realScaleY, realAngle, realAlpha);
 			};
 		});
 		

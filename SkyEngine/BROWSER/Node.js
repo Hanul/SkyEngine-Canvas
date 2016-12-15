@@ -12,10 +12,6 @@ SkyEngine.Node = CLASS({
 		//OPTIONAL: params.c		자식 노드. 하나의 노드를 지정하거나, 노드들의 배열을 지정할 수 있습니다.
 		//OPTIONAL: params.on		이벤트
 		
-		//OPTIONAL: params.scale
-		//OPTIONAL: params.scaleX
-		//OPTIONAL: params.scaleY
-		
 		//OPTIONAL: params.x
 		//OPTIONAL: params.y
 		//OPTIONAL: params.z
@@ -27,6 +23,22 @@ SkyEngine.Node = CLASS({
 		//OPTIONAL: params.maxSpeedY
 		//OPTIONAL: params.toX
 		//OPTIONAL: params.toY
+		
+		//OPTIONAL: params.scale
+		//OPTIONAL: params.scaleX
+		//OPTIONAL: params.scaleY
+		//OPTIONAL: params.scalingSpeed
+		//OPTIONAL: params.scalingSpeedX
+		//OPTIONAL: params.scalingSpeedY
+		//OPTIONAL: params.scalingAccel
+		//OPTIONAL: params.scalingAccelX
+		//OPTIONAL: params.scalingAccelY
+		//OPTIONAL: params.maxScalingSpeed
+		//OPTIONAL: params.maxScalingSpeedX
+		//OPTIONAL: params.maxScalingSpeedY
+		//OPTIONAL: params.toScale
+		//OPTIONAL: params.toScaleX
+		//OPTIONAL: params.toScaleY
 		
 		//OPTIONAL: params.angle
 		//OPTIONAL: params.rotationSpeed
@@ -47,29 +59,20 @@ SkyEngine.Node = CLASS({
 		// child nodes
 		childNodes = [],
 		
-		// scale
-		scaleX, scaleY,
-		
-		// position
-		x, y, z,
+		// properties
+		x, y, z, scaleX, scaleY, angle, alpha,
 		
 		// speed
-		speedX, speedY,
+		speedX, speedY, scalingSpeedX, scalingSpeedY, rotationSpeed, fadingSpeed,
 		
 		// accel
-		accelX, accelY,
+		accelX, accelY, scalingAccelX, scalingAccelY, rotationAccel, fadingAccel,
 		
 		// max speed (undefined면 무제한)
-		maxSpeedX, maxSpeedY,
+		maxSpeedX, maxSpeedY, maxScalingSpeedX, maxScalingSpeedY, maxRotationSpeed, maxFadingSpeed,
 		
-		// to position
-		toX, toY,
-		
-		// for rotation
-		angle, rotationSpeed, rotationAccel, maxRotationSpeed, toAngle,
-		
-		// for fading
-		alpha, fadingSpeed, fadingAccel, maxFadingSpeed, toAlpha,
+		// to properties
+		toX, toY, toScaleX, toScaleY, toAngle, toAlpha,
 		
 		// get children.
 		getChildren,
@@ -119,29 +122,20 @@ SkyEngine.Node = CLASS({
 		// off part.
 		offPart,
 		
-		// set/get scale.
-		setScaleX, getScaleX, setScaleY, getScaleY, setScale,
-		
-		// set/get position.
-		setX, getX, setY, getY, setZ, getZ,
+		// set/get properties.
+		setX, getX, setY, getY, setZ, getZ, setScaleX, getScaleX, setScaleY, getScaleY, setScale, getAngle, setAngle, getAlpha, setAlpha,
 		
 		// set/get speed.
-		setSpeedX, getSpeedX, setSpeedY, getSpeedY,
+		setSpeedX, getSpeedX, setSpeedY, getSpeedY, setScalingSpeedX, getScalingSpeedX, setScalingSpeedY, getScalingSpeedY, setRotationSpeed, getRotationSpeed, setFadingSpeed, getFadingSpeed,
 		
 		// set/get accel.
-		setAccelX, getAccelX, setAccelY, getAccelY,
+		setAccelX, getAccelX, setAccelY, getAccelY, setScalingAccelX, getScalingAccelX, setScalingAccelY, getScalingAccelY, setRotationAccel, getRotationAccel, setFadingAccel, getFadingAccel,
 		
 		// set/get max speed.
-		setMaxSpeedX, getMaxSpeedX, setMaxSpeedY, getMaxSpeedY,
+		setMaxSpeedX, getMaxSpeedX, setMaxSpeedY, getMaxSpeedY, setMaxScalingSpeedX, getMaxScalingSpeedX, setMaxScalingSpeedY, getMaxScalingSpeedY, setMaxRotationSpeed, getMaxRotationSpeed, setMaxFadingSpeed, getMaxFadingSpeed,
 		
-		// set/get to position.
-		setToX, getToX, setToY, getToY,
-		
-		// for rotation.
-		setAngle, getAngle, setRotationSpeed, getRotationSpeed, setRotationAccel, getRotationAccel, setMaxRotationSpeed, getMaxRotationSpeed, setToAngle, getToAngle,
-		
-		// for fading.
-		setAlpha, getAlpha, setFadingSpeed, getFadingSpeed, setFadingAccel, getFadingAccel, setMaxFadingSpeed, getMaxFadingSpeed, setToAlpha, getToAlpha,
+		// set/get to properties.
+		setToX, getToX, setToY, getToY, setToScaleX, getToScaleX, setToScaleY, getToScaleY, setToAngle, getToAngle, setToAlpha, getToAlpha,
 		
 		// move.
 		move,
@@ -199,16 +193,21 @@ SkyEngine.Node = CLASS({
 		// 파라미터 초기화
 		if (params !== undefined) {
 			
-			if (params.scale !== undefined)		{ setScale(params.scale); }
-			if (params.scaleX !== undefined)	{ scaleX = params.scaleX; }
-			if (params.scaleY !== undefined)	{ scaleY = params.scaleY; }
-			
 			x = params.x;
 			y = params.y;
 			z = params.z;
+			if (params.scale !== undefined)		{ setScale(params.scale); }
+			if (params.scaleX !== undefined)	{ scaleX = params.scaleX; }
+			if (params.scaleY !== undefined)	{ scaleY = params.scaleY; }
+			angle = params.angle;
+			alpha = params.alpha;
 			
 			speedX = params.speedX;
 			speedY = params.speedY;
+			scalingSpeedX = params.scalingSpeedX;
+			scalingSpeedY = params.scalingSpeedY;
+			rotationSpeed = params.rotationSpeed;
+			fadingSpeed = params.fadingSpeed;
 			
 			accelX = params.accelX;
 			accelY = params.accelY;
@@ -219,21 +218,14 @@ SkyEngine.Node = CLASS({
 			toX = params.toX;
 			toY = params.toY;
 			
-			angle = params.angle;
-			rotationSpeed = params.rotationSpeed;
 			rotationAccel = params.rotationAccel;
 			maxRotationSpeed = params.maxRotationSpeed;
 			toAngle = params.toAngle;
 			
-			alpha = params.alpha;
-			fadingSpeed = params.fadingSpeed;
 			fadingAccel = params.fadingAccel;
 			maxFadingSpeed = params.maxFadingSpeed;
 			toAlpha = params.toAlpha;
 		}
-		
-		if (scaleX === undefined)			{ scaleX = 1; }
-		if (scaleY === undefined)			{ scaleY = 1; }
 		
 		if (x === undefined)				{ x = 0; }
 		if (y === undefined)				{ y = 0; }
@@ -250,6 +242,9 @@ SkyEngine.Node = CLASS({
 		
 		if (toX === undefined)				{ toX = 0; }
 		if (toY === undefined)				{ toY = 0; }
+		
+		if (scaleX === undefined)			{ scaleX = 1; }
+		if (scaleY === undefined)			{ scaleY = 1; }
 		
 		if (angle === undefined)			{ angle = 0; }
 		if (rotationSpeed === undefined)	{ rotationSpeed = 0; }
@@ -440,22 +435,6 @@ SkyEngine.Node = CLASS({
 			
 		};
 		
-		self.setScaleX = setScaleX = function(_scaleX) {
-			scaleX = _scaleX;
-		};
-		
-		self.getScaleX = getScaleX = function() {
-			return scaleX;
-		};
-		
-		self.setScaleY = setScaleY = function(_scaleX) {
-			scaleX = _scaleX;
-		};
-		
-		self.getScaleY = getScaleY = function() {
-			return scaleY;
-		};
-		
 		self.setX = setX = function(_x) {
 			x = _x;
 		};
@@ -547,6 +526,22 @@ SkyEngine.Node = CLASS({
 		
 		self.getToY = getToY = function() {
 			return toY;
+		};
+		
+		self.setScaleX = setScaleX = function(_scaleX) {
+			scaleX = _scaleX;
+		};
+		
+		self.getScaleX = getScaleX = function() {
+			return scaleX;
+		};
+		
+		self.setScaleY = setScaleY = function(_scaleX) {
+			scaleX = _scaleX;
+		};
+		
+		self.getScaleY = getScaleY = function() {
+			return scaleY;
 		};
 		
 		self.setAngle = setAngle = function(_angle) {
@@ -768,7 +763,7 @@ SkyEngine.Node = CLASS({
 			}
 		};
 		
-		self.draw = draw = function(context, realScaleX, realScaleY, realX, realY, realAngle, realAlpha) {
+		self.draw = draw = function(context, realX, realY, realScaleX, realScaleY, realAngle, realAlpha) {
 			// to implement.
 		};
 	}

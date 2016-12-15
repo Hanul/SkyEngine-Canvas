@@ -64,7 +64,8 @@ SkyEngine.Screen = OBJECT({
 				style : {
 					position : 'fixed',
 					left : 5,
-					top : 5
+					top : 5,
+					fontSize : 12
 				}
 			}).appendTo(BODY);
 			
@@ -86,7 +87,7 @@ SkyEngine.Screen = OBJECT({
 			});
 		}
 		
-		drawAll = function(node, context, realScaleX, realScaleY, realX, realY, realAngle, realAlpha) {
+		drawAll = function(node, context, realX, realY, realScaleX, realScaleY, realAngle, realAlpha) {
 			
 			var
 			// radian
@@ -115,7 +116,7 @@ SkyEngine.Screen = OBJECT({
 			
 			context.globalAlpha = realAlpha;
 			
-			node.draw(context, realScaleX, realScaleY, realX, realY, realAngle, realAlpha);
+			node.draw(context, realX, realY, realScaleX, realScaleY, realAngle, realAlpha);
 			
 			context.rotate(-radian);
 			context.translate(-realX, -realY);
@@ -123,7 +124,7 @@ SkyEngine.Screen = OBJECT({
 			context.globalAlpha = 1;
 			
 			node.getChildren().forEach(function(childNode) {
-				drawAll(childNode, context, realScaleX, realScaleY, realX, realY, realAngle, realAlpha);
+				drawAll(childNode, context, realX, realY, realScaleX, realScaleY, realAngle, realAlpha);
 			});
 		}
 		
@@ -135,7 +136,7 @@ SkyEngine.Screen = OBJECT({
 			
 			context.clearRect(0, 0, canvasWidth, canvasHeight);
 			
-			drawAll(self, context, self.getScaleX(), self.getScaleY(), canvasWidth / 2, canvasHeight / 2, self.getAngle(), self.getAlpha());
+			drawAll(self, context, canvasWidth / 2, canvasHeight / 2, self.getScaleX(), self.getScaleY(), self.getAngle(), self.getAlpha());
 		});
 		
 		EVENT('resize', RAR(function() {
