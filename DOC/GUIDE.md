@@ -1,0 +1,7 @@
+
+
+`'tap'`
+`'touchstart'`
+`'touchend'`
+
+`'animationend'`

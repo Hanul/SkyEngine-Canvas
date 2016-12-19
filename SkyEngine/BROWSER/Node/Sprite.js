@@ -195,10 +195,10 @@ SkyEngine.Sprite = CLASS({
 					if (frameCount !== undefined) {
 						context.drawImage(
 							imgs[Math.floor(frame)],
-							-width * realScaleX / 2,
-							-height * realScaleY / 2,
-							width * realScaleX,
-							height * realScaleY);
+							-width / 2,
+							-height / 2,
+							width,
+							height);
 					}
 				}
 				
@@ -210,9 +210,9 @@ SkyEngine.Sprite = CLASS({
 						img,
 						spriteWidth * Math.floor(frame % (width / spriteWidth)), spriteHeight * Math.floor(frame / (width / spriteWidth)),
 						spriteWidth, spriteHeight,
-						-spriteWidth * realScaleX / 2, -spriteHeight * realScaleY / 2,
-						spriteWidth * realScaleX,
-						spriteHeight * realScaleY);
+						-spriteWidth / 2, -spriteHeight / 2,
+						spriteWidth,
+						spriteHeight);
 				}
 				
 				origin(context, realX, realY, realScaleX, realScaleY, realAngle, realAlpha);

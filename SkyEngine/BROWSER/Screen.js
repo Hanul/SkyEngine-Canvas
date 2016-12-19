@@ -85,7 +85,7 @@ SkyEngine.Screen = OBJECT({
 			node.getChildren().forEach(function(childNode) {
 				stepAll(childNode, deltaTime);
 			});
-		}
+		};
 		
 		drawAll = function(node, context, realX, realY, realScaleX, realScaleY, realAngle, realAlpha) {
 			
@@ -116,7 +116,11 @@ SkyEngine.Screen = OBJECT({
 			
 			context.globalAlpha = realAlpha;
 			
+			context.scale(realScaleX, realScaleY);
+			
 			node.draw(context, realX, realY, realScaleX, realScaleY, realAngle, realAlpha);
+			
+			context.scale(1 / realScaleX, 1 / realScaleY);
 			
 			context.rotate(-radian);
 			context.translate(-realX, -realY);
@@ -126,7 +130,7 @@ SkyEngine.Screen = OBJECT({
 			node.getChildren().forEach(function(childNode) {
 				drawAll(childNode, context, realX, realY, realScaleX, realScaleY, realAngle, realAlpha);
 			});
-		}
+		};
 		
 		loop = LOOP(function(_deltaTime) {
 			

@@ -3,7 +3,32 @@ SkyEngineShowcase.MAIN = METHOD({
 	run : function(params) {
 		'use strict';
 		
-		var node1 = SkyEngine.Node({
+		SkyEngineShowcase.MATCH_VIEW({
+			uri : '',
+			target : SkyEngineShowcase.MainMenu
+		});
+		
+		SkyEngineShowcase.MATCH_VIEW({
+			uri : 'test/moving',
+			target : SkyEngineShowcase.MovingTest
+		});
+		
+		SkyEngineShowcase.MATCH_VIEW({
+			uri : 'test/scaling',
+			target : SkyEngineShowcase.ScalingTest
+		});
+		
+		SkyEngineShowcase.MATCH_VIEW({
+			uri : 'test/rotation',
+			target : SkyEngineShowcase.RotationTest
+		});
+		
+		SkyEngineShowcase.MATCH_VIEW({
+			uri : 'test/fading',
+			target : SkyEngineShowcase.FadingTest
+		});
+		
+		/*var node1 = SkyEngine.Node({
 			//accelY : 9.8 * 10,
 			alpha : 0.5,
 			scale : 0.5,
@@ -14,7 +39,7 @@ SkyEngineShowcase.MAIN = METHOD({
 			src : 'R/sample.png',
 			x : -100,
 			y : -100
-		}).appendTo(node1); // 0
+		}).appendTo(node1); // 0*/
 		
 		/*REPEAT(1000, function() {
 			
@@ -26,7 +51,7 @@ SkyEngineShowcase.MAIN = METHOD({
 			}).appendTo(node1); // 1
 		});*/
 		
-		SkyEngine.Sprite({
+		/*SkyEngine.Sprite({
 			src : 'R/sprite.png',
 			spriteWidth : 128,
 			spriteHeight : 128,
@@ -46,7 +71,7 @@ SkyEngineShowcase.MAIN = METHOD({
 				color : '#000'
 			},
 			c : 'Test'
-		}).appendTo(node1);
+		}).appendTo(node1);*/
 		
 		/*node1.moveUp(50);
 		node1.moveLeft(50);
