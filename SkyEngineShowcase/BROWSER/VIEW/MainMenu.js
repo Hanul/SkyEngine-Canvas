@@ -76,6 +76,30 @@ SkyEngineShowcase.MainMenu = CLASS({
 							}
 						}
 					})
+				}), LI({
+					style : {
+						marginTop : 15
+					},
+					c : A({
+						c : '이벤트 테스트',
+						on : {
+							tap : function() {
+								SkyEngineShowcase.GO('test/event');
+							}
+						}
+					})
+				}), LI({
+					style : {
+						marginTop : 15
+					},
+					c : A({
+						c : '충돌 테스트',
+						on : {
+							tap : function() {
+								SkyEngineShowcase.GO('test/collision');
+							}
+						}
+					})
 				})]
 			})]
 		}).appendTo(BODY);

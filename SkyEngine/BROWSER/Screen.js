@@ -111,25 +111,28 @@ SkyEngine.Screen = OBJECT({
 			
 			realAlpha *= node.getAlpha();
 			
-			context.translate(realX, realY);
-			context.rotate(radian);
-			
-			context.globalAlpha = realAlpha;
-			
-			context.scale(realScaleX, realScaleY);
-			
-			node.draw(context, realX, realY, realScaleX, realScaleY, realAngle, realAlpha);
-			
-			context.scale(1 / realScaleX, 1 / realScaleY);
-			
-			context.rotate(-radian);
-			context.translate(-realX, -realY);
-			
-			context.globalAlpha = 1;
-			
-			node.getChildren().forEach(function(childNode) {
-				drawAll(childNode, context, realX, realY, realScaleX, realScaleY, realAngle, realAlpha);
-			});
+			if (node.checkIsHiding() !== true) {
+				
+				context.translate(realX, realY);
+				context.rotate(radian);
+				
+				context.globalAlpha = realAlpha;
+				
+				context.scale(realScaleX, realScaleY);
+				
+				node.draw(context, realX, realY, realScaleX, realScaleY, realAngle, realAlpha);
+				
+				context.scale(1 / realScaleX, 1 / realScaleY);
+				
+				context.rotate(-radian);
+				context.translate(-realX, -realY);
+				
+				context.globalAlpha = 1;
+				
+				node.getChildren().forEach(function(childNode) {
+					drawAll(childNode, context, realX, realY, realScaleX, realScaleY, realAngle, realAlpha);
+				});
+			}
 		};
 		
 		loop = LOOP(function(_deltaTime) {

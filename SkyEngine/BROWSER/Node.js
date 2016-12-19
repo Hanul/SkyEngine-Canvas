@@ -67,6 +67,9 @@ SkyEngine.Node = CLASS({
 		// child nodes
 		childNodes = [],
 		
+		// is hiding
+		isHiding = false,
+		
 		// properties
 		x, y, z, scaleX, scaleY, angle, alpha,
 		
@@ -177,6 +180,9 @@ SkyEngine.Node = CLASS({
 		
 		// hide/show.
 		hide, show,
+		
+		// check is hiding.
+		checkIsHiding,
 		
 		// add collider.
 		addCollider,
@@ -597,7 +603,7 @@ SkyEngine.Node = CLASS({
 			
 			if (accel !== undefined) {
 				accelX = accel;
-				toX = 0;
+				maxSpeedX = 0;
 			}
 			
 			else if (speedX < 0) {
@@ -634,7 +640,7 @@ SkyEngine.Node = CLASS({
 			
 			if (accel !== undefined) {
 				accelX = -accel;
-				toX = 0;
+				minSpeedX = 0;
 			}
 			
 			else if (speedX > 0) {
@@ -671,7 +677,7 @@ SkyEngine.Node = CLASS({
 			
 			if (accel !== undefined) {
 				accelY = accel;
-				toY = 0;
+				maxSpeedY = 0;
 			}
 			
 			else if (speedY < 0) {
@@ -708,7 +714,7 @@ SkyEngine.Node = CLASS({
 			
 			if (accel !== undefined) {
 				accelY = -accel;
-				toY = 0;
+				minSpeedY = 0;
 			}
 			
 			else if (speedY > 0) {
@@ -767,8 +773,21 @@ SkyEngine.Node = CLASS({
 			
 		};
 		
-		self.stopRotation = stopRotation = function() {
+		self.stopRotation = stopRotation = function(accel) {
+			//OPTIONAL: accel
 			
+			if (accel !== undefined) {
+				rotationAccel = -accel;
+				if (accel > 0) {
+					minRotationSpeed = 0;
+				} else if (accel < 0) {
+					maxRotationSpeed = 0;
+				}
+			}
+			
+			else if (rotationSpeed > 0) {
+				rotationSpeed = 0;
+			}
 		};
 		
 		self.rotateTo = rotateTo = function(params) {
@@ -796,36 +815,60 @@ SkyEngine.Node = CLASS({
 			fadingSpeed = -speed;
 		};
 		
-		self.stopFading = stopFading = function() {
+		self.stopFading = stopFading = function(accel) {
+			//OPTIONAL: accel
 			
+			if (accel !== undefined) {
+				fadingAccel = -accel;
+				if (accel > 0) {
+					minFadingSpeed = 0;
+				} else if (accel < 0) {
+					maxFadingSpeed = 0;
+				}
+			}
+			
+			else if (fadingSpeed > 0) {
+				fadingSpeed = 0;
+			}
 		};
 		
-		self.fadeTo = fadeTo = function() {
+		self.fadeTo = fadeTo = function(params) {
+			//REQUIRED: params
+			//OPTIONAL: params.toAlpha
+			//OPTIONAL: params.speed
+			//OPTIONAL: params.accel
+			//OPTIONAL: params.maxSpeed
 			
 		};
 		
 		self.hide = hide = function() {
-			
+			isHiding = true;
 		};
 		
 		self.show = show = function() {
-			
+			isHiding = false;
 		};
 		
-		self.addCollider = addCollider = function() {
-			
+		self.checkIsHiding = checkIsHiding = function() {
+			return isHiding;
 		};
 		
-		self.addTouchArea = addTouchArea = function() {
-			
+		self.addCollider = addCollider = function(collider) {
+			//REQUIRED: collider
 		};
 		
-		self.checkCollision = checkCollision = function() {
-			
+		self.addTouchArea = addTouchArea = function(touchArea) {
+			//REQUIRED: touchArea
 		};
 		
-		self.checkTouch = checkTouch = function() {
-			
+		self.checkCollision = checkCollision = function(target) {
+			// to implement.
+			return false;
+		};
+		
+		self.checkTouch = checkTouch = function(touchX, touchY) {
+			// to implement.
+			return false;
 		};
 		
 		self.step = step = function(deltaTime, realSpeedX, realSpeedY, realScalingSpeedX, realScalingSpeedY, realRotationSpeed, realFadingSpeed) {
