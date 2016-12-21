@@ -23,7 +23,11 @@ SkyEngine.Screen = OBJECT({
 		}).appendTo(BODY),
 		
 		// canvas
-		canvas = CANVAS().appendTo(wrapper),
+		canvas = CANVAS({
+			style : {
+				filter : 'grayscale(1)'
+			}
+		}).appendTo(wrapper),
 		
 		// context
 		context = canvas.getContext('2d'),

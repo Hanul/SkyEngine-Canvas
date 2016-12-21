@@ -61,15 +61,6 @@ SkyEngine.Node = CLASS({
 		//OPTIONAL: params.on		이벤트
 		
 		var
-		// parent node
-		parentNode,
-
-		// child nodes
-		childNodes = [],
-		
-		// is hiding
-		isHiding = false,
-		
 		// properties
 		x, y, z, scaleX, scaleY, angle, alpha,
 		
@@ -87,6 +78,18 @@ SkyEngine.Node = CLASS({
 		
 		// to properties
 		toX, toY, toScaleX, toScaleY, toAngle, toAlpha,
+		
+		// parent node
+		parentNode,
+
+		// child nodes
+		childNodes = [],
+		
+		// is hiding
+		isHiding = false,
+		
+		// event map
+		eventMap = {},
 		
 		// get children.
 		getChildren,
@@ -349,18 +352,40 @@ SkyEngine.Node = CLASS({
 				
 				setParent(undefined);
 			}
+			
+			// clear memory.
+			childNodes = undefined;
+			eventMap = undefined;
 		};
 		
 		self.on = on = function(eventName, eventHandler) {
 			
+			if (eventMap[eventName] === undefined) {
+				eventMap[eventName] = [];
+			}
+			
+			eventMap[eventName].push(eventHandler);
 		};
 		
 		self.off = off = function(eventName, eventHandler) {
-			
+		
+			if (eventMap[eventName] !== undefined) {
+				
+				REMOVE({
+					array : eventMap[eventName],
+					value : eventHandler
+				});
+			}
 		};
 		
 		self.fireEvent = fireEvent = function(eventName) {
 			
+			if (eventMap[eventName] !== undefined) {
+				
+				eventMap[eventName].forEach(function(eventHandler) {
+					eventHandler();
+				});
+			}
 		};
 		
 		self.onMeet = onMeet = function(target, eventHandler) {

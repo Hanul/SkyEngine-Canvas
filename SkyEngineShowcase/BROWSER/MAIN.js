@@ -9,6 +9,11 @@ SkyEngineShowcase.MAIN = METHOD({
 		});
 		
 		SkyEngineShowcase.MATCH_VIEW({
+			uri : 'test/draw',
+			target : SkyEngineShowcase.DrawTest
+		});
+		
+		SkyEngineShowcase.MATCH_VIEW({
 			uri : 'test/moving',
 			target : SkyEngineShowcase.MovingTest
 		});

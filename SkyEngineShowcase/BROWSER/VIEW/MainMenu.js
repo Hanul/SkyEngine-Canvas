@@ -33,6 +33,18 @@ SkyEngineShowcase.MainMenu = CLASS({
 				},
 				c : [LI({
 					c : A({
+						c : '드로우 테스트',
+						on : {
+							tap : function() {
+								SkyEngineShowcase.GO('test/draw');
+							}
+						}
+					})
+				}), LI({
+					style : {
+						marginTop : 15
+					},
+					c : A({
 						c : '움직임 테스트',
 						on : {
 							tap : function() {
