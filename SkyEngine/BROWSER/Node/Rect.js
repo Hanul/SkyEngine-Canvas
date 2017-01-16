@@ -89,11 +89,17 @@ SkyEngine.Rect = CLASS({
 		// get height.
 		getHeight,
 		
-		// check collision.
-		checkCollision,
+		// check point rect.
+		checkPointRect = SkyEngine.Util.Collision.checkPointRect,
 		
-		// check touch.
-		checkTouch,
+		// check rect rect.
+		checkRectRect = SkyEngine.Util.Collision.checkRectRect,
+		
+		// check point.
+		checkPoint,
+		
+		// check area.
+		checkArea,
 		
 		// draw.
 		draw;
@@ -132,23 +138,59 @@ SkyEngine.Rect = CLASS({
 			return height;
 		};
 		
-		self.checkCollision = checkCollision = function(target) {
-			// to implement.
-			return false;
+		self.checkPoint = checkPoint = function(touchX, touchY) {
+			
+			return checkPointRect(
+				touchX,
+				touchY,
+				self.getRealX(),
+				self.getRealY(),
+				width * self.getRealScaleX(),
+				height * self.getRealScaleY(),
+				self.getRealRadian());
 		};
 		
-		self.checkTouch = checkTouch = function(touchX, touchY) {
-			// to implement.
-			return false;
-		};
+		OVERRIDE(self.checkArea, function(origin) {
+			
+			self.checkArea = checkArea = function(collider) {
+				// collider이 같은 Rect인 경우 작동
+				
+				var cos, sin, hw, hh;
+				
+				if (collider.type === SkyEngine.Rect) {
+					
+					if (checkRectRect(
+						self.getRealX(),
+						self.getRealY(),
+						width * self.getRealScaleX(),
+						height * self.getRealScaleY(),
+						self.getRealRadian(),
+						collider.getRealX(),
+						collider.getRealY(),
+						collider.getWidth() * collider.getRealScaleX(),
+						collider.getHeight() * collider.getRealScaleY(),
+						collider.getRealRadian()) === true) {
+						
+						return true;
+					}
+				}
+				
+				return origin();
+			};
+		});
 		
-		self.draw = draw = function(context, realX, realY, realScaleX, realScaleY, realAngle, realAlpha) {
+		OVERRIDE(self.draw, function(origin) {
 			
-			context.beginPath();
-			context.rect(-width / 2, -height / 2, width, height);
-			
-			context.fillStyle = color;
-			context.fill();
-		};
+			self.draw = draw = function(context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha) {
+				
+				context.beginPath();
+				context.rect(-width / 2, -height / 2, width, height);
+				
+				context.fillStyle = color;
+				context.fill();
+				
+				origin(context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha);
+			};
+		});
 	}
 });

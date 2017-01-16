@@ -45,6 +45,18 @@ SkyEngineShowcase.MainMenu = CLASS({
 						marginTop : 15
 					},
 					c : A({
+						c : '노드 테스트',
+						on : {
+							tap : function() {
+								SkyEngineShowcase.GO('test/node');
+							}
+						}
+					})
+				}), LI({
+					style : {
+						marginTop : 15
+					},
+					c : A({
 						c : '움직임 테스트',
 						on : {
 							tap : function() {
@@ -85,6 +97,18 @@ SkyEngineShowcase.MainMenu = CLASS({
 						on : {
 							tap : function() {
 								SkyEngineShowcase.GO('test/fading');
+							}
+						}
+					})
+				}), LI({
+					style : {
+						marginTop : 15
+					},
+					c : A({
+						c : '필터 테스트',
+						on : {
+							tap : function() {
+								SkyEngineShowcase.GO('test/filter');
 							}
 						}
 					})

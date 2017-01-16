@@ -23,11 +23,7 @@ SkyEngine.Screen = OBJECT({
 		}).appendTo(BODY),
 		
 		// canvas
-		canvas = CANVAS({
-			style : {
-				filter : 'grayscale(1)'
-			}
-		}).appendTo(wrapper),
+		canvas = CANVAS().appendTo(wrapper),
 		
 		// context
 		context = canvas.getContext('2d'),
@@ -47,8 +43,11 @@ SkyEngine.Screen = OBJECT({
 		// delta time
 		deltaTime,
 		
-		// registered nodes
-		registeredNodes = {},
+		// registered node map
+		registeredNodeMap = {},
+		
+		// registered event node map
+		registeredEventNodeMap = {},
 		
 		// step all.
 		stepAll,
@@ -60,7 +59,99 @@ SkyEngine.Screen = OBJECT({
 		registerNode,
 		
 		// unregister node.
-		unregisterNode;
+		unregisterNode,
+		
+		// get registered nodes.
+		getRegisteredNodes,
+		
+		// register event node.
+		registerEventNode,
+		
+		// unregister event node.
+		unregisterEventNode,
+		
+		// set filter.
+		setFilter,
+		
+		// remove filter.
+		removeFilter;
+		
+		self.registerNode = registerNode = function(node) {
+			
+			var
+			// cls
+			cls = node.type;
+			
+			while (cls !== undefined && cls !== CLASS) {
+				
+				if (registeredNodeMap[cls.id] === undefined) {
+					registeredNodeMap[cls.id] = [];
+				}
+				
+				registeredNodeMap[cls.id].push(node);
+				
+				cls = cls.mom;
+			}
+		};
+		
+		self.unregisterNode = unregisterNode = function(node) {
+			
+			var
+			// cls
+			cls = node.type;
+			
+			while (cls !== undefined && cls !== CLASS) {
+				
+				if (registeredNodeMap[cls.id] !== undefined) {
+					
+					REMOVE({
+						array : registeredNodeMap[cls.id],
+						value : node
+					});
+					
+					if (registeredNodeMap[cls.id].length === 0) {
+						delete registeredNodeMap[cls.id];
+					}
+				}
+				
+				cls = cls.mom;
+			}
+		};
+		
+		self.getRegisteredNodes = getRegisteredNodes = function(cls) {
+			return registeredNodeMap[cls.id] === undefined ? [] : registeredNodeMap[cls.id];
+		};
+		
+		self.registerEventNode = registerEventNode = function(eventName, node) {
+			
+			if (registeredEventNodeMap[eventName] !== undefined) {
+				registeredEventNodeMap[eventName].push(node);
+			}
+		};
+		
+		self.unregisterEventNode = unregisterEventNode = function(eventName, node) {
+			
+			if (registeredEventNodeMap[eventName] !== undefined) {
+				
+				REMOVE({
+					array : registeredEventNodeMap[eventName],
+					value : node
+				});
+			}
+		};
+		
+		self.setFilter = setFilter = function(filterStyle) {
+			//REQUIRED: filterStyle
+			
+			canvas.addStyle({
+				filter : filterStyle
+			});
+		};
+		
+		self.removeFilter = removeFilter = function() {
+			setFilter('none');
+		};
+		
 		
 		if (CONFIG.isDevMode === true) {
 			
@@ -82,6 +173,27 @@ SkyEngine.Screen = OBJECT({
 			});
 		}
 		
+		EACH([
+			'tap',
+			'touchstart',
+			'touchend'
+		], function(eventName) {
+			
+			registeredEventNodeMap[eventName] = [];
+			
+			canvas.on(eventName, function(e) {
+				
+				EACH(registeredEventNodeMap[eventName], function(node) {
+					
+					if (node.checkTouch(e.getLeft(), e.getTop()) === true) {
+						node.fireEvent(eventName);
+					}
+				});
+				
+				e.stop();
+			});
+		});
+		
 		stepAll = function(node, deltaTime) {
 			
 			node.step(deltaTime);
@@ -91,50 +203,47 @@ SkyEngine.Screen = OBJECT({
 			});
 		};
 		
-		drawAll = function(node, context, realX, realY, realScaleX, realScaleY, realAngle, realAlpha) {
+		drawAll = function(node, context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha) {
 			
 			var
-			// radian
-			radian = realAngle * Math.PI / 180,
-			
 			// plus x
 			plusX = node.getX() * realScaleX,
 			
 			// plus y
-			plusY = node.getY() * realScaleY;
+			plusY = node.getY() * realScaleY,
 			
-			realX += plusX * Math.cos(radian) - plusY * Math.sin(radian);
-			realY += plusX * Math.sin(radian) + plusY * Math.cos(radian);
+			// sin
+			sin = Math.sin(realRadian),
+			
+			// cos
+			cos = Math.cos(realRadian);
+			
+			realX += plusX * cos - plusY * sin;
+			realY += plusX * sin + plusY * cos;
 			
 			realScaleX *= node.getScaleX();
 			realScaleY *= node.getScaleY();
 			
-			realAngle += node.getAngle();
-			
-			radian = realAngle * Math.PI / 180;
+			realRadian += node.getAngle() * Math.PI / 180;
 			
 			realAlpha *= node.getAlpha();
 			
 			if (node.checkIsHiding() !== true) {
 				
 				context.translate(realX, realY);
-				context.rotate(radian);
-				
+				context.rotate(realRadian);
+				context.scale(realScaleX, realScaleY);
 				context.globalAlpha = realAlpha;
 				
-				context.scale(realScaleX, realScaleY);
-				
-				node.draw(context, realX, realY, realScaleX, realScaleY, realAngle, realAlpha);
-				
-				context.scale(1 / realScaleX, 1 / realScaleY);
-				
-				context.rotate(-radian);
-				context.translate(-realX, -realY);
+				node.draw(context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha);
 				
 				context.globalAlpha = 1;
+				context.scale(1 / realScaleX, 1 / realScaleY);
+				context.rotate(-realRadian);
+				context.translate(-realX, -realY);
 				
 				node.getChildren().forEach(function(childNode) {
-					drawAll(childNode, context, realX, realY, realScaleX, realScaleY, realAngle, realAlpha);
+					drawAll(childNode, context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha);
 				});
 			}
 		};
@@ -147,7 +256,7 @@ SkyEngine.Screen = OBJECT({
 			
 			context.clearRect(0, 0, canvasWidth, canvasHeight);
 			
-			drawAll(self, context, canvasWidth / 2, canvasHeight / 2, self.getScaleX(), self.getScaleY(), self.getAngle(), self.getAlpha());
+			drawAll(self, context, canvasWidth / 2, canvasHeight / 2, self.getScaleX(), self.getScaleY(), self.getAngle() * Math.PI / 180, self.getAlpha());
 		});
 		
 		EVENT('resize', RAR(function() {
@@ -164,13 +273,5 @@ SkyEngine.Screen = OBJECT({
 		self.on('remove', function() {
 			loop.remove();
 		});
-		
-		self.registerNode = registerNode = function() {
-			
-		};
-		
-		self.unregisterNode = unregisterNode = function() {
-			
-		};
 	}
 });

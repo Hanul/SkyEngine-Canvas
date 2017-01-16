@@ -117,7 +117,10 @@ SkyEngine.Sprite = CLASS({
 		draw,
 		
 		// remove.
-		remove;
+		remove,
+		
+		// check collision.
+		checkCollision;
 		
 		if (fps === undefined) {
 			fps = 0;
@@ -228,7 +231,7 @@ SkyEngine.Sprite = CLASS({
 		
 		OVERRIDE(self.draw, function(origin) {
 			
-			self.draw = draw = function(context, realX, realY, realScaleX, realScaleY, realAngle, realAlpha) {
+			self.draw = draw = function(context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha) {
 				
 				var
 				// x frame
@@ -261,7 +264,7 @@ SkyEngine.Sprite = CLASS({
 						spriteHeight);
 				}
 				
-				origin(context, realX, realY, realScaleX, realScaleY, realAngle, realAlpha);
+				origin(context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha);
 			};
 		});
 		
@@ -277,6 +280,16 @@ SkyEngine.Sprite = CLASS({
 				origin();
 			};
 		});
+		
+		self.checkCollision = checkCollision = function(target) {
+			// target이 Rect인 경우 작동
+			// target이 Circle인 경우 작동
+			// target이 Image인 경우 작동
+			// target이 같은 Sprite인 경우 작동
+			
+			// to implement.
+			return false;
+		};
 		
 		// 사각형 충돌 체크
 		// 원 충돌 체크

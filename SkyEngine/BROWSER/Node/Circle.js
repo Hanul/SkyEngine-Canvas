@@ -89,11 +89,20 @@ SkyEngine.Circle = CLASS({
 		// get height.
 		getHeight,
 		
-		// check collision.
-		checkCollision,
+		// check point circle.
+		checkPointCircle = SkyEngine.Util.Collision.checkPointCircle,
 		
-		// check touch.
-		checkTouch,
+		// check rect circle.
+		checkRectCircle = SkyEngine.Util.Collision.checkRectCircle,
+		
+		// check circle circle.
+		checkCircleCircle = SkyEngine.Util.Collision.checkCircleCircle,
+		
+		// check point.
+		checkPoint,
+		
+		// check area.
+		checkArea,
 		
 		// draw.
 		draw;
@@ -132,23 +141,61 @@ SkyEngine.Circle = CLASS({
 			return height;
 		};
 		
-		self.checkCollision = checkCollision = function(target) {
-			// to implement.
-			return false;
+		self.checkPoint = checkPoint = function(touchX, touchY) {
+			
+			return checkPointCircle(
+				touchX,
+				touchY,
+				self.getRealX(),
+				self.getRealY(),
+				width * self.getRealScaleX(),
+				height * self.getRealScaleY(),
+				self.getRealRadian()
+			);
 		};
 		
-		self.checkTouch = checkTouch = function(touchX, touchY) {
-			// to implement.
-			return false;
-		};
+		OVERRIDE(self.checkArea, function(origin) {
+			
+			self.checkArea = checkArea = function(collider) {
+				// target이 Rect인 경우 작동
+				// target이 같은 Circle인 경우 작동
+				
+				if (collider.type === SkyEngine.Rect) {
+					
+					if (checkRectCircle(
+						collider.getRealX(), collider.getRealY(), collider.getWidth() * collider.getRealScaleX(), collider.getHeight() * collider.getRealScaleY(), collider.getRealRadian(),
+						self.getRealX(), self.getRealY(), width * self.getRealScaleX(), height * self.getRealScaleY(), self.getRealRadian()
+					) === true) {
+						return true;
+					}
+				}
+				
+				else if (collider.type === SkyEngine.Circle) {
+					
+					if (checkCircleCircle(
+						self.getRealX(), self.getRealY(), width * self.getRealScaleX(), height * self.getRealScaleY(), self.getRealRadian(),
+						collider.getRealX(), collider.getRealY(), collider.getWidth() * collider.getRealScaleX(), collider.getHeight() * collider.getRealScaleY(), collider.getRealRadian()
+					) === true) {
+						return true;
+					}
+				}
+				
+				return origin();
+			};
+		});
 		
-		self.draw = draw = function(context, realX, realY, realScaleX, realScaleY, realAngle, realAlpha) {
+		OVERRIDE(self.draw, function(origin) {
 			
-			context.beginPath();
-			context.ellipse(0, 0, width / 2, height / 2, 0, 0, 2 * Math.PI);
-			
-			context.fillStyle = color;
-			context.fill();
-		};
+			self.draw = draw = function(context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha) {
+				
+				context.beginPath();
+				context.ellipse(0, 0, width / 2, height / 2, 0, 0, 2 * Math.PI);
+				
+				context.fillStyle = color;
+				context.fill();
+				
+				origin(context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha);
+			};
+		});
 	}
 });

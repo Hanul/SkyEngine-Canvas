@@ -14,6 +14,11 @@ SkyEngineShowcase.MAIN = METHOD({
 		});
 		
 		SkyEngineShowcase.MATCH_VIEW({
+			uri : 'test/node',
+			target : SkyEngineShowcase.NodeTest
+		});
+		
+		SkyEngineShowcase.MATCH_VIEW({
 			uri : 'test/moving',
 			target : SkyEngineShowcase.MovingTest
 		});
@@ -31,6 +36,21 @@ SkyEngineShowcase.MAIN = METHOD({
 		SkyEngineShowcase.MATCH_VIEW({
 			uri : 'test/fading',
 			target : SkyEngineShowcase.FadingTest
+		});
+		
+		SkyEngineShowcase.MATCH_VIEW({
+			uri : 'test/filter',
+			target : SkyEngineShowcase.FilterTest
+		});
+		
+		SkyEngineShowcase.MATCH_VIEW({
+			uri : 'test/event',
+			target : SkyEngineShowcase.EventTest
+		});
+		
+		SkyEngineShowcase.MATCH_VIEW({
+			uri : 'test/collision',
+			target : SkyEngineShowcase.CollisionTest
 		});
 		
 		/*var node1 = SkyEngine.Node({

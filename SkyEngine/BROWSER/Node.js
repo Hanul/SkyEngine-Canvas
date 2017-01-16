@@ -57,6 +57,8 @@ SkyEngine.Node = CLASS({
 		//OPTIONAL: params.maxFadingSpeed
 		//OPTIONAL: params.toAlpha
 		
+		//OPTIONAL: params.collider
+		//OPTIONAL: params.touchArea
 		//OPTIONAL: params.c		자식 노드. 하나의 노드를 지정하거나, 노드들의 배열을 지정할 수 있습니다.
 		//OPTIONAL: params.on		이벤트
 		
@@ -79,6 +81,9 @@ SkyEngine.Node = CLASS({
 		// to properties
 		toX, toY, toScaleX, toScaleY, toAngle, toAlpha,
 		
+		// real properties
+		realX, realY, realScaleX, realScaleY, realRadian, realAlpha,
+		
 		// parent node
 		parentNode,
 
@@ -88,8 +93,29 @@ SkyEngine.Node = CLASS({
 		// is hiding
 		isHiding = false,
 		
+		// is removed
+		isRemoved = false,
+		
 		// event map
 		eventMap = {},
+		
+		// colliders
+		colliders = [],
+		
+		// touch areas
+		touchAreas = [],
+		
+		// collision targets
+		collisionTargets = [],
+		
+		// colliding node ids
+		collidingNodeIds = {},
+		
+		// meet handler map
+		meetHandlerMap = {},
+		
+		// part handler map
+		partHandlerMap = {},
 		
 		// get children.
 		getChildren,
@@ -117,6 +143,9 @@ SkyEngine.Node = CLASS({
 
 		// remove.
 		remove,
+		
+		// check is removed.
+		checkIsRemoved,
 
 		// on.
 		on,
@@ -133,11 +162,17 @@ SkyEngine.Node = CLASS({
 		// off meet.
 		offMeet,
 		
+		// run meet handlers.
+		runMeetHandlers,
+		
 		// on part.
 		onPart,
 		
 		// off part.
 		offPart,
+		
+		// run part handlers.
+		runPartHandlers,
 		
 		// set/get properties.
 		setX, getX, setY, getY, setZ, getZ, setScale, setScaleX, getScaleX, setScaleY, getScaleY, getAngle, setAngle, getAlpha, setAlpha,
@@ -156,6 +191,12 @@ SkyEngine.Node = CLASS({
 		
 		// set/get to properties.
 		setToX, getToX, setToY, getToY, setToScaleX, getToScaleX, setToScaleY, getToScaleY, setToScale, setToAngle, getToAngle, setToAlpha, getToAlpha,
+		
+		// get real properties.
+		getRealX, getRealY, getRealScaleX, getRealScaleY, getRealRadian, getRealAlpha,
+		
+		// get size.
+		getWidth, getHeight,
 		
 		// move/stop left.
 		moveLeft, stopLeft,
@@ -190,8 +231,17 @@ SkyEngine.Node = CLASS({
 		// add collider.
 		addCollider,
 		
+		// get colliders.
+		getColliders,
+		
 		// add touch area.
 		addTouchArea,
+		
+		// check point.
+		checkPoint,
+		
+		// check area.
+		checkArea,
 		
 		// check collision.
 		checkCollision,
@@ -203,7 +253,10 @@ SkyEngine.Node = CLASS({
 		step,
 		
 		// draw.
-		draw;
+		draw,
+		
+		// clone.
+		clone;
 		
 		self.getChildren = getChildren = function() {
 			return childNodes;
@@ -353,15 +406,39 @@ SkyEngine.Node = CLASS({
 				setParent(undefined);
 			}
 			
+			if (SkyEngine.Screen !== self) {
+				SkyEngine.Screen.unregisterNode(self);
+			}
+			
 			// clear memory.
 			childNodes = undefined;
+			
+			EACH(eventMap, function(eventName) {
+				SkyEngine.Screen.unregisterEventNode(eventName, self);
+			});
 			eventMap = undefined;
+			
+			colliders = undefined;
+			touchAreas = undefined;
+			
+			collisionTargets = undefined
+			collidingNodeIds = undefined;
+			meetHandlerMap = undefined;
+			partHandlerMap = undefined;
+			
+			isRemoved = true;
+		};
+		
+		self.checkIsRemoved = checkIsRemoved = function() {
+			return isRemoved;
 		};
 		
 		self.on = on = function(eventName, eventHandler) {
 			
 			if (eventMap[eventName] === undefined) {
 				eventMap[eventName] = [];
+				
+				SkyEngine.Screen.registerEventNode(eventName, self);
 			}
 			
 			eventMap[eventName].push(eventHandler);
@@ -375,6 +452,12 @@ SkyEngine.Node = CLASS({
 					array : eventMap[eventName],
 					value : eventHandler
 				});
+				
+				if (eventMap[eventName].length === 0) {
+					delete eventMap[eventName];
+					
+					SkyEngine.Screen.unregisterEventNode(eventName, self);
+				}
 			}
 		};
 		
@@ -388,20 +471,70 @@ SkyEngine.Node = CLASS({
 			}
 		};
 		
-		self.onMeet = onMeet = function(target, eventHandler) {
+		self.onMeet = onMeet = function(target, handler) {
 			
+			collisionTargets.push(target);
+			
+			if (meetHandlerMap[target.id] === undefined) {
+				meetHandlerMap[target.id] = [];
+			}
+			
+			meetHandlerMap[target.id].push(handler);
 		};
 		
-		self.offMeet = offMeet = function(target, eventHandler) {
+		self.offMeet = offMeet = function(target, handler) {
 			
+			if (handler === undefined) {
+				delete meetHandlerMap[target.id];
+			} else {
+				REMOVE({
+					array : meetHandlerMap[target.id],
+					value : handler
+				});
+			}
 		};
 		
-		self.onPart = onPart = function(target, eventHandler) {
+		self.runMeetHandlers = runMeetHandlers = function(target, realTarget) {
 			
+			if (meetHandlerMap[target.id] !== undefined) {
+				
+				meetHandlerMap[target.id].forEach(function(handler) {
+					handler(realTarget);
+				});
+			}
 		};
 		
-		self.offPart = offPart = function(target, eventHandler) {
+		self.onPart = onPart = function(target, handler) {
 			
+			collisionTargets.push(target);
+			
+			if (partHandlerMap[target.id] === undefined) {
+				partHandlerMap[target.id] = [];
+			}
+			
+			partHandlerMap[target.id].push(handler);
+		};
+		
+		self.offPart = offPart = function(target, handler) {
+			
+			if (handler === undefined) {
+				delete partHandlerMap[target.id];
+			} else {
+				REMOVE({
+					array : partHandlerMap[target.id],
+					value : handler
+				});
+			}
+		};
+		
+		self.runPartHandlers = runPartHandlers = function(target, realTarget) {
+			
+			if (partHandlerMap[target.id] !== undefined) {
+				
+				partHandlerMap[target.id].forEach(function(handler) {
+					handler(realTarget);
+				});
+			}
 		};
 		
 		self.setX = setX = function(_x)							{ x = _x; };
@@ -513,6 +646,16 @@ SkyEngine.Node = CLASS({
 		self.setToAlpha = setToAlpha = function(_toAlpha)						{ toAlpha = _toAlpha; };
 		self.getToAlpha = getToAlpha = function()								{ return toAlpha; };
 		
+		self.getRealX = getRealX = function()									{ return realX; };
+		self.getRealY = getRealY = function()									{ return realY; };
+		self.getRealScaleX = getRealScaleX = function()							{ return realScaleX; };
+		self.getRealScaleY = getRealScaleY = function()							{ return realScaleY; };
+		self.getRealRadian = getRealRadian = function(_toAlpha)					{ return realRadian; };
+		self.getRealAlpha = getRealAlpha = function(_toAlpha)					{ return realAlpha; };
+		
+		self.getWidth = getWidth = function()									{ return 0; };
+		self.getHeight = getHeight = function()									{ return 0; };
+		
 		// 파라미터 초기화
 		if (params !== undefined) {
 			
@@ -565,14 +708,40 @@ SkyEngine.Node = CLASS({
 			toAngle = params.toAngle;
 			toAlpha = params.toAlpha;
 			
-			if (params.c !== undefined) {
-				if (CHECK_IS_ARRAY(params.c) === true) {
-					params.c.forEach(function(childNode) {
-						childNode.appendTo(self);
+			if (params.collider !== undefined) {
+				if (CHECK_IS_ARRAY(params.collider) === true) {
+					EACH(params.collider, function(collider) {
+						addCollider(collider);
 					});
 				} else {
-					params.c.appendTo(self);
+					addCollider(params.collider);
 				}
+			}
+			
+			if (params.touchArea !== undefined) {
+				if (CHECK_IS_ARRAY(params.touchArea) === true) {
+					EACH(params.touchArea, function(touchArea) {
+						addTouchArea(touchArea);
+					});
+				} else {
+					addTouchArea(params.touchArea);
+				}
+			}
+			
+			if (params.c !== undefined) {
+				if (CHECK_IS_ARRAY(params.c) === true) {
+					EACH(params.c, function(childNode) {
+						append(childNode);
+					});
+				} else {
+					append(params.c);
+				}
+			}
+			
+			if (params.on !== undefined) {
+				EACH(params.on, function(eventHandler, eventName) {
+					on(eventName, eventHandler);
+				});
 			}
 		}
 		
@@ -598,6 +767,10 @@ SkyEngine.Node = CLASS({
 		if (alpha === undefined)			{ alpha = 1; }
 		if (fadingSpeed === undefined)		{ fadingSpeed = 0; }
 		if (fadingAccel === undefined)		{ fadingAccel = 0; }
+		
+		if (SkyEngine.Screen !== self) {
+			SkyEngine.Screen.registerNode(self);
+		}
 		
 		self.moveLeft = moveLeft = function(speedOrParams) {
 			//REQUIRED: speedOrParams
@@ -880,20 +1053,52 @@ SkyEngine.Node = CLASS({
 		
 		self.addCollider = addCollider = function(collider) {
 			//REQUIRED: collider
+			
+			colliders.push(collider);
+		};
+		
+		self.getColliders = getColliders = function() {
+			return colliders;
 		};
 		
 		self.addTouchArea = addTouchArea = function(touchArea) {
 			//REQUIRED: touchArea
+			
+			touchAreas.push(touchArea);
+		};
+		
+		self.checkPoint = checkPoint = function(x, y) {
+			// to implement.
+			return false;
+		};
+		
+		self.checkArea = checkArea = function(area) {
+			// to implement.
+			return false;
 		};
 		
 		self.checkCollision = checkCollision = function(target) {
-			// to implement.
-			return false;
+			
+			return colliders.every(function(collider) {
+				return target.getColliders().every(function(targetCollider) {
+					return collider.checkArea(targetCollider) !== true;
+				});
+			}) !== true ||
+			
+			childNodes.every(function(childNode) {
+				return childNode.checkCollision(target) !== true;
+			}) !== true;
 		};
 		
 		self.checkTouch = checkTouch = function(touchX, touchY) {
-			// to implement.
-			return false;
+			
+			return touchAreas.every(function(touchArea) {
+				return touchArea.checkPoint(touchX, touchY) !== true;
+			}) !== true ||
+			
+			childNodes.every(function(childNode) {
+				return childNode.checkTouch(touchX, touchY) !== true;
+			}) !== true;
 		};
 		
 		self.step = step = function(deltaTime, realSpeedX, realSpeedY, realScalingSpeedX, realScalingSpeedY, realRotationSpeed, realFadingSpeed) {
@@ -1053,10 +1258,79 @@ SkyEngine.Node = CLASS({
 					alpha = 0;
 				}
 			}
+			
+			// check all collisions.
+			
+			collisionTargets.forEach(function(target, index, arr) {
+				
+				if (target.type === CLASS) {
+					
+					SkyEngine.Screen.getRegisteredNodes(target).forEach(function(realTarget, i) {
+						
+						if (realTarget !== self) {
+							
+							if (realTarget.checkIsRemoved() !== true) {
+								
+								if (self.checkCollision(realTarget) === true || (self.type !== realTarget.type && realTarget.checkCollision(self) === true)) {
+									
+									if (collidingNodeIds[realTarget.id] === undefined) {
+										collidingNodeIds[realTarget.id] = true;
+										
+										runMeetHandlers(target, realTarget);
+									}
+								}
+								
+								else if (collidingNodeIds[realTarget.id] !== undefined) {
+									delete collidingNodeIds[realTarget.id];
+									
+									runPartHandlers(target, realTarget);
+								}
+							}
+							
+							else {
+								delete collidingNodeIds[realTarget.id];
+							}
+						}
+					});
+				}
+				
+				else if (target.checkIsRemoved() !== true) {
+					
+					if (self.checkCollision(target) === true || (self.type !== target.type && target.checkCollision(self) === true)) {
+						
+						if (collidingNodeIds[target.id] === undefined) {
+							collidingNodeIds[target.id] = true;
+							
+							runMeetHandlers(target, target);
+						}
+					}
+					
+					else if (collidingNodeIds[target.id] !== undefined) {
+						delete collidingNodeIds[target.id];
+						
+						runPartHandlers(target, target);
+					}
+				}
+				
+				else {
+					
+					arr.splice(index, 1);
+					
+					delete collidingNodeIds[target.id];
+					delete meetHandlerMap[target.id];
+					delete partHandlerMap[target.id];
+				}
+			});
 		};
 		
-		self.draw = draw = function(context, realX, realY, realScaleX, realScaleY, realAngle, realAlpha) {
-			// to implement.
+		self.draw = draw = function(context, _realX, _realY, _realScaleX, _realScaleY, _realRadian, _realAlpha) {
+			
+			realX = _realX;
+			realY = _realY;
+			realScaleX = _realScaleX;
+			realScaleY = _realScaleY;
+			realRadian = _realRadian;
+			realAlpha = _realAlpha
 		};
 	}
 });
