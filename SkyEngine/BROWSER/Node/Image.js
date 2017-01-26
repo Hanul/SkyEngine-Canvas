@@ -155,7 +155,7 @@ SkyEngine.Image = CLASS(function(cls) {
 						width,
 						height);
 						
-					if (polygon !== undefined) {
+					/*if (polygon !== undefined) {
 						context.beginPath();
 						context.strokeStyle="red";
 						context.lineWidth=2;
@@ -166,7 +166,7 @@ SkyEngine.Image = CLASS(function(cls) {
 						}
 						context.closePath();
 						context.stroke();
-					}
+					}*/
 					
 					origin(context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha);
 				};

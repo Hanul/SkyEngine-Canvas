@@ -136,6 +136,18 @@ SkyEngineShowcase.MainMenu = CLASS({
 							}
 						}
 					})
+				}), LI({
+					style : {
+						marginTop : 15
+					},
+					c : A({
+						c : 'Hello, SkyEngine!',
+						on : {
+							tap : function() {
+								SkyEngineShowcase.GO('hello');
+							}
+						}
+					})
 				})]
 			})]
 		}).appendTo(BODY);

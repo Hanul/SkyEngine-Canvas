@@ -13,59 +13,61 @@ SkyEngine.Rect = CLASS({
 		'use strict';
 		//OPTIONAL: params
 		
-		//OPTIONAL: params.x
-		//OPTIONAL: params.y
-		//OPTIONAL: params.z
-		//OPTIONAL: params.speedX
-		//OPTIONAL: params.speedY
-		//OPTIONAL: params.accelX
-		//OPTIONAL: params.accelY
-		//OPTIONAL: params.minSpeedX
-		//OPTIONAL: params.minSpeedY
-		//OPTIONAL: params.maxSpeedX
-		//OPTIONAL: params.maxSpeedY
-		//OPTIONAL: params.toX
-		//OPTIONAL: params.toY
+		//OPTIONAL: params.x					x 좌표
+		//OPTIONAL: params.y					y 좌표
+		//OPTIONAL: params.z					노드의 드로우 순서를 결정하기 위한 z 인덱스
+		//OPTIONAL: params.speedX				x 좌표 이동 속도
+		//OPTIONAL: params.speedY				y 좌표 이동 속도
+		//OPTIONAL: params.accelX				x 좌표 이동 가속도
+		//OPTIONAL: params.accelY				y 좌표 이동 가속도
+		//OPTIONAL: params.minSpeedX			x 좌표 최소 이동 속도. 가속도로 줄어드는 속도의 최소값입니다.
+		//OPTIONAL: params.minSpeedY			y 좌표 최소 이동 속도. 가속도로 줄어드는 속도의 최소값입니다.
+		//OPTIONAL: params.maxSpeedX			x 좌표 최대 이동 속도. 가속도로 늘어나는 속도의 최대값입니다.
+		//OPTIONAL: params.maxSpeedY			y 좌표 최대 이동 속도. 가속도로 늘어나는 속도의 최대값입니다.
+		//OPTIONAL: params.toX					x 좌표 목적지. 이동하다 목적지에 도착하면 속도가 0이 됩니다.
+		//OPTIONAL: params.toY					y 좌표 목적지. 이동하다 목적지에 도착하면 속도가 0이 됩니다.
 		
-		//OPTIONAL: params.scale
-		//OPTIONAL: params.scaleX
-		//OPTIONAL: params.scaleY
-		//OPTIONAL: params.scalingSpeed
-		//OPTIONAL: params.scalingSpeedX
-		//OPTIONAL: params.scalingSpeedY
-		//OPTIONAL: params.scalingAccel
-		//OPTIONAL: params.scalingAccelX
-		//OPTIONAL: params.scalingAccelY
-		//OPTIONAL: params.minScalingSpeed
-		//OPTIONAL: params.minScalingSpeedX
-		//OPTIONAL: params.minScalingSpeedY
-		//OPTIONAL: params.maxScalingSpeed
-		//OPTIONAL: params.maxScalingSpeedX
-		//OPTIONAL: params.maxScalingSpeedY
-		//OPTIONAL: params.toScale
-		//OPTIONAL: params.toScaleX
-		//OPTIONAL: params.toScaleY
+		//OPTIONAL: params.scale				배율
+		//OPTIONAL: params.scaleX				x 배율
+		//OPTIONAL: params.scaleY				y 배율
+		//OPTIONAL: params.scalingSpeed			배율이 커지는 속도
+		//OPTIONAL: params.scalingSpeedX		x 배율이 커지는 속도
+		//OPTIONAL: params.scalingSpeedY		y 배율이 커지는 속도
+		//OPTIONAL: params.scalingAccel			배율이 커지는 가속도
+		//OPTIONAL: params.scalingAccelX		x 배율이 커지는 가속도
+		//OPTIONAL: params.scalingAccelY		y 배율이 커지는 가속도
+		//OPTIONAL: params.minScalingSpeed		배율이 커지는 최소 속도
+		//OPTIONAL: params.minScalingSpeedX		x 배율이 커지는 최소 속도
+		//OPTIONAL: params.minScalingSpeedY		y 배율이 커지는 최소 속도
+		//OPTIONAL: params.maxScalingSpeed		배율이 커지는 최대 속도
+		//OPTIONAL: params.maxScalingSpeedX		x 배율이 커지는 최대 속도
+		//OPTIONAL: params.maxScalingSpeedY		y 배율이 커지는 최대 속도
+		//OPTIONAL: params.toScale				배율이 커지는 목적지
+		//OPTIONAL: params.toScaleX				x 배율이 커지는 목적지
+		//OPTIONAL: params.toScaleY				y 배율이 커지는 목적지
 		
-		//OPTIONAL: params.angle
-		//OPTIONAL: params.rotationSpeed
-		//OPTIONAL: params.rotationAccel
-		//OPTIONAL: params.minRotationSpeed
-		//OPTIONAL: params.maxRotationSpeed
-		//OPTIONAL: params.toAngle
+		//OPTIONAL: params.angle				회전 각도
+		//OPTIONAL: params.rotationSpeed		회전 속도
+		//OPTIONAL: params.rotationAccel		회전 가속도
+		//OPTIONAL: params.minRotationSpeed		최소 회전 속도
+		//OPTIONAL: params.maxRotationSpeed		최대 회전 속도
+		//OPTIONAL: params.toAngle				회전 각도 목적지
 		
-		//OPTIONAL: params.alpha
-		//OPTIONAL: params.fadingSpeed
-		//OPTIONAL: params.fadingAccel
-		//OPTIONAL: params.minFadingSpeed
-		//OPTIONAL: params.maxFadingSpeed
-		//OPTIONAL: params.toAlpha
+		//OPTIONAL: params.alpha				알파 값
+		//OPTIONAL: params.fadingSpeed			페이드 속도
+		//OPTIONAL: params.fadingAccel			페이드 가속도
+		//OPTIONAL: params.minFadingSpeed		최소 페이드 속도
+		//OPTIONAL: params.maxFadingSpeed		최대 페이드 속도
+		//OPTIONAL: params.toAlpha				페이드 알파 값 목적지
 		
-		//OPTIONAL: params.c		자식 노드. 하나의 노드를 지정하거나, 노드들의 배열을 지정할 수 있습니다.
-		//OPTIONAL: params.on		이벤트
+		//OPTIONAL: params.collider				충돌 영역. 하나의 영역을 지정하거나, 영역들의 배열을 지정할 수 있습니다.
+		//OPTIONAL: params.touchArea			터치 영역. 하나의 영역을 지정하거나, 영역들의 배열을 지정할 수 있습니다.
+		//OPTIONAL: params.c					자식 노드. 하나의 노드를 지정하거나, 노드들의 배열을 지정할 수 있습니다.
+		//OPTIONAL: params.on					이벤트
 		
-		//OPTIONAL: params.width
-		//OPTIONAL: params.height
-		//OPTIONAL: params.color
+		//OPTIONAL: params.width				가로 크기
+		//OPTIONAL: params.height				세로 크기
+		//OPTIONAL: params.color				색상
 		
 		var
 		// width
@@ -88,6 +90,12 @@ SkyEngine.Rect = CLASS({
 		
 		// get height.
 		getHeight,
+		
+		// set color.
+		setColor,
+		
+		// get color.
+		getColor,
 		
 		// check point rect.
 		checkPointRect = SkyEngine.Util.Collision.checkPointRect,
@@ -136,6 +144,14 @@ SkyEngine.Rect = CLASS({
 		
 		self.getHeight = getHeight = function() {
 			return height;
+		};
+		
+		self.setColor = setColor = function(color) {
+			color = _color;
+		};
+		
+		self.getColor = getColor = function() {
+			return color;
 		};
 		
 		self.checkPoint = checkPoint = function(touchX, touchY) {

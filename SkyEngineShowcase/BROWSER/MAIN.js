@@ -53,6 +53,11 @@ SkyEngineShowcase.MAIN = METHOD({
 			target : SkyEngineShowcase.CollisionTest
 		});
 		
+		SkyEngineShowcase.MATCH_VIEW({
+			uri : 'hello',
+			target : SkyEngineShowcase.HelloSkyEngine
+		});
+		
 		/*var node1 = SkyEngine.Node({
 			//accelY : 9.8 * 10,
 			alpha : 0.5,

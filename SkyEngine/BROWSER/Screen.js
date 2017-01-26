@@ -1,5 +1,5 @@
 /**
- * HTML canvas 태그와 대응되는 클래스
+ * 게임 화면 전체를 다루는 오브젝트
  */
 SkyEngine.Screen = OBJECT({
 	
@@ -212,19 +212,40 @@ SkyEngine.Screen = OBJECT({
 			// plus y
 			plusY = node.getY() * realScaleY,
 			
+			// plus center x
+			plusCenterX = node.getCenterX() * realScaleX,
+			
+			// plus center y
+			plusCenterY = node.getCenterY() * realScaleY,
+			
 			// sin
 			sin = Math.sin(realRadian),
 			
 			// cos
-			cos = Math.cos(realRadian);
+			cos = Math.cos(realRadian),
+			
+			// next x
+			nextX,
+			
+			// next y
+			nextY;
 			
 			realX += plusX * cos - plusY * sin;
 			realY += plusX * sin + plusY * cos;
+			
+			nextX = realX;
+			nextY = realY;
 			
 			realScaleX *= node.getScaleX();
 			realScaleY *= node.getScaleY();
 			
 			realRadian += node.getAngle() * Math.PI / 180;
+			
+			sin = Math.sin(realRadian);
+			cos = Math.cos(realRadian);
+			
+			realX -= plusCenterX * cos - plusCenterY * sin;
+			realY -= plusCenterX * sin + plusCenterY * cos;
 			
 			realAlpha *= node.getAlpha();
 			
@@ -243,7 +264,7 @@ SkyEngine.Screen = OBJECT({
 				context.translate(-realX, -realY);
 				
 				node.getChildren().forEach(function(childNode) {
-					drawAll(childNode, context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha);
+					drawAll(childNode, context, nextX, nextY, realScaleX, realScaleY, realRadian, realAlpha);
 				});
 			}
 		};

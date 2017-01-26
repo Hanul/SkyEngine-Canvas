@@ -1,8 +1,5 @@
 /**
- * 트리 구조를 정의하기 위한 Node 클래스 
- * 
- * + 이동 처리
- * + 회전 처리
+ * 노드 트리를 구성하기 위한 노드 클래스
  */
 SkyEngine.Node = CLASS({
 
@@ -10,61 +7,63 @@ SkyEngine.Node = CLASS({
 		'use strict';
 		//OPTIONAL: params
 		
-		//OPTIONAL: params.x
-		//OPTIONAL: params.y
-		//OPTIONAL: params.z
-		//OPTIONAL: params.speedX
-		//OPTIONAL: params.speedY
-		//OPTIONAL: params.accelX
-		//OPTIONAL: params.accelY
-		//OPTIONAL: params.minSpeedX
-		//OPTIONAL: params.minSpeedY
-		//OPTIONAL: params.maxSpeedX
-		//OPTIONAL: params.maxSpeedY
-		//OPTIONAL: params.toX
-		//OPTIONAL: params.toY
+		//OPTIONAL: params.x					x 좌표
+		//OPTIONAL: params.y					y 좌표
+		//OPTIONAL: params.centerX				중점의 x 좌표
+		//OPTIONAL: params.centerY				중점의 y 좌표
+		//OPTIONAL: params.z					노드의 드로우 순서를 결정하기 위한 z 인덱스
+		//OPTIONAL: params.speedX				x 좌표 이동 속도
+		//OPTIONAL: params.speedY				y 좌표 이동 속도
+		//OPTIONAL: params.accelX				x 좌표 이동 가속도
+		//OPTIONAL: params.accelY				y 좌표 이동 가속도
+		//OPTIONAL: params.minSpeedX			x 좌표 최소 이동 속도. 가속도로 줄어드는 속도의 최소값입니다.
+		//OPTIONAL: params.minSpeedY			y 좌표 최소 이동 속도. 가속도로 줄어드는 속도의 최소값입니다.
+		//OPTIONAL: params.maxSpeedX			x 좌표 최대 이동 속도. 가속도로 늘어나는 속도의 최대값입니다.
+		//OPTIONAL: params.maxSpeedY			y 좌표 최대 이동 속도. 가속도로 늘어나는 속도의 최대값입니다.
+		//OPTIONAL: params.toX					x 좌표 목적지. 이동하다 목적지에 도착하면 속도가 0이 됩니다.
+		//OPTIONAL: params.toY					y 좌표 목적지. 이동하다 목적지에 도착하면 속도가 0이 됩니다.
 		
-		//OPTIONAL: params.scale
-		//OPTIONAL: params.scaleX
-		//OPTIONAL: params.scaleY
-		//OPTIONAL: params.scalingSpeed
-		//OPTIONAL: params.scalingSpeedX
-		//OPTIONAL: params.scalingSpeedY
-		//OPTIONAL: params.scalingAccel
-		//OPTIONAL: params.scalingAccelX
-		//OPTIONAL: params.scalingAccelY
-		//OPTIONAL: params.minScalingSpeed
-		//OPTIONAL: params.minScalingSpeedX
-		//OPTIONAL: params.minScalingSpeedY
-		//OPTIONAL: params.maxScalingSpeed
-		//OPTIONAL: params.maxScalingSpeedX
-		//OPTIONAL: params.maxScalingSpeedY
-		//OPTIONAL: params.toScale
-		//OPTIONAL: params.toScaleX
-		//OPTIONAL: params.toScaleY
+		//OPTIONAL: params.scale				배율
+		//OPTIONAL: params.scaleX				x 배율
+		//OPTIONAL: params.scaleY				y 배율
+		//OPTIONAL: params.scalingSpeed			배율이 커지는 속도
+		//OPTIONAL: params.scalingSpeedX		x 배율이 커지는 속도
+		//OPTIONAL: params.scalingSpeedY		y 배율이 커지는 속도
+		//OPTIONAL: params.scalingAccel			배율이 커지는 가속도
+		//OPTIONAL: params.scalingAccelX		x 배율이 커지는 가속도
+		//OPTIONAL: params.scalingAccelY		y 배율이 커지는 가속도
+		//OPTIONAL: params.minScalingSpeed		배율이 커지는 최소 속도
+		//OPTIONAL: params.minScalingSpeedX		x 배율이 커지는 최소 속도
+		//OPTIONAL: params.minScalingSpeedY		y 배율이 커지는 최소 속도
+		//OPTIONAL: params.maxScalingSpeed		배율이 커지는 최대 속도
+		//OPTIONAL: params.maxScalingSpeedX		x 배율이 커지는 최대 속도
+		//OPTIONAL: params.maxScalingSpeedY		y 배율이 커지는 최대 속도
+		//OPTIONAL: params.toScale				배율이 커지는 목적지
+		//OPTIONAL: params.toScaleX				x 배율이 커지는 목적지
+		//OPTIONAL: params.toScaleY				y 배율이 커지는 목적지
 		
-		//OPTIONAL: params.angle
-		//OPTIONAL: params.rotationSpeed
-		//OPTIONAL: params.rotationAccel
-		//OPTIONAL: params.minRotationSpeed
-		//OPTIONAL: params.maxRotationSpeed
-		//OPTIONAL: params.toAngle
+		//OPTIONAL: params.angle				회전 각도
+		//OPTIONAL: params.rotationSpeed		회전 속도
+		//OPTIONAL: params.rotationAccel		회전 가속도
+		//OPTIONAL: params.minRotationSpeed		최소 회전 속도
+		//OPTIONAL: params.maxRotationSpeed		최대 회전 속도
+		//OPTIONAL: params.toAngle				회전 각도 목적지
 		
-		//OPTIONAL: params.alpha
-		//OPTIONAL: params.fadingSpeed
-		//OPTIONAL: params.fadingAccel
-		//OPTIONAL: params.minFadingSpeed
-		//OPTIONAL: params.maxFadingSpeed
-		//OPTIONAL: params.toAlpha
+		//OPTIONAL: params.alpha				알파 값
+		//OPTIONAL: params.fadingSpeed			페이드 속도
+		//OPTIONAL: params.fadingAccel			페이드 가속도
+		//OPTIONAL: params.minFadingSpeed		최소 페이드 속도
+		//OPTIONAL: params.maxFadingSpeed		최대 페이드 속도
+		//OPTIONAL: params.toAlpha				페이드 알파 값 목적지
 		
-		//OPTIONAL: params.collider
-		//OPTIONAL: params.touchArea
-		//OPTIONAL: params.c		자식 노드. 하나의 노드를 지정하거나, 노드들의 배열을 지정할 수 있습니다.
-		//OPTIONAL: params.on		이벤트
+		//OPTIONAL: params.collider				충돌 영역. 하나의 영역을 지정하거나, 영역들의 배열을 지정할 수 있습니다.
+		//OPTIONAL: params.touchArea			터치 영역. 하나의 영역을 지정하거나, 영역들의 배열을 지정할 수 있습니다.
+		//OPTIONAL: params.c					자식 노드. 하나의 노드를 지정하거나, 노드들의 배열을 지정할 수 있습니다.
+		//OPTIONAL: params.on					이벤트
 		
 		var
 		// properties
-		x, y, z, scaleX, scaleY, angle, alpha,
+		x, y, centerX, centerY, z, scaleX, scaleY, angle, alpha,
 		
 		// speed
 		speedX, speedY, scalingSpeedX, scalingSpeedY, rotationSpeed, fadingSpeed,
@@ -116,6 +115,57 @@ SkyEngine.Node = CLASS({
 		
 		// part handler map
 		partHandlerMap = {},
+		
+		// set/get properties.
+		setX, getX, setY, getY, setCenterX, getCenterX, setCenterY, getCenterY, setZ, getZ, setScaleX, getScaleX, setScaleY, getScaleY, setScale, setAngle, getAngle, setAlpha, getAlpha,
+		
+		// set/get speed.
+		setSpeedX, getSpeedX, setSpeedY, getSpeedY, setScalingSpeedX, getScalingSpeedX, setScalingSpeedY, getScalingSpeedY, setScalingSpeed, setRotationSpeed, getRotationSpeed, setFadingSpeed, getFadingSpeed,
+		
+		// set/get accel.
+		setAccelX, getAccelX, setAccelY, getAccelY, setScalingAccelX, getScalingAccelX, setScalingAccelY, getScalingAccelY, setScalingAccel, setRotationAccel, getRotationAccel, setFadingAccel, getFadingAccel,
+		
+		// set/get min speed.
+		setMinSpeedX, getMinSpeedX, setMinSpeedY, getMinSpeedY, setMinScalingSpeedX, getMinScalingSpeedX, setMinScalingSpeedY, getMinScalingSpeedY, setMinScalingSpeed, setMinRotationSpeed, getMinRotationSpeed, setMinFadingSpeed, getMinFadingSpeed,
+		
+		// set/get max speed.
+		setMaxSpeedX, getMaxSpeedX, setMaxSpeedY, getMaxSpeedY, setMaxScalingSpeedX, getMaxScalingSpeedX, setMaxScalingSpeedY, getMaxScalingSpeedY, setMaxScalingSpeed, setMaxRotationSpeed, getMaxRotationSpeed, setMaxFadingSpeed, getMaxFadingSpeed,
+		
+		// set/get to properties.
+		setToX, getToX, setToY, getToY, setToScaleX, getToScaleX, setToScaleY, getToScaleY, setToScale, setToAngle, getToAngle, setToAlpha, getToAlpha,
+		
+		// get real properties.
+		getRealX, getRealY, getRealScaleX, getRealScaleY, getRealRadian, getRealAlpha,
+		
+		// move/stop left.
+		moveLeft, stopLeft,
+		
+		// move/stop right.
+		moveRight, stopRight,
+		
+		// move/stop up.
+		moveUp, stopUp,
+		
+		// move/stop down.
+		moveDown, stopDown,
+		
+		// move to.
+		moveTo,
+		
+		// rotate.
+		rotate, stopRotation, rotateTo,
+		
+		// flip.
+		flipX, flipY,
+		
+		// fade.
+		fadeIn, fadeOut, stopFading, fadeTo,
+		
+		// hide/show.
+		hide, show,
+		
+		// check is hiding.
+		checkIsHiding,
 		
 		// get children.
 		getChildren,
@@ -174,60 +224,6 @@ SkyEngine.Node = CLASS({
 		// run part handlers.
 		runPartHandlers,
 		
-		// set/get properties.
-		setX, getX, setY, getY, setZ, getZ, setScale, setScaleX, getScaleX, setScaleY, getScaleY, getAngle, setAngle, getAlpha, setAlpha,
-		
-		// set/get speed.
-		setSpeedX, getSpeedX, setSpeedY, getSpeedY, setScalingSpeedX, getScalingSpeedX, setScalingSpeedY, getScalingSpeedY, setScalingSpeed, setRotationSpeed, getRotationSpeed, setFadingSpeed, getFadingSpeed,
-		
-		// set/get accel.
-		setAccelX, getAccelX, setAccelY, getAccelY, setScalingAccelX, getScalingAccelX, setScalingAccelY, getScalingAccelY, setScalingAccel, setRotationAccel, getRotationAccel, setFadingAccel, getFadingAccel,
-		
-		// set/get min speed.
-		setMinSpeedX, getMinSpeedX, setMinSpeedY, getMinSpeedY, setMinScalingSpeedX, getMinScalingSpeedX, setMinScalingSpeedY, getMinScalingSpeedY, setMinScalingSpeed, setMinRotationSpeed, getMinRotationSpeed, setMinFadingSpeed, getMinFadingSpeed,
-		
-		// set/get max speed.
-		setMaxSpeedX, getMaxSpeedX, setMaxSpeedY, getMaxSpeedY, setMaxScalingSpeedX, getMaxScalingSpeedX, setMaxScalingSpeedY, getMaxScalingSpeedY, setMaxScalingSpeed, setMaxRotationSpeed, getMaxRotationSpeed, setMaxFadingSpeed, getMaxFadingSpeed,
-		
-		// set/get to properties.
-		setToX, getToX, setToY, getToY, setToScaleX, getToScaleX, setToScaleY, getToScaleY, setToScale, setToAngle, getToAngle, setToAlpha, getToAlpha,
-		
-		// get real properties.
-		getRealX, getRealY, getRealScaleX, getRealScaleY, getRealRadian, getRealAlpha,
-		
-		// get size.
-		getWidth, getHeight,
-		
-		// move/stop left.
-		moveLeft, stopLeft,
-		
-		// move/stop right.
-		moveRight, stopRight,
-		
-		// move/stop up.
-		moveUp, stopUp,
-		
-		// move/stop down.
-		moveDown, stopDown,
-		
-		// move to.
-		moveTo,
-		
-		// rotate.
-		rotate, stopRotation, rotateTo,
-		
-		// flip.
-		flipX, flipY,
-		
-		// fade.
-		fadeIn, fadeOut, stopFading, fadeTo,
-		
-		// hide/show.
-		hide, show,
-		
-		// check is hiding.
-		checkIsHiding,
-		
 		// add collider.
 		addCollider,
 		
@@ -253,294 +249,16 @@ SkyEngine.Node = CLASS({
 		step,
 		
 		// draw.
-		draw,
-		
-		// clone.
-		clone;
-		
-		self.getChildren = getChildren = function() {
-			return childNodes;
-		};
-		
-		self.getParent = getParent = function() {
-			return parentNode;
-		};
-		
-		self.setParent = setParent = function(_parentNode) {
-			parentNode = _parentNode;
-		};
-		
-		self.empty = empty = function() {
-			
-			childNodes.forEach(function(childNode) {
-				childNode.setParent(undefined);
-				childNode.remove();
-			});
-			
-			childNodes = undefined;
-		};
-		
-		appendToParent = function() {
-			
-			var
-			// parent children
-			parentChildren = parentNode.getChildren(),
-			
-			// min index
-			minIndex = 0,
-			
-			// max index
-			maxIndex = parentChildren.length - 1,
-			
-			// index
-			index = -1,
-			
-			// node
-			node;
-			
-			while (minIndex <= maxIndex) {
-				
-				index = Math.ceil((minIndex + maxIndex) / 2);
-				
-				node = parentChildren[index];
-				
-				if (node.getZ() < z) {
-					minIndex = index + 1;
-				} else if (node.getZ() > z) {
-					maxIndex = index - 1;
-				} else {
-					break;
-				}
-			}
-			
-			parentChildren.splice(index + 1, 0, self);
-		};
-		
-		removeFromParent = function() {
-			
-			var
-			// parent children
-			parentChildren = parentNode.getChildren(),
-			
-			// min index
-			minIndex = 0,
-			
-			// max index
-			maxIndex = parentChildren.length - 1,
-			
-			// index
-			index = -1,
-			
-			// node
-			node,
-			
-			// level
-			level = 0;
-
-			while (minIndex <= maxIndex) {
-				
-				index = Math.ceil((minIndex + maxIndex) / 2);
-				
-				node = parentChildren[index];
-				
-				if (node.getZ() < z) {
-					minIndex = index + 1;
-				} else if (node.getZ() > z) {
-					maxIndex = index - 1;
-				} else {
-					
-					while (true) {
-						
-						if (parentChildren[index - level] === self) {
-							parentChildren.splice(index - level, 1);
-							break;
-						}
-						
-						if (level > 0 && parentChildren[index + level] === self) {
-							parentChildren.splice(index + level, 1);
-							break;
-						}
-						
-						if (
-						parentChildren[index - level].getZ() !== z &&
-						parentChildren[index + level].getZ() !== z) {
-							break;
-						}
-						
-						level += 1;
-					}
-					
-					break;
-				}
-			}
-		};
-
-		self.appendTo = appendTo = function(node) {
-			//REQUIRED: node
-			
-			if (parentNode !== undefined) {
-				removeFromParent();
-			}
-			
-			setParent(node);
-			
-			appendToParent();
-
-			return self;
-		};
-		
-		self.append = append = function(node) {
-			//REQUIRED: node
-			
-			node.appendTo(self);
-		};
-		
-		self.remove = remove = function() {
-			
-			empty();
-			
-			if (parentNode !== undefined) {
-				
-				removeFromParent();
-				
-				setParent(undefined);
-			}
-			
-			if (SkyEngine.Screen !== self) {
-				SkyEngine.Screen.unregisterNode(self);
-			}
-			
-			// clear memory.
-			childNodes = undefined;
-			
-			EACH(eventMap, function(eventName) {
-				SkyEngine.Screen.unregisterEventNode(eventName, self);
-			});
-			eventMap = undefined;
-			
-			colliders = undefined;
-			touchAreas = undefined;
-			
-			collisionTargets = undefined
-			collidingNodeIds = undefined;
-			meetHandlerMap = undefined;
-			partHandlerMap = undefined;
-			
-			isRemoved = true;
-		};
-		
-		self.checkIsRemoved = checkIsRemoved = function() {
-			return isRemoved;
-		};
-		
-		self.on = on = function(eventName, eventHandler) {
-			
-			if (eventMap[eventName] === undefined) {
-				eventMap[eventName] = [];
-				
-				SkyEngine.Screen.registerEventNode(eventName, self);
-			}
-			
-			eventMap[eventName].push(eventHandler);
-		};
-		
-		self.off = off = function(eventName, eventHandler) {
-		
-			if (eventMap[eventName] !== undefined) {
-				
-				REMOVE({
-					array : eventMap[eventName],
-					value : eventHandler
-				});
-				
-				if (eventMap[eventName].length === 0) {
-					delete eventMap[eventName];
-					
-					SkyEngine.Screen.unregisterEventNode(eventName, self);
-				}
-			}
-		};
-		
-		self.fireEvent = fireEvent = function(eventName) {
-			
-			if (eventMap[eventName] !== undefined) {
-				
-				eventMap[eventName].forEach(function(eventHandler) {
-					eventHandler();
-				});
-			}
-		};
-		
-		self.onMeet = onMeet = function(target, handler) {
-			
-			collisionTargets.push(target);
-			
-			if (meetHandlerMap[target.id] === undefined) {
-				meetHandlerMap[target.id] = [];
-			}
-			
-			meetHandlerMap[target.id].push(handler);
-		};
-		
-		self.offMeet = offMeet = function(target, handler) {
-			
-			if (handler === undefined) {
-				delete meetHandlerMap[target.id];
-			} else {
-				REMOVE({
-					array : meetHandlerMap[target.id],
-					value : handler
-				});
-			}
-		};
-		
-		self.runMeetHandlers = runMeetHandlers = function(target, realTarget) {
-			
-			if (meetHandlerMap[target.id] !== undefined) {
-				
-				meetHandlerMap[target.id].forEach(function(handler) {
-					handler(realTarget);
-				});
-			}
-		};
-		
-		self.onPart = onPart = function(target, handler) {
-			
-			collisionTargets.push(target);
-			
-			if (partHandlerMap[target.id] === undefined) {
-				partHandlerMap[target.id] = [];
-			}
-			
-			partHandlerMap[target.id].push(handler);
-		};
-		
-		self.offPart = offPart = function(target, handler) {
-			
-			if (handler === undefined) {
-				delete partHandlerMap[target.id];
-			} else {
-				REMOVE({
-					array : partHandlerMap[target.id],
-					value : handler
-				});
-			}
-		};
-		
-		self.runPartHandlers = runPartHandlers = function(target, realTarget) {
-			
-			if (partHandlerMap[target.id] !== undefined) {
-				
-				partHandlerMap[target.id].forEach(function(handler) {
-					handler(realTarget);
-				});
-			}
-		};
+		draw;
 		
 		self.setX = setX = function(_x)							{ x = _x; };
 		self.getX = getX = function()							{ return x; };
 		self.setY = setY = function(_y)							{ y = _y; };
 		self.getY = getY = function()							{ return y; };
+		self.setCenterX = setCenterX = function(_centerX)		{ centerX = _centerX; };
+		self.getCenterX = getCenterX = function()				{ return centerX; };
+		self.setCenterY = setCenterY = function(_centerY)		{ centerY = _centerY; };
+		self.getCenterY = getCenterY = function()				{ return centerY; };
 		self.setZ = setZ = function(_z)	{
 			
 			if (parentNode !== undefined) {
@@ -653,14 +371,13 @@ SkyEngine.Node = CLASS({
 		self.getRealRadian = getRealRadian = function(_toAlpha)					{ return realRadian; };
 		self.getRealAlpha = getRealAlpha = function(_toAlpha)					{ return realAlpha; };
 		
-		self.getWidth = getWidth = function()									{ return 0; };
-		self.getHeight = getHeight = function()									{ return 0; };
-		
 		// 파라미터 초기화
 		if (params !== undefined) {
 			
 			x = params.x;
 			y = params.y;
+			centerX = params.centerX;
+			centerY = params.centerY;
 			z = params.z;
 			if (params.scale !== undefined)		{ setScale(params.scale); }
 			if (params.scaleX !== undefined)	{ scaleX = params.scaleX; }
@@ -747,6 +464,8 @@ SkyEngine.Node = CLASS({
 		
 		if (x === undefined)				{ x = 0; }
 		if (y === undefined)				{ y = 0; }
+		if (centerX === undefined)			{ centerX = 0; }
+		if (centerY === undefined)			{ centerY = 0; }
 		if (z === undefined)				{ z = 0; }
 		if (speedX === undefined)			{ speedX = 0; }
 		if (speedY === undefined)			{ speedY = 0; }
@@ -1049,6 +768,285 @@ SkyEngine.Node = CLASS({
 		
 		self.checkIsHiding = checkIsHiding = function() {
 			return isHiding;
+		};
+		
+		self.getChildren = getChildren = function() {
+			return childNodes;
+		};
+		
+		self.getParent = getParent = function() {
+			return parentNode;
+		};
+		
+		self.setParent = setParent = function(_parentNode) {
+			parentNode = _parentNode;
+		};
+		
+		self.empty = empty = function() {
+			
+			childNodes.forEach(function(childNode) {
+				childNode.setParent(undefined);
+				childNode.remove();
+			});
+			
+			childNodes = undefined;
+		};
+		
+		appendToParent = function() {
+			
+			var
+			// parent children
+			parentChildren = parentNode.getChildren(),
+			
+			// min index
+			minIndex = 0,
+			
+			// max index
+			maxIndex = parentChildren.length - 1,
+			
+			// index
+			index = -1,
+			
+			// node
+			node;
+			
+			while (minIndex <= maxIndex) {
+				
+				index = Math.ceil((minIndex + maxIndex) / 2);
+				
+				node = parentChildren[index];
+				
+				if (node.getZ() < z) {
+					minIndex = index + 1;
+				} else if (node.getZ() > z) {
+					maxIndex = index - 1;
+				} else {
+					break;
+				}
+			}
+			
+			parentChildren.splice(index + 1, 0, self);
+		};
+		
+		removeFromParent = function() {
+			
+			var
+			// parent children
+			parentChildren = parentNode.getChildren(),
+			
+			// min index
+			minIndex = 0,
+			
+			// max index
+			maxIndex = parentChildren.length - 1,
+			
+			// index
+			index = -1,
+			
+			// node
+			node,
+			
+			// level
+			level = 0;
+
+			while (minIndex <= maxIndex) {
+				
+				index = Math.ceil((minIndex + maxIndex) / 2);
+				
+				node = parentChildren[index];
+				
+				if (node.getZ() < z) {
+					minIndex = index + 1;
+				} else if (node.getZ() > z) {
+					maxIndex = index - 1;
+				} else {
+					
+					while (true) {
+						
+						if (parentChildren[index - level] === self) {
+							parentChildren.splice(index - level, 1);
+							break;
+						}
+						
+						if (level > 0 && parentChildren[index + level] === self) {
+							parentChildren.splice(index + level, 1);
+							break;
+						}
+						
+						if (
+						parentChildren[index - level].getZ() !== z &&
+						parentChildren[index + level].getZ() !== z) {
+							break;
+						}
+						
+						level += 1;
+					}
+					
+					break;
+				}
+			}
+		};
+
+		self.appendTo = appendTo = function(node) {
+			//REQUIRED: node
+			
+			if (parentNode !== undefined) {
+				removeFromParent();
+			}
+			
+			setParent(node);
+			
+			appendToParent();
+
+			return self;
+		};
+		
+		self.append = append = function(node) {
+			//REQUIRED: node
+			
+			node.appendTo(self);
+		};
+		
+		self.remove = remove = function() {
+			
+			empty();
+			
+			if (parentNode !== undefined) {
+				
+				removeFromParent();
+				
+				setParent(undefined);
+			}
+			
+			if (SkyEngine.Screen !== self) {
+				SkyEngine.Screen.unregisterNode(self);
+			}
+			
+			// clear memory.
+			childNodes = undefined;
+			
+			EACH(eventMap, function(eventName) {
+				SkyEngine.Screen.unregisterEventNode(eventName, self);
+			});
+			eventMap = undefined;
+			
+			colliders = undefined;
+			touchAreas = undefined;
+			
+			collisionTargets = undefined
+			collidingNodeIds = undefined;
+			meetHandlerMap = undefined;
+			partHandlerMap = undefined;
+			
+			isRemoved = true;
+		};
+		
+		self.checkIsRemoved = checkIsRemoved = function() {
+			return isRemoved;
+		};
+		
+		self.on = on = function(eventName, eventHandler) {
+			
+			if (eventMap[eventName] === undefined) {
+				eventMap[eventName] = [];
+				
+				SkyEngine.Screen.registerEventNode(eventName, self);
+			}
+			
+			eventMap[eventName].push(eventHandler);
+		};
+		
+		self.off = off = function(eventName, eventHandler) {
+		
+			if (eventMap[eventName] !== undefined) {
+				
+				REMOVE({
+					array : eventMap[eventName],
+					value : eventHandler
+				});
+				
+				if (eventMap[eventName].length === 0) {
+					delete eventMap[eventName];
+					
+					SkyEngine.Screen.unregisterEventNode(eventName, self);
+				}
+			}
+		};
+		
+		self.fireEvent = fireEvent = function(eventName) {
+			
+			if (eventMap[eventName] !== undefined) {
+				
+				eventMap[eventName].forEach(function(eventHandler) {
+					eventHandler();
+				});
+			}
+		};
+		
+		self.onMeet = onMeet = function(target, handler) {
+			
+			collisionTargets.push(target);
+			
+			if (meetHandlerMap[target.id] === undefined) {
+				meetHandlerMap[target.id] = [];
+			}
+			
+			meetHandlerMap[target.id].push(handler);
+		};
+		
+		self.offMeet = offMeet = function(target, handler) {
+			
+			if (handler === undefined) {
+				delete meetHandlerMap[target.id];
+			} else {
+				REMOVE({
+					array : meetHandlerMap[target.id],
+					value : handler
+				});
+			}
+		};
+		
+		self.runMeetHandlers = runMeetHandlers = function(target, realTarget) {
+			
+			if (meetHandlerMap[target.id] !== undefined) {
+				
+				meetHandlerMap[target.id].forEach(function(handler) {
+					handler(realTarget);
+				});
+			}
+		};
+		
+		self.onPart = onPart = function(target, handler) {
+			
+			collisionTargets.push(target);
+			
+			if (partHandlerMap[target.id] === undefined) {
+				partHandlerMap[target.id] = [];
+			}
+			
+			partHandlerMap[target.id].push(handler);
+		};
+		
+		self.offPart = offPart = function(target, handler) {
+			
+			if (handler === undefined) {
+				delete partHandlerMap[target.id];
+			} else {
+				REMOVE({
+					array : partHandlerMap[target.id],
+					value : handler
+				});
+			}
+		};
+		
+		self.runPartHandlers = runPartHandlers = function(target, realTarget) {
+			
+			if (partHandlerMap[target.id] !== undefined) {
+				
+				partHandlerMap[target.id].forEach(function(handler) {
+					handler(realTarget);
+				});
+			}
 		};
 		
 		self.addCollider = addCollider = function(collider) {
