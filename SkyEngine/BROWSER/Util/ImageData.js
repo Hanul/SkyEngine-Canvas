@@ -1,7 +1,6 @@
 SkyEngine('Util').ImageData = OBJECT({
 
-	init : function(inner, self) {
-		'use strict';
+	init : (inner, self) => {
 
 		var
 		// TRANSPARENT_ALPHA

@@ -1,7 +1,6 @@
 SkyEngine('Util').Collision = OBJECT({
 
-	init : function(inner, self) {
-		'use strict';
+	init : (inner, self) => {
 
 		var
 		// check between.

@@ -1,16 +1,13 @@
-/**
+/*
  * 게임 화면 전체를 다루는 오브젝트
  */
 SkyEngine.Screen = OBJECT({
 	
-	preset : function() {
-		'use strict';
-
+	preset : () => {
 		return SkyEngine.Node;
 	},
 	
-	init : function(inner, self) {
-		'use strict';
+	init : (inner, self) => {
 		
 		var
 		// wrapper

@@ -1,16 +1,13 @@
-/**
+/*
  * 스프라이트 애니메이션 노드
  */
 SkyEngine.Sprite = CLASS({
 	
-	preset : function() {
-		'use strict';
-
+	preset : () => {
 		return SkyEngine.Node;
 	},
 
-	init : function(inner, self, params) {
-		'use strict';
+	init : (inner, self, params) => {
 		//OPTIONAL: params
 		
 		//OPTIONAL: params.x

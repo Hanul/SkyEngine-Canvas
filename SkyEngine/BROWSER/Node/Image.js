@@ -1,8 +1,7 @@
-/**
+/*
  * 이미지 노드
  */
-SkyEngine.Image = CLASS(function(cls) {
-	'use strict';
+SkyEngine.Image = CLASS((cls) => {
 	
 	var
 	// TRANSPARENT_ALPHA
@@ -10,12 +9,11 @@ SkyEngine.Image = CLASS(function(cls) {
 	
 	return {
 		
-		preset : function() {
-	
+		preset : () => {
 			return SkyEngine.Node;
 		},
 	
-		init : function(inner, self, params) {
+		init : (inner, self, params) => {
 			//OPTIONAL: params
 			
 			//OPTIONAL: params.x

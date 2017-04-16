@@ -1,16 +1,13 @@
-/**
+/*
  * 사각형 노드
  */
 SkyEngine.Rect = CLASS({
 	
-	preset : function() {
-		'use strict';
-
+	preset : () => {
 		return SkyEngine.Node;
 	},
 
-	init : function(inner, self, params) {
-		'use strict';
+	init : (inner, self, params) => {
 		//OPTIONAL: params
 		
 		//OPTIONAL: params.x					x 좌표

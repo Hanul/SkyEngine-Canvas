@@ -1,10 +1,9 @@
-/**
+/*
  * 노드 트리를 구성하기 위한 노드 클래스
  */
 SkyEngine.Node = CLASS({
 
-	init : function(inner, self, params) {
-		'use strict';
+	init : (inner, self, params) => {
 		//OPTIONAL: params
 		
 		//OPTIONAL: params.x					x 좌표
@@ -61,205 +60,47 @@ SkyEngine.Node = CLASS({
 		//OPTIONAL: params.c					자식 노드. 하나의 노드를 지정하거나, 노드들의 배열을 지정할 수 있습니다.
 		//OPTIONAL: params.on					이벤트
 		
-		var
 		// properties
-		x, y, centerX, centerY, z, scaleX, scaleY, angle, alpha,
+		let x, y, centerX, centerY, z, scaleX, scaleY, angle, alpha;
+		let speedX, speedY, scalingSpeedX, scalingSpeedY, rotationSpeed, fadingSpeed;
+		let accelX, accelY, scalingAccelX, scalingAccelY, rotationAccel, fadingAccel;
 		
-		// speed
-		speedX, speedY, scalingSpeedX, scalingSpeedY, rotationSpeed, fadingSpeed,
-		
-		// accel
-		accelX, accelY, scalingAccelX, scalingAccelY, rotationAccel, fadingAccel,
-		
-		// min speed (undefined면 무제한)
-		minSpeedX, minSpeedY, minScalingSpeedX, minScalingSpeedY, minRotationSpeed, minFadingSpeed,
-		
-		// max speed (undefined면 무제한)
-		maxSpeedX, maxSpeedY, maxScalingSpeedX, maxScalingSpeedY, maxRotationSpeed, maxFadingSpeed,
+		// min, max speed (undefined면 무제한)
+		let minSpeedX, minSpeedY, minScalingSpeedX, minScalingSpeedY, minRotationSpeed, minFadingSpeed;
+		let maxSpeedX, maxSpeedY, maxScalingSpeedX, maxScalingSpeedY, maxRotationSpeed, maxFadingSpeed;
 		
 		// to properties
-		toX, toY, toScaleX, toScaleY, toAngle, toAlpha,
+		let toX, toY, toScaleX, toScaleY, toAngle, toAlpha;
 		
 		// real properties
-		realX, realY, realScaleX, realScaleY, realRadian, realAlpha,
+		let realX, realY, realScaleX, realScaleY, realRadian, realAlpha;
 		
-		// parent node
-		parentNode,
-
-		// child nodes
-		childNodes = [],
+		let parentNode;
+		let childNodes = [];
 		
-		// is hiding
-		isHiding = false,
+		let isHiding = false;
+		let isRemoved = false;
 		
-		// is removed
-		isRemoved = false,
+		let eventMap = {};
 		
-		// event map
-		eventMap = {},
+		let colliders = [];
+		let touchAreas = [];
+		let collisionTargets = [];
+		let collidingNodeIds = {};
 		
-		// colliders
-		colliders = [],
+		let meetHandlerMap = {};
+		let partHandlerMap = {};
 		
-		// touch areas
-		touchAreas = [],
-		
-		// collision targets
-		collisionTargets = [],
-		
-		// colliding node ids
-		collidingNodeIds = {},
-		
-		// meet handler map
-		meetHandlerMap = {},
-		
-		// part handler map
-		partHandlerMap = {},
-		
-		// set/get properties.
-		setX, getX, setY, getY, setCenterX, getCenterX, setCenterY, getCenterY, setZ, getZ, setScaleX, getScaleX, setScaleY, getScaleY, setScale, setAngle, getAngle, setAlpha, getAlpha,
-		
-		// set/get speed.
-		setSpeedX, getSpeedX, setSpeedY, getSpeedY, setScalingSpeedX, getScalingSpeedX, setScalingSpeedY, getScalingSpeedY, setScalingSpeed, setRotationSpeed, getRotationSpeed, setFadingSpeed, getFadingSpeed,
-		
-		// set/get accel.
-		setAccelX, getAccelX, setAccelY, getAccelY, setScalingAccelX, getScalingAccelX, setScalingAccelY, getScalingAccelY, setScalingAccel, setRotationAccel, getRotationAccel, setFadingAccel, getFadingAccel,
-		
-		// set/get min speed.
-		setMinSpeedX, getMinSpeedX, setMinSpeedY, getMinSpeedY, setMinScalingSpeedX, getMinScalingSpeedX, setMinScalingSpeedY, getMinScalingSpeedY, setMinScalingSpeed, setMinRotationSpeed, getMinRotationSpeed, setMinFadingSpeed, getMinFadingSpeed,
-		
-		// set/get max speed.
-		setMaxSpeedX, getMaxSpeedX, setMaxSpeedY, getMaxSpeedY, setMaxScalingSpeedX, getMaxScalingSpeedX, setMaxScalingSpeedY, getMaxScalingSpeedY, setMaxScalingSpeed, setMaxRotationSpeed, getMaxRotationSpeed, setMaxFadingSpeed, getMaxFadingSpeed,
-		
-		// set/get to properties.
-		setToX, getToX, setToY, getToY, setToScaleX, getToScaleX, setToScaleY, getToScaleY, setToScale, setToAngle, getToAngle, setToAlpha, getToAlpha,
-		
-		// get real properties.
-		getRealX, getRealY, getRealScaleX, getRealScaleY, getRealRadian, getRealAlpha,
-		
-		// move/stop left.
-		moveLeft, stopLeft,
-		
-		// move/stop right.
-		moveRight, stopRight,
-		
-		// move/stop up.
-		moveUp, stopUp,
-		
-		// move/stop down.
-		moveDown, stopDown,
-		
-		// move to.
-		moveTo,
-		
-		// rotate.
-		rotate, stopRotation, rotateTo,
-		
-		// flip.
-		flipX, flipY,
-		
-		// fade.
-		fadeIn, fadeOut, stopFading, fadeTo,
-		
-		// hide/show.
-		hide, show,
-		
-		// check is hiding.
-		checkIsHiding,
-		
-		// get children.
-		getChildren,
-		
-		// get parent.
-		getParent,
-		
-		// set parent.
-		setParent,
-		
-		// empty.
-		empty,
-		
-		// append to parent.
-		appendToParent,
-		
-		// remove from parent.
-		removeFromParent,
-		
-		// append.
-		append,
-		
-		// append to.
-		appendTo,
-
-		// remove.
-		remove,
-		
-		// check is removed.
-		checkIsRemoved,
-
-		// on.
-		on,
-
-		// off.
-		off,
-		
-		// fire event.
-		fireEvent,
-		
-		// on meet.
-		onMeet,
-		
-		// off meet.
-		offMeet,
-		
-		// run meet handlers.
-		runMeetHandlers,
-		
-		// on part.
-		onPart,
-		
-		// off part.
-		offPart,
-		
-		// run part handlers.
-		runPartHandlers,
-		
-		// add collider.
-		addCollider,
-		
-		// get colliders.
-		getColliders,
-		
-		// add touch area.
-		addTouchArea,
-		
-		// check point.
-		checkPoint,
-		
-		// check area.
-		checkArea,
-		
-		// check collision.
-		checkCollision,
-		
-		// check touch.
-		checkTouch,
-		
-		// step.
-		step,
-		
-		// draw.
-		draw;
-		
-		self.setX = setX = function(_x)							{ x = _x; };
-		self.getX = getX = function()							{ return x; };
-		self.setY = setY = function(_y)							{ y = _y; };
-		self.getY = getY = function()							{ return y; };
-		self.setCenterX = setCenterX = function(_centerX)		{ centerX = _centerX; };
-		self.getCenterX = getCenterX = function()				{ return centerX; };
-		self.setCenterY = setCenterY = function(_centerY)		{ centerY = _centerY; };
-		self.getCenterY = getCenterY = function()				{ return centerY; };
-		self.setZ = setZ = function(_z)	{
+		// for position
+		let setX = self.setX = (_x) =>							{ x = _x; };
+		let getX = self.getX = () =>							{ return x; };
+		let setY = self.setY = (_y) =>							{ y = _y; };
+		let getY = self.getY = () =>							{ return y; };
+		let setCenterX = self.setCenterX = (_centerX) =>		{ centerX = _centerX; };
+		let getCenterX = self.getCenterX = () =>				{ return centerX; };
+		let setCenterY = self.setCenterY = (_centerY) =>		{ centerY = _centerY; };
+		let getCenterY = self.getCenterY = () =>				{ return centerY; };
+		let setZ = self.setZ = (_z) =>	{
 			
 			if (parentNode !== undefined) {
 				removeFromParent();
@@ -267,109 +108,113 @@ SkyEngine.Node = CLASS({
 				appendToParent();
 			}
 		};
-		self.getZ = getZ = function()							{ return z; };
-		self.setSpeedX = setSpeedX = function(_speedX)			{ speedX = _speedX; };
-		self.getSpeedX = getSpeedX = function()					{ return speedX; };
-		self.setSpeedY = setSpeedY = function(_speedY)			{ speedY = _speedY; };
-		self.getSpeedY = getSpeedY = function()					{ return speedY; };
-		self.setAccelX = setAccelX = function(_accelX)			{ accelX = _accelX; };
-		self.getAccelX = getAccelX = function()					{ return accelX; };
-		self.setAccelY = setAccelY = function(_accelY)			{ accelY = _accelY; };
-		self.getAccelY = getAccelY = function()					{ return accelY; };
-		self.setMinSpeedX = setMinSpeedX = function(_minSpeedX)	{ minSpeedX = _minSpeedX; };
-		self.getMinSpeedX = getMinSpeedX = function()			{ return minSpeedX; };
-		self.setMinSpeedY = setMinSpeedY = function(_minSpeedY)	{ minSpeedY = _minSpeedY; };
-		self.getMinSpeedY = getMinSpeedY = function()			{ return minSpeedY; };
-		self.setMaxSpeedX = setMaxSpeedX = function(_maxSpeedX)	{ maxSpeedX = _maxSpeedX; };
-		self.getMaxSpeedX = getMaxSpeedX = function()			{ return maxSpeedX; };
-		self.setMaxSpeedY = setMaxSpeedY = function(_maxSpeedY)	{ maxSpeedY = _maxSpeedY; };
-		self.getMaxSpeedY = getMaxSpeedY = function()			{ return maxSpeedY; };
-		self.setToX = setToX = function(_toX)					{ toX = _toX; };
-		self.getToX = getToX = function()						{ return toX; };
-		self.setToY = setToY = function(_toY)					{ toY = _toY; };
-		self.getToY = getToY = function()						{ return toY; };
+		let getZ = self.getZ = () =>							{ return z; };
+		let setSpeedX = self.setSpeedX = (_speedX) =>			{ speedX = _speedX; };
+		let getSpeedX = self.getSpeedX = () =>					{ return speedX; };
+		let setSpeedY = self.setSpeedY = (_speedY) =>			{ speedY = _speedY; };
+		let getSpeedY = self.getSpeedY = () =>					{ return speedY; };
+		let setAccelX = self.setAccelX = (_accelX) =>			{ accelX = _accelX; };
+		let getAccelX = self.getAccelX = () =>					{ return accelX; };
+		let setAccelY = self.setAccelY = (_accelY) =>			{ accelY = _accelY; };
+		let getAccelY = self.getAccelY = () =>					{ return accelY; };
+		let setMinSpeedX = self.setMinSpeedX = (_minSpeedX) =>	{ minSpeedX = _minSpeedX; };
+		let getMinSpeedX = self.getMinSpeedX = () =>			{ return minSpeedX; };
+		let setMinSpeedY = self.setMinSpeedY = (_minSpeedY) =>	{ minSpeedY = _minSpeedY; };
+		let getMinSpeedY = self.getMinSpeedY = () =>			{ return minSpeedY; };
+		let setMaxSpeedX = self.setMaxSpeedX = (_maxSpeedX) =>	{ maxSpeedX = _maxSpeedX; };
+		let getMaxSpeedX = self.getMaxSpeedX = () =>			{ return maxSpeedX; };
+		let setMaxSpeedY = self.setMaxSpeedY = (_maxSpeedY) =>	{ maxSpeedY = _maxSpeedY; };
+		let getMaxSpeedY = self.getMaxSpeedY = () =>			{ return maxSpeedY; };
+		let setToX = self.setToX = (_toX) =>					{ toX = _toX; };
+		let getToX = self.getToX = () =>						{ return toX; };
+		let setToY = self.setToY = (_toY) =>					{ toY = _toY; };
+		let getToY = self.getToY = () =>						{ return toY; };
 		
-		self.setScaleX = setScaleX = function(_scaleX)									{ scaleX = _scaleX; };
-		self.getScaleX = getScaleX = function()											{ return scaleX; };
-		self.setScaleY = setScaleY = function(_scaleY)									{ scaleY = _scaleY; };
-		self.getScaleY = getScaleY = function()											{ return scaleY; };
-		self.setScale = setScale = function(scale) {
+		// for scale
+		let setScaleX = self.setScaleX = (_scaleX) =>									{ scaleX = _scaleX; };
+		let getScaleX = self.getScaleX = () =>											{ return scaleX; };
+		let setScaleY = self.setScaleY = (_scaleY) =>									{ scaleY = _scaleY; };
+		let getScaleY = self.getScaleY = () =>											{ return scaleY; };
+		let setScale = self.setScale = (scale) => {
 			scaleX = scale;
 			scaleY = scale;
 		};
-		self.setScalingSpeedX = setScalingSpeedX = function(_scalingSpeedX)				{ scalingSpeedX = _scalingSpeedX; };
-		self.getScalingSpeedX = getScalingSpeedX = function()							{ return scalingSpeedX; };
-		self.setScalingSpeedY = setScalingSpeedY = function(_scalingSpeedY)				{ scalingSpeedY = _scalingSpeedY; };
-		self.getScalingSpeedY = getScalingSpeedY = function()							{ return scalingSpeedY; };
-		self.setScalingSpeed = setScalingSpeed = function(scalingSpeed) {
+		let setScalingSpeedX = self.setScalingSpeedX = (_scalingSpeedX) =>				{ scalingSpeedX = _scalingSpeedX; };
+		let getScalingSpeedX = self.getScalingSpeedX = () =>							{ return scalingSpeedX; };
+		let setScalingSpeedY = self.setScalingSpeedY = (_scalingSpeedY) =>				{ scalingSpeedY = _scalingSpeedY; };
+		let getScalingSpeedY = self.getScalingSpeedY = () =>							{ return scalingSpeedY; };
+		let setScalingSpeed = self.setScalingSpeed = (scalingSpeed) => {
 			scalingSpeedX = scalingSpeed;
 			scalingSpeedY = scalingSpeed;
 		};
-		self.setScalingAccelX = setScalingAccelX = function(_scalingAccelX)				{ scalingAccelX = _scalingAccelX; };
-		self.getScalingAccelX = getScalingAccelX = function()							{ return scalingAccelX; };
-		self.setScalingAccelY = setScalingAccelY = function(_scalingAccelY)				{ scalingAccelY = _scalingAccelY; };
-		self.getScalingAccelY = getScalingAccelY = function()							{ return scalingAccelY; };
-		self.setScalingAccel = setScalingAccel = function(scalingAccel) {
+		let setScalingAccelX = self.setScalingAccelX = (_scalingAccelX) =>				{ scalingAccelX = _scalingAccelX; };
+		let getScalingAccelX = self.getScalingAccelX = () =>							{ return scalingAccelX; };
+		let setScalingAccelY = self.setScalingAccelY = (_scalingAccelY) =>				{ scalingAccelY = _scalingAccelY; };
+		let getScalingAccelY = self.getScalingAccelY = () =>							{ return scalingAccelY; };
+		let setScalingAccel = self.setScalingAccel = (scalingAccel) => {
 			scalingAccelX = scalingAccel;
 			scalingAccelY = scalingAccel;
 		};
-		self.setMinScalingSpeedX = setMinScalingSpeedX = function(_minScalingSpeedX)	{ minScalingSpeedX = _minScalingSpeedX; };
-		self.getMinScalingSpeedX = getMinScalingSpeedX = function()						{ return minScalingSpeedX; };
-		self.setMinScalingSpeedY = setMinScalingSpeedY = function(_minScalingSpeedY)	{ minScalingSpeedY = _minScalingSpeedY; };
-		self.getMinScalingSpeedY = getMinScalingSpeedY = function()						{ return minScalingSpeedY; };
-		self.setMinScalingSpeed = setMinScalingSpeed = function(minScalingSpeed) {
+		let setMinScalingSpeedX = self.setMinScalingSpeedX = (_minScalingSpeedX) =>		{ minScalingSpeedX = _minScalingSpeedX; };
+		let getMinScalingSpeedX = self.getMinScalingSpeedX = () =>						{ return minScalingSpeedX; };
+		let setMinScalingSpeedY = self.setMinScalingSpeedY = (_minScalingSpeedY) =>		{ minScalingSpeedY = _minScalingSpeedY; };
+		let getMinScalingSpeedY = self.getMinScalingSpeedY = () =>						{ return minScalingSpeedY; };
+		let setMinScalingSpeed = self.setMinScalingSpeed = (minScalingSpeed) => {
 			minScalingSpeedX = minScalingSpeed;
 			minScalingSpeedY = minScalingSpeed;
 		};
-		self.setMaxScalingSpeedX = setMaxScalingSpeedX = function(_maxScalingSpeedX)	{ maxScalingSpeedX = _maxScalingSpeedX; };
-		self.getMaxScalingSpeedX = getMaxScalingSpeedX = function()						{ return maxScalingSpeedX; };
-		self.setMaxScalingSpeedY = setMaxScalingSpeedY = function(_maxScalingSpeedY)	{ maxScalingSpeedY = _maxScalingSpeedY; };
-		self.getMaxScalingSpeedY = getMaxScalingSpeedY = function()						{ return maxScalingSpeedY; };
-		self.setMaxScalingSpeed = setMaxScalingSpeed = function(maxScalingSpeed) {
+		let setMaxScalingSpeedX = self.setMaxScalingSpeedX = (_maxScalingSpeedX) =>		{ maxScalingSpeedX = _maxScalingSpeedX; };
+		let getMaxScalingSpeedX = self.getMaxScalingSpeedX = () =>						{ return maxScalingSpeedX; };
+		let setMaxScalingSpeedY = self.setMaxScalingSpeedY = (_maxScalingSpeedY) =>		{ maxScalingSpeedY = _maxScalingSpeedY; };
+		let getMaxScalingSpeedY = self.getMaxScalingSpeedY = () =>						{ return maxScalingSpeedY; };
+		let setMaxScalingSpeed = self.setMaxScalingSpeed = (maxScalingSpeed) => {
 			maxScalingSpeedX = maxScalingSpeed;
 			maxScalingSpeedY = maxScalingSpeed;
 		};
-		self.setToScaleX = setToScaleX = function(_toScaleX)							{ toScaleX = _toScaleX; };
-		self.getToScaleX = getToScaleX = function()										{ return toScaleX; };
-		self.setToScaleY = setToScaleY = function(_toScaleY)							{ toScaleY = _toScaleY; };
-		self.getToScaleY = getToScaleY = function()										{ return toScaleY; };
-		self.setToScale = setToScale = function(toScale) {
+		let setToScaleX = self.setToScaleX = (_toScaleX) =>								{ toScaleX = _toScaleX; };
+		let getToScaleX = self.getToScaleX = () =>										{ return toScaleX; };
+		let setToScaleY = self.setToScaleY = (_toScaleY) =>								{ toScaleY = _toScaleY; };
+		let getToScaleY = self.getToScaleY = () =>										{ return toScaleY; };
+		let setToScale = self.setToScale = (toScale) => {
 			toScaleX = toScale;
 			toScaleY = toScale;
 		};
 		
-		self.setAngle = setAngle = function(_angle)										{ angle = _angle; };
-		self.getAngle = getAngle = function()											{ return angle; };
-		self.setRotationSpeed = setRotationSpeed = function(_rotationSpeed)				{ rotationSpeed = _rotationSpeed; };
-		self.getRotationSpeed = getRotationSpeed = function()							{ return rotationSpeed; };
-		self.setRotationAccel = setRotationAccel = function(_rotationAccel)				{ rotationAccel = _rotationAccel; };
-		self.getRotationAccel = getRotationAccel = function()							{ return rotationAccel; };
-		self.setMinRotationSpeed = setMinRotationSpeed = function(_minRotationSpeed)	{ minRotationSpeed = _minRotationSpeed; };
-		self.getMinRotationSpeed = getMinRotationSpeed = function()						{ return minRotationSpeed; };
-		self.setMaxRotationSpeed = setMaxRotationSpeed = function(_maxRotationSpeed)	{ maxRotationSpeed = _maxRotationSpeed; };
-		self.getMaxRotationSpeed = getMaxRotationSpeed = function()						{ return maxRotationSpeed; };
-		self.setToAngle = setToAngle = function(_toAngle)								{ toAngle = _toAngle; };
-		self.getToAngle = getToAngle = function()										{ return toAngle; };
+		// for angle
+		let setAngle = self.setAngle = (_angle) =>										{ angle = _angle; };
+		let getAngle = self.getAngle = () =>											{ return angle; };
+		let setRotationSpeed = self.setRotationSpeed = (_rotationSpeed) =>				{ rotationSpeed = _rotationSpeed; };
+		let getRotationSpeed = self.getRotationSpeed = () =>							{ return rotationSpeed; };
+		let setRotationAccel = self.setRotationAccel = (_rotationAccel) =>				{ rotationAccel = _rotationAccel; };
+		let getRotationAccel = self.getRotationAccel = () =>							{ return rotationAccel; };
+		let setMinRotationSpeed = self.setMinRotationSpeed = (_minRotationSpeed) =>		{ minRotationSpeed = _minRotationSpeed; };
+		let getMinRotationSpeed = self.getMinRotationSpeed = () =>						{ return minRotationSpeed; };
+		let setMaxRotationSpeed = self.setMaxRotationSpeed = (_maxRotationSpeed) =>		{ maxRotationSpeed = _maxRotationSpeed; };
+		let getMaxRotationSpeed = self.getMaxRotationSpeed = () =>						{ return maxRotationSpeed; };
+		let setToAngle = self.setToAngle = (_toAngle) =>								{ toAngle = _toAngle; };
+		let getToAngle = self.getToAngle = () =>										{ return toAngle; };
 		
-		self.setAlpha = setAlpha = function(_alpha)								{ alpha = _alpha; };
-		self.getAlpha = getAlpha = function()									{ return alpha; };
-		self.setFadingSpeed = setFadingSpeed = function(_fadingSpeed)			{ fadingSpeed = _fadingSpeed; };
-		self.getFadingSpeed = getFadingSpeed = function()						{ return fadingSpeed; };
-		self.setFadingAccel = setFadingAccel = function(_fadingAccel)			{ fadingAccel = _fadingAccel; };
-		self.getFadingAccel = getFadingAccel = function()						{ return fadingAccel; };
-		self.setMinFadingSpeed = setMinFadingSpeed = function(_minFadingSpeed)	{ minFadingSpeed = _minFadingSpeed; };
-		self.getMinFadingSpeed = getMinFadingSpeed = function()					{ return minFadingSpeed; };
-		self.setMaxFadingSpeed = setMaxFadingSpeed = function(_maxFadingSpeed)	{ maxFadingSpeed = _maxFadingSpeed; };
-		self.getMaxFadingSpeed = getMaxFadingSpeed = function()					{ return maxFadingSpeed; };
-		self.setToAlpha = setToAlpha = function(_toAlpha)						{ toAlpha = _toAlpha; };
-		self.getToAlpha = getToAlpha = function()								{ return toAlpha; };
+		// for alpha
+		let setAlpha = self.setAlpha = (_alpha) =>								{ alpha = _alpha; };
+		let getAlpha = self.getAlpha = () =>									{ return alpha; };
+		let setFadingSpeed = self.setFadingSpeed = (_fadingSpeed) =>			{ fadingSpeed = _fadingSpeed; };
+		let getFadingSpeed = self.getFadingSpeed = () =>						{ return fadingSpeed; };
+		let setFadingAccel = self.setFadingAccel = (_fadingAccel) =>			{ fadingAccel = _fadingAccel; };
+		let getFadingAccel = self.getFadingAccel = () =>						{ return fadingAccel; };
+		let setMinFadingSpeed = self.setMinFadingSpeed = (_minFadingSpeed) =>	{ minFadingSpeed = _minFadingSpeed; };
+		let getMinFadingSpeed = self.getMinFadingSpeed = () =>					{ return minFadingSpeed; };
+		let setMaxFadingSpeed = self.setMaxFadingSpeed = (_maxFadingSpeed) =>	{ maxFadingSpeed = _maxFadingSpeed; };
+		let getMaxFadingSpeed = self.getMaxFadingSpeed = () =>					{ return maxFadingSpeed; };
+		let setToAlpha = self.setToAlpha = (_toAlpha) =>						{ toAlpha = _toAlpha; };
+		let getToAlpha = self.getToAlpha = () =>								{ return toAlpha; };
 		
-		self.getRealX = getRealX = function()									{ return realX; };
-		self.getRealY = getRealY = function()									{ return realY; };
-		self.getRealScaleX = getRealScaleX = function()							{ return realScaleX; };
-		self.getRealScaleY = getRealScaleY = function()							{ return realScaleY; };
-		self.getRealRadian = getRealRadian = function(_toAlpha)					{ return realRadian; };
-		self.getRealAlpha = getRealAlpha = function(_toAlpha)					{ return realAlpha; };
+		// for real properties
+		let getRealX = self.getRealX = () =>									{ return realX; };
+		let getRealY = self.getRealY = () =>									{ return realY; };
+		let getRealScaleX = self.getRealScaleX = () =>							{ return realScaleX; };
+		let getRealScaleY = self.getRealScaleY = () =>							{ return realScaleY; };
+		let getRealRadian = self.getRealRadian = (_toAlpha) =>					{ return realRadian; };
+		let getRealAlpha = self.getRealAlpha = (_toAlpha) =>					{ return realAlpha; };
 		
 		// 파라미터 초기화
 		if (params !== undefined) {
@@ -427,7 +272,7 @@ SkyEngine.Node = CLASS({
 			
 			if (params.collider !== undefined) {
 				if (CHECK_IS_ARRAY(params.collider) === true) {
-					EACH(params.collider, function(collider) {
+					EACH(params.collider, (collider) => {
 						addCollider(collider);
 					});
 				} else {
@@ -437,7 +282,7 @@ SkyEngine.Node = CLASS({
 			
 			if (params.touchArea !== undefined) {
 				if (CHECK_IS_ARRAY(params.touchArea) === true) {
-					EACH(params.touchArea, function(touchArea) {
+					EACH(params.touchArea, (touchArea) => {
 						addTouchArea(touchArea);
 					});
 				} else {
@@ -447,7 +292,7 @@ SkyEngine.Node = CLASS({
 			
 			if (params.c !== undefined) {
 				if (CHECK_IS_ARRAY(params.c) === true) {
-					EACH(params.c, function(childNode) {
+					EACH(params.c, (childNode) => {
 						append(childNode);
 					});
 				} else {
@@ -456,7 +301,7 @@ SkyEngine.Node = CLASS({
 			}
 			
 			if (params.on !== undefined) {
-				EACH(params.on, function(eventHandler, eventName) {
+				EACH(params.on, (eventHandler, eventName) => {
 					on(eventName, eventHandler);
 				});
 			}
@@ -491,7 +336,7 @@ SkyEngine.Node = CLASS({
 			SkyEngine.Screen.registerNode(self);
 		}
 		
-		self.moveLeft = moveLeft = function(speedOrParams) {
+		let moveLeft = self.moveLeft = (speedOrParams) => {
 			//REQUIRED: speedOrParams
 			//OPTIONAL: speedOrParams.speed
 			//OPTIONAL: speedOrParams.accel
@@ -515,7 +360,7 @@ SkyEngine.Node = CLASS({
 			}
 		};
 		
-		self.stopLeft = stopLeft = function(accel) {
+		let stopLeft = self.stopLeft = (accel) => {
 			//OPTIONAL: accel
 			
 			if (accel !== undefined) {
@@ -528,7 +373,7 @@ SkyEngine.Node = CLASS({
 			}
 		};
 		
-		self.moveRight = moveRight = function(speedOrParams) {
+		let moveRight = self.moveRight = (speedOrParams) => {
 			//REQUIRED: speedOrParams
 			//OPTIONAL: speedOrParams.speed
 			//OPTIONAL: speedOrParams.accel
@@ -552,7 +397,7 @@ SkyEngine.Node = CLASS({
 			}
 		};
 		
-		self.stopRight = stopRight = function(accel) {
+		let stopRight = self.stopRight = (accel) => {
 			//OPTIONAL: accel
 			
 			if (accel !== undefined) {
@@ -565,7 +410,7 @@ SkyEngine.Node = CLASS({
 			}
 		};
 		
-		self.moveUp = moveUp = function(speedOrParams) {
+		let moveUp = self.moveUp = (speedOrParams) => {
 			//REQUIRED: speedOrParams
 			//OPTIONAL: speedOrParams.speed
 			//OPTIONAL: speedOrParams.accel
@@ -589,7 +434,7 @@ SkyEngine.Node = CLASS({
 			}
 		};
 		
-		self.stopUp = stopUp = function(accel) {
+		let stopUp = self.stopUp = (accel) => {
 			//OPTIONAL: accel
 			
 			if (accel !== undefined) {
@@ -602,7 +447,7 @@ SkyEngine.Node = CLASS({
 			}
 		};
 		
-		self.moveDown = moveDown = function(speedOrParams) {
+		let moveDown = self.moveDown = (speedOrParams) => {
 			//REQUIRED: speedOrParams
 			//OPTIONAL: speedOrParams.speed
 			//OPTIONAL: speedOrParams.accel
@@ -626,7 +471,7 @@ SkyEngine.Node = CLASS({
 			}
 		};
 		
-		self.stopDown = stopDown = function(accel) {
+		let stopDown = self.stopDown = (accel) => {
 			//OPTIONAL: accel
 			
 			if (accel !== undefined) {
@@ -639,17 +484,13 @@ SkyEngine.Node = CLASS({
 			}
 		};
 		
-		self.moveTo = moveTo = function(params) {
+		let moveTo = self.moveTo = (params) => {
 			//REQUIRED: params
 			//OPTIONAL: params.toX
 			//OPTIONAL: params.toY
 			//OPTIONAL: params.speed
 			//OPTIONAL: params.accel
 			//OPTIONAL: params.maxSpeed
-			
-			var
-			// length
-			length;
 			
 			if (params.toY === undefined) {
 				toX = params.toX;
@@ -663,7 +504,7 @@ SkyEngine.Node = CLASS({
 				toX = params.toX;
 				toY = params.toY;
 				
-				length = Math.sqrt(toX * toX + toY * toY);
+				let length = Math.sqrt(toX * toX + toY * toY);
 				
 				if (params.speed !== undefined) {
 					speedX = params.speed * toX / length;
@@ -682,7 +523,7 @@ SkyEngine.Node = CLASS({
 			}
 		};
 		
-		self.rotate = rotate = function(speedOrParams) {
+		let rotate = self.rotate = (speedOrParams) => {
 			//REQUIRED: speedOrParams
 			//OPTIONAL: speedOrParams.speed
 			//OPTIONAL: speedOrParams.accel
@@ -690,7 +531,7 @@ SkyEngine.Node = CLASS({
 			
 		};
 		
-		self.stopRotation = stopRotation = function(accel) {
+		let stopRotation = self.stopRotation = (accel) => {
 			//OPTIONAL: accel
 			
 			if (accel !== undefined) {
@@ -707,7 +548,7 @@ SkyEngine.Node = CLASS({
 			}
 		};
 		
-		self.rotateTo = rotateTo = function(params) {
+		let rotateTo = self.rotateTo = (params) => {
 			//REQUIRED: params
 			//OPTIONAL: params.toAngle
 			//OPTIONAL: params.speed
@@ -716,23 +557,23 @@ SkyEngine.Node = CLASS({
 			
 		};
 		
-		self.flipX = flipX = function() {
+		let flipX = self.flipX = () => {
 			scaleX = -scaleX;
 		};
 		
-		self.flipY = flipY = function() {
+		let flipY = self.flipY = () => {
 			scaleY = -scaleY;
 		};
 		
-		self.fadeIn = fadeIn = function(speed) {
+		let fadeIn = self.fadeIn = (speed) => {
 			fadingSpeed = speed;
 		};
 		
-		self.fadeOut = fadeOut = function(speed) {
+		let fadeOut = self.fadeOut = (speed) => {
 			fadingSpeed = -speed;
 		};
 		
-		self.stopFading = stopFading = function(accel) {
+		let stopFading = self.stopFading = (accel) => {
 			//OPTIONAL: accel
 			
 			if (accel !== undefined) {
@@ -749,7 +590,7 @@ SkyEngine.Node = CLASS({
 			}
 		};
 		
-		self.fadeTo = fadeTo = function(params) {
+		let fadeTo = self.fadeTo = (params) => {
 			//REQUIRED: params
 			//OPTIONAL: params.toAlpha
 			//OPTIONAL: params.speed
@@ -758,33 +599,33 @@ SkyEngine.Node = CLASS({
 			
 		};
 		
-		self.hide = hide = function() {
+		let hide = self.hide = () => {
 			isHiding = true;
 		};
 		
-		self.show = show = function() {
+		let show = self.show = () => {
 			isHiding = false;
 		};
 		
-		self.checkIsHiding = checkIsHiding = function() {
+		let checkIsHiding = self.checkIsHiding = () => {
 			return isHiding;
 		};
 		
-		self.getChildren = getChildren = function() {
+		let getChildren = self.getChildren = () => {
 			return childNodes;
 		};
 		
-		self.getParent = getParent = function() {
+		let getParent = self.getParent = () => {
 			return parentNode;
 		};
 		
-		self.setParent = setParent = function(_parentNode) {
+		let setParent = self.setParent = (_parentNode) => {
 			parentNode = _parentNode;
 		};
 		
-		self.empty = empty = function() {
+		let empty = self.empty = () => {
 			
-			childNodes.forEach(function(childNode) {
+			childNodes.forEach((childNode) => {
 				childNode.setParent(undefined);
 				childNode.remove();
 			});
@@ -792,29 +633,20 @@ SkyEngine.Node = CLASS({
 			childNodes = undefined;
 		};
 		
-		appendToParent = function() {
+		let appendToParent = () => {
 			
-			var
-			// parent children
-			parentChildren = parentNode.getChildren(),
+			let parentChildren = parentNode.getChildren();
 			
-			// min index
-			minIndex = 0,
+			let minIndex = 0;
+			let maxIndex = parentChildren.length - 1;
 			
-			// max index
-			maxIndex = parentChildren.length - 1,
-			
-			// index
-			index = -1,
-			
-			// node
-			node;
+			let index = -1;
 			
 			while (minIndex <= maxIndex) {
 				
 				index = Math.ceil((minIndex + maxIndex) / 2);
 				
-				node = parentChildren[index];
+				let node = parentChildren[index];
 				
 				if (node.getZ() < z) {
 					minIndex = index + 1;
@@ -828,32 +660,20 @@ SkyEngine.Node = CLASS({
 			parentChildren.splice(index + 1, 0, self);
 		};
 		
-		removeFromParent = function() {
+		let removeFromParent = () => {
 			
-			var
-			// parent children
-			parentChildren = parentNode.getChildren(),
+			let parentChildren = parentNode.getChildren();
 			
-			// min index
-			minIndex = 0,
+			let minIndex = 0;
+			let maxIndex = parentChildren.length - 1;
 			
-			// max index
-			maxIndex = parentChildren.length - 1,
-			
-			// index
-			index = -1,
-			
-			// node
-			node,
-			
-			// level
-			level = 0;
+			let level = 0;
 
 			while (minIndex <= maxIndex) {
 				
-				index = Math.ceil((minIndex + maxIndex) / 2);
+				let index = Math.ceil((minIndex + maxIndex) / 2);
 				
-				node = parentChildren[index];
+				let node = parentChildren[index];
 				
 				if (node.getZ() < z) {
 					minIndex = index + 1;
@@ -887,7 +707,7 @@ SkyEngine.Node = CLASS({
 			}
 		};
 
-		self.appendTo = appendTo = function(node) {
+		let appendTo = self.appendTo = (node) => {
 			//REQUIRED: node
 			
 			if (parentNode !== undefined) {
@@ -901,13 +721,13 @@ SkyEngine.Node = CLASS({
 			return self;
 		};
 		
-		self.append = append = function(node) {
+		let append = self.append = (node) => {
 			//REQUIRED: node
 			
 			node.appendTo(self);
 		};
 		
-		self.remove = remove = function() {
+		let remove = self.remove = () => {
 			
 			empty();
 			
@@ -925,7 +745,7 @@ SkyEngine.Node = CLASS({
 			// clear memory.
 			childNodes = undefined;
 			
-			EACH(eventMap, function(eventName) {
+			EACH(eventMap, (eventName) => {
 				SkyEngine.Screen.unregisterEventNode(eventName, self);
 			});
 			eventMap = undefined;
@@ -941,11 +761,11 @@ SkyEngine.Node = CLASS({
 			isRemoved = true;
 		};
 		
-		self.checkIsRemoved = checkIsRemoved = function() {
+		let checkIsRemoved = self.checkIsRemoved = () => {
 			return isRemoved;
 		};
 		
-		self.on = on = function(eventName, eventHandler) {
+		let on = self.on = (eventName, eventHandler) => {
 			
 			if (eventMap[eventName] === undefined) {
 				eventMap[eventName] = [];
@@ -956,7 +776,7 @@ SkyEngine.Node = CLASS({
 			eventMap[eventName].push(eventHandler);
 		};
 		
-		self.off = off = function(eventName, eventHandler) {
+		let off = self.off = (eventName, eventHandler) => {
 		
 			if (eventMap[eventName] !== undefined) {
 				
@@ -973,17 +793,17 @@ SkyEngine.Node = CLASS({
 			}
 		};
 		
-		self.fireEvent = fireEvent = function(eventName) {
+		let fireEvent = self.fireEvent = (eventName) => {
 			
 			if (eventMap[eventName] !== undefined) {
 				
-				eventMap[eventName].forEach(function(eventHandler) {
+				eventMap[eventName].forEach((eventHandler) => {
 					eventHandler();
 				});
 			}
 		};
 		
-		self.onMeet = onMeet = function(target, handler) {
+		let onMeet = self.onMeet = (target, handler) => {
 			
 			collisionTargets.push(target);
 			
@@ -994,7 +814,7 @@ SkyEngine.Node = CLASS({
 			meetHandlerMap[target.id].push(handler);
 		};
 		
-		self.offMeet = offMeet = function(target, handler) {
+		let offMeet = self.offMeet = (target, handler) => {
 			
 			if (handler === undefined) {
 				delete meetHandlerMap[target.id];
@@ -1006,17 +826,17 @@ SkyEngine.Node = CLASS({
 			}
 		};
 		
-		self.runMeetHandlers = runMeetHandlers = function(target, realTarget) {
+		let runMeetHandlers = self.runMeetHandlers = (target, realTarget) => {
 			
 			if (meetHandlerMap[target.id] !== undefined) {
 				
-				meetHandlerMap[target.id].forEach(function(handler) {
+				meetHandlerMap[target.id].forEach((handler) => {
 					handler(realTarget);
 				});
 			}
 		};
 		
-		self.onPart = onPart = function(target, handler) {
+		let onPart = self.onPart = (target, handler) => {
 			
 			collisionTargets.push(target);
 			
@@ -1027,7 +847,7 @@ SkyEngine.Node = CLASS({
 			partHandlerMap[target.id].push(handler);
 		};
 		
-		self.offPart = offPart = function(target, handler) {
+		let offPart = self.offPart = (target, handler) => {
 			
 			if (handler === undefined) {
 				delete partHandlerMap[target.id];
@@ -1039,67 +859,67 @@ SkyEngine.Node = CLASS({
 			}
 		};
 		
-		self.runPartHandlers = runPartHandlers = function(target, realTarget) {
+		let runPartHandlers = self.runPartHandlers = (target, realTarget) => {
 			
 			if (partHandlerMap[target.id] !== undefined) {
 				
-				partHandlerMap[target.id].forEach(function(handler) {
+				partHandlerMap[target.id].forEach((handler) => {
 					handler(realTarget);
 				});
 			}
 		};
 		
-		self.addCollider = addCollider = function(collider) {
+		let addCollider = self.addCollider = (collider) => {
 			//REQUIRED: collider
 			
 			colliders.push(collider);
 		};
 		
-		self.getColliders = getColliders = function() {
+		let getColliders = self.getColliders = () => {
 			return colliders;
 		};
 		
-		self.addTouchArea = addTouchArea = function(touchArea) {
+		let addTouchArea = self.addTouchArea = (touchArea) => {
 			//REQUIRED: touchArea
 			
 			touchAreas.push(touchArea);
 		};
 		
-		self.checkPoint = checkPoint = function(x, y) {
+		let checkPoint = self.checkPoint = (x, y) => {
 			// to implement.
 			return false;
 		};
 		
-		self.checkArea = checkArea = function(area) {
+		let checkArea = self.checkArea = (area) => {
 			// to implement.
 			return false;
 		};
 		
-		self.checkCollision = checkCollision = function(target) {
+		let checkCollision = self.checkCollision = (target) => {
 			
-			return colliders.every(function(collider) {
-				return target.getColliders().every(function(targetCollider) {
+			return colliders.every((collider) => {
+				return target.getColliders().every((targetCollider) => {
 					return collider.checkArea(targetCollider) !== true;
 				});
 			}) !== true ||
 			
-			childNodes.every(function(childNode) {
+			childNodes.every((childNode) => {
 				return childNode.checkCollision(target) !== true;
 			}) !== true;
 		};
 		
-		self.checkTouch = checkTouch = function(touchX, touchY) {
+		let checkTouch = self.checkTouch = (touchX, touchY) => {
 			
-			return touchAreas.every(function(touchArea) {
+			return touchAreas.every((touchArea) => {
 				return touchArea.checkPoint(touchX, touchY) !== true;
 			}) !== true ||
 			
-			childNodes.every(function(childNode) {
+			childNodes.every((childNode) => {
 				return childNode.checkTouch(touchX, touchY) !== true;
 			}) !== true;
 		};
 		
-		self.step = step = function(deltaTime, realSpeedX, realSpeedY, realScalingSpeedX, realScalingSpeedY, realRotationSpeed, realFadingSpeed) {
+		let step = self.step = (deltaTime, realSpeedX, realSpeedY, realScalingSpeedX, realScalingSpeedY, realRotationSpeed, realFadingSpeed) => {
 			
 			if (accelX !== 0) {
 				speedX += accelX * deltaTime / 1000;
@@ -1259,11 +1079,11 @@ SkyEngine.Node = CLASS({
 			
 			// check all collisions.
 			
-			collisionTargets.forEach(function(target, index, arr) {
+			collisionTargets.forEach((target, index, arr) => {
 				
 				if (target.type === CLASS) {
 					
-					SkyEngine.Screen.getRegisteredNodes(target).forEach(function(realTarget, i) {
+					SkyEngine.Screen.getRegisteredNodes(target).forEach((realTarget, i) => {
 						
 						if (realTarget !== self) {
 							
@@ -1321,7 +1141,7 @@ SkyEngine.Node = CLASS({
 			});
 		};
 		
-		self.draw = draw = function(context, _realX, _realY, _realScaleX, _realScaleY, _realRadian, _realAlpha) {
+		let draw = self.draw = (context, _realX, _realY, _realScaleX, _realScaleY, _realRadian, _realAlpha) => {
 			
 			realX = _realX;
 			realY = _realY;
