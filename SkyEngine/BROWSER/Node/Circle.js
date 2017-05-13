@@ -106,47 +106,50 @@ SkyEngine.Circle = CLASS({
 			return height;
 		};
 		
-		let checkPoint = self.checkPoint = (touchX, touchY) => {
+		let checkPoint;
+		OVERRIDE(self.checkPoint, (origin) => {
 			
-			return checkPointCircle(
-				touchX,
-				touchY,
-				self.getRealX(),
-				self.getRealY(),
-				width * self.getRealScaleX(),
-				height * self.getRealScaleY(),
-				self.getRealRadian()
-			);
-		};
+			let checkPoint = self.checkPoint = (x, y) => {
+				
+				return checkPointCircle(
+					x,
+					y,
+					self.getRealX(),
+					self.getRealY(),
+					width * self.getRealScaleX(),
+					height * self.getRealScaleY(),
+					self.getRealRadian()) === true || origin(x, y) === true;
+			};
+		});
 		
 		let checkArea;
 		OVERRIDE(self.checkArea, (origin) => {
 			
-			checkArea = self.checkArea = (collider) => {
-				// target이 Rect인 경우 작동
-				// target이 같은 Circle인 경우 작동
+			checkArea = self.checkArea = (area) => {
+				// area가 Rect인 경우 작동
+				// area가 같은 Circle인 경우 작동
 				
-				if (collider.type === SkyEngine.Rect) {
+				if (area.type === SkyEngine.Rect) {
 					
 					if (checkRectCircle(
-						collider.getRealX(), collider.getRealY(), collider.getWidth() * collider.getRealScaleX(), collider.getHeight() * collider.getRealScaleY(), collider.getRealRadian(),
+						area.getRealX(), area.getRealY(), area.getWidth() * area.getRealScaleX(), area.getHeight() * area.getRealScaleY(), area.getRealRadian(),
 						self.getRealX(), self.getRealY(), width * self.getRealScaleX(), height * self.getRealScaleY(), self.getRealRadian()
 					) === true) {
 						return true;
 					}
 				}
 				
-				else if (collider.type === SkyEngine.Circle) {
+				else if (area.type === SkyEngine.Circle) {
 					
 					if (checkCircleCircle(
 						self.getRealX(), self.getRealY(), width * self.getRealScaleX(), height * self.getRealScaleY(), self.getRealRadian(),
-						collider.getRealX(), collider.getRealY(), collider.getWidth() * collider.getRealScaleX(), collider.getHeight() * collider.getRealScaleY(), collider.getRealRadian()
+						area.getRealX(), area.getRealY(), area.getWidth() * area.getRealScaleX(), area.getHeight() * area.getRealScaleY(), area.getRealRadian()
 					) === true) {
 						return true;
 					}
 				}
 				
-				return origin();
+				return origin(area);
 			};
 		});
 		
@@ -156,12 +159,29 @@ SkyEngine.Circle = CLASS({
 			draw = self.draw = (context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha) => {
 				
 				context.beginPath();
+				
 				context.ellipse(0, 0, width / 2, height / 2, 0, 0, 2 * Math.PI);
 				
 				context.fillStyle = color;
 				context.fill();
 				
 				origin(context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha);
+			};
+		});
+		
+		let drawArea;
+		OVERRIDE(self.drawArea, (origin) => {
+			
+			drawArea = self.drawArea = (context, realX, realY, realScaleX, realScaleY, realRadian, color) => {
+				
+				context.beginPath();
+				
+				context.ellipse(0, 0, width / 2, height / 2, 0, 0, 2 * Math.PI);
+				
+				context.strokeStyle = color;
+				context.stroke();
+				
+				origin(context, realX, realY, realScaleX, realScaleY, realRadian, color);
 			};
 		});
 	}

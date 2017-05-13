@@ -13,59 +13,49 @@ SkyEngineShowcase.NodeTest = CLASS({
 			color : 'green',
 			c : [
 			// head
-			SkyEngine.Node({
+			SkyEngine.Circle({
+				centerY : 25,
 				y : -40,
-				c : SkyEngine.Circle({
-					y : -25,
-					width : 50,
-					height : 50,
-					color : 'yellow'
-				})
+				width : 50,
+				height : 50,
+				color : 'yellow'
 			}),
 			
 			// left arm
-			leftArm = SkyEngine.Node({
+			leftArm = SkyEngine.Rect({
+				centerY : -30,
+				angle : 40,
 				x : -20,
 				y : -40,
-				angle : 40,
+				width : 20,
+				height : 60,
+				color : 'purple',
 				c : SkyEngine.Rect({
-					y : 30,
+					centerY : -30,
+					angle : -40,
+					y : 60,
 					width : 20,
 					height : 60,
-					color : 'purple',
-					c : SkyEngine.Node({
-						y : 30,
-						angle : -40,
-						c : SkyEngine.Rect({
-							y : 30,
-							width : 20,
-							height : 60,
-							color : 'purple'
-						})
-					})
+					color : 'purple'
 				})
 			}),
 			
 			// right arm
-			SkyEngine.Node({
+			SkyEngine.Rect({
+				centerY : -30,
+				angle : -40,
 				x : 20,
 				y : -40,
-				angle : -40,
+				width : 20,
+				height : 60,
+				color : 'purple',
 				c : SkyEngine.Rect({
-					y : 30,
+					centerY : -30,
+					angle : 40,
+					y : 60,
 					width : 20,
 					height : 60,
-					color : 'purple',
-					c : SkyEngine.Node({
-						y : 30,
-						angle : 40,
-						c : SkyEngine.Rect({
-							y : 30,
-							width : 20,
-							height : 60,
-							color : 'purple'
-						})
-					})
+					color : 'purple'
 				})
 			})]
 		}).appendTo(SkyEngine.Screen);

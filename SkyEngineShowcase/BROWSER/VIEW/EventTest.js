@@ -20,6 +20,15 @@ SkyEngineShowcase.EventTest = CLASS({
 			}
 		}).appendTo(SkyEngine.Screen);
 		
+		rect.addTouchArea(SkyEngine.Rect({
+			width : 60,
+			height : 40,
+			c : SkyEngine.Rect({
+				width : 40,
+				height : 60
+			})
+		}));
+		
 		let circle = SkyEngine.Circle({
 			width : 60,
 			height : 40,
@@ -33,24 +42,12 @@ SkyEngineShowcase.EventTest = CLASS({
 			}
 		}).appendTo(SkyEngine.Screen);
 		
-		let image = SkyEngine.Image({
-			x : 100,
-			src : SkyEngineShowcase.R('robot/idle1.png'),
-			scale : 0.2,
-			angle : 45,
-			on : {
-				touchstart : () => {
-					console.log('This is Image!');
-				}
-			}
-		}).appendTo(SkyEngine.Screen);
+		circle.addTouchArea(SkyEngine.Circle({
+			width : 60,
+			height : 40
+		}));
 		
-		rect.addTouchArea(rect);
-		
-		circle.addTouchArea(circle);
-		
-		/*// character
-		character = SkyEngine.Sprite({
+		let character = SkyEngine.Sprite({
 			srcs : [
 				SkyEngineShowcase.R('robot/run1.png'),
 				SkyEngineShowcase.R('robot/run2.png'),
@@ -63,7 +60,7 @@ SkyEngineShowcase.EventTest = CLASS({
 			],
 			fps : 10,
 			scale : 0.2
-		}).appendTo(SkyEngine.Screen);*/
+		}).appendTo(SkyEngine.Screen);
 		
 		inner.on('close', () => {
 			
@@ -73,10 +70,7 @@ SkyEngineShowcase.EventTest = CLASS({
 			circle.remove();
 			circle = undefined;
 			
-			image.remove();
-			image = undefined;
-			
-			//character.remove();
+			character.remove();
 			character = undefined;
 		});
 	}

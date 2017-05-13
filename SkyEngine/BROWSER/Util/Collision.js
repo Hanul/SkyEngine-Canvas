@@ -289,7 +289,7 @@ SkyEngine('Util').Collision = OBJECT({
 			z0, z1, z2, z3, z4,
 			
 			// for a zero
-			za, zb, zc, zd, zp, zq, zr, d, descrim, P, D;
+			za, zb, zc, zd, zp, zq, zr, descrim, P, D;
 			
 			bx -= ax;
 			by -= ay;

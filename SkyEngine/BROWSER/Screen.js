@@ -100,8 +100,8 @@ SkyEngine.Screen = OBJECT({
 			setFilter('none');
 		};
 		
-		
-		if (CONFIG.isDevMode === true) {
+		// 디버그 모드에서는 FPS 수치 표시
+		if (CONFIG.SkyEngine.isDebugMode === true) {
 			
 			let fpsDom = DIV({
 				style : {
@@ -151,6 +151,48 @@ SkyEngine.Screen = OBJECT({
 			});
 		};
 		
+		let drawAllArea = (node, context, realX, realY, realScaleX, realScaleY, realRadian, color) => {
+			
+			let plusX = node.getX() * realScaleX;
+			let plusY = node.getY() * realScaleY;
+			
+			let plusCenterX = node.getCenterX() * realScaleX;
+			let plusCenterY = node.getCenterY() * realScaleY;
+			
+			let sin = Math.sin(realRadian);
+			let cos = Math.cos(realRadian);
+			
+			realX += plusX * cos - plusY * sin;
+			realY += plusX * sin + plusY * cos;
+			
+			let nextX = realX;
+			let nextY = realY;
+			
+			realScaleX *= node.getScaleX();
+			realScaleY *= node.getScaleY();
+			
+			realRadian += node.getAngle() * Math.PI / 180;
+			
+			sin = Math.sin(realRadian);
+			cos = Math.cos(realRadian);
+			
+			realX -= plusCenterX * cos - plusCenterY * sin;
+			realY -= plusCenterX * sin + plusCenterY * cos;
+			
+			context.save();
+			context.translate(realX, realY);
+			context.rotate(realRadian);
+			context.scale(realScaleX, realScaleY);
+			
+			node.drawArea(context, realX, realY, realScaleX, realScaleY, realRadian, color);
+			
+			context.restore();
+			
+			node.getChildren().forEach((childNode) => {
+				drawAllArea(childNode, context, nextX, nextY, realScaleX, realScaleY, realRadian, color);
+			});
+		};
+		
 		let drawAll = (node, context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha) => {
 			
 			let plusX = node.getX() * realScaleX;
@@ -183,6 +225,7 @@ SkyEngine.Screen = OBJECT({
 			
 			if (node.checkIsHiding() !== true) {
 				
+				context.save();
 				context.translate(realX, realY);
 				context.rotate(realRadian);
 				context.scale(realScaleX, realScaleY);
@@ -190,10 +233,30 @@ SkyEngine.Screen = OBJECT({
 				
 				node.draw(context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha);
 				
-				context.globalAlpha = 1;
-				context.scale(1 / realScaleX, 1 / realScaleY);
-				context.rotate(-realRadian);
-				context.translate(-realX, -realY);
+				context.restore();
+				
+				// 개발 모드에서는 중점 표시
+				if (CONFIG.SkyEngine.isDebugMode === true) {
+					
+					context.beginPath();
+					context.strokeStyle = context.fillStyle = 'aqua';
+					
+					context.rect(nextX - 1, nextY - 1, 2, 2);
+					
+					context.moveTo(nextX - 15, nextY);
+					context.lineTo(nextX + 15, nextY);
+					context.moveTo(nextX, nextY - 15);
+					context.lineTo(nextX, nextY + 15);
+					context.stroke();
+					
+					node.getTouchAreas().forEach((touchArea) => {
+						drawAllArea(touchArea, context, realX, realY, realScaleX, realScaleY, realRadian, 'magenta');
+					});
+					
+					node.getColliders().forEach((collider) => {
+						drawAllArea(collider, context, realX, realY, realScaleX, realScaleY, realRadian, 'lime');
+					});
+				}
 				
 				node.getChildren().forEach((childNode) => {
 					drawAll(childNode, context, nextX, nextY, realScaleX, realScaleY, realRadian, realAlpha);

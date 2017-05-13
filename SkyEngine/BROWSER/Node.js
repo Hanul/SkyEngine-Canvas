@@ -269,42 +269,6 @@ SkyEngine.Node = CLASS({
 			if (params.toScaleY !== undefined)	{ toScaleY = params.toScaleY; }
 			toAngle = params.toAngle;
 			toAlpha = params.toAlpha;
-			
-			if (params.collider !== undefined) {
-				if (CHECK_IS_ARRAY(params.collider) === true) {
-					EACH(params.collider, (collider) => {
-						addCollider(collider);
-					});
-				} else {
-					addCollider(params.collider);
-				}
-			}
-			
-			if (params.touchArea !== undefined) {
-				if (CHECK_IS_ARRAY(params.touchArea) === true) {
-					EACH(params.touchArea, (touchArea) => {
-						addTouchArea(touchArea);
-					});
-				} else {
-					addTouchArea(params.touchArea);
-				}
-			}
-			
-			if (params.c !== undefined) {
-				if (CHECK_IS_ARRAY(params.c) === true) {
-					EACH(params.c, (childNode) => {
-						append(childNode);
-					});
-				} else {
-					append(params.c);
-				}
-			}
-			
-			if (params.on !== undefined) {
-				EACH(params.on, (eventHandler, eventName) => {
-					on(eventName, eventHandler);
-				});
-			}
 		}
 		
 		if (x === undefined)				{ x = 0; }
@@ -623,16 +587,6 @@ SkyEngine.Node = CLASS({
 			parentNode = _parentNode;
 		};
 		
-		let empty = self.empty = () => {
-			
-			childNodes.forEach((childNode) => {
-				childNode.setParent(undefined);
-				childNode.remove();
-			});
-			
-			childNodes = undefined;
-		};
-		
 		let appendToParent = () => {
 			
 			let parentChildren = parentNode.getChildren();
@@ -727,14 +681,27 @@ SkyEngine.Node = CLASS({
 			node.appendTo(self);
 		};
 		
+		if (params !== undefined && params.c !== undefined) {
+			if (CHECK_IS_ARRAY(params.c) === true) {
+				EACH(params.c, (childNode) => {
+					append(childNode);
+				});
+			} else {
+				append(params.c);
+			}
+		}
+		
 		let remove = self.remove = () => {
 			
-			empty();
+			// 모든 자식 노드 제거
+			childNodes.forEach((childNode) => {
+				childNode.setParent(undefined);
+				childNode.remove();
+			});
+			childNodes = undefined;
 			
 			if (parentNode !== undefined) {
-				
 				removeFromParent();
-				
 				setParent(undefined);
 			}
 			
@@ -742,16 +709,23 @@ SkyEngine.Node = CLASS({
 				SkyEngine.Screen.unregisterNode(self);
 			}
 			
-			// clear memory.
-			childNodes = undefined;
-			
-			EACH(eventMap, (eventName) => {
+			// 모든 이벤트 제거
+			EACH(eventMap, (eventHandler, eventName) => {
 				SkyEngine.Screen.unregisterEventNode(eventName, self);
 			});
 			eventMap = undefined;
 			
-			colliders = undefined;
+			// 모든 터치 영역 제거
+			touchAreas.forEach((touchArea) => {
+				touchArea.remove();
+			});
 			touchAreas = undefined;
+			
+			// 모든 충돌 영역 제거
+			colliders.forEach((collider) => {
+				collider.remove();
+			});
+			colliders = undefined;
 			
 			collisionTargets = undefined
 			collidingNodeIds = undefined;
@@ -775,6 +749,12 @@ SkyEngine.Node = CLASS({
 			
 			eventMap[eventName].push(eventHandler);
 		};
+		
+		if (params !== undefined && params.on !== undefined) {
+			EACH(params.on, (eventHandler, eventName) => {
+				on(eventName, eventHandler);
+			});
+		}
 		
 		let off = self.off = (eventName, eventHandler) => {
 		
@@ -875,6 +855,16 @@ SkyEngine.Node = CLASS({
 			colliders.push(collider);
 		};
 		
+		if (params !== undefined && params.collider !== undefined) {
+			if (CHECK_IS_ARRAY(params.collider) === true) {
+				EACH(params.collider, (collider) => {
+					addCollider(collider);
+				});
+			} else {
+				addCollider(params.collider);
+			}
+		}
+		
 		let getColliders = self.getColliders = () => {
 			return colliders;
 		};
@@ -885,14 +875,43 @@ SkyEngine.Node = CLASS({
 			touchAreas.push(touchArea);
 		};
 		
+		if (params !== undefined && params.touchArea !== undefined) {
+			if (CHECK_IS_ARRAY(params.touchArea) === true) {
+				EACH(params.touchArea, (touchArea) => {
+					addTouchArea(touchArea);
+				});
+			} else {
+				addTouchArea(params.touchArea);
+			}
+		}
+		
+		let getTouchAreas = self.getTouchAreas = () => {
+			return touchAreas;
+		};
+		
 		let checkPoint = self.checkPoint = (x, y) => {
-			// to implement.
-			return false;
+			
+			return childNodes.every((childNode) => {
+				return childNode.checkPoint(x, y) !== true;
+			}) !== true;
 		};
 		
 		let checkArea = self.checkArea = (area) => {
-			// to implement.
-			return false;
+			
+			return childNodes.every((childNode) => {
+				return childNode.checkArea(area) !== true;
+			}) !== true;
+		};
+		
+		let checkTouch = self.checkTouch = (touchX, touchY) => {
+			
+			return touchAreas.every((touchArea) => {
+				return touchArea.checkPoint(touchX, touchY) !== true;
+			}) !== true ||
+			
+			childNodes.every((childNode) => {
+				return childNode.checkTouch(touchX, touchY) !== true;
+			}) !== true;
 		};
 		
 		let checkCollision = self.checkCollision = (target) => {
@@ -905,17 +924,6 @@ SkyEngine.Node = CLASS({
 			
 			childNodes.every((childNode) => {
 				return childNode.checkCollision(target) !== true;
-			}) !== true;
-		};
-		
-		let checkTouch = self.checkTouch = (touchX, touchY) => {
-			
-			return touchAreas.every((touchArea) => {
-				return touchArea.checkPoint(touchX, touchY) !== true;
-			}) !== true ||
-			
-			childNodes.every((childNode) => {
-				return childNode.checkTouch(touchX, touchY) !== true;
 			}) !== true;
 		};
 		
@@ -1034,7 +1042,7 @@ SkyEngine.Node = CLASS({
 				
 				if (toAngle !== undefined) {
 					
-					if ((rotationSpeed > 0 && angle > toAngle) || (rotationSpeed < 0 && angle < toAngle)) {
+					if ((rotationSpeed > 0 && angle >= toAngle) || (rotationSpeed < 0 && angle <= toAngle)) {
 						angle = toAngle;
 						rotationSpeed = 0;
 					}
@@ -1148,7 +1156,16 @@ SkyEngine.Node = CLASS({
 			realScaleX = _realScaleX;
 			realScaleY = _realScaleY;
 			realRadian = _realRadian;
-			realAlpha = _realAlpha
+			realAlpha = _realAlpha;
+		};
+		
+		let drawArea = self.drawArea = (context, _realX, _realY, _realScaleX, _realScaleY, _realRadian, color) => {
+			
+			realX = _realX;
+			realY = _realY;
+			realScaleX = _realScaleX;
+			realScaleY = _realScaleY;
+			realRadian = _realRadian;
 		};
 	}
 });

@@ -115,25 +115,29 @@ SkyEngine.Rect = CLASS({
 			return color;
 		};
 		
-		let checkPoint = self.checkPoint = (touchX, touchY) => {
+		let checkPoint;
+		OVERRIDE(self.checkPoint, (origin) => {
 			
-			return checkPointRect(
-				touchX,
-				touchY,
-				self.getRealX(),
-				self.getRealY(),
-				width * self.getRealScaleX(),
-				height * self.getRealScaleY(),
-				self.getRealRadian());
-		};
+			let checkPoint = self.checkPoint = (x, y) => {
+				
+				return checkPointRect(
+					x,
+					y,
+					self.getRealX(),
+					self.getRealY(),
+					width * self.getRealScaleX(),
+					height * self.getRealScaleY(),
+					self.getRealRadian()) === true || origin(x, y) === true;
+			};
+		});
 		
 		let checkArea;
 		OVERRIDE(self.checkArea, (origin) => {
 			
-			checkArea = self.checkArea = (collider) => {
-				// collider이 같은 Rect인 경우 작동
+			checkArea = self.checkArea = (area) => {
+				// area가 같은 Rect인 경우 작동
 				
-				if (collider.type === SkyEngine.Rect) {
+				if (area.type === SkyEngine.Rect) {
 					
 					if (checkRectRect(
 						self.getRealX(),
@@ -141,17 +145,17 @@ SkyEngine.Rect = CLASS({
 						width * self.getRealScaleX(),
 						height * self.getRealScaleY(),
 						self.getRealRadian(),
-						collider.getRealX(),
-						collider.getRealY(),
-						collider.getWidth() * collider.getRealScaleX(),
-						collider.getHeight() * collider.getRealScaleY(),
-						collider.getRealRadian()) === true) {
+						area.getRealX(),
+						area.getRealY(),
+						area.getWidth() * area.getRealScaleX(),
+						area.getHeight() * area.getRealScaleY(),
+						area.getRealRadian()) === true) {
 						
 						return true;
 					}
 				}
 				
-				return origin();
+				return origin(area);
 			};
 		});
 		
@@ -161,12 +165,29 @@ SkyEngine.Rect = CLASS({
 			draw = self.draw = (context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha) => {
 				
 				context.beginPath();
+				
 				context.rect(-width / 2, -height / 2, width, height);
 				
 				context.fillStyle = color;
 				context.fill();
 				
 				origin(context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha);
+			};
+		});
+		
+		let drawArea;
+		OVERRIDE(self.drawArea, (origin) => {
+			
+			drawArea = self.drawArea = (context, realX, realY, realScaleX, realScaleY, realRadian, color) => {
+				
+				context.beginPath();
+				
+				context.rect(-width / 2, -height / 2, width, height);
+				
+				context.strokeStyle = color;
+				context.stroke();
+				
+				origin(context, realX, realY, realScaleX, realScaleY, realRadian, color);
 			};
 		});
 	}

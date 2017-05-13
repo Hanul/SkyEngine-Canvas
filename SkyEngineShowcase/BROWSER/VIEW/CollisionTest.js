@@ -10,11 +10,16 @@ SkyEngineShowcase.CollisionTest = CLASS({
 			x : -100,
 			width : 40,
 			height : 40,
-			//centerY : 40,
+			centerY : 40,
 			color : 'green',
 			angle : 45,
 			scaleX : 2
 		}).appendTo(SkyEngine.Screen);
+		
+		rect.addCollider(SkyEngine.Rect({
+			width : 40,
+			height : 40
+		}));
 		
 		let circle = SkyEngine.Circle({
 			width : 60,
@@ -24,15 +29,10 @@ SkyEngineShowcase.CollisionTest = CLASS({
 			scale : 1.2
 		}).appendTo(SkyEngine.Screen);
 		
-		let image = SkyEngine.Image({
-			x : 100,
-			src : SkyEngineShowcase.R('robot/idle1.png'),
-			scale : 0.2,
-			angle : 45
-		}).appendTo(SkyEngine.Screen);
-		
-		rect.addCollider(rect);
-		circle.addCollider(circle);
+		circle.addCollider(SkyEngine.Circle({
+			width : 60,
+			height : 40
+		}));
 		
 		circle.onMeet(SkyEngine.Rect, () => {
 			console.log('Met!');
@@ -42,7 +42,6 @@ SkyEngineShowcase.CollisionTest = CLASS({
 			console.log('Parted!');
 		});
 		
-		/*// character
 		let character = SkyEngine.Sprite({
 			srcs : [
 				SkyEngineShowcase.R('robot/run1.png'),
@@ -56,7 +55,7 @@ SkyEngineShowcase.CollisionTest = CLASS({
 			],
 			fps : 10,
 			scale : 0.2
-		}).appendTo(SkyEngine.Screen);*/
+		}).appendTo(SkyEngine.Screen);
 		
 		circle.moveRight(100);
 		
@@ -114,10 +113,7 @@ SkyEngineShowcase.CollisionTest = CLASS({
 			circle.remove();
 			circle = undefined;
 			
-			image.remove();
-			image = undefined;
-			
-			//character.remove();
+			character.remove();
 			character = undefined;
 			
 			delay.remove();
