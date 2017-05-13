@@ -1,63 +1,20 @@
 SkyEngine('Util').Collision = OBJECT({
 
 	init : (inner, self) => {
-
-		var
-		// check between.
-		checkBetween,
-		
-		// check overlap.
-		checkOverlap,
-		
-		// check point rect.
-		checkPointRect,
-		
-		// check point circle.
-		checkPointCircle,
-		
-		// check point polygon.
-		checkPointPolygon,
-		
-		// check line line.
-		checkLineLine,
-		
-		// check line circle.
-		checkLineCircle,
-		
-		// check line polygon.
-		checkLinePolygon,
-		
-		// check rect rect.
-		checkRectRect,
-		
-		// check rect circle.
-		checkRectCircle,
-		
-		// check rect polygon.
-		checkRectPolygon,
-		
-		// check circle circle.
-		checkCircleCircle,
-		
-		// check circle polygon.
-		checkCirclePolygon,
-		
-		// check polygon polygon.
-		checkPolygonPolygon;
 		
 		// c in a-b
-		self.checkBetween = checkBetween = function(c, a, b) {
+		let checkBetween = self.checkBetween = (c, a, b) => {
 			return (a - c) * (b - c) <= 0;
 		};
 		
 		// a-b, c-d
-		self.checkOverlap = checkOverlap = function(a, b, c, d) {
+		let checkOverlap = self.checkOverlap = (a, b, c, d) => {
 			return checkBetween((c < d) ? c : d, a, b) === true || checkBetween((a < b) ? a : b, c, d) === true;
 		};
 		
-		self.checkPointRect = checkPointRect = function(px, py, cx, cy, width, height, radian) {
+		let checkPointRect = self.checkPointRect = (px, py, cx, cy, width, height, radian) => {
 			
-			var cos, sin, tx = px, ty = py;
+			let cos, sin, tx = px, ty = py;
 			
 			if (radian !== 0) {
 				
@@ -77,9 +34,9 @@ SkyEngine('Util').Collision = OBJECT({
 			return checkBetween(tx, cx, cx + width) === true && checkBetween(ty, cy, cy + height) === true;
 		};
 		
-		self.checkPointCircle = checkPointCircle = function(px, py, cx, cy, width, height, radian) {
+		let checkPointCircle = self.checkPointCircle = (px, py, cx, cy, width, height, radian) => {
 
-			var cos = 1, sin = 0, termX, termY;
+			let cos = 1, sin = 0, termX, termY;
 			
 			px -= cx;
 			py -= cy;
@@ -95,9 +52,9 @@ SkyEngine('Util').Collision = OBJECT({
 			return ((termX * termX) + (termY * termY)) <= 1;
 		};
 		
-		self.checkPointPolygon = checkPointPolygon = function(x, y, points) {
+		let checkPointPolygon = self.checkPointPolygon = (x, y, points) => {
 		
-			var i, j, length = points.length, ix, iy, jx, jy, result = false;
+			let i, j, length = points.length, ix, iy, jx, jy, result = false;
 			
 			for (i = 0, j = length - 1; i < length; j = i += 1) {
 				
@@ -112,9 +69,9 @@ SkyEngine('Util').Collision = OBJECT({
 			return result;
 		};
 		
-		self.checkLineLine = checkLineLine = function(a1x, a1y, a2x, a2y, b1x, b1y, b2x, b2y) {
+		let checkLineLine = self.checkLineLine = (a1x, a1y, a2x, a2y, b1x, b1y, b2x, b2y) => {
 			
-			var ua, ub, denom = (a2x - a1x) * (b2y - b1y) - (b2x - b1x) * (a2y - a1y);
+			let ua, ub, denom = (a2x - a1x) * (b2y - b1y) - (b2x - b1x) * (a2y - a1y);
 			
 			if (denom === 0) {
 				return false;
@@ -128,9 +85,9 @@ SkyEngine('Util').Collision = OBJECT({
 			}
 		};
 		
-		self.checkLineCircle = checkLineCircle = function(a1x, a1y, a2x, a2y, cx, cy, cw, ch, cr) {
+		let checkLineCircle = self.checkLineCircle = (a1x, a1y, a2x, a2y, cx, cy, cw, ch, cr) => {
 			
-			var cos = 1, sin = 0, b1x, b1y, b2x, b2y, m, s, t, k, a, b, c, discrim;
+			let cos = 1, sin = 0, b1x, b1y, b2x, b2y, m, s, t, k, a, b, c, discrim;
 			
 			if (cr !== 0) {
 				cos = Math.cos(cr);
@@ -173,9 +130,9 @@ SkyEngine('Util').Collision = OBJECT({
 			return checkBetween((-b - discrim) / a, b1x, b2x) === true || checkBetween((-b + discrim) / a, b1x, b2x) === true;
 		};
 		
-		self.checkLinePolygon = checkLinePolygon = function(a1x, a1y, a2x, a2y, points) {
+		let checkLinePolygon = self.checkLinePolygon = (a1x, a1y, a2x, a2y, points) => {
 			
-			var i, j, length = points.length, result = false;
+			let i, j, length = points.length, result = false;
 			
 			for (i = 0, j = length - 1; result !== true && i < length; j = i, i += 1) {
 				result = checkLineLine(a1x, a1y, a2x, a2y, points[j].x, points[j].y, points[i].x, points[i].y);
@@ -184,9 +141,9 @@ SkyEngine('Util').Collision = OBJECT({
 			return result;
 		};
 		
-		self.checkRectRect = checkRectRect = function(ax, ay, aw, ah, ar, bx, by, bw, bh, br) {
+		let checkRectRect = self.checkRectRect = (ax, ay, aw, ah, ar, bx, by, bw, bh, br) => {
 			
-			var cos, sin, cw, sw, ch, sh,
+			let cos, sin, cw, sw, ch, sh,
 			
 			// a points
 			ap1x, ap1y, ap2x, ap2y, ap3x, ap3y, ap4x, ap4y,
@@ -280,9 +237,9 @@ SkyEngine('Util').Collision = OBJECT({
 			}
 		};
 		
-		self.checkRectCircle = checkRectCircle = function(rx, ry, rw, rh, rr, cx, cy, cw, ch, cr) {
+		let checkRectCircle = self.checkRectCircle = (rx, ry, rw, rh, rr, cx, cy, cw, ch, cr) => {
 			
-		    var cos, sin, cosw, sinw, cosh, sinh,
+		    let cos, sin, cosw, sinw, cosh, sinh,
 			
 			// points
 			p1x, p1y, p2x, p2y, p3x, p3y, p4x, p4y;
@@ -319,9 +276,9 @@ SkyEngine('Util').Collision = OBJECT({
 				checkLineCircle(p4x, p4y, p1x, p1y, cx, cy, cw, ch, cr);
 		};
 		
-		self.checkCircleCircle = checkCircleCircle = function(ax, ay, aw, ah, ar, bx, by, bw, bh, br) {
+		let checkCircleCircle = self.checkCircleCircle = (ax, ay, aw, ah, ar, bx, by, bw, bh, br) => {
 			
-			var
+			let
 			// max r
 			maxR,
 			
@@ -424,9 +381,9 @@ SkyEngine('Util').Collision = OBJECT({
 			return descrim < 0 || (descrim > 0 && P < 0 && D < 0) || (descrim === 0 && (D !== 0 || P <= 0));
 		};
 		
-		self.checkCirclePolygon = checkCirclePolygon = function(x, y, w, h, r, points) {
+		let checkCirclePolygon = self.checkCirclePolygon = (x, y, w, h, r, points) => {
 		
-			var i, j, length = points.length, result = false;
+			let i, j, length = points.length, result = false;
 			
 			for (i = 0, j = length - 1; result !== true && i < length; j = i, i += 1) {
 				result = checkLineCircle(points[j].x, points[j].y, points[i].x, points[i].y, x, y, w, h, r);
@@ -435,15 +392,15 @@ SkyEngine('Util').Collision = OBJECT({
 			return result;
 		};
 		
-		self.checkPolygonPolygon = checkPolygonPolygon = function(points1, points2) {
+		let checkPolygonPolygon = self.checkPolygonPolygon = (points1, points2) => {
 			
-			var i, j, length = points.length, result = false;
+			let i, j, length = points.length, result = false;
 			
 			for (i = 0, j = length - 1; result !== true && i < length; j = i, i += 1) {
 				result = checkLinePolygon(points[j].x, points[j].y, points[i].x, points[i].y, points2);
 			}
 			
 			return result;
-		}
+		};
 	}
 });

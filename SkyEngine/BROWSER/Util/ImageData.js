@@ -2,58 +2,27 @@ SkyEngine('Util').ImageData = OBJECT({
 
 	init : (inner, self) => {
 
-		var
-		// TRANSPARENT_ALPHA
-		TRANSPARENT_ALPHA = 20,
+		const TRANSPARENT_ALPHA = 20;
 		
-		// OUTLINE_DX
-		OUTLINE_DX = [1, 0, 1, 1, -1, 0, -1, 1, 0, 0, 0, 0, -1, 0, -1],
-		
-		// OUTLINE_DY
-		OUTLINE_DY = [0, -1, 0, 0, 0, -1, 0, 0, 1, -1, 1, 1, 0, -1, 0],
+		const OUTLINE_DX = [1, 0, 1, 1, -1, 0, -1, 1, 0, 0, 0, 0, -1, 0, -1];
+		const OUTLINE_DY = [0, -1, 0, 0, 0, -1, 0, 0, 1, -1, 1, 1, 0, -1, 0];
 
-		// check image data point is transparent.
-		checkImageDataPointIsTransparent,
-
-		// convert image data to polygon.
-		convertImageDataToPolygon;
-
-		self.checkImageDataPointIsTransparent = checkImageDataPointIsTransparent = function(imageData, width, x, y) {
+		let checkImageDataPointIsTransparent = self.checkImageDataPointIsTransparent = (imageData, width, x, y) => {
 			return imageData[(y * width + x) * 4 + 3] <= TRANSPARENT_ALPHA;
 		};
 
-		self.convertImageDataToPolygon = convertImageDataToPolygon = function(imageData, width) {
+		let convertImageDataToPolygon = self.convertImageDataToPolygon = (imageData, width) => {
 			
-			var
-			// x
-			x = 0,
+			let x = 0;
+			let y = 0;
 			
-			// y
-			y = 0,
+			let pdx;
+			let pdy;
 			
-			// dx
-			dx,
+			let startX;
+			let startY;
 			
-			// dy
-			dy,
-			
-			// pdx
-			pdx,
-			
-			// pdy
-			pdy,
-			
-			// start x
-			startX,
-			
-			// start y
-			startY,
-			
-			// points
-			points = [],
-			
-			// i
-			i;
+			let points = [];
 			
 			while (true) {
 				
@@ -75,11 +44,12 @@ SkyEngine('Util').ImageData = OBJECT({
 			x = startX;
 			y = startY;
 			
-			dx = 0;
-			dy = 0;
+			let dx = 0;
+			let dy = 0;
 
 			do {
-				i = 0;
+				let i = 0;
+				
 				if (checkImageDataPointIsTransparent(imageData, width, x - 1, y - 1) !== true) {
 					i += 1;
 				}

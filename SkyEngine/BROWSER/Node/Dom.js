@@ -16,43 +16,9 @@ SkyEngine.Dom = CLASS({
 		//OPTIONAL: params.y
 		//OPTIONAL: params.z
 		
-		var
-		// style
-		style,
-
-		// children
-		children,
-
-		// on
-		on,
-		
-		// origin x
-		originX,
-		
-		// origin y
-		originY,
-		
-		// origin radian
-		originRadian,
-		
-		// origin alpha
-		originAlpha,
-		
-		// dom
-		dom = DIV({
-			style : {
-				position : 'fixed'
-			}
-		}).appendTo(BODY),
-		
-		// get dom.
-		getDom,
-		
-		// draw.
-		draw,
-		
-		// remove.
-		remove;
+		let style;
+		let children;
+		let on;
 		
 		// init params.
 		if (params !== undefined) {
@@ -60,30 +26,42 @@ SkyEngine.Dom = CLASS({
 			children = params.c === undefined || CHECK_IS_ARRAY(params.c) === true ? params.c : [params.c];
 			on = params.on;
 		}
+		
+		let originX;
+		let originY;
+		let originRadian;
+		let originAlpha;
+		
+		let dom = DIV({
+			style : {
+				position : 'fixed'
+			}
+		}).appendTo(BODY);
 
 		if (style !== undefined) {
 			dom.addStyle(style);
 		}
 
 		if (on !== undefined) {
-			EACH(on, function(handler, name) {
+			EACH(on, (handler, name) => {
 				dom.on(name, handler);
 			});
 		}
 
 		if (children !== undefined) {
-			EACH(children, function(child, i) {
+			EACH(children, (child, i) => {
 				dom.append(child);
 			});
 		}
 		
-		self.getDom = getDom = function() {
+		let getDom = self.getDom = () => {
 			return dom;
 		};
 		
-		OVERRIDE(self.draw, function(origin) {
+		let draw;
+		OVERRIDE(self.draw, (origin) => {
 			
-			self.draw = draw = function(context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha) {
+			draw = self.draw = (context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha) => {
 				
 				if (
 				originX !== realX ||
@@ -108,9 +86,10 @@ SkyEngine.Dom = CLASS({
 			};
 		});
 		
-		OVERRIDE(self.remove, function(origin) {
+		let remove;
+		OVERRIDE(self.remove, (origin) => {
 			
-			self.remove = remove = function() {
+			remove = self.remove = () => {
 				
 				dom.remove();
 				

@@ -64,45 +64,9 @@ SkyEngine.Circle = CLASS({
 		//OPTIONAL: params.height
 		//OPTIONAL: params.color
 		
-		var
-		// width
-		width,
-		
-		// height
-		height,
-		
-		// color
-		color,
-		
-		// set width.
-		setWidth,
-		
-		// get width.
-		getWidth,
-		
-		// set height.
-		setHeight,
-		
-		// get height.
-		getHeight,
-		
-		// check point circle.
-		checkPointCircle = SkyEngine.Util.Collision.checkPointCircle,
-		
-		// check rect circle.
-		checkRectCircle = SkyEngine.Util.Collision.checkRectCircle,
-		
-		// check circle circle.
-		checkCircleCircle = SkyEngine.Util.Collision.checkCircleCircle,
-		
-		// check point.
-		checkPoint,
-		
-		// check area.
-		checkArea,
-		
-		// draw.
-		draw;
+		let width;
+		let height;
+		let color;
 		
 		if (params !== undefined) {
 			width = params.width;
@@ -122,23 +86,27 @@ SkyEngine.Circle = CLASS({
 			color = '#000';
 		}
 		
-		self.setWidth = setWidth = function(_width) {
+		let checkPointCircle = SkyEngine.Util.Collision.checkPointCircle;
+		let checkRectCircle = SkyEngine.Util.Collision.checkRectCircle;
+		let checkCircleCircle = SkyEngine.Util.Collision.checkCircleCircle;
+		
+		let setWidth = self.setWidth = (_width) => {
 			width = _width;
 		};
 		
-		self.getWidth = getWidth = function() {
+		let getWidth = self.getWidth = () => {
 			return width;
 		};
 		
-		self.setHeight = setHeight = function(_height) {
+		let setHeight = self.setHeight = (_height) => {
 			height = _height;
 		};
 		
-		self.getHeight = getHeight = function() {
+		let getHeight = self.getHeight = () => {
 			return height;
 		};
 		
-		self.checkPoint = checkPoint = function(touchX, touchY) {
+		let checkPoint = self.checkPoint = (touchX, touchY) => {
 			
 			return checkPointCircle(
 				touchX,
@@ -151,9 +119,10 @@ SkyEngine.Circle = CLASS({
 			);
 		};
 		
-		OVERRIDE(self.checkArea, function(origin) {
+		let checkArea;
+		OVERRIDE(self.checkArea, (origin) => {
 			
-			self.checkArea = checkArea = function(collider) {
+			checkArea = self.checkArea = (collider) => {
 				// target이 Rect인 경우 작동
 				// target이 같은 Circle인 경우 작동
 				
@@ -181,9 +150,10 @@ SkyEngine.Circle = CLASS({
 			};
 		});
 		
-		OVERRIDE(self.draw, function(origin) {
+		let draw;
+		OVERRIDE(self.draw, (origin) => {
 			
-			self.draw = draw = function(context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha) {
+			draw = self.draw = (context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha) => {
 				
 				context.beginPath();
 				context.ellipse(0, 0, width / 2, height / 2, 0, 0, 2 * Math.PI);

@@ -3,9 +3,7 @@
  */
 SkyEngine.Image = CLASS((cls) => {
 	
-	var
-	// TRANSPARENT_ALPHA
-	TRANSPARENT_ALPHA = 20;
+	const TRANSPARENT_ALPHA = 20;
 	
 	return {
 		
@@ -68,56 +66,29 @@ SkyEngine.Image = CLASS((cls) => {
 			
 			//REQUIRED: params.src
 			
-			var
-			// src
-			src = params.src,
+			let src = params.src;
 			
-			// img
-			img,
+			let img;
 			
-			// image canvas
-			imageCanvas = CANVAS({
+			let imageCanvas = CANVAS({
 				style : {
 					display : 'none'
 				}
-			}).appendTo(BODY),
+			}).appendTo(BODY);
 			
-			// image context
-			imageContext = imageCanvas.getContext('2d'),
+			let imageContext = imageCanvas.getContext('2d');
 			
-			// image data
-			imageData,
+			let imageData;
 			
-			// polygon
-			polygon,
+			let width;
+			let height;
 			
-			// width
-			width,
-			
-			// height
-			height,
-			
-			// set src.
-			setSrc,
-			
-			// draw.
-			draw,
-			
-			// remove.
-			remove,
-			
-			// check point.
-			checkPoint,
-			
-			// check collision.
-			checkCollision;
-			
-			self.setSrc = setSrc = function(_src) {
+			let setSrc = self.setSrc = (_src) => {
 				src = _src;
 				
 				img = new Image();
 				
-				img.onload = function() {
+				img.onload = () => {
 					
 					width = img.width;
 					height = img.height;
@@ -129,10 +100,7 @@ SkyEngine.Image = CLASS((cls) => {
 					imageContext.drawImage(img, 0, 0, width, height);
 					imageData = imageContext.getImageData(0, 0, width, height).data;
 					
-					polygon = SkyEngine.Util.ImageData.convertImageDataToPolygon(imageData, width);
-					
 					img.onload = undefined;
-					//img.src = imageCanvas.getDataURL();
 					
 					self.fireEvent('load');
 				};
@@ -142,9 +110,10 @@ SkyEngine.Image = CLASS((cls) => {
 			
 			setSrc(src);
 			
-			OVERRIDE(self.draw, function(origin) {
+			let draw;
+			OVERRIDE(self.draw, (origin) => {
 				
-				self.draw = draw = function(context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha) {
+				draw = self.draw = (context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha) => {
 					
 					context.drawImage(
 						img,
@@ -152,27 +121,15 @@ SkyEngine.Image = CLASS((cls) => {
 						-height / 2,
 						width,
 						height);
-						
-					/*if (polygon !== undefined) {
-						context.beginPath();
-						context.strokeStyle="red";
-						context.lineWidth=2;
-						context.moveTo(polygon[0].x-width / 2, polygon[0].y-height / 2);
-						for (var i = 1; i < polygon.length; i++) {
-							var point = polygon[i];
-							context.lineTo(point.x-width / 2, point.y-height / 2);
-						}
-						context.closePath();
-						context.stroke();
-					}*/
 					
 					origin(context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha);
 				};
 			});
 			
-			OVERRIDE(self.remove, function(origin) {
+			let remove;
+			OVERRIDE(self.remove, (origin) => {
 				
-				self.remove = remove = function() {
+				remove = self.remove = () => {
 					
 					img = undefined;
 					
@@ -184,36 +141,25 @@ SkyEngine.Image = CLASS((cls) => {
 				};
 			});
 			
-			self.checkPoint = checkPoint = function(touchX, touchY) {
+			let checkPoint = self.checkPoint = (touchX, touchY) => {
 				
 				if (imageData === undefined) {
 					return origin();
 				}
 				
-				var tx, ty, cos, sin, px, py;
+				let tx = touchX - self.getRealX();
+				let ty = touchY - self.getRealY();
 				
-				tx = touchX - self.getRealX();
-				ty = touchY - self.getRealY();
+				let cos = Math.cos(-self.getRealRadian());
+				let sin = Math.sin(-self.getRealRadian());
 				
-				cos = Math.cos(-self.getRealRadian());
-				sin = Math.sin(-self.getRealRadian());
-				
-				px = cos * tx - sin * ty;
-				py = cos * ty + sin * tx;
+				let px = cos * tx - sin * ty;
+				let py = cos * ty + sin * tx;
 				
 				px = parseInt((px + width * self.getRealScaleX() / 2) / self.getRealScaleX());
 				py = parseInt((py + height * self.getRealScaleY() / 2) / self.getRealScaleY());
 				
 				px >= 0 && px < width && py >= 0 && py < height && imageData[(py * width + px) * 4 + 3] > TRANSPARENT_ALPHA;
-			};
-			
-			self.checkCollision = checkCollision = function(target) {
-				// target이 Rect인 경우 작동
-				// target이 Circle인 경우 작동
-				// target이 같은 Image인 경우 작동
-				
-				// to implement.
-				return false;
 			};
 		}
 	};

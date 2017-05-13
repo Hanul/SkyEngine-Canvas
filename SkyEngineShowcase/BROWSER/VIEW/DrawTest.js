@@ -18,12 +18,6 @@ SkyEngineShowcase.DrawTest = CLASS({
 			color : 'yellow'
 		}).appendTo(SkyEngine.Screen);
 		
-		let image = SkyEngine.Image({
-			src : SkyEngineShowcase.R('robot/idle1.png'),
-			scale : 0.2
-		}).appendTo(SkyEngine.Screen);
-		
-		/*// character
 		let character = SkyEngine.Sprite({
 			srcs : [
 				SkyEngineShowcase.R('robot/run1.png'),
@@ -37,7 +31,7 @@ SkyEngineShowcase.DrawTest = CLASS({
 			],
 			fps : 10,
 			scale : 0.2
-		}).appendTo(SkyEngine.Screen);*/
+		}).appendTo(SkyEngine.Screen);
 		
 		inner.on('close', () => {
 			
@@ -47,10 +41,7 @@ SkyEngineShowcase.DrawTest = CLASS({
 			circle.remove();
 			circle = undefined;
 			
-			image.remove();
-			image = undefined;
-			
-			//character.remove();
+			character.remove();
 			character = undefined;
 		});
 	}

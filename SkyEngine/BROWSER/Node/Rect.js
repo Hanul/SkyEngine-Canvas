@@ -66,48 +66,9 @@ SkyEngine.Rect = CLASS({
 		//OPTIONAL: params.height				세로 크기
 		//OPTIONAL: params.color				색상
 		
-		var
-		// width
-		width,
-		
-		// height
-		height,
-		
-		// color
-		color,
-		
-		// set width.
-		setWidth,
-		
-		// get width.
-		getWidth,
-		
-		// set height.
-		setHeight,
-		
-		// get height.
-		getHeight,
-		
-		// set color.
-		setColor,
-		
-		// get color.
-		getColor,
-		
-		// check point rect.
-		checkPointRect = SkyEngine.Util.Collision.checkPointRect,
-		
-		// check rect rect.
-		checkRectRect = SkyEngine.Util.Collision.checkRectRect,
-		
-		// check point.
-		checkPoint,
-		
-		// check area.
-		checkArea,
-		
-		// draw.
-		draw;
+		let width;
+		let height;
+		let color;
 		
 		if (params !== undefined) {
 			width = params.width;
@@ -127,31 +88,34 @@ SkyEngine.Rect = CLASS({
 			color = '#000';
 		}
 		
-		self.setWidth = setWidth = function(_width) {
+		let checkPointRect = SkyEngine.Util.Collision.checkPointRect;
+		let checkRectRect = SkyEngine.Util.Collision.checkRectRect;
+		
+		let setWidth = self.setWidth = (_width) => {
 			width = _width;
 		};
 		
-		self.getWidth = getWidth = function() {
+		let getWidth = self.getWidth = () => {
 			return width;
 		};
 		
-		self.setHeight = setHeight = function(_height) {
+		let setHeight = self.setHeight = (_height) => {
 			height = _height;
 		};
 		
-		self.getHeight = getHeight = function() {
+		let getHeight = self.getHeight = () => {
 			return height;
 		};
 		
-		self.setColor = setColor = function(color) {
+		let setColor = self.setColor = (color) => {
 			color = _color;
 		};
 		
-		self.getColor = getColor = function() {
+		let getColor = self.getColor = () => {
 			return color;
 		};
 		
-		self.checkPoint = checkPoint = function(touchX, touchY) {
+		let checkPoint = self.checkPoint = (touchX, touchY) => {
 			
 			return checkPointRect(
 				touchX,
@@ -163,12 +127,11 @@ SkyEngine.Rect = CLASS({
 				self.getRealRadian());
 		};
 		
-		OVERRIDE(self.checkArea, function(origin) {
+		let checkArea;
+		OVERRIDE(self.checkArea, (origin) => {
 			
-			self.checkArea = checkArea = function(collider) {
+			checkArea = self.checkArea = (collider) => {
 				// collider이 같은 Rect인 경우 작동
-				
-				var cos, sin, hw, hh;
 				
 				if (collider.type === SkyEngine.Rect) {
 					
@@ -192,9 +155,10 @@ SkyEngine.Rect = CLASS({
 			};
 		});
 		
-		OVERRIDE(self.draw, function(origin) {
+		let draw;
+		OVERRIDE(self.draw, (origin) => {
 			
-			self.draw = draw = function(context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha) {
+			draw = self.draw = (context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha) => {
 				
 				context.beginPath();
 				context.rect(-width / 2, -height / 2, width, height);

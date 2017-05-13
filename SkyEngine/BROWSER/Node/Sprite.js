@@ -67,68 +67,31 @@ SkyEngine.Sprite = CLASS({
 		//OPTIONAL: params.frameCount
 		//OPTIONAL: params.fps
 		
-		var
-		// src
-		src = params.src,
+		let src = params.src;
+		let srcs = params.srcs;
+		let spriteWidth = params.spriteWidth;
+		let spriteHeight = params.spriteHeight;
+		let frameCount = params.frameCount;
+		let fps = params.fps;
 		
-		// srcs
-		srcs = params.srcs,
+		let img;
+		let imgs;
 		
-		// sprite width
-		spriteWidth = params.spriteWidth,
+		let width;
+		let height;
 		
-		// sprite height
-		spriteHeight = params.spriteHeight,
-		
-		// frame count
-		frameCount = params.frameCount,
-		
-		// fps
-		fps = params.fps,
-		
-		// img
-		img,
-		
-		// imgs
-		imgs,
-		
-		// width
-		width,
-		
-		// height
-		height,
-		
-		// frame
-		frame = 0,
-		
-		// set src.
-		setSrc,
-		
-		// add src.
-		addSrc,
-		
-		// step.
-		step,
-		
-		// draw.
-		draw,
-		
-		// remove.
-		remove,
-		
-		// check collision.
-		checkCollision;
+		let frame = 0;
 		
 		if (fps === undefined) {
 			fps = 0;
 		}
 		
-		self.setSrc = setSrc = function(_src) {
+		let setSrc = self.setSrc = (_src) => {
 			src = _src;
 			
 			img = new Image();
 			
-			img.onload = function() {
+			img.onload = () => {
 				
 				width = img.width;
 				height = img.height;
@@ -155,16 +118,14 @@ SkyEngine.Sprite = CLASS({
 			setSrc(src);
 		}
 		
-		self.addSrc = addSrc = function(src) {
+		let addSrc = self.addSrc = (src) => {
 			
-			var
-			// img
-			img = new Image();
+			let img = new Image();
 			
 			if (imgs === undefined) {
 				imgs = [];
 				
-				img.onload = function() {
+				img.onload = () => {
 					
 					width = img.width;
 					height = img.height;
@@ -189,7 +150,7 @@ SkyEngine.Sprite = CLASS({
 			
 			else {
 				
-				img.onload = function() {
+				img.onload = () => {
 					
 					if (frameCount === undefined) {
 						frameCount = 1;
@@ -208,9 +169,10 @@ SkyEngine.Sprite = CLASS({
 			EACH(srcs, addSrc);
 		}
 		
-		OVERRIDE(self.step, function(origin) {
+		let step;
+		OVERRIDE(self.step, (origin) => {
 			
-			self.step = step = function(deltaTime) {
+			step = self.step = (deltaTime) => {
 				
 				if (fps > 0) {
 					frame += fps * deltaTime / 1000;
@@ -226,16 +188,10 @@ SkyEngine.Sprite = CLASS({
 			};
 		});
 		
-		OVERRIDE(self.draw, function(origin) {
+		let draw;
+		OVERRIDE(self.draw, (origin) => {
 			
-			self.draw = draw = function(context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha) {
-				
-				var
-				// x frame
-				xFrame,
-				
-				// y frame
-				yFrame;
+			draw = self.draw = (context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha) => {
 				
 				if (imgs !== undefined) {
 					if (frameCount !== undefined) {
@@ -265,9 +221,10 @@ SkyEngine.Sprite = CLASS({
 			};
 		});
 		
-		OVERRIDE(self.remove, function(origin) {
+		let remove;
+		OVERRIDE(self.remove, (origin) => {
 			
-			self.remove = remove = function() {
+			remove = self.remove = () => {
 				
 				srcs = undefined;
 				
@@ -278,7 +235,7 @@ SkyEngine.Sprite = CLASS({
 			};
 		});
 		
-		self.checkCollision = checkCollision = function(target) {
+		let checkCollision = self.checkCollision = (target) => {
 			// target이 Rect인 경우 작동
 			// target이 Circle인 경우 작동
 			// target이 Image인 경우 작동

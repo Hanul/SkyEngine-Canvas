@@ -9,75 +9,28 @@ SkyEngine.Screen = OBJECT({
 	
 	init : (inner, self) => {
 		
-		var
-		// wrapper
-		wrapper = DIV({
+		let wrapper = DIV({
 			style : {
 				position : 'fixed',
 				left : 0,
 				top : 0
 			}
-		}).appendTo(BODY),
+		}).appendTo(BODY);
 		
-		// canvas
-		canvas = CANVAS().appendTo(wrapper),
+		let canvas = CANVAS().appendTo(wrapper);
+		let context = canvas.getContext('2d');
 		
-		// context
-		context = canvas.getContext('2d'),
+		let canvasWidth;
+		let canvasHeight;
 		
-		// canvas width
-		canvasWidth,
+		let deltaTime;
 		
-		// canvas height
-		canvasHeight,
+		let registeredNodeMap = {};
+		let registeredEventNodeMap = {};
 		
-		// fps dom
-		fpsDom,
-		
-		// loop
-		loop,
-		
-		// delta time
-		deltaTime,
-		
-		// registered node map
-		registeredNodeMap = {},
-		
-		// registered event node map
-		registeredEventNodeMap = {},
-		
-		// step all.
-		stepAll,
-		
-		// draw all.
-		drawAll,
-		
-		// register node.
-		registerNode,
-		
-		// unregister node.
-		unregisterNode,
-		
-		// get registered nodes.
-		getRegisteredNodes,
-		
-		// register event node.
-		registerEventNode,
-		
-		// unregister event node.
-		unregisterEventNode,
-		
-		// set filter.
-		setFilter,
-		
-		// remove filter.
-		removeFilter;
-		
-		self.registerNode = registerNode = function(node) {
+		let registerNode = self.registerNode = (node) => {
 			
-			var
-			// cls
-			cls = node.type;
+			let cls = node.type;
 			
 			while (cls !== undefined && cls !== CLASS) {
 				
@@ -91,11 +44,9 @@ SkyEngine.Screen = OBJECT({
 			}
 		};
 		
-		self.unregisterNode = unregisterNode = function(node) {
+		let unregisterNode = self.unregisterNode = (node) => {
 			
-			var
-			// cls
-			cls = node.type;
+			let cls = node.type;
 			
 			while (cls !== undefined && cls !== CLASS) {
 				
@@ -115,18 +66,18 @@ SkyEngine.Screen = OBJECT({
 			}
 		};
 		
-		self.getRegisteredNodes = getRegisteredNodes = function(cls) {
+		let getRegisteredNodes = self.getRegisteredNodes = (cls) => {
 			return registeredNodeMap[cls.id] === undefined ? [] : registeredNodeMap[cls.id];
 		};
 		
-		self.registerEventNode = registerEventNode = function(eventName, node) {
+		let registerEventNode = self.registerEventNode = (eventName, node) => {
 			
 			if (registeredEventNodeMap[eventName] !== undefined) {
 				registeredEventNodeMap[eventName].push(node);
 			}
 		};
 		
-		self.unregisterEventNode = unregisterEventNode = function(eventName, node) {
+		let unregisterEventNode = self.unregisterEventNode = (eventName, node) => {
 			
 			if (registeredEventNodeMap[eventName] !== undefined) {
 				
@@ -137,7 +88,7 @@ SkyEngine.Screen = OBJECT({
 			}
 		};
 		
-		self.setFilter = setFilter = function(filterStyle) {
+		let setFilter = self.setFilter = (filterStyle) => {
 			//REQUIRED: filterStyle
 			
 			canvas.addStyle({
@@ -145,14 +96,14 @@ SkyEngine.Screen = OBJECT({
 			});
 		};
 		
-		self.removeFilter = removeFilter = function() {
+		let removeFilter = self.removeFilter = () => {
 			setFilter('none');
 		};
 		
 		
 		if (CONFIG.isDevMode === true) {
 			
-			fpsDom = DIV({
+			let fpsDom = DIV({
 				style : {
 					position : 'fixed',
 					left : 5,
@@ -161,7 +112,7 @@ SkyEngine.Screen = OBJECT({
 				}
 			}).appendTo(BODY);
 			
-			INTERVAL(0.1, function() {
+			INTERVAL(0.1, () => {
 				
 				if (deltaTime !== undefined) {
 					fpsDom.empty();
@@ -174,13 +125,13 @@ SkyEngine.Screen = OBJECT({
 			'tap',
 			'touchstart',
 			'touchend'
-		], function(eventName) {
+		], (eventName) => {
 			
 			registeredEventNodeMap[eventName] = [];
 			
-			canvas.on(eventName, function(e) {
+			canvas.on(eventName, (e) => {
 				
-				EACH(registeredEventNodeMap[eventName], function(node) {
+				EACH(registeredEventNodeMap[eventName], (node) => {
 					
 					if (node.checkTouch(e.getLeft(), e.getTop()) === true) {
 						node.fireEvent(eventName);
@@ -191,47 +142,31 @@ SkyEngine.Screen = OBJECT({
 			});
 		});
 		
-		stepAll = function(node, deltaTime) {
+		let stepAll = (node, deltaTime) => {
 			
 			node.step(deltaTime);
 			
-			node.getChildren().forEach(function(childNode) {
+			node.getChildren().forEach((childNode) => {
 				stepAll(childNode, deltaTime);
 			});
 		};
 		
-		drawAll = function(node, context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha) {
+		let drawAll = (node, context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha) => {
 			
-			var
-			// plus x
-			plusX = node.getX() * realScaleX,
+			let plusX = node.getX() * realScaleX;
+			let plusY = node.getY() * realScaleY;
 			
-			// plus y
-			plusY = node.getY() * realScaleY,
+			let plusCenterX = node.getCenterX() * realScaleX;
+			let plusCenterY = node.getCenterY() * realScaleY;
 			
-			// plus center x
-			plusCenterX = node.getCenterX() * realScaleX,
-			
-			// plus center y
-			plusCenterY = node.getCenterY() * realScaleY,
-			
-			// sin
-			sin = Math.sin(realRadian),
-			
-			// cos
-			cos = Math.cos(realRadian),
-			
-			// next x
-			nextX,
-			
-			// next y
-			nextY;
+			let sin = Math.sin(realRadian);
+			let cos = Math.cos(realRadian);
 			
 			realX += plusX * cos - plusY * sin;
 			realY += plusX * sin + plusY * cos;
 			
-			nextX = realX;
-			nextY = realY;
+			let nextX = realX;
+			let nextY = realY;
 			
 			realScaleX *= node.getScaleX();
 			realScaleY *= node.getScaleY();
@@ -260,13 +195,13 @@ SkyEngine.Screen = OBJECT({
 				context.rotate(-realRadian);
 				context.translate(-realX, -realY);
 				
-				node.getChildren().forEach(function(childNode) {
+				node.getChildren().forEach((childNode) => {
 					drawAll(childNode, context, nextX, nextY, realScaleX, realScaleY, realRadian, realAlpha);
 				});
 			}
 		};
 		
-		loop = LOOP(function(_deltaTime) {
+		let loop = LOOP((_deltaTime) => {
 			
 			deltaTime = _deltaTime;
 			
@@ -277,7 +212,7 @@ SkyEngine.Screen = OBJECT({
 			drawAll(self, context, canvasWidth / 2, canvasHeight / 2, self.getScaleX(), self.getScaleY(), self.getAngle() * Math.PI / 180, self.getAlpha());
 		});
 		
-		EVENT('resize', RAR(function() {
+		EVENT('resize', RAR(() => {
 			
 			canvasWidth = WIN_WIDTH();
 			canvasHeight = WIN_HEIGHT();
@@ -288,7 +223,7 @@ SkyEngine.Screen = OBJECT({
 			});
 		}));
 		
-		self.on('remove', function() {
+		self.on('remove', () => {
 			loop.remove();
 		});
 	}
