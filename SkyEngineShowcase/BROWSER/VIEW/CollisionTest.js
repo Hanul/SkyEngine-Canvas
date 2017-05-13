@@ -1,16 +1,12 @@
 SkyEngineShowcase.CollisionTest = CLASS({
 	
-	preset : function() {
-		'use strict';
-		
+	preset : () => {
 		return VIEW;
 	},
 	
-	init : function(inner) {
+	init : (inner) => {
 		
-		var
-		// rect
-		rect = SkyEngine.Rect({
+		let rect = SkyEngine.Rect({
 			x : -100,
 			width : 40,
 			height : 40,
@@ -18,41 +14,36 @@ SkyEngineShowcase.CollisionTest = CLASS({
 			color : 'green',
 			angle : 45,
 			scaleX : 2
-		}).appendTo(SkyEngine.Screen),
+		}).appendTo(SkyEngine.Screen);
 		
-		// circle
-		circle = SkyEngine.Circle({
+		let circle = SkyEngine.Circle({
 			width : 60,
 			height : 40,
 			color : 'yellow',
 			angle : 45,
 			scale : 1.2
-		}).appendTo(SkyEngine.Screen),
+		}).appendTo(SkyEngine.Screen);
 		
-		// image
-		image = SkyEngine.Image({
+		let image = SkyEngine.Image({
 			x : 100,
 			src : SkyEngineShowcase.R('robot/idle1.png'),
 			scale : 0.2,
 			angle : 45
-		}).appendTo(SkyEngine.Screen),
-		
-		// delay
-		delay;
+		}).appendTo(SkyEngine.Screen);
 		
 		rect.addCollider(rect);
 		circle.addCollider(circle);
 		
-		circle.onMeet(SkyEngine.Rect, function() {
+		circle.onMeet(SkyEngine.Rect, () => {
 			console.log('Met!');
 		});
 		
-		circle.onPart(SkyEngine.Rect, function() {
+		circle.onPart(SkyEngine.Rect, () => {
 			console.log('Parted!');
 		});
 		
 		/*// character
-		character = SkyEngine.Sprite({
+		let character = SkyEngine.Sprite({
 			srcs : [
 				SkyEngineShowcase.R('robot/run1.png'),
 				SkyEngineShowcase.R('robot/run2.png'),
@@ -69,41 +60,37 @@ SkyEngineShowcase.CollisionTest = CLASS({
 		
 		circle.moveRight(100);
 		
-		delay = DELAY(1, function() {
+		let delay = DELAY(1, () => {
 			circle.stopRight();
 			circle.moveDown(100);
 			
-			delay = DELAY(1, function() {
-				
-				var
-				// repeat.
-				repeat;
+			delay = DELAY(1, () => {
 				
 				circle.flipX();
 				
 				circle.stopDown();
 				circle.moveLeft(100);
 				
-				repeat = RAR(function() {
+				let repeat = RAR(() => {
 				
-					delay = DELAY(2, function() {
+					delay = DELAY(2, () => {
 						
 						circle.stopLeft();
 						circle.moveUp(100);
 						
-						delay = DELAY(2, function() {
+						delay = DELAY(2, () => {
 						
 							circle.flipX();
 							
 							circle.stopUp();
 							circle.moveRight(100);
 							
-							delay = DELAY(2, function() {
+							delay = DELAY(2, () => {
 								
 								circle.stopRight();
 								circle.moveDown(100);
 								
-								delay = DELAY(2, function() {
+								delay = DELAY(2, () => {
 									
 									circle.flipX();
 									
@@ -119,7 +106,7 @@ SkyEngineShowcase.CollisionTest = CLASS({
 			});
 		});
 		
-		inner.on('close', function() {
+		inner.on('close', () => {
 			
 			rect.remove();
 			rect = undefined;

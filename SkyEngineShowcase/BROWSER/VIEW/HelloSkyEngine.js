@@ -1,20 +1,16 @@
 SkyEngineShowcase.HelloSkyEngine = CLASS({
 	
-	preset : function() {
-		'use strict';
-		
+	preset : () => {
 		return VIEW;
 	},
 	
-	init : function(inner) {
+	init : (inner) => {
 		
-		var
-		// image
-		image = SkyEngine.Image({
+		let image = SkyEngine.Image({
 			src : SkyEngineShowcase.R('hello.png')
 		}).appendTo(SkyEngine.Screen);
 		
-		inner.on('close', function() {
+		inner.on('close', () => {
 			
 			image.remove();
 			image = undefined;

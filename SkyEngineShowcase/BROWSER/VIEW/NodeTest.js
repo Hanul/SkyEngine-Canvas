@@ -1,19 +1,13 @@
 SkyEngineShowcase.NodeTest = CLASS({
 	
-	preset : function() {
-		'use strict';
-		
+	preset : () => {
 		return VIEW;
 	},
 	
-	init : function(inner) {
+	init : (inner) => {
 		
-		var
-		// left arm
-		leftArm,
-		
-		// man
-		man = SkyEngine.Rect({
+		let leftArm;
+		let man = SkyEngine.Rect({
 			width : 40,
 			height : 80,
 			color : 'green',
@@ -78,14 +72,14 @@ SkyEngineShowcase.NodeTest = CLASS({
 		
 		leftArm.setScalingSpeedX(1);
 		
-		delay = DELAY(1, function() {
+		let delay = DELAY(1, () => {
 			leftArm.setScalingSpeedX(-1);
-			delay = DELAY(1, function() {
+			delay = DELAY(1, () => {
 				leftArm.setScalingSpeedX(0);
 			});
 		});
 		
-		inner.on('close', function() {
+		inner.on('close', () => {
 			
 			man.remove();
 			man = undefined;

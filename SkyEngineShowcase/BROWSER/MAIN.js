@@ -1,7 +1,6 @@
 SkyEngineShowcase.MAIN = METHOD({
 
-	run : function(params) {
-		'use strict';
+	run : (params) => {
 		
 		SkyEngineShowcase.MATCH_VIEW({
 			uri : '',
@@ -58,20 +57,20 @@ SkyEngineShowcase.MAIN = METHOD({
 			target : SkyEngineShowcase.HelloSkyEngine
 		});
 		
-		/*var node1 = SkyEngine.Node({
+		/*let node1 = SkyEngine.Node({
 			//accelY : 9.8 * 10,
 			alpha : 0.5,
 			scale : 0.5,
 			//angle : 90
 		}).appendTo(SkyEngine.Screen); // 0
 		
-		var node2 = SkyEngine.Image({
+		let node2 = SkyEngine.Image({
 			src : 'R/sample.png',
 			x : -100,
 			y : -100
 		}).appendTo(node1); // 0*/
 		
-		/*REPEAT(1000, function() {
+		/*REPEAT(1000, () => {
 			
 			SkyEngine.Sprite({
 				src : 'R/sprite.png',
@@ -106,7 +105,7 @@ SkyEngineShowcase.MAIN = METHOD({
 		/*node1.moveUp(50);
 		node1.moveLeft(50);
 		
-		DELAY(3, function() {
+		DELAY(3, () => {
 			node1.stopUp();
 			node1.stopLeft();
 		});*/

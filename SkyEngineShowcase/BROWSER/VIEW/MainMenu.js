@@ -1,16 +1,12 @@
 SkyEngineShowcase.MainMenu = CLASS({
 	
-	preset : function() {
-		'use strict';
-		
+	preset : () => {
 		return VIEW;
 	},
 	
-	init : function(inner) {
+	init : (inner) => {
 		
-		var
-		// wrapper
-		wrapper = DIV({
+		let wrapper = DIV({
 			style : {
 				position : 'fixed',
 				left : 0,
@@ -35,7 +31,7 @@ SkyEngineShowcase.MainMenu = CLASS({
 					c : A({
 						c : '드로우 테스트',
 						on : {
-							tap : function() {
+							tap : () => {
 								SkyEngineShowcase.GO('test/draw');
 							}
 						}
@@ -47,7 +43,7 @@ SkyEngineShowcase.MainMenu = CLASS({
 					c : A({
 						c : '노드 테스트',
 						on : {
-							tap : function() {
+							tap : () => {
 								SkyEngineShowcase.GO('test/node');
 							}
 						}
@@ -59,7 +55,7 @@ SkyEngineShowcase.MainMenu = CLASS({
 					c : A({
 						c : '움직임 테스트',
 						on : {
-							tap : function() {
+							tap : () => {
 								SkyEngineShowcase.GO('test/moving');
 							}
 						}
@@ -71,7 +67,7 @@ SkyEngineShowcase.MainMenu = CLASS({
 					c : A({
 						c : '스케일 테스트',
 						on : {
-							tap : function() {
+							tap : () => {
 								SkyEngineShowcase.GO('test/scaling');
 							}
 						}
@@ -83,7 +79,7 @@ SkyEngineShowcase.MainMenu = CLASS({
 					c : A({
 						c : '회전 테스트',
 						on : {
-							tap : function() {
+							tap : () => {
 								SkyEngineShowcase.GO('test/rotation');
 							}
 						}
@@ -95,7 +91,7 @@ SkyEngineShowcase.MainMenu = CLASS({
 					c : A({
 						c : '페이드 테스트',
 						on : {
-							tap : function() {
+							tap : () => {
 								SkyEngineShowcase.GO('test/fading');
 							}
 						}
@@ -107,7 +103,7 @@ SkyEngineShowcase.MainMenu = CLASS({
 					c : A({
 						c : '필터 테스트',
 						on : {
-							tap : function() {
+							tap : () => {
 								SkyEngineShowcase.GO('test/filter');
 							}
 						}
@@ -119,7 +115,7 @@ SkyEngineShowcase.MainMenu = CLASS({
 					c : A({
 						c : '이벤트 테스트',
 						on : {
-							tap : function() {
+							tap : () => {
 								SkyEngineShowcase.GO('test/event');
 							}
 						}
@@ -131,7 +127,7 @@ SkyEngineShowcase.MainMenu = CLASS({
 					c : A({
 						c : '충돌 테스트',
 						on : {
-							tap : function() {
+							tap : () => {
 								SkyEngineShowcase.GO('test/collision');
 							}
 						}
@@ -143,7 +139,7 @@ SkyEngineShowcase.MainMenu = CLASS({
 					c : A({
 						c : 'Hello, SkyEngine!',
 						on : {
-							tap : function() {
+							tap : () => {
 								SkyEngineShowcase.GO('hello');
 							}
 						}
@@ -152,7 +148,7 @@ SkyEngineShowcase.MainMenu = CLASS({
 			})]
 		}).appendTo(BODY);
 		
-		inner.on('close', function() {
+		inner.on('close', () => {
 			wrapper.remove();
 		});
 	}

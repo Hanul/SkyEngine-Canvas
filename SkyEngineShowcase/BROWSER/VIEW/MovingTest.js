@@ -1,27 +1,15 @@
 SkyEngineShowcase.MovingTest = CLASS({
 	
-	preset : function() {
-		'use strict';
-		
+	preset : () => {
 		return VIEW;
 	},
 	
-	init : function(inner) {
+	init : (inner) => {
 		
-		var
-		// character
-		character,
+		let character2;
+		let character3;
 		
-		// character2,
-		character2,
-		
-		// character3,
-		character3,
-		
-		// delay
-		delay;
-		
-		character = SkyEngine.Sprite({
+		let character = SkyEngine.Sprite({
 			srcs : [
 				SkyEngineShowcase.R('robot/run1.png'),
 				SkyEngineShowcase.R('robot/run2.png'),
@@ -66,41 +54,37 @@ SkyEngineShowcase.MovingTest = CLASS({
 		
 		character.moveRight(100);
 		
-		delay = DELAY(1, function() {
+		let delay = DELAY(1, () => {
 			character.stopRight();
 			character.moveDown(100);
 			
-			delay = DELAY(1, function() {
-				
-				var
-				// repeat.
-				repeat;
+			delay = DELAY(1, () => {
 				
 				character.flipX();
 				
 				character.stopDown();
 				character.moveLeft(100);
 				
-				repeat = RAR(function() {
+				let repeat = RAR(() => {
 				
-					delay = DELAY(2, function() {
+					delay = DELAY(2, () => {
 						
 						character.stopLeft();
 						character.moveUp(100);
 						
-						delay = DELAY(2, function() {
+						delay = DELAY(2, () => {
 						
 							character.flipX();
 							
 							character.stopUp();
 							character.moveRight(100);
 							
-							delay = DELAY(2, function() {
+							delay = DELAY(2, () => {
 								
 								character.stopRight();
 								character.moveDown(100);
 								
-								delay = DELAY(2, function() {
+								delay = DELAY(2, () => {
 									
 									character.flipX();
 									
@@ -127,7 +111,7 @@ SkyEngineShowcase.MovingTest = CLASS({
 			accel : 100
 		});
 		
-		inner.on('close', function() {
+		inner.on('close', () => {
 			
 			character.remove();
 			character = undefined;

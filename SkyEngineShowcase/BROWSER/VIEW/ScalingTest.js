@@ -1,21 +1,12 @@
 SkyEngineShowcase.ScalingTest = CLASS({
 	
-	preset : function() {
-		'use strict';
-		
+	preset : () => {
 		return VIEW;
 	},
 	
-	init : function(inner) {
+	init : (inner) => {
 		
-		var
-		// character
-		character,
-		
-		// delay
-		delay;
-		
-		character = SkyEngine.Sprite({
+		let character = SkyEngine.Sprite({
 			srcs : [
 				SkyEngineShowcase.R('robot/run1.png'),
 				SkyEngineShowcase.R('robot/run2.png'),
@@ -31,8 +22,7 @@ SkyEngineShowcase.ScalingTest = CLASS({
 			toScale : 0
 		}).appendTo(SkyEngine.Screen);
 		
-		inner.on('close', function() {
-			
+		inner.on('close', () => {
 			character.remove();
 			character = undefined;
 		});

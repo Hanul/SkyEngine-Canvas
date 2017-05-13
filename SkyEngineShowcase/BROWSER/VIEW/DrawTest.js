@@ -1,36 +1,30 @@
 SkyEngineShowcase.DrawTest = CLASS({
 	
-	preset : function() {
-		'use strict';
-		
+	preset : () => {
 		return VIEW;
 	},
 	
-	init : function(inner) {
+	init : (inner) => {
 		
-		var
-		// rect
-		rect = SkyEngine.Rect({
+		let rect = SkyEngine.Rect({
 			width : 300,
 			height : 200,
 			color : 'green'
-		}).appendTo(SkyEngine.Screen),
+		}).appendTo(SkyEngine.Screen);
 		
-		// circle
-		circle = SkyEngine.Circle({
+		let circle = SkyEngine.Circle({
 			width : 300,
 			height : 200,
 			color : 'yellow'
-		}).appendTo(SkyEngine.Screen),
+		}).appendTo(SkyEngine.Screen);
 		
-		// image
-		image = SkyEngine.Image({
+		let image = SkyEngine.Image({
 			src : SkyEngineShowcase.R('robot/idle1.png'),
 			scale : 0.2
 		}).appendTo(SkyEngine.Screen);
 		
 		/*// character
-		character = SkyEngine.Sprite({
+		let character = SkyEngine.Sprite({
 			srcs : [
 				SkyEngineShowcase.R('robot/run1.png'),
 				SkyEngineShowcase.R('robot/run2.png'),
@@ -45,7 +39,7 @@ SkyEngineShowcase.DrawTest = CLASS({
 			scale : 0.2
 		}).appendTo(SkyEngine.Screen);*/
 		
-		inner.on('close', function() {
+		inner.on('close', () => {
 			
 			rect.remove();
 			rect = undefined;

@@ -1,16 +1,12 @@
 SkyEngineShowcase.EventTest = CLASS({
 	
-	preset : function() {
-		'use strict';
-		
+	preset : () => {
 		return VIEW;
 	},
 	
-	init : function(inner) {
+	init : (inner) => {
 		
-		var
-		// rect
-		rect = SkyEngine.Rect({
+		let rect = SkyEngine.Rect({
 			x : -100,
 			width : 60,
 			height : 40,
@@ -18,34 +14,32 @@ SkyEngineShowcase.EventTest = CLASS({
 			angle : 45,
 			scale : 1.2,
 			on : {
-				touchstart : function() {
+				touchstart : () => {
 					console.log('This is Rect!');
 				}
 			}
-		}).appendTo(SkyEngine.Screen),
+		}).appendTo(SkyEngine.Screen);
 		
-		// circle
-		circle = SkyEngine.Circle({
+		let circle = SkyEngine.Circle({
 			width : 60,
 			height : 40,
 			color : 'yellow',
 			angle : 45,
 			scale : 1.2,
 			on : {
-				touchstart : function() {
+				touchstart : () => {
 					console.log('This is Circle!');
 				}
 			}
-		}).appendTo(SkyEngine.Screen),
+		}).appendTo(SkyEngine.Screen);
 		
-		// image
-		image = SkyEngine.Image({
+		let image = SkyEngine.Image({
 			x : 100,
 			src : SkyEngineShowcase.R('robot/idle1.png'),
 			scale : 0.2,
 			angle : 45,
 			on : {
-				touchstart : function() {
+				touchstart : () => {
 					console.log('This is Image!');
 				}
 			}
@@ -71,7 +65,7 @@ SkyEngineShowcase.EventTest = CLASS({
 			scale : 0.2
 		}).appendTo(SkyEngine.Screen);*/
 		
-		inner.on('close', function() {
+		inner.on('close', () => {
 			
 			rect.remove();
 			rect = undefined;
