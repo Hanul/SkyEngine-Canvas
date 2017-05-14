@@ -1,4 +1,4 @@
-SkyEngineShowcase.FilterTest = CLASS({
+SkyEngineShowcase.BlendModeTest = CLASS({
 	
 	preset : () => {
 		return VIEW;
@@ -9,7 +9,7 @@ SkyEngineShowcase.FilterTest = CLASS({
 		let rect = SkyEngine.Rect({
 			width : 300,
 			height : 200,
-			color : 'green'
+			color : 'sky'
 		}).appendTo(SkyEngine.Screen);
 		
 		let circle = SkyEngine.Circle({
@@ -31,16 +31,10 @@ SkyEngineShowcase.FilterTest = CLASS({
 			],
 			fps : 10,
 			scale : 0.2,
-			alpha : 0.5,
-			c : SkyEngine.Dom({
-				style : {
-					color : 'red'
-				},
-				c : 'Test'
-			})
+			alpha : 0.5
 		}).appendTo(SkyEngine.Screen);
 		
-		SkyEngine.Screen.setFilter('grayscale(100%)');
+		circle.setBlendMode('multiply');
 		
 		inner.on('close', () => {
 			

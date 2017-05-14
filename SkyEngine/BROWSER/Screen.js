@@ -92,18 +92,6 @@ SkyEngine.Screen = OBJECT({
 			}
 		};
 		
-		let setFilter = self.setFilter = (filterStyle) => {
-			//REQUIRED: filterStyle
-			
-			canvas.addStyle({
-				filter : filterStyle
-			});
-		};
-		
-		let removeFilter = self.removeFilter = () => {
-			setFilter('none');
-		};
-		
 		// 디버그 모드에서는 FPS 수치 표시
 		if (CONFIG.SkyEngine.isDebugMode === true) {
 			
@@ -192,7 +180,7 @@ SkyEngine.Screen = OBJECT({
 			
 			// 개발 모드에서는 영역 표시
 			if (CONFIG.SkyEngine.isDebugMode === true) {
-				node.drawArea(context, realX, realY, realScaleX, realScaleY, realRadian, color);
+				node.drawArea(context, color);
 			}
 			
 			context.restore();
@@ -234,15 +222,23 @@ SkyEngine.Screen = OBJECT({
 			
 			if (node.checkIsHiding() !== true) {
 				
+				if (node.getFilter() !== undefined) {
+					context.filter = node.getFilter();
+				}
+				
+				if (node.getBlendMode() !== undefined) {
+					context.globalCompositeOperation = node.getBlendMode();
+				}
+				
 				context.save();
 				context.translate(realX, realY);
 				context.rotate(realRadian);
 				context.scale(realScaleX, realScaleY);
 				context.globalAlpha = realAlpha;
 				
-				node.setRealProperties(realX, realY, realScaleX, realScaleY, realRadian, realAlpha);
+				node.setRealProperties(realX, realY, realScaleX, realScaleY, realRadian);
 				
-				node.draw(context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha);
+				node.draw(context);
 				
 				context.restore();
 				
@@ -282,8 +278,11 @@ SkyEngine.Screen = OBJECT({
 			stepAll(self, deltaTime);
 			
 			context.clearRect(0, 0, canvasWidth, canvasHeight);
+			context.save();
 			
 			drawAll(self, context, canvasWidth / 2, canvasHeight / 2, self.getScaleX(), self.getScaleY(), self.getAngle() * Math.PI / 180, self.getAlpha());
+			
+			context.restore();
 		});
 		
 		EVENT('resize', RAR(() => {

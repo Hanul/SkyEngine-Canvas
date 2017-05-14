@@ -132,7 +132,7 @@ SkyEngine.Sprite = CLASS({
 		let draw;
 		OVERRIDE(self.draw, (origin) => {
 			
-			draw = self.draw = (context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha) => {
+			draw = self.draw = (context) => {
 				
 				if (imgs !== undefined) {
 					if (frameCount !== undefined) {
@@ -158,7 +158,7 @@ SkyEngine.Sprite = CLASS({
 						spriteHeight);
 				}
 				
-				origin(context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha);
+				origin(context);
 			};
 		});
 		

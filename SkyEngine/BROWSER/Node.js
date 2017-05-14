@@ -73,7 +73,7 @@ SkyEngine.Node = CLASS({
 		let toX, toY, toScaleX, toScaleY, toAngle, toAlpha;
 		
 		// real properties
-		let realX, realY, realScaleX, realScaleY, realRadian, realAlpha;
+		let realX, realY, realScaleX, realScaleY, realRadian;
 		
 		let parentNode;
 		let childNodes = [];
@@ -90,6 +90,9 @@ SkyEngine.Node = CLASS({
 		
 		let meetHandlerMap = {};
 		let partHandlerMap = {};
+		
+		let filterStyle;
+		let blendMode;
 		
 		// for position
 		let setX = self.setX = (_x) =>							{ x = _x; };
@@ -214,7 +217,6 @@ SkyEngine.Node = CLASS({
 		let getRealScaleX = self.getRealScaleX = () =>							{ return realScaleX; };
 		let getRealScaleY = self.getRealScaleY = () =>							{ return realScaleY; };
 		let getRealRadian = self.getRealRadian = (_toAlpha) =>					{ return realRadian; };
-		let getRealAlpha = self.getRealAlpha = (_toAlpha) =>					{ return realAlpha; };
 		
 		// 파라미터 초기화
 		if (params !== undefined) {
@@ -301,6 +303,34 @@ SkyEngine.Node = CLASS({
 		if (SkyEngine.Screen !== self) {
 			SkyEngine.Screen.registerNode(self);
 		}
+		
+		let setFilter = self.setFilter = (_filterStyle) => {
+			//REQUIRED: filterStyle
+			
+			filterStyle = _filterStyle;
+		};
+		
+		let getFilter = self.getFilter = () => {
+			return filterStyle;
+		};
+		
+		let removeFilter = self.removeFilter = () => {
+			filterStyle = undefined;
+		};
+		
+		let setBlendMode = self.setBlendMode = (_blendMode) => {
+			//REQUIRED: blendMode
+			
+			blendMode = _blendMode;
+		};
+		
+		let getBlendMode = self.getBlendMode = () => {
+			return blendMode;
+		};
+		
+		let removeBlendMode = self.removeBlendMode = () => {
+			blendMode = undefined;
+		};
 		
 		let moveLeft = self.moveLeft = (speedOrParams) => {
 			//REQUIRED: speedOrParams
@@ -794,16 +824,6 @@ SkyEngine.Node = CLASS({
 			node.appendTo(self);
 		};
 		
-		if (params !== undefined && params.c !== undefined) {
-			if (CHECK_IS_ARRAY(params.c) === true) {
-				EACH(params.c, (childNode) => {
-					append(childNode);
-				});
-			} else {
-				append(params.c);
-			}
-		}
-		
 		let remove = self.remove = () => {
 			
 			// 모든 자식 노드 제거
@@ -862,12 +882,6 @@ SkyEngine.Node = CLASS({
 			
 			eventMap[eventName].push(eventHandler);
 		};
-		
-		if (params !== undefined && params.on !== undefined) {
-			EACH(params.on, (eventHandler, eventName) => {
-				on(eventName, eventHandler);
-			});
-		}
 		
 		let off = self.off = (eventName, eventHandler) => {
 		
@@ -962,44 +976,24 @@ SkyEngine.Node = CLASS({
 			}
 		};
 		
-		let addCollider = self.addCollider = (collider) => {
-			//REQUIRED: collider
-			
-			colliders.push(collider);
-		};
-		
-		if (params !== undefined && params.collider !== undefined) {
-			if (CHECK_IS_ARRAY(params.collider) === true) {
-				EACH(params.collider, (collider) => {
-					addCollider(collider);
-				});
-			} else {
-				addCollider(params.collider);
-			}
-		}
-		
-		let getColliders = self.getColliders = () => {
-			return colliders;
-		};
-		
 		let addTouchArea = self.addTouchArea = (touchArea) => {
 			//REQUIRED: touchArea
 			
 			touchAreas.push(touchArea);
 		};
 		
-		if (params !== undefined && params.touchArea !== undefined) {
-			if (CHECK_IS_ARRAY(params.touchArea) === true) {
-				EACH(params.touchArea, (touchArea) => {
-					addTouchArea(touchArea);
-				});
-			} else {
-				addTouchArea(params.touchArea);
-			}
-		}
-		
 		let getTouchAreas = self.getTouchAreas = () => {
 			return touchAreas;
+		};
+		
+		let addCollider = self.addCollider = (collider) => {
+			//REQUIRED: collider
+			
+			colliders.push(collider);
+		};
+		
+		let getColliders = self.getColliders = () => {
+			return colliders;
 		};
 		
 		let checkPoint = self.checkPoint = (pointX, pointY) => {
@@ -1262,21 +1256,62 @@ SkyEngine.Node = CLASS({
 			});
 		};
 		
-		let setRealProperties = self.setRealProperties = (_realX, _realY, _realScaleX, _realScaleY, _realRadian, _realAlpha) => {
+		let setRealProperties = self.setRealProperties = (_realX, _realY, _realScaleX, _realScaleY, _realRadian) => {
 			realX = _realX;
 			realY = _realY;
 			realScaleX = _realScaleX;
 			realScaleY = _realScaleY;
 			realRadian = _realRadian;
-			realAlpha = _realAlpha;
 		};
 		
-		let draw = self.draw = (context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha) => {
+		let draw = self.draw = (context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha, filter) => {
 			// to implement.
 		};
 		
 		let drawArea = self.drawArea = (context, realX, realY, realScaleX, realScaleY, realRadian, color) => {
 			// to implement.
 		};
+	},
+	
+	afterInit : (inner, self, params) => {
+		
+		if (params !== undefined) {
+			
+			if (params.c !== undefined) {
+				if (CHECK_IS_ARRAY(params.c) === true) {
+					EACH(params.c, (childNode) => {
+						self.append(childNode);
+					});
+				} else {
+					self.append(params.c);
+				}
+			}
+			
+			if (params.on !== undefined) {
+				EACH(params.on, (eventHandler, eventName) => {
+					self.on(eventName, eventHandler);
+				});
+			}
+			
+			if (params.touchArea !== undefined) {
+				if (CHECK_IS_ARRAY(params.touchArea) === true) {
+					EACH(params.touchArea, (touchArea) => {
+						self.addTouchArea(touchArea);
+					});
+				} else {
+					self.addTouchArea(params.touchArea);
+				}
+			}
+			
+			if (params.collider !== undefined) {
+				if (CHECK_IS_ARRAY(params.collider) === true) {
+					EACH(params.collider, (collider) => {
+						self.addCollider(collider);
+					});
+				} else {
+					self.addCollider(params.collider);
+				}
+			}
+		}
 	}
 });

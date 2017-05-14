@@ -109,7 +109,7 @@ SkyEngine.Image = CLASS((cls) => {
 			let draw;
 			OVERRIDE(self.draw, (origin) => {
 				
-				draw = self.draw = (context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha) => {
+				draw = self.draw = (context) => {
 					
 					context.drawImage(
 						img,
@@ -118,14 +118,14 @@ SkyEngine.Image = CLASS((cls) => {
 						width,
 						height);
 					
-					origin(context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha);
+					origin(context);
 				};
 			});
 			
 			let drawArea;
 			OVERRIDE(self.drawArea, (origin) => {
 				
-				drawArea = self.drawArea = (context, realX, realY, realScaleX, realScaleY, realRadian, color) => {
+				drawArea = self.drawArea = (context, color) => {
 					
 					if (polygon === undefined) {
 						
@@ -191,7 +191,7 @@ SkyEngine.Image = CLASS((cls) => {
 						context.closePath();
 					}
 					
-					origin(context, realX, realY, realScaleX, realScaleY, realRadian, color);
+					origin(context, color);
 				};
 			});
 			
