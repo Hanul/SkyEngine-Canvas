@@ -18,10 +18,13 @@ SkyEngineShowcase.RotationTest = CLASS({
 				SkyEngineShowcase.R('robot/run8.png')
 			],
 			fps : 10,
-			scale : 0.5,
-			rotationSpeed : 360,
-			toAngle : 360
+			scale : 0.5
 		}).appendTo(SkyEngine.Screen);
+		
+		character.rotateTo({
+			speed : 360,
+			toAngle : 360
+		})
 		
 		inner.on('close', () => {
 			character.remove();

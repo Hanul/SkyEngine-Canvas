@@ -271,6 +271,7 @@ SkyEngine.Node = CLASS({
 			toAlpha = params.toAlpha;
 		}
 		
+		// 초기화 되지 않은 파라미터에 기본값 지정
 		if (x === undefined)				{ x = 0; }
 		if (y === undefined)				{ y = 0; }
 		if (centerX === undefined)			{ centerX = 0; }
@@ -296,6 +297,7 @@ SkyEngine.Node = CLASS({
 		if (fadingSpeed === undefined)		{ fadingSpeed = 0; }
 		if (fadingAccel === undefined)		{ fadingAccel = 0; }
 		
+		// 노드 등록
 		if (SkyEngine.Screen !== self) {
 			SkyEngine.Screen.registerNode(self);
 		}
@@ -316,7 +318,9 @@ SkyEngine.Node = CLASS({
 					accelX = -speedOrParams.accel;
 				}
 				
-				maxSpeedX = -speedOrParams.maxSpeed;
+				if (speedOrParams.maxSpeed !== undefined) {
+					maxSpeedX = -speedOrParams.maxSpeed;
+				}
 			}
 			
 			else {
@@ -353,7 +357,9 @@ SkyEngine.Node = CLASS({
 					accelX = speedOrParams.accel;
 				}
 				
-				maxSpeedX = speedOrParams.maxSpeed;
+				if (speedOrParams.maxSpeed !== undefined) {
+					maxSpeedX = speedOrParams.maxSpeed;
+				}
 			}
 			
 			else {
@@ -390,7 +396,9 @@ SkyEngine.Node = CLASS({
 					accelY = -speedOrParams.accel;
 				}
 				
-				maxSpeedY = -speedOrParams.maxSpeed;
+				if (speedOrParams.maxSpeed !== undefined) {
+					maxSpeedY = -speedOrParams.maxSpeed;
+				}
 			}
 			
 			else {
@@ -427,7 +435,9 @@ SkyEngine.Node = CLASS({
 					accelY = speedOrParams.accel;
 				}
 				
-				maxSpeedY = speedOrParams.maxSpeed;
+				if (speedOrParams.maxSpeed !== undefined) {
+					maxSpeedY = speedOrParams.maxSpeed;
+				}
 			}
 			
 			else {
@@ -491,8 +501,31 @@ SkyEngine.Node = CLASS({
 			//REQUIRED: speedOrParams
 			//OPTIONAL: speedOrParams.speed
 			//OPTIONAL: speedOrParams.accel
+			//OPTIONAL: speedOrParams.minSpeed
 			//OPTIONAL: speedOrParams.maxSpeed
 			
+			if (CHECK_IS_DATA(speedOrParams) === true) {
+				
+				if (speedOrParams.speed !== undefined) {
+					rotationSpeed = speedOrParams.speed;
+				}
+				
+				if (speedOrParams.accel !== undefined) {
+					rotationAccel = speedOrParams.accel;
+				}
+				
+				if (speedOrParams.minSpeed !== undefined) {
+					minRotationSpeed = speedOrParams.minSpeed;
+				}
+				
+				if (speedOrParams.maxSpeed !== undefined) {
+					maxRotationSpeed = speedOrParams.maxSpeed;
+				}
+			}
+			
+			else {
+				rotationSpeed = speedOrParams;
+			}
 		};
 		
 		let stopRotation = self.stopRotation = (accel) => {
@@ -514,11 +547,29 @@ SkyEngine.Node = CLASS({
 		
 		let rotateTo = self.rotateTo = (params) => {
 			//REQUIRED: params
-			//OPTIONAL: params.toAngle
+			//REQUIRED: params.toAngle
 			//OPTIONAL: params.speed
 			//OPTIONAL: params.accel
+			//OPTIONAL: params.minSpeed
 			//OPTIONAL: params.maxSpeed
 			
+			toAngle = params.toAngle;
+			
+			if (params.speed !== undefined) {
+				rotationSpeed = params.speed;
+			}
+			
+			if (params.accel !== undefined) {
+				rotationAccel = params.accel;
+			}
+			
+			if (params.minSpeed !== undefined) {
+				minRotationSpeed = params.minSpeed;
+			}
+			
+			if (params.maxSpeed !== undefined) {
+				maxRotationSpeed = params.maxSpeed;
+			}
 		};
 		
 		let flipX = self.flipX = () => {
@@ -529,12 +580,56 @@ SkyEngine.Node = CLASS({
 			scaleY = -scaleY;
 		};
 		
-		let fadeIn = self.fadeIn = (speed) => {
-			fadingSpeed = speed;
+		let fadeIn = self.fadeIn = (speedOrParams) => {
+			//REQUIRED: speedOrParams
+			//OPTIONAL: speedOrParams.speed
+			//OPTIONAL: speedOrParams.accel
+			//OPTIONAL: speedOrParams.maxSpeed
+			
+			if (CHECK_IS_DATA(speedOrParams) === true) {
+				
+				if (speedOrParams.speed !== undefined) {
+					fadingSpeed = speedOrParams.speed;
+				}
+				
+				if (speedOrParams.accel !== undefined) {
+					fadingAccel = speedOrParams.accel;
+				}
+				
+				if (speedOrParams.maxSpeed !== undefined) {
+					maxFadingSpeed = speedOrParams.maxSpeed;
+				}
+			}
+			
+			else {
+				fadingSpeed = speedOrParams;
+			}
 		};
 		
-		let fadeOut = self.fadeOut = (speed) => {
-			fadingSpeed = -speed;
+		let fadeOut = self.fadeOut = (speedOrParams) => {
+			//REQUIRED: speedOrParams
+			//OPTIONAL: speedOrParams.speed
+			//OPTIONAL: speedOrParams.accel
+			//OPTIONAL: speedOrParams.maxSpeed
+			
+			if (CHECK_IS_DATA(speedOrParams) === true) {
+				
+				if (speedOrParams.speed !== undefined) {
+					fadingSpeed = -speedOrParams.speed;
+				}
+				
+				if (speedOrParams.accel !== undefined) {
+					fadingAccel = -speedOrParams.accel;
+				}
+				
+				if (speedOrParams.maxSpeed !== undefined) {
+					minFadingSpeed = -speedOrParams.maxSpeed;
+				}
+			}
+			
+			else {
+				fadingSpeed = -speedOrParams;
+			}
 		};
 		
 		let stopFading = self.stopFading = (accel) => {
@@ -556,11 +651,29 @@ SkyEngine.Node = CLASS({
 		
 		let fadeTo = self.fadeTo = (params) => {
 			//REQUIRED: params
-			//OPTIONAL: params.toAlpha
+			//REQUIRED: params.toAlpha
 			//OPTIONAL: params.speed
 			//OPTIONAL: params.accel
+			//OPTIONAL: params.minSpeed
 			//OPTIONAL: params.maxSpeed
 			
+			toAlpha = params.toAlpha;
+			
+			if (params.speed !== undefined) {
+				fadingSpeed = params.speed;
+			}
+			
+			if (params.accel !== undefined) {
+				fadingAccel = params.accel;
+			}
+			
+			if (params.minSpeed !== undefined) {
+				minFadingSpeed = params.minSpeed;
+			}
+			
+			if (params.maxSpeed !== undefined) {
+				maxFadingSpeed = params.maxSpeed;
+			}
 		};
 		
 		let hide = self.hide = () => {
@@ -889,10 +1002,10 @@ SkyEngine.Node = CLASS({
 			return touchAreas;
 		};
 		
-		let checkPoint = self.checkPoint = (x, y) => {
+		let checkPoint = self.checkPoint = (pointX, pointY) => {
 			
 			return childNodes.every((childNode) => {
-				return childNode.checkPoint(x, y) !== true;
+				return childNode.checkPoint(pointX, pointY) !== true;
 			}) !== true;
 		};
 		
@@ -1149,8 +1262,7 @@ SkyEngine.Node = CLASS({
 			});
 		};
 		
-		let draw = self.draw = (context, _realX, _realY, _realScaleX, _realScaleY, _realRadian, _realAlpha) => {
-			
+		let setRealProperties = self.setRealProperties = (_realX, _realY, _realScaleX, _realScaleY, _realRadian, _realAlpha) => {
 			realX = _realX;
 			realY = _realY;
 			realScaleX = _realScaleX;
@@ -1159,13 +1271,12 @@ SkyEngine.Node = CLASS({
 			realAlpha = _realAlpha;
 		};
 		
-		let drawArea = self.drawArea = (context, _realX, _realY, _realScaleX, _realScaleY, _realRadian, color) => {
-			
-			realX = _realX;
-			realY = _realY;
-			realScaleX = _realScaleX;
-			realScaleY = _realScaleY;
-			realRadian = _realRadian;
+		let draw = self.draw = (context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha) => {
+			// to implement.
+		};
+		
+		let drawArea = self.drawArea = (context, realX, realY, realScaleX, realScaleY, realRadian, color) => {
+			// to implement.
 		};
 	}
 });

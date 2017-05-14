@@ -59,8 +59,17 @@ SkyEngineShowcase.EventTest = CLASS({
 				SkyEngineShowcase.R('robot/run8.png')
 			],
 			fps : 10,
-			scale : 0.2
+			scale : 0.2,
+			on : {
+				touchstart : () => {
+					console.log('This is Sprite!');
+				}
+			}
 		}).appendTo(SkyEngine.Screen);
+		
+		character.addTouchArea(SkyEngine.Image({
+			src : SkyEngineShowcase.R('robot/run1.png')
+		}));
 		
 		inner.on('close', () => {
 			

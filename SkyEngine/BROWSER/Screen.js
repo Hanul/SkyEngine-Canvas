@@ -28,6 +28,7 @@ SkyEngine.Screen = OBJECT({
 		let registeredNodeMap = {};
 		let registeredEventNodeMap = {};
 		
+		// 드로잉 노드 등록
 		let registerNode = self.registerNode = (node) => {
 			
 			let cls = node.type;
@@ -44,6 +45,7 @@ SkyEngine.Screen = OBJECT({
 			}
 		};
 		
+		// 드로잉 노드 해제
 		let unregisterNode = self.unregisterNode = (node) => {
 			
 			let cls = node.type;
@@ -70,6 +72,7 @@ SkyEngine.Screen = OBJECT({
 			return registeredNodeMap[cls.id] === undefined ? [] : registeredNodeMap[cls.id];
 		};
 		
+		// 이벤트 노드 등록
 		let registerEventNode = self.registerEventNode = (eventName, node) => {
 			
 			if (registeredEventNodeMap[eventName] !== undefined) {
@@ -77,6 +80,7 @@ SkyEngine.Screen = OBJECT({
 			}
 		};
 		
+		// 이벤트 노드 해제
 		let unregisterEventNode = self.unregisterEventNode = (eventName, node) => {
 			
 			if (registeredEventNodeMap[eventName] !== undefined) {
@@ -184,7 +188,12 @@ SkyEngine.Screen = OBJECT({
 			context.rotate(realRadian);
 			context.scale(realScaleX, realScaleY);
 			
-			node.drawArea(context, realX, realY, realScaleX, realScaleY, realRadian, color);
+			node.setRealProperties(realX, realY, realScaleX, realScaleY, realRadian);
+			
+			// 개발 모드에서는 영역 표시
+			if (CONFIG.SkyEngine.isDebugMode === true) {
+				node.drawArea(context, realX, realY, realScaleX, realScaleY, realRadian, color);
+			}
 			
 			context.restore();
 			
@@ -231,6 +240,8 @@ SkyEngine.Screen = OBJECT({
 				context.scale(realScaleX, realScaleY);
 				context.globalAlpha = realAlpha;
 				
+				node.setRealProperties(realX, realY, realScaleX, realScaleY, realRadian, realAlpha);
+				
 				node.draw(context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha);
 				
 				context.restore();
@@ -248,15 +259,15 @@ SkyEngine.Screen = OBJECT({
 					context.moveTo(nextX, nextY - 15);
 					context.lineTo(nextX, nextY + 15);
 					context.stroke();
-					
-					node.getTouchAreas().forEach((touchArea) => {
-						drawAllArea(touchArea, context, realX, realY, realScaleX, realScaleY, realRadian, 'magenta');
-					});
-					
-					node.getColliders().forEach((collider) => {
-						drawAllArea(collider, context, realX, realY, realScaleX, realScaleY, realRadian, 'lime');
-					});
 				}
+				
+				node.getTouchAreas().forEach((touchArea) => {
+					drawAllArea(touchArea, context, realX, realY, realScaleX, realScaleY, realRadian, 'magenta');
+				});
+				
+				node.getColliders().forEach((collider) => {
+					drawAllArea(collider, context, realX, realY, realScaleX, realScaleY, realRadian, 'lime');
+				});
 				
 				node.getChildren().forEach((childNode) => {
 					drawAll(childNode, context, nextX, nextY, realScaleX, realScaleY, realRadian, realAlpha);

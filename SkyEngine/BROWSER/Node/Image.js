@@ -10,75 +10,18 @@ SkyEngine.Image = CLASS((cls) => {
 		preset : () => {
 			return SkyEngine.Node;
 		},
-	
+		
 		init : (inner, self, params) => {
-			//OPTIONAL: params
-			
-			//OPTIONAL: params.x
-			//OPTIONAL: params.y
-			//OPTIONAL: params.z
-			//OPTIONAL: params.speedX
-			//OPTIONAL: params.speedY
-			//OPTIONAL: params.accelX
-			//OPTIONAL: params.accelY
-			//OPTIONAL: params.minSpeedX
-			//OPTIONAL: params.minSpeedY
-			//OPTIONAL: params.maxSpeedX
-			//OPTIONAL: params.maxSpeedY
-			//OPTIONAL: params.toX
-			//OPTIONAL: params.toY
-			
-			//OPTIONAL: params.scale
-			//OPTIONAL: params.scaleX
-			//OPTIONAL: params.scaleY
-			//OPTIONAL: params.scalingSpeed
-			//OPTIONAL: params.scalingSpeedX
-			//OPTIONAL: params.scalingSpeedY
-			//OPTIONAL: params.scalingAccel
-			//OPTIONAL: params.scalingAccelX
-			//OPTIONAL: params.scalingAccelY
-			//OPTIONAL: params.minScalingSpeed
-			//OPTIONAL: params.minScalingSpeedX
-			//OPTIONAL: params.minScalingSpeedY
-			//OPTIONAL: params.maxScalingSpeed
-			//OPTIONAL: params.maxScalingSpeedX
-			//OPTIONAL: params.maxScalingSpeedY
-			//OPTIONAL: params.toScale
-			//OPTIONAL: params.toScaleX
-			//OPTIONAL: params.toScaleY
-			
-			//OPTIONAL: params.angle
-			//OPTIONAL: params.rotationSpeed
-			//OPTIONAL: params.rotationAccel
-			//OPTIONAL: params.minRotationSpeed
-			//OPTIONAL: params.maxRotationSpeed
-			//OPTIONAL: params.toAngle
-			
-			//OPTIONAL: params.alpha
-			//OPTIONAL: params.fadingSpeed
-			//OPTIONAL: params.fadingAccel
-			//OPTIONAL: params.minFadingSpeed
-			//OPTIONAL: params.maxFadingSpeed
-			//OPTIONAL: params.toAlpha
-			
-			//OPTIONAL: params.c		자식 노드. 하나의 노드를 지정하거나, 노드들의 배열을 지정할 수 있습니다.
-			//OPTIONAL: params.on		이벤트
-			
+			//REQUIRED: params
 			//REQUIRED: params.src
 			
 			let src = params.src;
 			
 			let img;
-			
-			let imageCanvas = CANVAS({
-				style : {
-					display : 'none'
-				}
-			}).appendTo(BODY);
-			
-			let imageContext = imageCanvas.getContext('2d');
-			
 			let imageData;
+			let isImageDataLoading = false;
+			
+			let polygon;
 			
 			let width;
 			let height;
@@ -93,13 +36,6 @@ SkyEngine.Image = CLASS((cls) => {
 					width = img.width;
 					height = img.height;
 					
-					imageCanvas.setSize({
-						width : width,
-						height : height
-					});
-					imageContext.drawImage(img, 0, 0, width, height);
-					imageData = imageContext.getImageData(0, 0, width, height).data;
-					
 					img.onload = undefined;
 					
 					self.fireEvent('load');
@@ -109,6 +45,66 @@ SkyEngine.Image = CLASS((cls) => {
 			};
 			
 			setSrc(src);
+			
+			let checkPoint;
+			OVERRIDE(self.checkPoint, (origin) => {
+				
+				checkPoint = self.checkPoint = (x, y) => {
+					
+					if (imageData === undefined) {
+						
+						if (isImageDataLoading !== true) {
+							
+							let tempImg = new Image();
+							
+							tempImg.onload = () => {
+								
+								let width = tempImg.width;
+								let height = tempImg.height;
+								
+								let imageCanvas = CANVAS({
+									style : {
+										display : 'none'
+									},
+									width : width,
+									height : height
+								}).appendTo(BODY);
+								
+								let imageContext = imageCanvas.getContext('2d');
+								imageContext.drawImage(tempImg, 0, 0, width, height);
+								
+								imageData = imageContext.getImageData(0, 0, width, height).data;
+								
+								// clear.
+								imageContext = undefined;
+								imageCanvas.remove();
+								
+								tempImg.onload = undefined;
+							};
+							
+							tempImg.src = src;
+							
+							isImageDataLoading = true;
+						}
+						
+						return origin(x, y) === true;
+					}
+					
+					let tx = x - self.getRealX();
+					let ty = y - self.getRealY();
+					
+					let cos = Math.cos(-self.getRealRadian());
+					let sin = Math.sin(-self.getRealRadian());
+					
+					let px = cos * tx - sin * ty;
+					let py = cos * ty + sin * tx;
+					
+					px = parseInt((px + width * self.getRealScaleX() / 2) / self.getRealScaleX());
+					py = parseInt((py + height * self.getRealScaleY() / 2) / self.getRealScaleY());
+					
+					return (px >= 0 && px < width && py >= 0 && py < height && imageData[(py * width + px) * 4 + 3] > TRANSPARENT_ALPHA) || origin(x, y) === true;
+				};
+			});
 			
 			let draw;
 			OVERRIDE(self.draw, (origin) => {
@@ -126,41 +122,90 @@ SkyEngine.Image = CLASS((cls) => {
 				};
 			});
 			
+			let drawArea;
+			OVERRIDE(self.drawArea, (origin) => {
+				
+				drawArea = self.drawArea = (context, realX, realY, realScaleX, realScaleY, realRadian, color) => {
+					
+					if (polygon === undefined) {
+						
+						if (imageData === undefined) {
+							
+							if (isImageDataLoading !== true) {
+								
+								let tempImg = new Image();
+								
+								tempImg.onload = () => {
+									
+									let width = tempImg.width;
+									let height = tempImg.height;
+									
+									let imageCanvas = CANVAS({
+										style : {
+											display : 'none'
+										},
+										width : width,
+										height : height
+									}).appendTo(BODY);
+									
+									let imageContext = imageCanvas.getContext('2d');
+									imageContext.drawImage(tempImg, 0, 0, width, height);
+									
+									imageData = imageContext.getImageData(0, 0, width, height).data;
+									
+									polygon = SkyEngine.Util.ImageData.convertImageDataToPolygon(imageData, width);
+									
+									// clear.
+									imageContext = undefined;
+									imageCanvas.remove();
+									
+									tempImg.onload = undefined;
+								};
+								
+								tempImg.src = src;
+								
+								isImageDataLoading = true;
+							}
+						}
+						
+						else {
+							polygon = SkyEngine.Util.ImageData.convertImageDataToPolygon(imageData, width);
+						}
+					}
+					
+					else if (polygon.length > 0) {
+						
+						context.beginPath();
+						context.moveTo(polygon[0].x - width / 2, polygon[0].y - height / 2);
+						
+						for (let i = 1; i < polygon.length; i += 1) {
+							let point = polygon[i];
+							context.lineTo(point.x - width / 2, point.y - height / 2);
+						}
+						
+						context.strokeStyle = color;
+						context.stroke();
+						
+						context.closePath();
+					}
+					
+					origin(context, realX, realY, realScaleX, realScaleY, realRadian, color);
+				};
+			});
+			
 			let remove;
 			OVERRIDE(self.remove, (origin) => {
 				
 				remove = self.remove = () => {
 					
 					img = undefined;
-					
 					imageData = undefined;
-					imageContext = undefined;
-					imageCanvas.remove();
+					
+					polygon = undefined;
 					
 					origin();
 				};
 			});
-			
-			let checkPoint = self.checkPoint = (touchX, touchY) => {
-				
-				if (imageData === undefined) {
-					return origin();
-				}
-				
-				let tx = touchX - self.getRealX();
-				let ty = touchY - self.getRealY();
-				
-				let cos = Math.cos(-self.getRealRadian());
-				let sin = Math.sin(-self.getRealRadian());
-				
-				let px = cos * tx - sin * ty;
-				let py = cos * ty + sin * tx;
-				
-				px = parseInt((px + width * self.getRealScaleX() / 2) / self.getRealScaleX());
-				py = parseInt((py + height * self.getRealScaleY() / 2) / self.getRealScaleY());
-				
-				px >= 0 && px < width && py >= 0 && py < height && imageData[(py * width + px) * 4 + 3] > TRANSPARENT_ALPHA;
-			};
 		}
 	};
 });

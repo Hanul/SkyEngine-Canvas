@@ -8,58 +8,7 @@ SkyEngine.Sprite = CLASS({
 	},
 
 	init : (inner, self, params) => {
-		//OPTIONAL: params
-		
-		//OPTIONAL: params.x
-		//OPTIONAL: params.y
-		//OPTIONAL: params.z
-		//OPTIONAL: params.speedX
-		//OPTIONAL: params.speedY
-		//OPTIONAL: params.accelX
-		//OPTIONAL: params.accelY
-		//OPTIONAL: params.minSpeedX
-		//OPTIONAL: params.minSpeedY
-		//OPTIONAL: params.maxSpeedX
-		//OPTIONAL: params.maxSpeedY
-		//OPTIONAL: params.toX
-		//OPTIONAL: params.toY
-		
-		//OPTIONAL: params.scale
-		//OPTIONAL: params.scaleX
-		//OPTIONAL: params.scaleY
-		//OPTIONAL: params.scalingSpeed
-		//OPTIONAL: params.scalingSpeedX
-		//OPTIONAL: params.scalingSpeedY
-		//OPTIONAL: params.scalingAccel
-		//OPTIONAL: params.scalingAccelX
-		//OPTIONAL: params.scalingAccelY
-		//OPTIONAL: params.minScalingSpeed
-		//OPTIONAL: params.minScalingSpeedX
-		//OPTIONAL: params.minScalingSpeedY
-		//OPTIONAL: params.maxScalingSpeed
-		//OPTIONAL: params.maxScalingSpeedX
-		//OPTIONAL: params.maxScalingSpeedY
-		//OPTIONAL: params.toScale
-		//OPTIONAL: params.toScaleX
-		//OPTIONAL: params.toScaleY
-		
-		//OPTIONAL: params.angle
-		//OPTIONAL: params.rotationSpeed
-		//OPTIONAL: params.rotationAccel
-		//OPTIONAL: params.minRotationSpeed
-		//OPTIONAL: params.maxRotationSpeed
-		//OPTIONAL: params.toAngle
-		
-		//OPTIONAL: params.alpha
-		//OPTIONAL: params.fadingSpeed
-		//OPTIONAL: params.fadingAccel
-		//OPTIONAL: params.minFadingSpeed
-		//OPTIONAL: params.maxFadingSpeed
-		//OPTIONAL: params.toAlpha
-		
-		//OPTIONAL: params.c		자식 노드. 하나의 노드를 지정하거나, 노드들의 배열을 지정할 수 있습니다.
-		//OPTIONAL: params.on		이벤트
-		
+		//REQUIRED: params
 		//OPTIONAL: params.src
 		//OPTIONAL: params.srcs
 		//OPTIONAL: params.spriteWidth
@@ -108,6 +57,8 @@ SkyEngine.Sprite = CLASS({
 					frameCount = width / spriteWidth * height / spriteHeight;
 				}
 				
+				img.onload = undefined;
+				
 				self.fireEvent('load');
 			};
 			
@@ -124,41 +75,31 @@ SkyEngine.Sprite = CLASS({
 			
 			if (imgs === undefined) {
 				imgs = [];
-				
-				img.onload = () => {
-					
-					width = img.width;
-					height = img.height;
-					
-					if (spriteWidth === undefined) {
-						spriteWidth = width;
-					}
-					
-					if (spriteHeight === undefined) {
-						spriteHeight = height;
-					}
-					
-					if (frameCount === undefined) {
-						frameCount = 1;
-					} else {
-						frameCount += 1;
-					}
-					
-					self.fireEvent('load');
-				};
 			}
-			
-			else {
 				
-				img.onload = () => {
-					
-					if (frameCount === undefined) {
-						frameCount = 1;
-					} else {
-						frameCount += 1;
-					}
-				};
-			}
+			img.onload = () => {
+				
+				width = img.width;
+				height = img.height;
+				
+				if (spriteWidth === undefined) {
+					spriteWidth = width;
+				}
+				
+				if (spriteHeight === undefined) {
+					spriteHeight = height;
+				}
+				
+				if (frameCount === undefined) {
+					frameCount = 1;
+				} else {
+					frameCount += 1;
+				}
+				
+				img.onload = undefined;
+				
+				self.fireEvent('load');
+			};
 			
 			img.src = src;
 			
@@ -234,20 +175,5 @@ SkyEngine.Sprite = CLASS({
 				origin();
 			};
 		});
-		
-		let checkCollision = self.checkCollision = (target) => {
-			// target이 Rect인 경우 작동
-			// target이 Circle인 경우 작동
-			// target이 Image인 경우 작동
-			// target이 같은 Sprite인 경우 작동
-			
-			// to implement.
-			return false;
-		};
-		
-		// 사각형 충돌 체크
-		// 원 충돌 체크
-		// 이미지 충돌 체크
-		// 스프라이트 충돌 체크
 	}
 });

@@ -12,14 +12,18 @@ SkyEngine('Util').Collision = OBJECT({
 			return checkBetween((c < d) ? c : d, a, b) === true || checkBetween((a < b) ? a : b, c, d) === true;
 		};
 		
-		let checkPointRect = self.checkPointRect = (px, py, cx, cy, width, height, radian) => {
+		let checkPointRect = self.checkPointRect = (px, py, cx, cy, w, h, sx, sy, r) => {
 			
-			let cos, sin, tx = px, ty = py;
+			w *= sx;
+			h *= sy;
 			
-			if (radian !== 0) {
+			let tx = px;
+			let ty = py;
+			
+			if (r !== 0) {
 				
-				cos = Math.cos(radian);
-				sin = Math.sin(radian);
+				let cos = Math.cos(r);
+				let sin = Math.sin(r);
 				
 				px -= cx;
 				py -= cy;
@@ -28,40 +32,74 @@ SkyEngine('Util').Collision = OBJECT({
 				ty = -sin * px + cos * py + cy;
 			}
 			
-			cx -= width / 2;
-			cy -= height / 2;
+			cx -= w / 2;
+			cy -= h / 2;
 			
-			return checkBetween(tx, cx, cx + width) === true && checkBetween(ty, cy, cy + height) === true;
+			return checkBetween(tx, cx, cx + w) === true && checkBetween(ty, cy, cy + h) === true;
 		};
 		
-		let checkPointCircle = self.checkPointCircle = (px, py, cx, cy, width, height, radian) => {
+		let checkPointCircle = self.checkPointCircle = (px, py, cx, cy, w, h, sx, sy, r) => {
+			
+			w *= sx;
+			h *= sy;
 
-			let cos = 1, sin = 0, termX, termY;
+			let cos = 1;
+			let sin = 0;
 			
 			px -= cx;
 			py -= cy;
 			
-			if (radian !== 0) {
-				cos = Math.cos(radian);
-				sin = Math.sin(radian);
+			if (r !== 0) {
+				cos = Math.cos(r);
+				sin = Math.sin(r);
 			}
 
-			termX = 2 * (cos * px + sin * py) / width;
-			termY = 2 * (sin * px - cos * py) / height;
+			let tx = 2 * (cos * px + sin * py) / w;
+			let ty = 2 * (sin * px - cos * py) / h;
 			
-			return ((termX * termX) + (termY * termY)) <= 1;
+			return ((tx * tx) + (ty * ty)) <= 1;
 		};
 		
-		let checkPointPolygon = self.checkPointPolygon = (x, y, points) => {
+		let checkPointPolygon = self.checkPointPolygon = (px, py, cx, cy, ps, sx, sy, r) => {
 		
-			let i, j, length = points.length, ix, iy, jx, jy, result = false;
+			let i, j;
+			
+			let length = points.length;
+			
+			let cos = 1;
+			let sin = 0;
+			
+			if (r !== 0) {
+				cos = Math.cos(r);
+				sin = Math.sin(r);
+			}
+			
+			let tx = px;
+			let ty = py;
+			
+			if (r !== 0) {
+				
+				let cos = Math.cos(r);
+				let sin = Math.sin(r);
+				
+				px -= cx;
+				py -= cy;
+				
+				tx = cos * px + sin * py + cx;
+				ty = -sin * px + cos * py + cy;
+			}
+			
+			let result = false;
 			
 			for (i = 0, j = length - 1; i < length; j = i += 1) {
 				
-				ix = points[i].x;	iy = points[i].y;
-				jx = points[j].x;	jy = points[j].y;
+				let ix = cx + points[i].x * sx;
+				let iy = cy + points[i].y * sy;
 				
-				if ((iy > y) !== (jy > y) && x < (jx - ix) * (y - iy) / (jy - iy) + ix) {
+				let jx = cx + points[j].x * sx;
+				let jy = cy + points[j].y * sy;
+				
+				if ((iy > ty) !== (jy > ty) && tx < (jx - ix) * (ty - iy) / (jy - iy) + ix) {
 					result = !result;
 				}
 			}
@@ -71,18 +109,23 @@ SkyEngine('Util').Collision = OBJECT({
 		
 		let checkLineLine = self.checkLineLine = (a1x, a1y, a2x, a2y, b1x, b1y, b2x, b2y) => {
 			
-			let ua, ub, denom = (a2x - a1x) * (b2y - b1y) - (b2x - b1x) * (a2y - a1y);
+			let denom = (a2x - a1x) * (b2y - b1y) - (b2x - b1x) * (a2y - a1y);
 			
 			if (denom === 0) {
 				return false;
 			}
 			
 			else {
-				ua = ((b2y - b1y) * (b2x - a1x) + (b1x - b2x) * (b2y - a1y)) / denom;
-				ub = ((a1y - a2y) * (b2x - a1x) + (a2x - a1x) * (b2y - a1y)) / denom;
+				
+				let ua = ((b2y - b1y) * (b2x - a1x) + (b1x - b2x) * (b2y - a1y)) / denom;
+				let ub = ((a1y - a2y) * (b2x - a1x) + (a2x - a1x) * (b2y - a1y)) / denom;
 				
 				return 0 < ua && ua < 1 && 0 < ub && ub < 1;
 			}
+		};
+		
+		let checkLineRect = self.checkLineRect = (a1x, a1y, a2x, a2y, x, y, w, h, r) => {
+			//TODO: 개발해야 함
 		};
 		
 		let checkLineCircle = self.checkLineCircle = (a1x, a1y, a2x, a2y, cx, cy, cw, ch, cr) => {
@@ -141,7 +184,13 @@ SkyEngine('Util').Collision = OBJECT({
 			return result;
 		};
 		
-		let checkRectRect = self.checkRectRect = (ax, ay, aw, ah, ar, bx, by, bw, bh, br) => {
+		let checkRectRect = self.checkRectRect = (ax, ay, aw, ah, asx, asy, ar, bx, by, bw, bh, bsx, bsy, br) => {
+			
+			aw *= asx;
+			ah *= asy;
+			
+			bw *= bsx;
+			bh *= bsy;
 			
 			let cos, sin, cw, sw, ch, sh,
 			
@@ -237,7 +286,13 @@ SkyEngine('Util').Collision = OBJECT({
 			}
 		};
 		
-		let checkRectCircle = self.checkRectCircle = (rx, ry, rw, rh, rr, cx, cy, cw, ch, cr) => {
+		let checkRectCircle = self.checkRectCircle = (rx, ry, rw, rh, rsx, rsy, rr, cx, cy, cw, ch, csx, csy, cr) => {
+			
+			rw *= rsx;
+			rh *= rsy;
+			
+			cw *= csx;
+			ch *= csy;
 			
 		    let cos, sin, cosw, sinw, cosh, sinh,
 			
@@ -276,11 +331,15 @@ SkyEngine('Util').Collision = OBJECT({
 				checkLineCircle(p4x, p4y, p1x, p1y, cx, cy, cw, ch, cr);
 		};
 		
-		let checkCircleCircle = self.checkCircleCircle = (ax, ay, aw, ah, ar, bx, by, bw, bh, br) => {
+		let checkCircleCircle = self.checkCircleCircle = (ax, ay, aw, ah, asx, asy, ar, bx, by, bw, bh, bsx, bsy, br) => {
 			
-			let
-			// max r
-			maxR,
+			aw *= asx;
+			ah *= asy;
+			
+			bw *= bsx;
+			bh *= bsy;
+			
+			let maxR,
 			
 			// for bivariate
 			A, B, a, c, d, b, aa, ab, ac, ad, ae, af, ba, bb, bc, bd, be, bf,
@@ -379,6 +438,17 @@ SkyEngine('Util').Collision = OBJECT({
 			D = 64 * zr - 16 * zp * zp;
 
 			return descrim < 0 || (descrim > 0 && P < 0 && D < 0) || (descrim === 0 && (D !== 0 || P <= 0));
+		};
+		
+		let checkRectPolygon = self.checkRectPolygon = (x, y, w, h, r, points) => {
+		
+			let i, j, length = points.length, result = false;
+			
+			for (i = 0, j = length - 1; result !== true && i < length; j = i, i += 1) {
+				result = checkLineRect(points[j].x, points[j].y, points[i].x, points[i].y, x, y, w, h, r);
+			}
+			
+			return result;
 		};
 		
 		let checkCirclePolygon = self.checkCirclePolygon = (x, y, w, h, r, points) => {

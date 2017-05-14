@@ -10,11 +10,8 @@ SkyEngine.Dom = CLASS({
 	init : (inner, self, params) => {
 		//OPTIONAL: params
 		//OPTIONAL: params.style	스타일
-		//OPTIONAL: params.c		자식 노드. 하나의 노드를 지정하거나, 노드들의 배열을 지정할 수 있습니다.
+		//OPTIONAL: params.c		자식 DOM 노드. 하나의 노드를 지정하거나, 노드들의 배열을 지정할 수 있습니다.
 		//OPTIONAL: params.on		이벤트
-		//OPTIONAL: params.x
-		//OPTIONAL: params.y
-		//OPTIONAL: params.z
 		
 		let style;
 		let children;

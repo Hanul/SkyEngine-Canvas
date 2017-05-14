@@ -8,82 +8,26 @@ SkyEngine.Circle = CLASS({
 	},
 
 	init : (inner, self, params) => {
-		//OPTIONAL: params
-		
-		//OPTIONAL: params.x
-		//OPTIONAL: params.y
-		//OPTIONAL: params.z
-		//OPTIONAL: params.speedX
-		//OPTIONAL: params.speedY
-		//OPTIONAL: params.accelX
-		//OPTIONAL: params.accelY
-		//OPTIONAL: params.minSpeedX
-		//OPTIONAL: params.minSpeedY
-		//OPTIONAL: params.maxSpeedX
-		//OPTIONAL: params.maxSpeedY
-		//OPTIONAL: params.toX
-		//OPTIONAL: params.toY
-		
-		//OPTIONAL: params.scale
-		//OPTIONAL: params.scaleX
-		//OPTIONAL: params.scaleY
-		//OPTIONAL: params.scalingSpeed
-		//OPTIONAL: params.scalingSpeedX
-		//OPTIONAL: params.scalingSpeedY
-		//OPTIONAL: params.scalingAccel
-		//OPTIONAL: params.scalingAccelX
-		//OPTIONAL: params.scalingAccelY
-		//OPTIONAL: params.minScalingSpeed
-		//OPTIONAL: params.minScalingSpeedX
-		//OPTIONAL: params.minScalingSpeedY
-		//OPTIONAL: params.maxScalingSpeed
-		//OPTIONAL: params.maxScalingSpeedX
-		//OPTIONAL: params.maxScalingSpeedY
-		//OPTIONAL: params.toScale
-		//OPTIONAL: params.toScaleX
-		//OPTIONAL: params.toScaleY
-		
-		//OPTIONAL: params.angle
-		//OPTIONAL: params.rotationSpeed
-		//OPTIONAL: params.rotationAccel
-		//OPTIONAL: params.minRotationSpeed
-		//OPTIONAL: params.maxRotationSpeed
-		//OPTIONAL: params.toAngle
-		
-		//OPTIONAL: params.alpha
-		//OPTIONAL: params.fadingSpeed
-		//OPTIONAL: params.fadingAccel
-		//OPTIONAL: params.minFadingSpeed
-		//OPTIONAL: params.maxFadingSpeed
-		//OPTIONAL: params.toAlpha
-		
-		//OPTIONAL: params.c		자식 노드. 하나의 노드를 지정하거나, 노드들의 배열을 지정할 수 있습니다.
-		//OPTIONAL: params.on		이벤트
-		
-		//OPTIONAL: params.width
-		//OPTIONAL: params.height
+		//REQUIRED: params
+		//REQUIRED: params.width
+		//REQUIRED: params.height
 		//OPTIONAL: params.color
+		//OPTIONAL: params.border
 		
-		let width;
-		let height;
-		let color;
+		let width = params.width;
+		let height = params.height;
+		let color = params.color;
+		let border = params.border;
 		
-		if (params !== undefined) {
-			width = params.width;
-			height = params.height;
-			color = params.color;
-		}
+		let borderPixel;
+		let borderStyle;
+		let borderColor;
 		
-		if (width === undefined) {
-			width = 0;
-		}
-		
-		if (height === undefined) {
-			height = 0;
-		}
-		
-		if (color === undefined) {
-			color = '#000';
+		if (border !== undefined) {
+			let split = border.split(' ');
+			borderPixel = INTEGER(split[0]);
+			borderStyle = split[1];
+			borderColor = split[2];
 		}
 		
 		let checkPointCircle = SkyEngine.Util.Collision.checkPointCircle;
@@ -109,16 +53,20 @@ SkyEngine.Circle = CLASS({
 		let checkPoint;
 		OVERRIDE(self.checkPoint, (origin) => {
 			
-			let checkPoint = self.checkPoint = (x, y) => {
+			let checkPoint = self.checkPoint = (pointX, pointY) => {
 				
 				return checkPointCircle(
-					x,
-					y,
+					
+					pointX,
+					pointY,
+					
 					self.getRealX(),
 					self.getRealY(),
-					width * self.getRealScaleX(),
-					height * self.getRealScaleY(),
-					self.getRealRadian()) === true || origin(x, y) === true;
+					width,
+					height,
+					self.getRealScaleX(),
+					self.getRealScaleY(),
+					self.getRealRadian()) === true || origin(pointX, pointY) === true;
 			};
 		});
 		
@@ -132,8 +80,23 @@ SkyEngine.Circle = CLASS({
 				if (area.type === SkyEngine.Rect) {
 					
 					if (checkRectCircle(
-						area.getRealX(), area.getRealY(), area.getWidth() * area.getRealScaleX(), area.getHeight() * area.getRealScaleY(), area.getRealRadian(),
-						self.getRealX(), self.getRealY(), width * self.getRealScaleX(), height * self.getRealScaleY(), self.getRealRadian()
+						
+						area.getRealX(),
+						area.getRealY(),
+						area.getWidth(),
+						area.getHeight(),
+						area.getRealScaleX(),
+						area.getRealScaleY(),
+						area.getRealRadian(),
+						
+						self.getRealX(),
+						self.getRealY(),
+						width,
+						height,
+						self.getRealScaleX(),
+						self.getRealScaleY(),
+						self.getRealRadian()
+						
 					) === true) {
 						return true;
 					}
@@ -142,8 +105,23 @@ SkyEngine.Circle = CLASS({
 				else if (area.type === SkyEngine.Circle) {
 					
 					if (checkCircleCircle(
-						self.getRealX(), self.getRealY(), width * self.getRealScaleX(), height * self.getRealScaleY(), self.getRealRadian(),
-						area.getRealX(), area.getRealY(), area.getWidth() * area.getRealScaleX(), area.getHeight() * area.getRealScaleY(), area.getRealRadian()
+						
+						area.getRealX(),
+						area.getRealY(),
+						area.getWidth(),
+						area.getHeight(),
+						area.getRealScaleX(),
+						area.getRealScaleY(),
+						area.getRealRadian(),
+						
+						self.getRealX(),
+						self.getRealY(),
+						width,
+						height,
+						self.getRealScaleX(),
+						self.getRealScaleY(),
+						self.getRealRadian()
+						
 					) === true) {
 						return true;
 					}
@@ -162,8 +140,25 @@ SkyEngine.Circle = CLASS({
 				
 				context.ellipse(0, 0, width / 2, height / 2, 0, 0, 2 * Math.PI);
 				
-				context.fillStyle = color;
-				context.fill();
+				if (color !== undefined) {
+					context.fillStyle = color;
+					context.fill();
+				}
+				
+				if (border !== undefined) {
+					context.lineWidth = borderPixel;
+					context.strokeStyle = borderColor;
+					
+					if (borderStyle === 'dashed') {
+						context.setLineDash([5]);
+					} else if (borderStyle === 'dotted') {
+						context.setLineDash([2]);
+					}
+					
+					context.stroke();
+				}
+				
+				context.closePath();
 				
 				origin(context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha);
 			};
@@ -180,6 +175,8 @@ SkyEngine.Circle = CLASS({
 				
 				context.strokeStyle = color;
 				context.stroke();
+				
+				context.closePath();
 				
 				origin(context, realX, realY, realScaleX, realScaleY, realRadian, color);
 			};
