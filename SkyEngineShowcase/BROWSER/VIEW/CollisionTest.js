@@ -7,55 +7,116 @@ SkyEngineShowcase.CollisionTest = CLASS({
 	init : (inner) => {
 		
 		let rect = SkyEngine.Rect({
-			x : -100,
-			width : 40,
+			x : -50,
+			y : -50,
+			width : 60,
 			height : 40,
-			centerY : 40,
 			color : 'green',
+			scale : 1.2,
 			angle : 45,
-			scaleX : 2
+			on : {
+				touchstart : () => {
+					console.log('This is Rect!');
+				}
+			}
 		}).appendTo(SkyEngine.Screen);
 		
 		rect.addCollider(SkyEngine.Rect({
-			width : 40,
-			height : 40
+			width : 60,
+			height : 40,
+			c : SkyEngine.Rect({
+				width : 40,
+				height : 60
+			})
 		}));
 		
 		let circle = SkyEngine.Circle({
+			x : 50,
+			y : -50,
 			width : 60,
 			height : 40,
 			color : 'yellow',
+			scale : 1.2,
 			angle : 45,
-			scale : 1.2
+			on : {
+				touchstart : () => {
+					console.log('This is Circle!');
+				}
+			}
 		}).appendTo(SkyEngine.Screen);
 		
 		circle.addCollider(SkyEngine.Circle({
 			width : 60,
-			height : 40
+			height : 40,
+			c : SkyEngine.Circle({
+				width : 40,
+				height : 60
+			})
 		}));
 		
 		circle.onMeet(SkyEngine.Rect, () => {
-			console.log('Met!');
+			console.log('Met Rect!');
 		});
 		
 		circle.onPart(SkyEngine.Rect, () => {
-			console.log('Parted!');
+			console.log('Parted Rect!');
 		});
 		
-		let character = SkyEngine.Sprite({
-			srcs : [
-				SkyEngineShowcase.R('robot/run1.png'),
-				SkyEngineShowcase.R('robot/run2.png'),
-				SkyEngineShowcase.R('robot/run3.png'),
-				SkyEngineShowcase.R('robot/run4.png'),
-				SkyEngineShowcase.R('robot/run5.png'),
-				SkyEngineShowcase.R('robot/run6.png'),
-				SkyEngineShowcase.R('robot/run7.png'),
-				SkyEngineShowcase.R('robot/run8.png')
-			],
-			fps : 10,
-			scale : 0.2
+		circle.onMeet(SkyEngine.Polygon, () => {
+			console.log('Met Polygon!');
+		});
+		
+		circle.onPart(SkyEngine.Polygon, () => {
+			console.log('Parted Polygon!');
+		});
+		
+		let polygon = SkyEngine.Polygon({
+			x : 50,
+			y : 50,
+			points : [{
+				x : -30,
+				y : 50
+			}, {
+				x : 50,
+				y : 40
+			}, {
+				x : 20,
+				y : -50
+			}],
+			color : 'yellow',
+			scale : 0.7,
+			angle : -45,
+			on : {
+				touchstart : () => {
+					console.log('This is Polygon!');
+				}
+			}
 		}).appendTo(SkyEngine.Screen);
+		
+		polygon.addCollider(SkyEngine.Polygon({
+			points : [{
+				x : -30,
+				y : 50
+			}, {
+				x : 50,
+				y : 40
+			}, {
+				x : 20,
+				y : -50
+			}],
+			c : SkyEngine.Polygon({
+				points : [{
+					x : 30,
+					y : -50
+				}, {
+					x : -50,
+					y : -40
+				}, {
+					x : -20,
+					y : 50
+				}]
+			})
+		}));
 		
 		circle.moveRight(100);
 		
@@ -113,8 +174,8 @@ SkyEngineShowcase.CollisionTest = CLASS({
 			circle.remove();
 			circle = undefined;
 			
-			character.remove();
-			character = undefined;
+			polygon.remove();
+			polygon = undefined;
 			
 			delay.remove();
 			delay = undefined;

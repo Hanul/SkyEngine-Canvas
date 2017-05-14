@@ -162,6 +162,8 @@ SkyEngine.Polygon = CLASS({
 						context.lineTo(point.x, point.y);
 					}
 					
+					context.lineTo(points[0].x, points[0].y);
+					
 					if (color !== undefined) {
 						context.fillStyle = color;
 						context.fill();
@@ -201,6 +203,8 @@ SkyEngine.Polygon = CLASS({
 						let point = points[i];
 						context.lineTo(point.x, point.y);
 					}
+					
+					context.lineTo(points[0].x, points[0].y);
 					
 					context.strokeStyle = color;
 					context.stroke();

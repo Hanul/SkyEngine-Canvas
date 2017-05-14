@@ -183,6 +183,8 @@ SkyEngine.Image = CLASS((cls) => {
 							context.lineTo(point.x - width / 2, point.y - height / 2);
 						}
 						
+						context.lineTo(polygon[0].x - width / 2, polygon[0].y - height / 2);
+						
 						context.strokeStyle = color;
 						context.stroke();
 						

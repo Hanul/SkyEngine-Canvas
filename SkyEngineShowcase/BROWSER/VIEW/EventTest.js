@@ -7,12 +7,13 @@ SkyEngineShowcase.EventTest = CLASS({
 	init : (inner) => {
 		
 		let rect = SkyEngine.Rect({
-			x : -100,
+			x : -50,
+			y : -50,
 			width : 60,
 			height : 40,
 			color : 'green',
-			angle : 45,
 			scale : 1.2,
+			angle : 45,
 			on : {
 				touchstart : () => {
 					console.log('This is Rect!');
@@ -30,11 +31,13 @@ SkyEngineShowcase.EventTest = CLASS({
 		}));
 		
 		let circle = SkyEngine.Circle({
+			x : 50,
+			y : -50,
 			width : 60,
 			height : 40,
 			color : 'yellow',
-			angle : 45,
 			scale : 1.2,
+			angle : 45,
 			on : {
 				touchstart : () => {
 					console.log('This is Circle!');
@@ -44,25 +47,71 @@ SkyEngineShowcase.EventTest = CLASS({
 		
 		circle.addTouchArea(SkyEngine.Circle({
 			width : 60,
-			height : 40
+			height : 40,
+			c : SkyEngine.Circle({
+				width : 40,
+				height : 60
+			})
 		}));
 		
-		let character = SkyEngine.Sprite({
-			srcs : [
-				SkyEngineShowcase.R('robot/run1.png'),
-				SkyEngineShowcase.R('robot/run2.png'),
-				SkyEngineShowcase.R('robot/run3.png'),
-				SkyEngineShowcase.R('robot/run4.png'),
-				SkyEngineShowcase.R('robot/run5.png'),
-				SkyEngineShowcase.R('robot/run6.png'),
-				SkyEngineShowcase.R('robot/run7.png'),
-				SkyEngineShowcase.R('robot/run8.png')
-			],
-			fps : 10,
-			scale : 0.2,
+		let polygon = SkyEngine.Polygon({
+			x : -50,
+			y : 50,
+			points : [{
+				x : -30,
+				y : 50
+			}, {
+				x : 50,
+				y : 40
+			}, {
+				x : 20,
+				y : -50
+			}],
+			color : 'yellow',
+			scale : 0.7,
+			angle : -45,
 			on : {
 				touchstart : () => {
-					console.log('This is Sprite!');
+					console.log('This is Polygon!');
+				}
+			}
+		}).appendTo(SkyEngine.Screen);
+		
+		polygon.addTouchArea(SkyEngine.Polygon({
+			points : [{
+				x : -30,
+				y : 50
+			}, {
+				x : 50,
+				y : 40
+			}, {
+				x : 20,
+				y : -50
+			}],
+			c : SkyEngine.Polygon({
+				points : [{
+					x : 30,
+					y : -50
+				}, {
+					x : -50,
+					y : -40
+				}, {
+					x : -20,
+					y : 50
+				}]
+			})
+		}));
+		
+		let character = SkyEngine.Image({
+			src : SkyEngineShowcase.R('robot/run1.png'),
+			x : 50,
+			y : 50,
+			fps : 10,
+			scale : 0.2,
+			angle : 45,
+			on : {
+				touchstart : () => {
+					console.log('This is Image!');
 				}
 			}
 		}).appendTo(SkyEngine.Screen);
@@ -78,6 +127,9 @@ SkyEngineShowcase.EventTest = CLASS({
 			
 			circle.remove();
 			circle = undefined;
+			
+			polygon.remove();
+			polygon = undefined;
 			
 			character.remove();
 			character = undefined;
