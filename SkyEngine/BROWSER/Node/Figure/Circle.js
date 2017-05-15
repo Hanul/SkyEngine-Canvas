@@ -132,13 +132,11 @@ SkyEngine.Circle = CLASS({
 		let drawArea;
 		OVERRIDE(self.drawArea, (origin) => {
 			
-			drawArea = self.drawArea = (context, color) => {
-				
-				context.beginPath();
+			drawArea = self.drawArea = (context) => {
 				
 				context.ellipse(0, 0, width / 2, height / 2, 0, 0, 2 * Math.PI);
 				
-				origin(context, color);
+				origin(context);
 			};
 		});
 	}

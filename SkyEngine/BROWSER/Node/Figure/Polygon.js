@@ -158,9 +158,7 @@ SkyEngine.Polygon = CLASS({
 		let drawArea;
 		OVERRIDE(self.drawArea, (origin) => {
 			
-			drawArea = self.drawArea = (context, color) => {
-					
-				context.beginPath();
+			drawArea = self.drawArea = (context) => {
 				
 				if (points.length > 0) {
 					
@@ -174,7 +172,7 @@ SkyEngine.Polygon = CLASS({
 					context.lineTo(points[0].x, points[0].y);
 				}
 				
-				origin(context, color);
+				origin(context);
 			};
 		});
 	}

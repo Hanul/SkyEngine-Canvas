@@ -60,16 +60,11 @@ SkyEngine.Figure = CLASS({
 		let drawArea;
 		OVERRIDE(self.drawArea, (origin) => {
 			
-			drawArea = self.drawArea = (context, color) => {
+			drawArea = self.drawArea = (context) => {
 				
 				// to implement.
 				
-				context.strokeStyle = color;
-				context.stroke();
-				
-				context.closePath();
-				
-				origin(context, color);
+				origin(context);
 			};
 		});
 	}

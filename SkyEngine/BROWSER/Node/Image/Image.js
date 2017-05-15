@@ -125,7 +125,7 @@ SkyEngine.Image = CLASS((cls) => {
 			let drawArea;
 			OVERRIDE(self.drawArea, (origin) => {
 				
-				drawArea = self.drawArea = (context, color) => {
+				drawArea = self.drawArea = (context) => {
 					
 					if (polygon === undefined) {
 						
@@ -175,7 +175,6 @@ SkyEngine.Image = CLASS((cls) => {
 					
 					else if (polygon.length > 0) {
 						
-						context.beginPath();
 						context.moveTo(polygon[0].x - width / 2, polygon[0].y - height / 2);
 						
 						for (let i = 1; i < polygon.length; i += 1) {
@@ -184,14 +183,9 @@ SkyEngine.Image = CLASS((cls) => {
 						}
 						
 						context.lineTo(polygon[0].x - width / 2, polygon[0].y - height / 2);
-						
-						context.strokeStyle = color;
-						context.stroke();
-						
-						context.closePath();
 					}
 					
-					origin(context, color);
+					origin(context);
 				};
 			});
 			

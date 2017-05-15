@@ -112,13 +112,11 @@ SkyEngine.Rect = CLASS({
 		let drawArea;
 		OVERRIDE(self.drawArea, (origin) => {
 			
-			drawArea = self.drawArea = (context, color) => {
-				
-				context.beginPath();
+			drawArea = self.drawArea = (context) => {
 				
 				context.rect(-width / 2, -height / 2, width, height);
 				
-				origin(context, color);
+				origin(context);
 			};
 		});
 	}

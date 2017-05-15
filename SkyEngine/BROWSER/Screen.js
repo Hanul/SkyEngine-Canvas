@@ -180,7 +180,14 @@ SkyEngine.Screen = OBJECT({
 			
 			// 개발 모드에서는 영역 표시
 			if (CONFIG.SkyEngine.isDebugMode === true) {
-				node.drawArea(context, color);
+				
+				context.beginPath();
+				context.strokeStyle = color;
+				
+				node.drawArea(context);
+				
+				context.stroke();
+				context.closePath();
 			}
 			
 			context.restore();
@@ -222,6 +229,8 @@ SkyEngine.Screen = OBJECT({
 			
 			if (node.checkIsHiding() !== true) {
 				
+				context.save();
+				
 				if (node.getFilter() !== undefined) {
 					context.filter = node.getFilter();
 				}
@@ -239,6 +248,12 @@ SkyEngine.Screen = OBJECT({
 				node.setRealProperties(realX, realY, realScaleX, realScaleY, realRadian);
 				
 				node.draw(context);
+				
+				context.restore();
+				
+				node.getChildren().forEach((childNode) => {
+					drawAll(childNode, context, nextX, nextY, realScaleX, realScaleY, realRadian, realAlpha);
+				});
 				
 				context.restore();
 				
@@ -264,10 +279,6 @@ SkyEngine.Screen = OBJECT({
 				node.getColliders().forEach((collider) => {
 					drawAllArea(collider, context, realX, realY, realScaleX, realScaleY, realRadian, 'lime');
 				});
-				
-				node.getChildren().forEach((childNode) => {
-					drawAll(childNode, context, nextX, nextY, realScaleX, realScaleY, realRadian, realAlpha);
-				});
 			}
 		};
 		
@@ -278,11 +289,8 @@ SkyEngine.Screen = OBJECT({
 			stepAll(self, deltaTime);
 			
 			context.clearRect(0, 0, canvasWidth, canvasHeight);
-			context.save();
 			
 			drawAll(self, context, canvasWidth / 2, canvasHeight / 2, self.getScaleX(), self.getScaleY(), self.getAngle() * Math.PI / 180, self.getAlpha());
-			
-			context.restore();
 		});
 		
 		EVENT('resize', RAR(() => {
