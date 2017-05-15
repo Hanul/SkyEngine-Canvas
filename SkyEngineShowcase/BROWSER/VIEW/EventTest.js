@@ -102,21 +102,22 @@ SkyEngineShowcase.EventTest = CLASS({
 			})
 		}));
 		
-		let character = SkyEngine.Image({
+		let character = SkyEngine.Silhouette({
 			src : SkyEngineShowcase.R('robot/run1.png'),
 			x : 50,
 			y : 50,
 			fps : 10,
 			scale : 0.2,
 			angle : 45,
+			color : 'green',
 			on : {
 				touchstart : () => {
-					console.log('This is Image!');
+					console.log('This is Silhouette!');
 				}
 			}
 		}).appendTo(SkyEngine.Screen);
 		
-		character.addTouchArea(SkyEngine.Image({
+		character.addTouchArea(SkyEngine.Silhouette({
 			src : SkyEngineShowcase.R('robot/run1.png')
 		}));
 		

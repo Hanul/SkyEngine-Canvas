@@ -6,6 +6,22 @@ SkyEngineShowcase.CollisionTest = CLASS({
 	
 	init : (inner) => {
 		
+		let line = SkyEngine.Line({
+			y : -140,
+			startX : -100,
+			startY : -10,
+			endX : 100,
+			endY : 10,
+			border : '5px solid red'
+		}).appendTo(SkyEngine.Screen);
+		
+		line.addCollider(SkyEngine.Line({
+			startX : -100,
+			startY : -10,
+			endX : 100,
+			endY : 10
+		}));
+		
 		let rect = SkyEngine.Rect({
 			x : -50,
 			y : -50,
@@ -53,6 +69,14 @@ SkyEngineShowcase.CollisionTest = CLASS({
 				height : 60
 			})
 		}));
+		
+		circle.onMeet(SkyEngine.Line, () => {
+			console.log('Met Line!');
+		});
+		
+		circle.onPart(SkyEngine.Line, () => {
+			console.log('Parted Line!');
+		});
 		
 		circle.onMeet(SkyEngine.Rect, () => {
 			console.log('Met Rect!');
@@ -167,6 +191,9 @@ SkyEngineShowcase.CollisionTest = CLASS({
 		});
 		
 		inner.on('close', () => {
+			
+			line.remove();
+			line = undefined;
 			
 			rect.remove();
 			rect = undefined;

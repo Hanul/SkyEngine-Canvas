@@ -15,7 +15,9 @@ SkyEngine.Rect = CLASS({
 		let width = params.width;
 		let height = params.height;
 		
-		let checkPointRect = SkyEngine.Util.Collision.checkPointRect;
+		let checkPointInRect = SkyEngine.Util.Collision.checkPointInRect;
+		
+		let checkLineRect = SkyEngine.Util.Collision.checkLineRect;
 		let checkRectRect = SkyEngine.Util.Collision.checkRectRect;
 		
 		let setWidth = self.setWidth = (_width) => {
@@ -47,7 +49,7 @@ SkyEngine.Rect = CLASS({
 			
 			let checkPoint = self.checkPoint = (pointX, pointY) => {
 				
-				return checkPointRect(
+				return checkPointInRect(
 					
 					pointX,
 					pointY,
@@ -66,9 +68,36 @@ SkyEngine.Rect = CLASS({
 		OVERRIDE(self.checkArea, (origin) => {
 			
 			checkArea = self.checkArea = (area) => {
+				// area가 Line인 경우 작동
 				// area가 같은 Rect인 경우 작동
 				
-				if (area.type === SkyEngine.Rect) {
+				if (area.type === SkyEngine.Line) {
+					
+					if (checkLineRect(
+						
+						area.getRealX(),
+						area.getRealY(),
+						area.getStartX(),
+						area.getStartY(),
+						area.getEndX(),
+						area.getEndY(),
+						area.getRealScaleX(),
+						area.getRealScaleY(),
+						area.getRealRadian(),
+						
+						self.getRealX(),
+						self.getRealY(),
+						width,
+						height,
+						self.getRealScaleX(),
+						self.getRealScaleY(),
+						self.getRealRadian()) === true) {
+						
+						return true;
+					}
+				}
+				
+				else if (area.type === SkyEngine.Rect) {
 					
 					if (checkRectRect(
 						

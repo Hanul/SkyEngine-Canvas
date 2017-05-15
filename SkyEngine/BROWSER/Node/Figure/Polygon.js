@@ -13,7 +13,9 @@ SkyEngine.Polygon = CLASS({
 		
 		let points = params.points
 		
-		let checkPointPolygon = SkyEngine.Util.Collision.checkPointPolygon;
+		let checkPointInPolygon = SkyEngine.Util.Collision.checkPointInPolygon;
+		
+		let checkLinePolygon = SkyEngine.Util.Collision.checkLinePolygon;
 		let checkRectPolygon = SkyEngine.Util.Collision.checkRectPolygon;
 		let checkCirclePolygon = SkyEngine.Util.Collision.checkCirclePolygon;
 		let checkPolygonPolygon = SkyEngine.Util.Collision.checkPolygonPolygon;
@@ -35,7 +37,7 @@ SkyEngine.Polygon = CLASS({
 			
 			let checkPoint = self.checkPoint = (pointX, pointY) => {
 				
-				return checkPointPolygon(
+				return checkPointInPolygon(
 					
 					pointX,
 					pointY,
@@ -53,11 +55,38 @@ SkyEngine.Polygon = CLASS({
 		OVERRIDE(self.checkArea, (origin) => {
 			
 			checkArea = self.checkArea = (area) => {
+				// area가 Line인 경우 작동
 				// area가 Rect인 경우 작동
 				// area가 Circle인 경우 작동
 				// area가 같은 Polygon인 경우 작동
 				
-				if (area.type === SkyEngine.Rect) {
+				if (area.type === SkyEngine.Line) {
+					
+					if (checkLinePolygon(
+						
+						area.getRealX(),
+						area.getRealY(),
+						area.getStartX(),
+						area.getStartY(),
+						area.getEndX(),
+						area.getEndY(),
+						area.getRealScaleX(),
+						area.getRealScaleY(),
+						area.getRealRadian(),
+						
+						self.getRealX(),
+						self.getRealY(),
+						points,
+						self.getRealScaleX(),
+						self.getRealScaleY(),
+						self.getRealRadian()
+						
+					) === true) {
+						return true;
+					}
+				}
+				
+				else if (area.type === SkyEngine.Rect) {
 					
 					if (checkRectPolygon(
 						

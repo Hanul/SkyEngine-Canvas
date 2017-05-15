@@ -745,7 +745,7 @@ SkyEngine.Node = CLASS({
 				
 				let node = parentChildren[index];
 				
-				if (node.getZ() < z) {
+				if (node.getZ() <= z) {
 					minIndex = index + 1;
 				} else if (node.getZ() > z) {
 					maxIndex = index - 1;
@@ -1264,11 +1264,11 @@ SkyEngine.Node = CLASS({
 			realRadian = _realRadian;
 		};
 		
-		let draw = self.draw = (context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha, filter) => {
+		let draw = self.draw = (context) => {
 			// to implement.
 		};
 		
-		let drawArea = self.drawArea = (context, realX, realY, realScaleX, realScaleY, realRadian, color) => {
+		let drawArea = self.drawArea = (context) => {
 			// to implement.
 		};
 	},

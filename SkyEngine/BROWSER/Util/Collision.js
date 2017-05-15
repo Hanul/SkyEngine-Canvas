@@ -15,85 +15,10 @@ SkyEngine('Util').Collision = OBJECT({
 			a, b,
 			c, d
 		) => {
-			return checkBetween((c < d) ? c : d, a, b) === true || checkBetween((a < b) ? a : b, c, d) === true;
+			return checkBetween(c < d ? c : d, a, b) === true || checkBetween(a < b ? a : b, c, d) === true;
 		};
 		
-		let checkLineLine = (
-			a1x, a1y,
-			a2x, a2y,
-			
-			b1x, b1y,
-			b2x, b2y
-		) => {
-			
-			let denom = (a2x - a1x) * (b2y - b1y) - (b2x - b1x) * (a2y - a1y);
-			
-			if (denom === 0) {
-				return false;
-			}
-			
-			else {
-				
-				let ua = ((b2y - b1y) * (b2x - a1x) + (b1x - b2x) * (b2y - a1y)) / denom;
-				let ub = ((a1y - a2y) * (b2x - a1x) + (a2x - a1x) * (b2y - a1y)) / denom;
-				
-				return 0 < ua && ua < 1 && 0 < ub && ub < 1;
-			}
-		};
-		
-		let checkLineCircle = (
-			a1x, a1y,
-			a2x, a2y,
-			
-			cx, cy,
-			cw, ch,
-			cr
-		) => {
-			
-			let cos = 1, sin = 0, b1x, b1y, b2x, b2y, m, s, t, k, a, b, c, discrim;
-			
-			if (cr !== 0) {
-				cos = Math.cos(cr);
-				sin = Math.sin(cr);
-			}
-			
-			a1x -= cx;	a1y -= cy;
-			a2x -= cx;	a2y -= cy;
-			
-			b1x = cos * a1x + sin * a1y;	b1y = -sin * a1x + cos * a1y;
-			b2x = cos * a2x + sin * a2y;	b2y = -sin * a2x + cos * a2y;
-			
-			m = (b2y - b1y) / (b2x - b1x);
-			
-			if (Math.abs(m) > 1024) {
-				return checkLineCircle(b1y, b1x, b2y, b2x, 0, 0, ch, cw, 1, 1, 0);
-			}
-			
-			if (checkPointCircle(b2x, b2y, 0, 0, cw, ch, 1, 1, 0) === true) {
-				return true;
-			}
-			
-			s = cw * cw / 4;
-			t = ch * ch / 4;
-			
-			k = b1y - (m * b1x);
-			
-			a = 1 / s + m * m / t;
-			b = 2 * m * k / t;
-			c = k * k / t - 1;
-			discrim = b * b - 4 * a * c;
-			
-			if (discrim < 0) {
-				return false;
-			}
-			
-			discrim = Math.sqrt(discrim);
-			a *= 2;
-			
-			return checkBetween((-b - discrim) / a, b1x, b2x) === true || checkBetween((-b + discrim) / a, b1x, b2x) === true;
-		};
-		
-		let checkPointRect = self.checkPointRect = (px, py, cx, cy, w, h, sx, sy, r) => {
+		let checkPointInRect = self.checkPointInRect = (px, py, cx, cy, w, h, sx, sy, r) => {
 			
 			w *= sx;
 			h *= sy;
@@ -119,7 +44,7 @@ SkyEngine('Util').Collision = OBJECT({
 			return checkBetween(tx, cx, cx + w) === true && checkBetween(ty, cy, cy + h) === true;
 		};
 		
-		let checkPointCircle = self.checkPointCircle = (px, py, cx, cy, w, h, sx, sy, r) => {
+		let checkPointInCircle = self.checkPointInCircle = (px, py, cx, cy, w, h, sx, sy, r) => {
 			
 			w *= sx;
 			h *= sy;
@@ -141,7 +66,7 @@ SkyEngine('Util').Collision = OBJECT({
 			return ((tx * tx) + (ty * ty)) <= 1;
 		};
 		
-		let checkPointPolygon = self.checkPointPolygon = (px, py, cx, cy, ps, sx, sy, r) => {
+		let checkPointInPolygon = self.checkPointInPolygon = (px, py, cx, cy, ps, sx, sy, r) => {
 			
 			let tx = px;
 			let ty = py;
@@ -179,6 +104,204 @@ SkyEngine('Util').Collision = OBJECT({
 			}
 			
 			return result;
+		};
+		
+		let checkLineLine = self.checkLineLine = (
+			aX, aY,
+			aStartX, aStartY,
+			aEndX, aEndY,
+			aScaleX, aScaleY,
+			aRadian,
+			
+			bX, bY,
+			bStartX, bStartY,
+			bEndX, bEndY,
+			bScaleX, bScaleY,
+			bRadian
+		) => {
+			
+			let aTempStartX = aStartX * aScaleX;
+			let aTempStartY = aStartY * aScaleY;
+			
+			let aTempEndX = aEndX * aScaleX;
+			let aTempEndY = aEndY * aScaleY;
+			
+			if (aRadian !== 0) {
+				
+				let cos = Math.cos(aRadian);
+				let sin = Math.sin(aRadian);
+				
+				aStartX -= aX;
+				aStartY -= aY;
+				
+				aTempStartX = cos * aStartX + sin * aStartY + aX;
+				aTempStartY = -sin * aStartX + cos * aStartY + aY;
+				
+				aEndX -= aX;
+				aEndY -= aY;
+				
+				aTempEndX = cos * aEndX + sin * aEndY + aX;
+				aTempEndY = -sin * aEndX + cos * aEndY + aY;
+			}
+			
+			aTempStartX += aX;
+			aTempStartY += aY;
+			
+			aTempEndX += aX;
+			aTempEndY += aY;
+			
+			let bTempStartX = bStartX * bScaleX;
+			let bTempStartY = bStartY * bScaleY;
+			
+			let bTempEndX = bEndX * bScaleX;
+			let bTempEndY = bEndY * bScaleY;
+			
+			if (aRadian !== 0) {
+				
+				let cos = Math.cos(aRadian);
+				let sin = Math.sin(aRadian);
+				
+				bStartX -= bX;
+				bStartY -= bY;
+				
+				bTempStartX = cos * bStartX + sin * bStartY + bX;
+				bTempStartY = -sin * bStartX + cos * bStartY + bY;
+				
+				bEndX -= bX;
+				bEndY -= bY;
+				
+				bTempEndX = cos * bEndX + sin * bEndY + bX;
+				bTempEndY = -sin * bEndX + cos * bEndY + bY;
+			}
+			
+			bTempStartX += bX;
+			bTempStartY += bY;
+			
+			bTempEndX += bX;
+			bTempEndY += bY;
+			
+			let denom = (aTempEndX - aTempStartX) * (bTempEndY - bTempStartY) - (bTempEndX - bTempStartX) * (aTempEndY - aTempStartY);
+			
+			if (denom === 0) {
+				return false;
+			}
+			
+			else {
+				
+				let ua = ((bEndY - bTempStartY) * (bTempEndX - aTempStartX) + (bTempStartX - bTempEndX) * (bEndY - aTempStartY)) / denom;
+				let ub = ((aTempStartY - aTempEndY) * (bTempEndX - aTempStartX) + (aTempEndX - aTempStartX) * (bEndY - aTempStartY)) / denom;
+				
+				return 0 < ua && ua < 1 && 0 < ub && ub < 1;
+			}
+		};
+		
+		let checkLineCircle = self.checkLineCircle = (
+			lineX, lineY,
+			lineStartX, lineStartY,
+			lineEndX, lineEndY,
+			lineScaleX, lineScaleY,
+			lineRadian,
+			
+			circleX, circleY,
+			circleWidth, circleHeight,
+			circleScaleX, circleScaleY,
+			circleRadian
+		) => {
+			
+			let lineTempStartX = lineStartX * lineScaleX;
+			let lineTempStartY = lineStartY * lineScaleY;
+			
+			let lineTempEndX = lineEndX * lineScaleX;
+			let lineTempEndY = lineEndY * lineScaleY;
+			
+			if (lineRadian !== 0) {
+				
+				let cos = Math.cos(lineRadian);
+				let sin = Math.sin(lineRadian);
+				
+				lineStartX -= lineX;
+				lineStartY -= lineY;
+				
+				lineTempStartX = cos * lineStartX + sin * lineStartY + lineX;
+				lineTempStartY = -sin * lineStartX + cos * lineStartY + lineY;
+				
+				lineEndX -= lineX;
+				lineEndY -= lineY;
+				
+				lineTempEndX = cos * lineEndX + sin * lineEndY + lineX;
+				lineTempEndY = -sin * lineEndX + cos * lineEndY + lineY;
+			}
+			
+			lineTempStartX += lineX;
+			lineTempStartY += lineY;
+			
+			lineTempEndX += lineX;
+			lineTempEndY += lineY;
+			
+			lineTempStartX -= circleX;
+			lineTempStartY -= circleY;
+			
+			lineTempEndX -= circleX;
+			lineTempEndY -= circleY;
+			
+			let tempStartX = lineTempStartX;
+			let tempStartY = lineTempStartY;
+			
+			let tempEndX = lineTempEndX;
+			let tempEndY = lineTempEndY;
+			
+			if (circleRadian !== 0) {
+				
+				let cos = Math.cos(circleRadian);
+				let sin = Math.sin(circleRadian);
+				
+				tempStartX = cos * lineTempStartX + sin * lineTempStartY;
+				tempStartY = -sin * lineTempStartX + cos * lineTempStartY;
+				
+				tempEndX = cos * lineTempEndX + sin * lineTempEndY;
+				tempEndY = -sin * lineTempEndX + cos * lineTempEndY;
+			}
+			
+			circleWidth *= circleScaleX;
+			circleHeight *= circleScaleY;
+			
+			let m = (tempEndY - tempStartY) / (tempEndX - tempStartX);
+			
+			if (Math.abs(m) > 1024) {
+				return checkLineCircle(0, 0, tempStartY, tempStartX, tempEndY, tempEndX, 1, 1, 0, 0, 0, circleHeight, circleWidth, 1, 1, 0);
+			}
+			
+			if (checkPointInCircle(tempEndX, tempEndY, 0, 0, circleWidth, circleHeight, 1, 1, 0) === true) {
+				return true;
+			}
+			
+			let s = circleWidth * circleWidth / 4;
+			let t = circleHeight * circleHeight / 4;
+			
+			let k = tempStartY - (m * tempStartX);
+			
+			let a = 1 / s + m * m / t;
+			let b = 2 * m * k / t;
+			let c = k * k / t - 1;
+			
+			let discrim = b * b - 4 * a * c;
+			
+			if (discrim < 0) {
+				return false;
+			}
+			
+			discrim = Math.sqrt(discrim);
+			a *= 2;
+			
+			return checkBetween((-b - discrim) / a, tempStartX, tempEndX) === true || checkBetween((-b + discrim) / a, tempStartX, tempEndX) === true;
+		};
+		
+		let checkLineRect = self.checkLineRect = () => {
+			//TODO:
+		};
+		
+		let checkLinePolygon = self.checkLinePolygon = () => {
+			//TODO:
 		};
 		
 		let checkRectRect = self.checkRectRect = (ax, ay, aw, ah, asx, asy, ar, bx, by, bw, bh, bsx, bsy, br) => {
@@ -261,25 +384,25 @@ SkyEngine('Util').Collision = OBJECT({
 					bp4x = -cw + sh + bx;	bp4y = sw + ch + by;
 				}
 				
-				return checkLineLine(ap1x, ap1y, ap2x, ap2y, bp1x, bp1y, bp2x, bp2y) ||
-					checkLineLine(ap1x, ap1y, ap2x, ap2y, bp2x, bp2y, bp3x, bp3y) ||
-					checkLineLine(ap1x, ap1y, ap2x, ap2y, bp3x, bp3y, bp4x, bp4y) ||
-					checkLineLine(ap1x, ap1y, ap2x, ap2y, bp4x, bp4y, bp1x, bp1y) ||
+				return checkLineLine(0, 0, ap1x, ap1y, ap2x, ap2y, 1, 1, 0, 0, 0, bp1x, bp1y, bp2x, bp2y, 1, 1, 0) ||
+					checkLineLine(0, 0, ap1x, ap1y, ap2x, ap2y, 1, 1, 0, 0, 0, bp2x, bp2y, bp3x, bp3y, 1, 1, 0) ||
+					checkLineLine(0, 0, ap1x, ap1y, ap2x, ap2y, 1, 1, 0, 0, 0, bp3x, bp3y, bp4x, bp4y, 1, 1, 0) ||
+					checkLineLine(0, 0, ap1x, ap1y, ap2x, ap2y, 1, 1, 0, 0, 0, bp4x, bp4y, bp1x, bp1y, 1, 1, 0) ||
 					
-					checkLineLine(ap2x, ap2y, ap3x, ap3y, bp1x, bp1y, bp2x, bp2y) ||
-					checkLineLine(ap2x, ap2y, ap3x, ap3y, bp2x, bp2y, bp3x, bp3y) ||
-					checkLineLine(ap2x, ap2y, ap3x, ap3y, bp3x, bp3y, bp4x, bp4y) ||
-					checkLineLine(ap2x, ap2y, ap3x, ap3y, bp4x, bp4y, bp1x, bp1y) ||
+					checkLineLine(0, 0, ap2x, ap2y, ap3x, ap3y, 1, 1, 0, 0, 0, bp1x, bp1y, bp2x, bp2y, 1, 1, 0) ||
+					checkLineLine(0, 0, ap2x, ap2y, ap3x, ap3y, 1, 1, 0, 0, 0, bp2x, bp2y, bp3x, bp3y, 1, 1, 0) ||
+					checkLineLine(0, 0, ap2x, ap2y, ap3x, ap3y, 1, 1, 0, 0, 0, bp3x, bp3y, bp4x, bp4y, 1, 1, 0) ||
+					checkLineLine(0, 0, ap2x, ap2y, ap3x, ap3y, 1, 1, 0, 0, 0, bp4x, bp4y, bp1x, bp1y, 1, 1, 0) ||
 					
-					checkLineLine(ap3x, ap3y, ap4x, ap4y, bp1x, bp1y, bp2x, bp2y) ||
-					checkLineLine(ap3x, ap3y, ap4x, ap4y, bp2x, bp2y, bp3x, bp3y) ||
-					checkLineLine(ap3x, ap3y, ap4x, ap4y, bp3x, bp3y, bp4x, bp4y) ||
-					checkLineLine(ap3x, ap3y, ap4x, ap4y, bp4x, bp4y, bp1x, bp1y) ||
+					checkLineLine(0, 0, ap3x, ap3y, ap4x, ap4y, 1, 1, 0, 0, 0, bp1x, bp1y, bp2x, bp2y, 1, 1, 0) ||
+					checkLineLine(0, 0, ap3x, ap3y, ap4x, ap4y, 1, 1, 0, 0, 0, bp2x, bp2y, bp3x, bp3y, 1, 1, 0) ||
+					checkLineLine(0, 0, ap3x, ap3y, ap4x, ap4y, 1, 1, 0, 0, 0, bp3x, bp3y, bp4x, bp4y, 1, 1, 0) ||
+					checkLineLine(0, 0, ap3x, ap3y, ap4x, ap4y, 1, 1, 0, 0, 0, bp4x, bp4y, bp1x, bp1y, 1, 1, 0) ||
 					
-					checkLineLine(ap4x, ap4y, ap1x, ap1y, bp1x, bp1y, bp2x, bp2y) ||
-					checkLineLine(ap4x, ap4y, ap1x, ap1y, bp2x, bp2y, bp3x, bp3y) ||
-					checkLineLine(ap4x, ap4y, ap1x, ap1y, bp3x, bp3y, bp4x, bp4y) ||
-					checkLineLine(ap4x, ap4y, ap1x, ap1y, bp4x, bp4y, bp1x, bp1y);
+					checkLineLine(0, 0, ap4x, ap4y, ap1x, ap1y, 1, 1, 0, 0, 0, bp1x, bp1y, bp2x, bp2y, 1, 1, 0) ||
+					checkLineLine(0, 0, ap4x, ap4y, ap1x, ap1y, 1, 1, 0, 0, 0, bp2x, bp2y, bp3x, bp3y, 1, 1, 0) ||
+					checkLineLine(0, 0, ap4x, ap4y, ap1x, ap1y, 1, 1, 0, 0, 0, bp3x, bp3y, bp4x, bp4y, 1, 1, 0) ||
+					checkLineLine(0, 0, ap4x, ap4y, ap1x, ap1y, 1, 1, 0, 0, 0, bp4x, bp4y, bp1x, bp1y, 1, 1, 0);
 			}
 		};
 		
@@ -319,10 +442,78 @@ SkyEngine('Util').Collision = OBJECT({
 				p4x = -cosw + sinh + rx;	p4y = sinw + cosh + ry;
 			}
 			
-			return checkLineCircle(p1x, p1y, p2x, p2y, cx, cy, cw, ch, cr) ||
-				checkLineCircle(p2x, p2y, p3x, p3y, cx, cy, cw, ch, cr) ||
-				checkLineCircle(p3x, p3y, p4x, p4y, cx, cy, cw, ch, cr) ||
-				checkLineCircle(p4x, p4y, p1x, p1y, cx, cy, cw, ch, cr);
+			return checkLineCircle(0, 0, p1x, p1y, p2x, p2y, 1, 1, 0, cx, cy, cw, ch, 1, 1, cr) ||
+				checkLineCircle(0, 0, p2x, p2y, p3x, p3y, 1, 1, 0, cx, cy, cw, ch, 1, 1, cr) ||
+				checkLineCircle(0, 0, p3x, p3y, p4x, p4y, 1, 1, 0, cx, cy, cw, ch, 1, 1, cr) ||
+				checkLineCircle(0, 0, p4x, p4y, p1x, p1y, 1, 1, 0, cx, cy, cw, ch, 1, 1, cr);
+		};
+		
+		let checkRectPolygon = self.checkRectPolygon = (rx, ry, rw, rh, rsx, rsy, rr, px, py, ps, psx, psy, pr) => {
+			
+			let
+			p1x, p1y,
+			p2x, p2y,
+			p3x, p3y,
+			p4x, p4y;
+			
+			rw /= 2;
+			rh /= 2;
+			
+			if (rr === 0) {
+				p1x = rx - rw;	p1y = ry - rh;
+				p2x = rx + rw;	p2y = ry - rh;
+				p3x = rx + rw;	p3y = ry + rh;
+				p4x = rx - rw;	p4y = ry + rh;
+			}
+			
+			else {
+				
+				let cos = Math.cos(-rr);
+				let sin = Math.sin(-rr);
+				
+				let cosw = cos * rw;	let sinw = sin * rw;
+				let cosh = cos * rh;	let sinh = sin * rh;
+				
+				p1x = -cosw - sinh + rx;	p1y = sinw - cosh + ry;
+				p2x = cosw - sinh + rx;		p2y = -sinw - cosh + ry;
+				p3x = cosw + sinh + rx;		p3y = -sinw + cosh + ry;
+				p4x = -cosw + sinh + rx;	p4y = sinw + cosh + ry;
+			}
+		
+			let i, j, length = ps.length, result = false;
+			
+			for (i = 0, j = length - 1; result !== true && i < length; j = i, i += 1) {
+				
+				let
+				t1x = ps[i].x * psx,
+				t1y = ps[i].y * psy,
+				t2x = ps[j].x * psx,
+				t2y = ps[j].y * psy,
+				
+				p5x, p5y,
+				p6x, p6y;
+				
+				if (pr === 0) {
+					p5x = t1x + px;	p5y = t1y + py;
+					p6x = t2x + px;	p6y = t2y + py;
+				}
+				
+				else {
+					
+					let cos = Math.cos(-pr);
+					let sin = Math.sin(-pr);
+					
+					p5x = cos * t1x + sin * t1y + px;	p5y = -sin * t1x + cos * t1y + py;
+					p6x = cos * t2x + sin * t2y + px;	p6y = -sin * t2x + cos * t2y + py;
+				}
+				
+				result = checkLineLine(0, 0, p1x, p1y, p2x, p2y, 1, 1, 0, 0, 0, p5x, p5y, p6x, p6y, 1, 1, 0) ||
+					checkLineLine(0, 0, p2x, p2y, p3x, p3y, 1, 1, 0, 0, 0, p5x, p5y, p6x, p6y, 1, 1, 0) ||
+					checkLineLine(0, 0, p3x, p3y, p4x, p4y, 1, 1, 0, 0, 0, p5x, p5y, p6x, p6y, 1, 1, 0) ||
+					checkLineLine(0, 0, p4x, p4y, p1x, p1y, 1, 1, 0, 0, 0, p5x, p5y, p6x, p6y, 1, 1, 0);
+			}
+			
+			return result;
 		};
 		
 		let checkCircleCircle = self.checkCircleCircle = (ax, ay, aw, ah, asx, asy, ar, bx, by, bw, bh, bsx, bsy, br) => {
@@ -355,8 +546,8 @@ SkyEngine('Util').Collision = OBJECT({
 			}
 			
 			if (
-			checkPointCircle(bx, by, ax, ay, aw, ah, 1, 1, ar) === true ||
-			checkPointCircle(ax, ay, bx, by, bw, bh, 1, 1, br) === true) {
+			checkPointInCircle(bx, by, ax, ay, aw, ah, 1, 1, ar) === true ||
+			checkPointInCircle(ax, ay, bx, by, bw, bh, 1, 1, br) === true) {
 				return true;
 			}
 			
@@ -434,74 +625,6 @@ SkyEngine('Util').Collision = OBJECT({
 			return descrim < 0 || (descrim > 0 && P < 0 && D < 0) || (descrim === 0 && (D !== 0 || P <= 0));
 		};
 		
-		let checkRectPolygon = self.checkRectPolygon = (rx, ry, rw, rh, rsx, rsy, rr, px, py, ps, psx, psy, pr) => {
-			
-			let
-			p1x, p1y,
-			p2x, p2y,
-			p3x, p3y,
-			p4x, p4y;
-			
-			rw /= 2;
-			rh /= 2;
-			
-			if (rr === 0) {
-				p1x = rx - rw;	p1y = ry - rh;
-				p2x = rx + rw;	p2y = ry - rh;
-				p3x = rx + rw;	p3y = ry + rh;
-				p4x = rx - rw;	p4y = ry + rh;
-			}
-			
-			else {
-				
-				let cos = Math.cos(-rr);
-				let sin = Math.sin(-rr);
-				
-				let cosw = cos * rw;	let sinw = sin * rw;
-				let cosh = cos * rh;	let sinh = sin * rh;
-				
-				p1x = -cosw - sinh + rx;	p1y = sinw - cosh + ry;
-				p2x = cosw - sinh + rx;		p2y = -sinw - cosh + ry;
-				p3x = cosw + sinh + rx;		p3y = -sinw + cosh + ry;
-				p4x = -cosw + sinh + rx;	p4y = sinw + cosh + ry;
-			}
-		
-			let i, j, length = ps.length, result = false;
-			
-			for (i = 0, j = length - 1; result !== true && i < length; j = i, i += 1) {
-				
-				let
-				t1x = ps[i].x * psx,
-				t1y = ps[i].y * psy,
-				t2x = ps[j].x * psx,
-				t2y = ps[j].y * psy,
-				
-				p5x, p5y,
-				p6x, p6y;
-				
-				if (pr === 0) {
-					p5x = t1x + px;	p5y = t1y + py;
-					p6x = t2x + px;	p6y = t2y + py;
-				}
-				
-				else {
-					
-					let cos = Math.cos(-pr);
-					let sin = Math.sin(-pr);
-					
-					p5x = cos * t1x + sin * t1y + px;	p5y = -sin * t1x + cos * t1y + py;
-					p6x = cos * t2x + sin * t2y + px;	p6y = -sin * t2x + cos * t2y + py;
-				}
-				
-				result = checkLineLine(p1x, p1y, p2x, p2y, p5x, p5y, p6x, p6y) ||
-					checkLineLine(p2x, p2y, p3x, p3y, p5x, p5y, p6x, p6y) ||
-					checkLineLine(p3x, p3y, p4x, p4y, p5x, p5y, p6x, p6y) ||
-					checkLineLine(p4x, p4y, p1x, p1y, p5x, p5y, p6x, p6y);
-			}
-			
-			return result;
-		};
-		
 		let checkCirclePolygon = self.checkCirclePolygon = (cx, cy, cw, ch, csx, csy, cr, px, py, ps, psx, psy, pr) => {
 			
 			cw *= csx;
@@ -534,7 +657,7 @@ SkyEngine('Util').Collision = OBJECT({
 					p2x = cos * t2x + sin * t2y + px;	p2y = -sin * t2x + cos * t2y + py;
 				}
 				
-				result = checkLineCircle(p1x, p1y, p2x, p2y, cx, cy, cw, ch, cr);
+				result = checkLineCircle(0, 0, p1x, p1y, p2x, p2y, 1, 1, 0, cx, cy, cw, ch, 1, 1, cr);
 			}
 			
 			return result;
@@ -596,7 +719,7 @@ SkyEngine('Util').Collision = OBJECT({
 						p4x = cos * t4x + sin * t4y + bx;	p4y = -sin * t4x + cos * t4y + by;
 					}
 					
-					result = checkLineLine(p1x, p1y, p2x, p2y, p3x, p3y, p4x, p4y);
+					result = checkLineLine(0, 0, p1x, p1y, p2x, p2y, 1, 1, 0, 0, 0, p3x, p3y, p4x, p4y, 1, 1, 0);
 				}
 			}
 			

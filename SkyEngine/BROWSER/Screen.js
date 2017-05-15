@@ -182,10 +182,10 @@ SkyEngine.Screen = OBJECT({
 			if (CONFIG.SkyEngine.isDebugMode === true) {
 				
 				context.beginPath();
-				context.strokeStyle = color;
 				
 				node.drawArea(context);
 				
+				context.strokeStyle = color;
 				context.stroke();
 				context.closePath();
 			}

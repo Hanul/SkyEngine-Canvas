@@ -6,6 +6,15 @@ SkyEngineShowcase.DrawTest = CLASS({
 	
 	init : (inner) => {
 		
+		let line = SkyEngine.Line({
+			y : -140,
+			startX : -100,
+			startY : -10,
+			endX : 100,
+			endY : 10,
+			border : '5px solid red'
+		}).appendTo(SkyEngine.Screen);
+		
 		let rect = SkyEngine.Rect({
 			width : 300,
 			height : 200,
@@ -34,6 +43,9 @@ SkyEngineShowcase.DrawTest = CLASS({
 		}).appendTo(SkyEngine.Screen);
 		
 		inner.on('close', () => {
+			
+			line.remove();
+			line = undefined;
 			
 			rect.remove();
 			rect = undefined;
