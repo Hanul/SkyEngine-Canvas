@@ -2,103 +2,122 @@ SkyEngine('Util').Collision = OBJECT({
 
 	init : (inner, self) => {
 		
-		// c in a-b
 		let checkBetween = (
-			c,
-			a, b
+			point,
+			start, end
 		) => {
-			return (a - c) * (b - c) <= 0;
+			return (start - point) * (end - point) <= 0;
 		};
 		
-		// a-b, c-d
 		let checkOverlap = (
-			a, b,
-			c, d
+			aStart, aEnd,
+			bStart, bEnd
 		) => {
-			return checkBetween(c < d ? c : d, a, b) === true || checkBetween(a < b ? a : b, c, d) === true;
+			return checkBetween(bStart < bEnd ? bStart : bEnd, aStart, aEnd) === true || checkBetween(aStart < aEnd ? aStart : aEnd, bStart, bEnd) === true;
 		};
 		
-		let checkPointInRect = self.checkPointInRect = (px, py, cx, cy, w, h, sx, sy, r) => {
+		let checkPointInRect = self.checkPointInRect = (
+			pointX, pointY,
 			
-			w *= sx;
-			h *= sy;
+			rectX, rectY,
+			rectWidth, rectHeight,
+			rectScaleX, rectScaleY,
+			rectRadian
+		) => {
 			
-			let tx = px;
-			let ty = py;
+			let tempX = pointX;
+			let tempY = pointY;
 			
-			if (r !== 0) {
+			if (rectRadian !== 0) {
 				
-				let cos = Math.cos(r);
-				let sin = Math.sin(r);
+				let cos = Math.cos(rectRadian);
+				let sin = Math.sin(rectRadian);
 				
-				px -= cx;
-				py -= cy;
+				pointX -= rectX;
+				pointY -= rectY;
 				
-				tx = cos * px + sin * py + cx;
-				ty = -sin * px + cos * py + cy;
+				tempX = rectX + cos * pointX + sin * pointY;
+				tempY = rectY - sin * pointX + cos * pointY;
 			}
 			
-			cx -= w / 2;
-			cy -= h / 2;
+			rectWidth *= rectScaleX;
+			rectHeight *= rectScaleY;
 			
-			return checkBetween(tx, cx, cx + w) === true && checkBetween(ty, cy, cy + h) === true;
+			rectX -= rectWidth / 2;
+			rectY -= rectHeight / 2;
+			
+			return checkBetween(tempX, rectX, rectX + rectWidth) === true && checkBetween(tempY, rectY, rectY + rectHeight) === true;
 		};
 		
-		let checkPointInCircle = self.checkPointInCircle = (px, py, cx, cy, w, h, sx, sy, r) => {
+		let checkPointInCircle = self.checkPointInCircle = (
+			pointX, pointY,
 			
-			w *= sx;
-			h *= sy;
+			circleX, circleY,
+			circleWidth, circleHeight,
+			circleScaleX, circleScaleY,
+			circleRadian
+		) => {
 
 			let cos = 1;
 			let sin = 0;
 			
-			px -= cx;
-			py -= cy;
-			
-			if (r !== 0) {
-				cos = Math.cos(r);
-				sin = Math.sin(r);
+			if (circleRadian !== 0) {
+				cos = Math.cos(circleRadian);
+				sin = Math.sin(circleRadian);
 			}
-
-			let tx = 2 * (cos * px + sin * py) / w;
-			let ty = 2 * (sin * px - cos * py) / h;
 			
-			return ((tx * tx) + (ty * ty)) <= 1;
+			circleWidth *= circleScaleX;
+			circleHeight *= circleScaleY;
+			
+			pointX -= circleX;
+			pointY -= circleY;
+
+			let tempX = 2 * (cos * pointX + sin * pointY) / circleWidth;
+			let tempY = 2 * (sin * pointX - cos * pointY) / circleHeight;
+			
+			return tempX * tempX + tempY * tempY <= 1;
 		};
 		
-		let checkPointInPolygon = self.checkPointInPolygon = (px, py, cx, cy, ps, sx, sy, r) => {
+		let checkPointInPolygon = self.checkPointInPolygon = (
+			pointX, pointY,
 			
-			let tx = px;
-			let ty = py;
+			polygonX, polygonY,
+			points,
+			polygonScaleX, polygonScaleY,
+			polygonRadian
+		) => {
 			
-			if (r !== 0) {
+			let tempX = pointX;
+			let tempY = pointY;
+			
+			if (polygonRadian !== 0) {
 				
-				let cos = Math.cos(r);
-				let sin = Math.sin(r);
+				let cos = Math.cos(polygonRadian);
+				let sin = Math.sin(polygonRadian);
 				
-				px -= cx;
-				py -= cy;
+				pointX -= polygonX;
+				pointY -= polygonY;
 				
-				tx = cos * px + sin * py + cx;
-				ty = -sin * px + cos * py + cy;
+				tempX = polygonX + cos * pointX + sin * pointY;
+				tempY = polygonY - sin * pointX + cos * pointY;
 			}
 			
-			tx -= cx;
-			ty -= cy;
+			tempX -= polygonX;
+			tempY -= polygonY;
 			
 			let result = false;
 			
-			let i, j, length = ps.length;
+			let length = points.length;
 			
-			for (i = 0, j = length - 1; i < length; j = i, i += 1) {
+			for (let i = 0, j = length - 1; i < length; j = i, i += 1) {
 				
-				let ix = ps[i].x * sx;
-				let iy = ps[i].y * sy;
+				let ix = ps[i].x * polygonScaleX;
+				let iy = ps[i].y * polygonScaleY;
 				
-				let jx = ps[j].x * sx;
-				let jy = ps[j].y * sy;
+				let jx = ps[j].x * polygonScaleX;
+				let jy = ps[j].y * polygonScaleY;
 				
-				if ((iy > ty) !== (jy > ty) && tx < (jx - ix) * (ty - iy) / (jy - iy) + ix) {
+				if ((iy > tempY) !== (jy > tempY) && tempX < (jx - ix) * (tempY - iy) / (jy - iy) + ix) {
 					result = !result;
 				}
 			}
@@ -120,28 +139,37 @@ SkyEngine('Util').Collision = OBJECT({
 			bRadian
 		) => {
 			
-			let aTempStartX = aStartX * aScaleX;
-			let aTempStartY = aStartY * aScaleY;
+			let aTempStartX;
+			let aTempStartY;
 			
-			let aTempEndX = aEndX * aScaleX;
-			let aTempEndY = aEndY * aScaleY;
+			let aTempEndX;
+			let aTempEndY;
 			
-			if (aRadian !== 0) {
+			if (aRadian === 0) {
 				
+				aTempStartX = aStartX * aScaleX;
+				aTempStartY = aStartY * aScaleY;
+				
+				aTempEndX = aEndX * aScaleX;
+				aTempEndY = aEndY * aScaleY;
+			}
+			
+			else {
+					
 				let cos = Math.cos(aRadian);
 				let sin = Math.sin(aRadian);
 				
 				aStartX -= aX;
 				aStartY -= aY;
 				
-				aTempStartX = cos * aStartX + sin * aStartY + aX;
-				aTempStartY = -sin * aStartX + cos * aStartY + aY;
+				aTempStartX = aX + cos * aStartX + sin * aStartY;
+				aTempStartY = aY - sin * aStartX + cos * aStartY;
 				
 				aEndX -= aX;
 				aEndY -= aY;
 				
-				aTempEndX = cos * aEndX + sin * aEndY + aX;
-				aTempEndY = -sin * aEndX + cos * aEndY + aY;
+				aTempEndX = aX + cos * aEndX + sin * aEndY;
+				aTempEndY = aY - sin * aEndX + cos * aEndY;
 			}
 			
 			aTempStartX += aX;
@@ -150,28 +178,37 @@ SkyEngine('Util').Collision = OBJECT({
 			aTempEndX += aX;
 			aTempEndY += aY;
 			
-			let bTempStartX = bStartX * bScaleX;
-			let bTempStartY = bStartY * bScaleY;
+			let bTempStartX;
+			let bTempStartY;
 			
-			let bTempEndX = bEndX * bScaleX;
-			let bTempEndY = bEndY * bScaleY;
+			let bTempEndX;
+			let bTempEndY;
 			
-			if (aRadian !== 0) {
+			if (bRadian === 0) {
 				
-				let cos = Math.cos(aRadian);
-				let sin = Math.sin(aRadian);
+				bTempStartX = bStartX * bScaleX;
+				bTempStartY = bStartY * bScaleY;
+				
+				bTempEndX = bEndX * bScaleX;
+				bTempEndY = bEndY * bScaleY;
+			}
+			
+			else {
+				
+				let cos = Math.cos(bRadian);
+				let sin = Math.sin(bRadian);
 				
 				bStartX -= bX;
 				bStartY -= bY;
 				
-				bTempStartX = cos * bStartX + sin * bStartY + bX;
-				bTempStartY = -sin * bStartX + cos * bStartY + bY;
+				bTempStartX = bX + cos * bStartX + sin * bStartY;
+				bTempStartY = bY - sin * bStartX + cos * bStartY;
 				
 				bEndX -= bX;
 				bEndY -= bY;
 				
-				bTempEndX = cos * bEndX + sin * bEndY + bX;
-				bTempEndY = -sin * bEndX + cos * bEndY + bY;
+				bTempEndX = bX + cos * bEndX + sin * bEndY;
+				bTempEndY = bY - sin * bEndX + cos * bEndY;
 			}
 			
 			bTempStartX += bX;
@@ -180,19 +217,7 @@ SkyEngine('Util').Collision = OBJECT({
 			bTempEndX += bX;
 			bTempEndY += bY;
 			
-			let denom = (aTempEndX - aTempStartX) * (bTempEndY - bTempStartY) - (bTempEndX - bTempStartX) * (aTempEndY - aTempStartY);
-			
-			if (denom === 0) {
-				return false;
-			}
-			
-			else {
-				
-				let ua = ((bEndY - bTempStartY) * (bTempEndX - aTempStartX) + (bTempStartX - bTempEndX) * (bEndY - aTempStartY)) / denom;
-				let ub = ((aTempStartY - aTempEndY) * (bTempEndX - aTempStartX) + (aTempEndX - aTempStartX) * (bEndY - aTempStartY)) / denom;
-				
-				return 0 < ua && ua < 1 && 0 < ub && ub < 1;
-			}
+			return checkOverlap(aTempStartX, aTempEndX, bTempStartX, bTempEndX) && checkOverlap(aTempStartY, aTempEndY, bTempStartY, bTempEndY);
 		};
 		
 		let checkLineCircle = self.checkLineCircle = (
@@ -208,13 +233,22 @@ SkyEngine('Util').Collision = OBJECT({
 			circleRadian
 		) => {
 			
-			let lineTempStartX = lineStartX * lineScaleX;
-			let lineTempStartY = lineStartY * lineScaleY;
+			let lineTempStartX;
+			let lineTempStartY;
 			
-			let lineTempEndX = lineEndX * lineScaleX;
-			let lineTempEndY = lineEndY * lineScaleY;
+			let lineTempEndX;
+			let lineTempEndY;
 			
-			if (lineRadian !== 0) {
+			if (lineRadian === 0) {
+				
+				lineTempStartX = lineStartX * lineScaleX;
+				lineTempStartY = lineStartY * lineScaleY;
+				
+				lineTempEndX = lineEndX * lineScaleX;
+				lineTempEndY = lineEndY * lineScaleY;
+			}
+			
+			else {
 				
 				let cos = Math.cos(lineRadian);
 				let sin = Math.sin(lineRadian);
@@ -222,27 +256,21 @@ SkyEngine('Util').Collision = OBJECT({
 				lineStartX -= lineX;
 				lineStartY -= lineY;
 				
-				lineTempStartX = cos * lineStartX + sin * lineStartY + lineX;
-				lineTempStartY = -sin * lineStartX + cos * lineStartY + lineY;
+				lineTempStartX = lineX + cos * lineStartX + sin * lineStartY;
+				lineTempStartY = lineY - sin * lineStartX + cos * lineStartY;
 				
 				lineEndX -= lineX;
 				lineEndY -= lineY;
 				
-				lineTempEndX = cos * lineEndX + sin * lineEndY + lineX;
-				lineTempEndY = -sin * lineEndX + cos * lineEndY + lineY;
+				lineTempEndX = lineX + cos * lineEndX + sin * lineEndY;
+				lineTempEndY = lineY - sin * lineEndX + cos * lineEndY;
 			}
 			
-			lineTempStartX += lineX;
-			lineTempStartY += lineY;
+			lineTempStartX += lineX - circleX;
+			lineTempStartY += lineY - circleY;
 			
-			lineTempEndX += lineX;
-			lineTempEndY += lineY;
-			
-			lineTempStartX -= circleX;
-			lineTempStartY -= circleY;
-			
-			lineTempEndX -= circleX;
-			lineTempEndY -= circleY;
+			lineTempEndX += lineX - circleX;
+			lineTempEndY += lineY - circleY;
 			
 			let tempStartX = lineTempStartX;
 			let tempStartY = lineTempStartY;
@@ -296,15 +324,112 @@ SkyEngine('Util').Collision = OBJECT({
 			return checkBetween((-b - discrim) / a, tempStartX, tempEndX) === true || checkBetween((-b + discrim) / a, tempStartX, tempEndX) === true;
 		};
 		
-		let checkLineRect = self.checkLineRect = () => {
-			//TODO:
+		let checkLineRect = self.checkLineRect = (
+			lineX, lineY,
+			lineStartX, lineStartY,
+			lineEndX, lineEndY,
+			lineScaleX, lineScaleY,
+			lineRadian,
+			
+			rectX, rectY,
+			rectWidth, rectHeight,
+			rectScaleX, rectScaleY,
+			rectRadian
+		) => {
+			
+			let lineTempStartX;
+			let lineTempStartY;
+			
+			let lineTempEndX;
+			let lineTempEndY;
+			
+			if (lineRadian === 0) {
+				
+				lineTempStartX = lineStartX * lineScaleX;
+				lineTempStartY = lineStartY * lineScaleY;
+				
+				lineTempEndX = lineEndX * lineScaleX;
+				lineTempEndY = lineEndY * lineScaleY;
+			}
+			
+			else {
+				
+				let cos = Math.cos(lineRadian);
+				let sin = Math.sin(lineRadian);
+				
+				lineStartX -= lineX;
+				lineStartY -= lineY;
+				
+				lineTempStartX = lineX + cos * lineStartX + sin * lineStartY;
+				lineTempStartY = lineY - sin * lineStartX + cos * lineStartY;
+				
+				lineEndX -= lineX;
+				lineEndY -= lineY;
+				
+				lineTempEndX = lineX + cos * lineEndX + sin * lineEndY;
+				lineTempEndY = lineY - sin * lineEndX + cos * lineEndY;
+			}
+			
+			lineTempStartX += lineX;
+			lineTempStartY += lineY;
+			
+			lineTempEndX += lineX;
+			lineTempEndY += lineY;
+			
+			rectWidth *= rectScaleX / 2;
+			rectHeight *= rectScaleY / 2;
+			
+			let rectPoint1X, rectPoint1Y;
+			let rectPoint2X, rectPoint2Y;
+			let rectPoint3X, rectPoint3Y;
+			let rectPoint4X, rectPoint4Y;
+			
+			if (rectRadian === 0) {
+				
+				rectPoint1X = rectX - rectWidth;	rectPoint1Y = rectY - rectHeight;
+				rectPoint2X = rectX + rectWidth;	rectPoint2Y = rectY - rectHeight;
+				rectPoint3X = rectX + rectWidth;	rectPoint3Y = rectY + rectHeight;
+				rectPoint4X = rectX - rectWidth;	rectPoint4Y = rectY + rectHeight;
+			}
+			
+			else {
+				
+				let cos = Math.cos(-rectRadian);
+				let sin = Math.sin(-rectRadian);
+				
+				let cw = cos * rectWidth;	let ch = cos * rectHeight;
+				let sw = sin * rectWidth;	let sh = sin * rectHeight;
+				
+				rectPoint1X = rectX - cw - sh;	rectPoint1Y = rectY + sw - ch;
+				rectPoint2X = rectX + cw - sh;	rectPoint2Y = rectY - sw - ch;
+				rectPoint3X = rectX + cw + sh;	rectPoint3Y = rectY - sw + ch;
+				rectPoint4X = rectX - cw + sh;	rectPoint4Y = rectY + sw + ch;
+			}
+			
+			return (checkOverlap(lineTempStartX, lineTempEndX, rectPoint1X, rectPoint2X) && checkOverlap(lineTempStartY, lineTempEndY, rectPoint1Y, rectPoint2Y)) ||
+				(checkOverlap(lineTempStartX, lineTempEndX, rectPoint2X, rectPoint3X) && checkOverlap(lineTempStartY, lineTempEndY, rectPoint2Y, rectPoint3Y)) ||
+				(checkOverlap(lineTempStartX, lineTempEndX, rectPoint3X, rectPoint4X) && checkOverlap(lineTempStartY, lineTempEndY, rectPoint3Y, rectPoint4Y)) ||
+				(checkOverlap(lineTempStartX, lineTempEndX, rectPoint4X, rectPoint1X) && checkOverlap(lineTempStartY, lineTempEndY, rectPoint4Y, rectPoint1Y));
 		};
 		
-		let checkLinePolygon = self.checkLinePolygon = () => {
-			//TODO:
+		let checkLinePolygon = self.checkLinePolygon = (
+			lineX, lineY,
+			lineStartX, lineStartY,
+			lineEndX, lineEndY,
+			lineScaleX, lineScaleY,
+			lineRadian,
+			
+			polygonX, polygonY,
+			points,
+			polygonScaleX, polygonScaleY,
+			polygonRadian
+		) => {
+			//TODO: checkOverlap 하나만으로 될듯
 		};
 		
 		let checkRectRect = self.checkRectRect = (ax, ay, aw, ah, asx, asy, ar, bx, by, bw, bh, bsx, bsy, br) => {
+			
+			//TODO: checkOverlap 하나만으로 될듯
 			
 			aw *= asx;
 			ah *= asy;
@@ -449,6 +574,8 @@ SkyEngine('Util').Collision = OBJECT({
 		};
 		
 		let checkRectPolygon = self.checkRectPolygon = (rx, ry, rw, rh, rsx, rsy, rr, px, py, ps, psx, psy, pr) => {
+			
+			//TODO: checkOverlap 하나만으로 될듯
 			
 			let
 			p1x, p1y,
@@ -664,6 +791,8 @@ SkyEngine('Util').Collision = OBJECT({
 		};
 		
 		let checkPolygonPolygon = self.checkPolygonPolygon = (ax, ay, aps, asx, asy, ar, bx, by, bps, bsx, bsy, br) => {
+			
+			//TODO: checkOverlap 하나만으로 될듯
 			
 			let i, j, al = aps.length, result = false;
 			
