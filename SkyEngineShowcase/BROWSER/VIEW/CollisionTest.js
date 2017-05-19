@@ -38,8 +38,8 @@ SkyEngineShowcase.CollisionTest = CLASS({
 		}).appendTo(SkyEngine.Screen);
 		
 		rect.addCollider(SkyEngine.Rect({
-			width : 60,
-			height : 40,
+			//width : 60,
+			//height : 40,
 			c : SkyEngine.Rect({
 				width : 40,
 				height : 60
@@ -64,11 +64,9 @@ SkyEngineShowcase.CollisionTest = CLASS({
 		circle.addCollider(SkyEngine.Rect({
 			//width : 60,
 			//height : 40,
-			c : SkyEngine.Line({
-				startX : -100,
-				startY : -10,
-				endX : 100,
-				endY : 10
+			c : SkyEngine.Rect({
+				width : 40,
+				height : 60
 			})
 		}));
 		
