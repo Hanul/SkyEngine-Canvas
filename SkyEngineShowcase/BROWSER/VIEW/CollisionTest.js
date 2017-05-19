@@ -24,7 +24,7 @@ SkyEngineShowcase.CollisionTest = CLASS({
 		
 		let rect = SkyEngine.Rect({
 			x : -50,
-			y : -50,
+			y : 80,
 			width : 60,
 			height : 40,
 			color : 'green',
@@ -62,11 +62,13 @@ SkyEngineShowcase.CollisionTest = CLASS({
 		}).appendTo(SkyEngine.Screen);
 		
 		circle.addCollider(SkyEngine.Rect({
-			width : 60,
-			height : 40,
-			c : SkyEngine.Rect({
-				width : 40,
-				height : 60
+			//width : 60,
+			//height : 40,
+			c : SkyEngine.Line({
+				startX : -100,
+				startY : -10,
+				endX : 100,
+				endY : 10
 			})
 		}));
 		
@@ -95,8 +97,8 @@ SkyEngineShowcase.CollisionTest = CLASS({
 		});
 		
 		let polygon = SkyEngine.Polygon({
-			x : 50,
-			y : 50,
+			x : 100,
+			y : 80,
 			points : [{
 				x : -30,
 				y : 50

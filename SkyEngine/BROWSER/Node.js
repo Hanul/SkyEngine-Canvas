@@ -1006,7 +1006,7 @@ SkyEngine.Node = CLASS({
 		let checkArea = self.checkArea = (area) => {
 			
 			return childNodes.every((childNode) => {
-				return childNode.checkArea(area) !== true;
+				return childNode.checkArea(area) !== true && (childNode.type === area.type || area.checkArea(childNode) !== true);
 			}) !== true;
 		};
 		
