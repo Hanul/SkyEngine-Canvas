@@ -8,6 +8,11 @@ SkyEngineShowcase.MAIN = METHOD({
 		});
 		
 		SkyEngineShowcase.MATCH_VIEW({
+			uri : 'hello',
+			target : SkyEngineShowcase.HelloSkyEngine
+		});
+		
+		SkyEngineShowcase.MATCH_VIEW({
 			uri : 'test/draw',
 			target : SkyEngineShowcase.DrawTest
 		});
@@ -55,11 +60,6 @@ SkyEngineShowcase.MAIN = METHOD({
 		SkyEngineShowcase.MATCH_VIEW({
 			uri : 'test/collision',
 			target : SkyEngineShowcase.CollisionTest
-		});
-		
-		SkyEngineShowcase.MATCH_VIEW({
-			uri : 'hello',
-			target : SkyEngineShowcase.HelloSkyEngine
 		});
 	}
 });

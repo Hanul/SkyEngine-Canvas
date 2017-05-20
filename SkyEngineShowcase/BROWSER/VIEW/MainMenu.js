@@ -29,6 +29,18 @@ SkyEngineShowcase.MainMenu = CLASS({
 				},
 				c : [LI({
 					c : A({
+						c : 'Hello, SkyEngine!',
+						on : {
+							tap : () => {
+								SkyEngineShowcase.GO('hello');
+							}
+						}
+					})
+				}), LI({
+					style : {
+						marginTop : 15
+					},
+					c : A({
 						c : '드로우 테스트',
 						on : {
 							tap : () => {
@@ -141,18 +153,6 @@ SkyEngineShowcase.MainMenu = CLASS({
 						on : {
 							tap : () => {
 								SkyEngineShowcase.GO('test/collision');
-							}
-						}
-					})
-				}), LI({
-					style : {
-						marginTop : 15
-					},
-					c : A({
-						c : 'Hello, SkyEngine!',
-						on : {
-							tap : () => {
-								SkyEngineShowcase.GO('hello');
 							}
 						}
 					})

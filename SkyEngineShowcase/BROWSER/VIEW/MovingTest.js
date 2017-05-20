@@ -112,12 +112,8 @@ SkyEngineShowcase.MovingTest = CLASS({
 		});
 		
 		inner.on('close', () => {
-			
 			character.remove();
-			character = undefined;
-			
 			delay.remove();
-			delay = undefined;
 		});
 	}
 });

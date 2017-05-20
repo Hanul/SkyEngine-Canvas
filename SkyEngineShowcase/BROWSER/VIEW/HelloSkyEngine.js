@@ -11,9 +11,7 @@ SkyEngineShowcase.HelloSkyEngine = CLASS({
 		}).appendTo(SkyEngine.Screen);
 		
 		inner.on('close', () => {
-			
 			image.remove();
-			image = undefined;
 		});
 	}
 });

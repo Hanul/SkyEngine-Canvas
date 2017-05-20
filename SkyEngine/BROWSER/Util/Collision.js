@@ -209,7 +209,7 @@ SkyEngine('Util').Collision = OBJECT({
 				let ua = ((bTempEndY - bTempStartY) * (bTempEndX - aTempStartX) + (bTempStartX - bTempEndX) * (bTempEndY - aTempStartY)) / denom;
 				let ub = ((aTempStartY - aTempEndY) * (bTempEndX - aTempStartX) + (aTempEndX - aTempStartX) * (bTempEndY - aTempStartY)) / denom;
 				
-				return 0 < ua && ua < 1 && 0 < ub && ub < 1;
+				return 0 <= ua && ua <= 1 && 0 <= ub && ub <= 1;
 			}
 		};
 		

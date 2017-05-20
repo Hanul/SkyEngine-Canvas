@@ -191,21 +191,11 @@ SkyEngineShowcase.CollisionTest = CLASS({
 		});
 		
 		inner.on('close', () => {
-			
 			line.remove();
-			line = undefined;
-			
 			rect.remove();
-			rect = undefined;
-			
 			circle.remove();
-			circle = undefined;
-			
 			polygon.remove();
-			polygon = undefined;
-			
 			delay.remove();
-			delay = undefined;
 		});
 	}
 });

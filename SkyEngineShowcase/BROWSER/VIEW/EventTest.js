@@ -122,18 +122,10 @@ SkyEngineShowcase.EventTest = CLASS({
 		}));
 		
 		inner.on('close', () => {
-			
 			rect.remove();
-			rect = undefined;
-			
 			circle.remove();
-			circle = undefined;
-			
 			polygon.remove();
-			polygon = undefined;
-			
 			character.remove();
-			character = undefined;
 		});
 	}
 });

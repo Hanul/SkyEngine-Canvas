@@ -70,12 +70,8 @@ SkyEngineShowcase.NodeTest = CLASS({
 		});
 		
 		inner.on('close', () => {
-			
 			man.remove();
-			man = undefined;
-			
 			delay.remove();
-			delay = undefined;
 		});
 	}
 });

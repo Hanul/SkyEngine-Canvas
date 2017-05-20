@@ -75,6 +75,9 @@ SkyEngine.Node = CLASS({
 		// real properties
 		let realX, realY, realScaleX, realScaleY, realRadian;
 		
+		// before properties
+		let beforeX, beforeY;
+		
 		let parentNode;
 		let childNodes = [];
 		
@@ -217,6 +220,10 @@ SkyEngine.Node = CLASS({
 		let getRealScaleX = self.getRealScaleX = () =>							{ return realScaleX; };
 		let getRealScaleY = self.getRealScaleY = () =>							{ return realScaleY; };
 		let getRealRadian = self.getRealRadian = (_toAlpha) =>					{ return realRadian; };
+		
+		// for before properties
+		let getBeforeX = self.getBeforeX = () =>								{ return beforeX; };
+		let getBeforeY = self.getBeforeY = () =>								{ return beforeY; };
 		
 		// 파라미터 초기화
 		if (params !== undefined) {
@@ -1034,7 +1041,10 @@ SkyEngine.Node = CLASS({
 			}) !== true;
 		};
 		
-		let step = self.step = (deltaTime, realSpeedX, realSpeedY, realScalingSpeedX, realScalingSpeedY, realRotationSpeed, realFadingSpeed) => {
+		let step = self.step = (deltaTime) => {
+			
+			beforeX = x;
+			beforeY = y;
 			
 			if (accelX !== 0) {
 				speedX += accelX * deltaTime / 1000;
@@ -1191,8 +1201,9 @@ SkyEngine.Node = CLASS({
 					alpha = 0;
 				}
 			}
-			
-			// check all collisions.
+		};
+		
+		let checkAllCollisions = self.checkAllCollisions = () => {
 			
 			collisionTargets.forEach((target, index, arr) => {
 				

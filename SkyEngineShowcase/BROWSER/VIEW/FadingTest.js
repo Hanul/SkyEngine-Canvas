@@ -25,7 +25,6 @@ SkyEngineShowcase.FadingTest = CLASS({
 		
 		inner.on('close', () => {
 			character.remove();
-			character = undefined;
 		});
 	}
 });

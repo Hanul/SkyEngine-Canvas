@@ -45,13 +45,8 @@ SkyEngineShowcase.FilterTest = CLASS({
 		inner.on('close', () => {
 			
 			rect.remove();
-			rect = undefined;
-			
 			circle.remove();
-			circle = undefined;
-			
 			character.remove();
-			character = undefined;
 			
 			SkyEngine.Screen.removeFilter();
 		});

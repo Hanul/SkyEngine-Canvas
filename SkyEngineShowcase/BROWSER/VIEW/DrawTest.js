@@ -43,18 +43,10 @@ SkyEngineShowcase.DrawTest = CLASS({
 		}).appendTo(SkyEngine.Screen);
 		
 		inner.on('close', () => {
-			
 			line.remove();
-			line = undefined;
-			
 			rect.remove();
-			rect = undefined;
-			
 			circle.remove();
-			circle = undefined;
-			
 			character.remove();
-			character = undefined;
 		});
 	}
 });
