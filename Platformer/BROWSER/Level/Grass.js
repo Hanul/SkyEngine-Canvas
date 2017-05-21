@@ -6,7 +6,7 @@ Platformer.Grass = CLASS({
 	
 	init : (inner) => {
 		
-		let gravity = 2000;
+		let gravity = 3000;
 		
 		SkyEngine.Screen.setScale(0.5);
 		
@@ -73,7 +73,7 @@ Platformer.Grass = CLASS({
 				player.setScaleX(1);
 			}
 			if (e.getKey() === ' ' && isPlayerOnGround === true) {
-				player.setSpeedY(-1000);
+				player.setSpeedY(-1200);
 				player.setAccelY(gravity);
 			}
 		});

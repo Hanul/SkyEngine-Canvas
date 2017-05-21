@@ -60,14 +60,14 @@ SkyEngine.Dom = CLASS({
 			draw = self.draw = (context) => {
 				
 				if (
-				originX !== self.getRealX() ||
-				originY !== self.getRealY() ||
+				originX !== self.getDrawingX() ||
+				originY !== self.getDrawingY() ||
 				originRadian !== self.getRealRadian() ||
 				originAlpha !== context.globalAlpha ||
 				originFilter !== context.filter) {
 					
-					originX = self.getRealX();
-					originY = self.getRealY();
+					originX = self.getDrawingX();
+					originY = self.getDrawingY();
 					originRadian = self.getRealRadian();
 					originAlpha = context.globalAlpha;
 					originFilter = context.filter;

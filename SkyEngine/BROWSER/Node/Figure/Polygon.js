@@ -42,8 +42,8 @@ SkyEngine.Polygon = CLASS({
 					pointX,
 					pointY,
 					
-					self.getRealX(),
-					self.getRealY(),
+					self.getDrawingX(),
+					self.getDrawingY(),
 					points,
 					self.getRealScaleX(),
 					self.getRealScaleY(),
@@ -64,8 +64,8 @@ SkyEngine.Polygon = CLASS({
 					
 					if (checkLinePolygon(
 						
-						area.getRealX(),
-						area.getRealY(),
+						area.getDrawingX(),
+						area.getDrawingY(),
 						area.getStartX(),
 						area.getStartY(),
 						area.getEndX(),
@@ -74,8 +74,8 @@ SkyEngine.Polygon = CLASS({
 						area.getRealScaleY(),
 						area.getRealRadian(),
 						
-						self.getRealX(),
-						self.getRealY(),
+						self.getDrawingX(),
+						self.getDrawingY(),
 						points,
 						self.getRealScaleX(),
 						self.getRealScaleY(),
@@ -90,16 +90,16 @@ SkyEngine.Polygon = CLASS({
 					
 					if (checkRectPolygon(
 						
-						area.getRealX(),
-						area.getRealY(),
+						area.getDrawingX(),
+						area.getDrawingY(),
 						area.getWidth(),
 						area.getHeight(),
 						area.getRealScaleX(),
 						area.getRealScaleY(),
 						area.getRealRadian(),
 						
-						self.getRealX(),
-						self.getRealY(),
+						self.getDrawingX(),
+						self.getDrawingY(),
 						points,
 						self.getRealScaleX(),
 						self.getRealScaleY(),
@@ -114,16 +114,16 @@ SkyEngine.Polygon = CLASS({
 					
 					if (checkCirclePolygon(
 						
-						area.getRealX(),
-						area.getRealY(),
+						area.getDrawingX(),
+						area.getDrawingY(),
 						area.getWidth(),
 						area.getHeight(),
 						area.getRealScaleX(),
 						area.getRealScaleY(),
 						area.getRealRadian(),
 						
-						self.getRealX(),
-						self.getRealY(),
+						self.getDrawingX(),
+						self.getDrawingY(),
 						points,
 						self.getRealScaleX(),
 						self.getRealScaleY(),
@@ -138,15 +138,15 @@ SkyEngine.Polygon = CLASS({
 					
 					if (checkPolygonPolygon(
 						
-						area.getRealX(),
-						area.getRealY(),
+						area.getDrawingX(),
+						area.getDrawingY(),
 						area.getPoints(),
 						area.getRealScaleX(),
 						area.getRealScaleY(),
 						area.getRealRadian(),
 						
-						self.getRealX(),
-						self.getRealY(),
+						self.getDrawingX(),
+						self.getDrawingY(),
 						points,
 						self.getRealScaleX(),
 						self.getRealScaleY(),

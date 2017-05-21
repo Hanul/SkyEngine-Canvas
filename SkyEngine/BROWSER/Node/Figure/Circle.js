@@ -47,8 +47,8 @@ SkyEngine.Circle = CLASS({
 					pointX,
 					pointY,
 					
-					self.getRealX(),
-					self.getRealY(),
+					self.getDrawingX(),
+					self.getDrawingY(),
 					width,
 					height,
 					self.getRealScaleX(),
@@ -69,8 +69,8 @@ SkyEngine.Circle = CLASS({
 					
 					if (checkLineCircle(
 						
-						area.getRealX(),
-						area.getRealY(),
+						area.getDrawingX(),
+						area.getDrawingY(),
 						area.getStartX(),
 						area.getStartY(),
 						area.getEndX(),
@@ -79,8 +79,8 @@ SkyEngine.Circle = CLASS({
 						area.getRealScaleY(),
 						area.getRealRadian(),
 						
-						self.getRealX(),
-						self.getRealY(),
+						self.getDrawingX(),
+						self.getDrawingY(),
 						width,
 						height,
 						self.getRealScaleX(),
@@ -96,16 +96,16 @@ SkyEngine.Circle = CLASS({
 					
 					if (checkRectCircle(
 						
-						area.getRealX(),
-						area.getRealY(),
+						area.getDrawingX(),
+						area.getDrawingY(),
 						area.getWidth(),
 						area.getHeight(),
 						area.getRealScaleX(),
 						area.getRealScaleY(),
 						area.getRealRadian(),
 						
-						self.getRealX(),
-						self.getRealY(),
+						self.getDrawingX(),
+						self.getDrawingY(),
 						width,
 						height,
 						self.getRealScaleX(),
@@ -121,16 +121,16 @@ SkyEngine.Circle = CLASS({
 					
 					if (checkCircleCircle(
 						
-						area.getRealX(),
-						area.getRealY(),
+						area.getDrawingX(),
+						area.getDrawingY(),
 						area.getWidth(),
 						area.getHeight(),
 						area.getRealScaleX(),
 						area.getRealScaleY(),
 						area.getRealRadian(),
 						
-						self.getRealX(),
-						self.getRealY(),
+						self.getDrawingX(),
+						self.getDrawingY(),
 						width,
 						height,
 						self.getRealScaleX(),

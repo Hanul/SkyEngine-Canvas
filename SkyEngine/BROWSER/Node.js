@@ -73,7 +73,7 @@ SkyEngine.Node = CLASS({
 		let toX, toY, toScaleX, toScaleY, toAngle, toAlpha;
 		
 		// real properties
-		let realX, realY, realScaleX, realScaleY, realRadian;
+		let drawingX, drawingY, realX, realY, realScaleX, realScaleY, realRadian;
 		
 		// before properties
 		let beforeX, beforeY;
@@ -81,7 +81,6 @@ SkyEngine.Node = CLASS({
 		let parentNode;
 		let childNodes = [];
 		
-		let isHiding = false;
 		let isRemoved = false;
 		
 		let eventMap = {};
@@ -215,6 +214,8 @@ SkyEngine.Node = CLASS({
 		let getToAlpha = self.getToAlpha = () =>								{ return toAlpha; };
 		
 		// for real properties
+		let getDrawingX = self.getDrawingX = () =>								{ return drawingX; };
+		let getDrawingY = self.getDrawingY = () =>								{ return drawingY; };
 		let getRealX = self.getRealX = () =>									{ return realX; };
 		let getRealY = self.getRealY = () =>									{ return realY; };
 		let getRealScaleX = self.getRealScaleX = () =>							{ return realScaleX; };
@@ -711,18 +712,6 @@ SkyEngine.Node = CLASS({
 			if (params.maxSpeed !== undefined) {
 				maxFadingSpeed = params.maxSpeed;
 			}
-		};
-		
-		let hide = self.hide = () => {
-			isHiding = true;
-		};
-		
-		let show = self.show = () => {
-			isHiding = false;
-		};
-		
-		let checkIsHiding = self.checkIsHiding = () => {
-			return isHiding;
 		};
 		
 		let getChildren = self.getChildren = () => {
@@ -1267,7 +1256,9 @@ SkyEngine.Node = CLASS({
 			});
 		};
 		
-		let setRealProperties = self.setRealProperties = (_realX, _realY, _realScaleX, _realScaleY, _realRadian) => {
+		let setRealProperties = self.setRealProperties = (_drawingX, _drawingY, _realX, _realY, _realScaleX, _realScaleY, _realRadian) => {
+			drawingX = _drawingX;
+			drawingY = _drawingY;
 			realX = _realX;
 			realY = _realY;
 			realScaleX = _realScaleX;

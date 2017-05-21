@@ -63,8 +63,8 @@ SkyEngine.Line = CLASS({
 					
 					if (checkLineLine(
 						
-						area.getRealX(),
-						area.getRealY(),
+						area.getDrawingX(),
+						area.getDrawingY(),
 						area.getStartX(),
 						area.getStartY(),
 						area.getEndX(),
@@ -73,8 +73,8 @@ SkyEngine.Line = CLASS({
 						area.getRealScaleY(),
 						area.getRealRadian(),
 						
-						self.getRealX(),
-						self.getRealY(),
+						self.getDrawingX(),
+						self.getDrawingY(),
 						startX,
 						startY,
 						endX,

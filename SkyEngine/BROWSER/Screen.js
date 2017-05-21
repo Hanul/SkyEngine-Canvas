@@ -134,7 +134,7 @@ SkyEngine.Screen = OBJECT({
 			});
 		});
 		
-		let stepAll = (node, realX, realY, realScaleX, realScaleY, realRadian, deltaTime) => {
+		let stepAll = (node, drawingX, drawingY, realScaleX, realScaleY, realRadian, deltaTime) => {
 			
 			node.step(deltaTime);
 			
@@ -147,8 +147,11 @@ SkyEngine.Screen = OBJECT({
 			let sin = Math.sin(realRadian);
 			let cos = Math.cos(realRadian);
 			
-			realX += plusX * cos - plusY * sin;
-			realY += plusX * sin + plusY * cos;
+			drawingX += plusX * cos - plusY * sin;
+			drawingY += plusX * sin + plusY * cos;
+			
+			let realX = drawingX;
+			let realY = drawingY;
 			
 			realScaleX *= node.getScaleX();
 			realScaleY *= node.getScaleY();
@@ -158,163 +161,104 @@ SkyEngine.Screen = OBJECT({
 			sin = Math.sin(realRadian);
 			cos = Math.cos(realRadian);
 			
-			realX -= plusCenterX * cos - plusCenterY * sin;
-			realY -= plusCenterX * sin + plusCenterY * cos;
+			drawingX -= plusCenterX * cos - plusCenterY * sin;
+			drawingY -= plusCenterX * sin + plusCenterY * cos;
 			
-			node.setRealProperties(realX, realY, realScaleX, realScaleY, realRadian);
+			node.setRealProperties(drawingX, drawingY, realX, realY, realScaleX, realScaleY, realRadian);
 			
 			node.getChildren().forEach((childNode) => {
 				stepAll(childNode, realX, realY, realScaleX, realScaleY, realRadian, deltaTime);
 			});
 			
 			node.getTouchAreas().forEach((touchArea) => {
-				stepAll(touchArea, realX, realY, realScaleX, realScaleY, realRadian, deltaTime);
+				stepAll(touchArea, drawingX, drawingY, realScaleX, realScaleY, realRadian, deltaTime);
 			});
 			
 			node.getColliders().forEach((collider) => {
-				stepAll(collider, realX, realY, realScaleX, realScaleY, realRadian, deltaTime);
+				stepAll(collider, drawingX, drawingY, realScaleX, realScaleY, realRadian, deltaTime);
 			});
 			
-			node.checkAllCollisions(realX, realY, realScaleX, realScaleY, realRadian);
+			node.checkAllCollisions(drawingX, drawingY, realScaleX, realScaleY, realRadian);
 		};
 		
-		let drawAllArea = (node, context, realX, realY, realScaleX, realScaleY, realRadian, color) => {
-			
-			let plusX = node.getX() * realScaleX;
-			let plusY = node.getY() * realScaleY;
-			
-			let plusCenterX = node.getCenterX() * realScaleX;
-			let plusCenterY = node.getCenterY() * realScaleY;
-			
-			let sin = Math.sin(realRadian);
-			let cos = Math.cos(realRadian);
-			
-			realX += plusX * cos - plusY * sin;
-			realY += plusX * sin + plusY * cos;
-			
-			let nextX = realX;
-			let nextY = realY;
-			
-			realScaleX *= node.getScaleX();
-			realScaleY *= node.getScaleY();
-			
-			realRadian += node.getAngle() * Math.PI / 180;
-			
-			sin = Math.sin(realRadian);
-			cos = Math.cos(realRadian);
-			
-			realX -= plusCenterX * cos - plusCenterY * sin;
-			realY -= plusCenterX * sin + plusCenterY * cos;
+		let drawAllArea = (node, context, color) => {
 			
 			context.save();
-			context.translate(realX, realY);
-			context.rotate(realRadian);
-			context.scale(realScaleX, realScaleY);
 			
-			//node.setRealProperties(realX, realY, realScaleX, realScaleY, realRadian);
+			context.translate(node.getDrawingX(), node.getDrawingY());
+			context.rotate(node.getRealRadian());
+			context.scale(node.getRealScaleX(), node.getRealScaleY());
 			
-			// 개발 모드에서는 영역 표시
-			if (CONFIG.SkyEngine.isDebugMode === true) {
-				
-				context.beginPath();
-				
-				node.drawArea(context);
-				
-				context.strokeStyle = color;
-				context.stroke();
-				context.closePath();
-			}
+			context.beginPath();
+			
+			node.drawArea(context);
+			
+			context.strokeStyle = color;
+			context.stroke();
+			context.closePath();
 			
 			context.restore();
 			
 			node.getChildren().forEach((childNode) => {
-				drawAllArea(childNode, context, nextX, nextY, realScaleX, realScaleY, realRadian, color);
+				drawAllArea(childNode, context, color);
 			});
 		};
 		
-		let drawAll = (node, context, realX, realY, realScaleX, realScaleY, realRadian, realAlpha, deltaTime) => {
-			
-			let plusX = node.getX() * realScaleX;
-			let plusY = node.getY() * realScaleY;
-			
-			let plusCenterX = node.getCenterX() * realScaleX;
-			let plusCenterY = node.getCenterY() * realScaleY;
-			
-			let sin = Math.sin(realRadian);
-			let cos = Math.cos(realRadian);
-			
-			realX += plusX * cos - plusY * sin;
-			realY += plusX * sin + plusY * cos;
-			
-			let nextX = realX;
-			let nextY = realY;
-			
-			realScaleX *= node.getScaleX();
-			realScaleY *= node.getScaleY();
-			
-			realRadian += node.getAngle() * Math.PI / 180;
-			
-			sin = Math.sin(realRadian);
-			cos = Math.cos(realRadian);
-			
-			realX -= plusCenterX * cos - plusCenterY * sin;
-			realY -= plusCenterX * sin + plusCenterY * cos;
+		let drawAll = (node, context, realAlpha) => {
 			
 			realAlpha *= node.getAlpha();
 			
-			//node.step(deltaTime);
+			context.save();
 			
-			if (node.checkIsHiding() !== true) {
+			if (node.getFilter() !== undefined) {
+				context.filter = node.getFilter();
+			}
+			
+			if (node.getBlendMode() !== undefined) {
+				context.globalCompositeOperation = node.getBlendMode();
+			}
+			
+			context.save();
+			
+			context.translate(node.getDrawingX(), node.getDrawingY());
+			context.rotate(node.getRealRadian());
+			context.scale(node.getRealScaleX(), node.getRealScaleY());
+			
+			context.globalAlpha = realAlpha;
+			
+			node.draw(context);
+			
+			context.restore();
+			
+			node.getChildren().forEach((childNode) => {
+				drawAll(childNode, context, realAlpha);
+			});
+			
+			context.restore();
+			
+			// 개발 모드에서는 중점 및 영역 표시
+			if (CONFIG.SkyEngine.isDebugMode === true) {
 				
-				context.save();
+				context.beginPath();
+				context.strokeStyle = context.fillStyle = 'aqua';
 				
-				if (node.getFilter() !== undefined) {
-					context.filter = node.getFilter();
-				}
+				let realX = node.getRealX();
+				let realY = node.getRealY();
 				
-				if (node.getBlendMode() !== undefined) {
-					context.globalCompositeOperation = node.getBlendMode();
-				}
+				context.rect(realX - 1, realY - 1, 2, 2);
 				
-				context.save();
-				context.translate(node.getRealX(), node.getRealY());
-				context.rotate(realRadian);
-				context.scale(realScaleX, realScaleY);
-				context.globalAlpha = realAlpha;
-				
-				//node.setRealProperties(realX, realY, realScaleX, realScaleY, realRadian);
-				
-				node.draw(context);
-				
-				context.restore();
-				
-				node.getChildren().forEach((childNode) => {
-					drawAll(childNode, context, nextX, nextY, realScaleX, realScaleY, realRadian, realAlpha, deltaTime);
-				});
-				
-				context.restore();
-				
-				// 개발 모드에서는 중점 표시
-				if (CONFIG.SkyEngine.isDebugMode === true) {
-					
-					context.beginPath();
-					context.strokeStyle = context.fillStyle = 'aqua';
-					
-					context.rect(nextX - 1, nextY - 1, 2, 2);
-					
-					context.moveTo(nextX - 15, nextY);
-					context.lineTo(nextX + 15, nextY);
-					context.moveTo(nextX, nextY - 15);
-					context.lineTo(nextX, nextY + 15);
-					context.stroke();
-				}
+				context.moveTo(realX - 15, realY);
+				context.lineTo(realX + 15, realY);
+				context.moveTo(realX, realY - 15);
+				context.lineTo(realX, realY + 15);
+				context.stroke();
 				
 				node.getTouchAreas().forEach((touchArea) => {
-					drawAllArea(touchArea, context, realX, realY, realScaleX, realScaleY, realRadian, 'magenta');
+					drawAllArea(touchArea, context, 'magenta');
 				});
 				
 				node.getColliders().forEach((collider) => {
-					drawAllArea(collider, context, realX, realY, realScaleX, realScaleY, realRadian, 'lime');
+					drawAllArea(collider, context, 'lime');
 				});
 			}
 		};
@@ -327,7 +271,7 @@ SkyEngine.Screen = OBJECT({
 			
 			context.clearRect(0, 0, canvasWidth, canvasHeight);
 			
-			drawAll(self, context, canvasWidth / 2, canvasHeight / 2, 1, 1, self.getAngle() * Math.PI / 180, self.getAlpha(), deltaTime);
+			drawAll(self, context, self.getAlpha());
 		});
 		
 		EVENT('resize', RAR(() => {

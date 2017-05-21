@@ -54,8 +54,8 @@ SkyEngine.Rect = CLASS({
 					pointX,
 					pointY,
 					
-					self.getRealX(),
-					self.getRealY(),
+					self.getDrawingX(),
+					self.getDrawingY(),
 					width,
 					height,
 					self.getRealScaleX(),
@@ -75,8 +75,8 @@ SkyEngine.Rect = CLASS({
 					
 					if (checkLineRect(
 						
-						area.getRealX(),
-						area.getRealY(),
+						area.getDrawingX(),
+						area.getDrawingY(),
 						area.getStartX(),
 						area.getStartY(),
 						area.getEndX(),
@@ -85,8 +85,8 @@ SkyEngine.Rect = CLASS({
 						area.getRealScaleY(),
 						area.getRealRadian(),
 						
-						self.getRealX(),
-						self.getRealY(),
+						self.getDrawingX(),
+						self.getDrawingY(),
 						width,
 						height,
 						self.getRealScaleX(),
@@ -101,16 +101,16 @@ SkyEngine.Rect = CLASS({
 					
 					if (checkRectRect(
 						
-						area.getRealX(),
-						area.getRealY(),
+						area.getDrawingX(),
+						area.getDrawingY(),
 						area.getWidth(),
 						area.getHeight(),
 						area.getRealScaleX(),
 						area.getRealScaleY(),
 						area.getRealRadian(),
 						
-						self.getRealX(),
-						self.getRealY(),
+						self.getDrawingX(),
+						self.getDrawingY(),
 						width,
 						height,
 						self.getRealScaleX(),

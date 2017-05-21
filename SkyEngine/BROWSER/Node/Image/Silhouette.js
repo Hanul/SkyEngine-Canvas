@@ -110,8 +110,8 @@ SkyEngine.Silhouette = CLASS((cls) => {
 						return origin(x, y) === true;
 					}
 					
-					let tx = x - self.getRealX();
-					let ty = y - self.getRealY();
+					let tx = x - self.getDrawingX();
+					let ty = y - self.getDrawingY();
 					
 					let cos = Math.cos(-self.getRealRadian());
 					let sin = Math.sin(-self.getRealRadian());
