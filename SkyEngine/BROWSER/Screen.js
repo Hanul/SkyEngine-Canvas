@@ -134,10 +134,15 @@ SkyEngine.Screen = OBJECT({
 			});
 		});
 		
+		//TODO: 노드의 위치가 변경될 때 마다 절대 위치도 바뀌어야 버그가 없을듯
+		
+		// 모든 노드의 step을 실행합니다.
 		let stepAll = (node, drawingX, drawingY, realScaleX, realScaleY, realRadian, deltaTime) => {
 			
+			// 노드의 위치 변화 계산
 			node.step(deltaTime);
 			
+			// 화면상의 실제 위치로 변환
 			let plusX = node.getX() * realScaleX;
 			let plusY = node.getY() * realScaleY;
 			
@@ -164,23 +169,30 @@ SkyEngine.Screen = OBJECT({
 			drawingX -= plusCenterX * cos - plusCenterY * sin;
 			drawingY -= plusCenterX * sin + plusCenterY * cos;
 			
+			// 실제 정보들을 저장
+			// real x, y는 center x, y를 고려한 노드의 실제 위치이며, drawing x, y는 center x, y를 고려하지 않은 중앙 기준의 위치 
 			node.setRealProperties(drawingX, drawingY, realX, realY, realScaleX, realScaleY, realRadian);
 			
+			// 모든 자식 노드들에 대해 실행
 			node.getChildren().forEach((childNode) => {
 				stepAll(childNode, realX, realY, realScaleX, realScaleY, realRadian, deltaTime);
 			});
 			
+			// 모든 터치 영역에 대해 실행
 			node.getTouchAreas().forEach((touchArea) => {
 				stepAll(touchArea, drawingX, drawingY, realScaleX, realScaleY, realRadian, deltaTime);
 			});
 			
+			// 모든 충돌 영역에 대해 실행
 			node.getColliders().forEach((collider) => {
 				stepAll(collider, drawingX, drawingY, realScaleX, realScaleY, realRadian, deltaTime);
 			});
 			
-			node.checkAllCollisions(drawingX, drawingY, realScaleX, realScaleY, realRadian);
+			// 충돌 체크
+			node.checkAllCollisions();
 		};
 		
+		// 노드의 모든 영역을 그립니다.
 		let drawAllArea = (node, context, color) => {
 			
 			context.save();
@@ -204,6 +216,7 @@ SkyEngine.Screen = OBJECT({
 			});
 		};
 		
+		// 모든 노드를 그립니다.
 		let drawAll = (node, context, realAlpha) => {
 			
 			realAlpha *= node.getAlpha();
@@ -230,6 +243,7 @@ SkyEngine.Screen = OBJECT({
 			
 			context.restore();
 			
+			// 모든 자식 노드를 그립니다.
 			node.getChildren().forEach((childNode) => {
 				drawAll(childNode, context, realAlpha);
 			});
@@ -239,6 +253,7 @@ SkyEngine.Screen = OBJECT({
 			// 개발 모드에서는 중점 및 영역 표시
 			if (CONFIG.SkyEngine.isDebugMode === true) {
 				
+				// 중점을 그립니다.
 				context.beginPath();
 				context.strokeStyle = context.fillStyle = 'aqua';
 				
@@ -253,10 +268,12 @@ SkyEngine.Screen = OBJECT({
 				context.lineTo(realX, realY + 15);
 				context.stroke();
 				
+				// 터치 영역을 그립니다.
 				node.getTouchAreas().forEach((touchArea) => {
 					drawAllArea(touchArea, context, 'magenta');
 				});
 				
+				// 충돌 영역을 그립니다.
 				node.getColliders().forEach((collider) => {
 					drawAllArea(collider, context, 'lime');
 				});
@@ -267,13 +284,21 @@ SkyEngine.Screen = OBJECT({
 			
 			deltaTime = _deltaTime;
 			
-			stepAll(self, canvasWidth / 2, canvasHeight / 2, 1, 1, self.getAngle() * Math.PI / 180, deltaTime);
+			// 모든 노드의 step을 실행합니다.
+			stepAll(self, 0, 0, 1, 1, self.getAngle() * Math.PI / 180, deltaTime);
 			
+			// 모든 노드를 그립니다.
 			context.clearRect(0, 0, canvasWidth, canvasHeight);
 			
+			context.save();
+			context.translate(canvasWidth / 2, canvasHeight / 2);
+			
 			drawAll(self, context, self.getAlpha());
+			
+			context.restore();
 		});
 		
+		// 화면 크기가 변경되는 경우, 캔버스의 크기 또한 변경되어야 합니다.
 		EVENT('resize', RAR(() => {
 			
 			canvasWidth = WIN_WIDTH();
