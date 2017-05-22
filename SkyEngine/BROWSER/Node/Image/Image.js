@@ -17,7 +17,6 @@ SkyEngine.Image = CLASS((cls) => {
 			
 			let src = params.src;
 			
-			let img;
 			let imageData;
 			let isImageDataLoading = false;
 			
@@ -26,25 +25,19 @@ SkyEngine.Image = CLASS((cls) => {
 			let width;
 			let height;
 			
-			let setSrc = self.setSrc = (_src) => {
-				src = _src;
+			let img = new Image();
+			
+			img.onload = () => {
 				
-				img = new Image();
+				width = img.width;
+				height = img.height;
 				
-				img.onload = () => {
-					
-					width = img.width;
-					height = img.height;
-					
-					img.onload = undefined;
-					
-					self.fireEvent('load');
-				};
+				img.onload = undefined;
 				
-				img.src = src;
+				self.fireEvent('load');
 			};
 			
-			setSrc(src);
+			img.src = src;
 			
 			let checkPoint;
 			OVERRIDE(self.checkPoint, (origin) => {

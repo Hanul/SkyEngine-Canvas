@@ -73,14 +73,16 @@ SkyEngine.Node = CLASS({
 		let toX, toY, toScaleX, toScaleY, toAngle, toAlpha;
 		
 		// real properties
-		let drawingX, drawingY, realX, realY, realScaleX, realScaleY, realRadian;
+		// real x, y는 center x, y를 고려한 노드의 실제 위치이며, drawing x, y는 center x, y를 고려하지 않은 중앙 기준의 위치 
+		let realX, realY, drawingX, drawingY, realScaleX, realScaleY, realRadian, realSin, realCos;
 		
 		// before properties
 		let beforeX, beforeY;
 		
-		let parentNode;
+		let parentNode, targetNode;
 		let childNodes = [];
 		
+		let isHiding = false;
 		let isRemoved = false;
 		
 		let eventMap = {};
@@ -97,9 +99,32 @@ SkyEngine.Node = CLASS({
 		let blendMode;
 		
 		// for position
-		let setX = self.setX = (_x) =>							{ x = _x; };
+		let genRealPosition = () => {
+			
+			if (targetNode === undefined) {
+				realX = x;
+				realY = y;
+				drawingX = x;
+				drawingY = y;
+			} else {
+				
+				let plusX = x * targetNode.getRealScaleX();
+				let plusY = y * targetNode.getRealScaleY();
+				
+				realX = targetNode.getDrawingX() + plusX * targetNode.getRealCos() - plusY * targetNode.getRealSin();
+				realY = targetNode.getDrawingY() + plusX * targetNode.getRealSin() + plusY * targetNode.getRealCos();
+				
+				let plusCenterX = centerX * targetNode.getRealScaleY();
+				let plusCenterY = centerY * targetNode.getRealScaleY();
+				
+				drawingX = realX - plusCenterX * realCos + plusCenterY * realSin;
+				drawingY = realY - plusCenterX * realSin - plusCenterY * realCos;
+			}
+		};
+		
+		let setX = self.setX = (_x) =>							{ x = _x; genRealPosition(); };
 		let getX = self.getX = () =>							{ return x; };
-		let setY = self.setY = (_y) =>							{ y = _y; };
+		let setY = self.setY = (_y) =>							{ y = _y; genRealPosition(); };
 		let getY = self.getY = () =>							{ return y; };
 		let setCenterX = self.setCenterX = (_centerX) =>		{ centerX = _centerX; };
 		let getCenterX = self.getCenterX = () =>				{ return centerX; };
@@ -136,13 +161,29 @@ SkyEngine.Node = CLASS({
 		let getToY = self.getToY = () =>						{ return toY; };
 		
 		// for scale
-		let setScaleX = self.setScaleX = (_scaleX) =>									{ scaleX = _scaleX; };
+		let setScaleX = self.setScaleX = (_scaleX) => {
+			scaleX = _scaleX;
+			
+			if (targetNode === undefined) {
+				realScaleX = scaleX;
+			} else {
+				realScaleX = targetNode.getRealScaleX() * scaleX;
+			}
+		};
 		let getScaleX = self.getScaleX = () =>											{ return scaleX; };
-		let setScaleY = self.setScaleY = (_scaleY) =>									{ scaleY = _scaleY; };
+		let setScaleY = self.setScaleY = (_scaleY) => {
+			scaleY = _scaleY;
+			
+			if (targetNode === undefined) {
+				realScaleY = _scaleY;
+			} else {
+				realScaleY = targetNode.getRealScaleY() * scaleY;
+			}
+		};
 		let getScaleY = self.getScaleY = () =>											{ return scaleY; };
 		let setScale = self.setScale = (scale) => {
-			scaleX = scale;
-			scaleY = scale;
+			setScaleX(scale);
+			setScaleY(scale);
 		};
 		let setScalingSpeedX = self.setScalingSpeedX = (_scalingSpeedX) =>				{ scalingSpeedX = _scalingSpeedX; };
 		let getScalingSpeedX = self.getScalingSpeedX = () =>							{ return scalingSpeedX; };
@@ -186,7 +227,18 @@ SkyEngine.Node = CLASS({
 		};
 		
 		// for angle
-		let setAngle = self.setAngle = (_angle) =>										{ angle = _angle; };
+		let setAngle = self.setAngle = (_angle) => {
+			angle = _angle;
+			
+			if (targetNode === undefined) {
+				realRadian = angle;
+			} else {
+				realRadian = targetNode.getRealRadian() + angle * Math.PI / 180;
+			}
+			
+			realSin = Math.sin(realRadian);
+			realCos = Math.cos(realRadian);
+		};
 		let getAngle = self.getAngle = () =>											{ return angle; };
 		let setRotationSpeed = self.setRotationSpeed = (_rotationSpeed) =>				{ rotationSpeed = _rotationSpeed; };
 		let getRotationSpeed = self.getRotationSpeed = () =>							{ return rotationSpeed; };
@@ -220,7 +272,9 @@ SkyEngine.Node = CLASS({
 		let getRealY = self.getRealY = () =>									{ return realY; };
 		let getRealScaleX = self.getRealScaleX = () =>							{ return realScaleX; };
 		let getRealScaleY = self.getRealScaleY = () =>							{ return realScaleY; };
-		let getRealRadian = self.getRealRadian = (_toAlpha) =>					{ return realRadian; };
+		let getRealRadian = self.getRealRadian = () =>							{ return realRadian; };
+		let getRealSin = self.getRealSin = () =>								{ return realSin; };
+		let getRealCos = self.getRealCos = () =>								{ return realCos; };
 		
 		// for before properties
 		let getBeforeX = self.getBeforeX = () =>								{ return beforeX; };
@@ -279,6 +333,10 @@ SkyEngine.Node = CLASS({
 			if (params.toScaleY !== undefined)	{ toScaleY = params.toScaleY; }
 			toAngle = params.toAngle;
 			toAlpha = params.toAlpha;
+			
+			if (params.isHiding !== undefined)	{
+				isHiding = params.isHiding;
+			}
 		}
 		
 		// 초기화 되지 않은 파라미터에 기본값 지정
@@ -714,6 +772,18 @@ SkyEngine.Node = CLASS({
 			}
 		};
 		
+		let hide = self.hide = () => {
+			isHiding = true;
+		};
+		
+		let show = self.show = () => {
+			isHiding = false;
+		};
+		
+		let checkIsHiding = self.checkIsHiding = () => {
+			return isHiding;
+		};
+		
 		let getChildren = self.getChildren = () => {
 			return childNodes;
 		};
@@ -724,6 +794,11 @@ SkyEngine.Node = CLASS({
 		
 		let setParent = self.setParent = (_parentNode) => {
 			parentNode = _parentNode;
+			targetNode = parentNode;
+		};
+		
+		let setTarget = self.setTarget = (_targetNode) => {
+			targetNode = _targetNode;
 		};
 		
 		let appendToParent = () => {
@@ -976,6 +1051,7 @@ SkyEngine.Node = CLASS({
 			//REQUIRED: touchArea
 			
 			touchAreas.push(touchArea);
+			touchArea.setTarget(self);
 		};
 		
 		let getTouchAreas = self.getTouchAreas = () => {
@@ -986,6 +1062,7 @@ SkyEngine.Node = CLASS({
 			//REQUIRED: collider
 			
 			colliders.push(collider);
+			collider.setTarget(self);
 		};
 		
 		let getColliders = self.getColliders = () => {
@@ -1008,6 +1085,10 @@ SkyEngine.Node = CLASS({
 		
 		let checkTouch = self.checkTouch = (touchX, touchY) => {
 			
+			if (self.checkIsHiding() === true) {
+				return false;
+			}
+			
 			return touchAreas.every((touchArea) => {
 				return touchArea.checkPoint(touchX, touchY) !== true;
 			}) !== true ||
@@ -1019,6 +1100,10 @@ SkyEngine.Node = CLASS({
 		
 		let checkCollision = self.checkCollision = (target) => {
 			
+			if (self.checkIsHiding() === true || target.checkIsHiding() === true) {
+				return false;
+			}
+						
 			return colliders.every((collider) => {
 				return target.getColliders().every((targetCollider) => {
 					return collider.checkArea(targetCollider) !== true;
@@ -1190,10 +1275,24 @@ SkyEngine.Node = CLASS({
 					alpha = 0;
 				}
 			}
-		};
-		
-		let checkAllCollisions = self.checkAllCollisions = () => {
 			
+			setAngle(angle);
+			setScaleX(scaleX);
+			setScaleY(scaleY);
+			setX(x);
+			setY(y);
+			
+			// 모든 터치 영역에 대해 실행
+			self.getTouchAreas().forEach((touchArea) => {
+				touchArea.step(deltaTime);
+			});
+			
+			// 모든 충돌 영역에 대해 실행
+			self.getColliders().forEach((collider) => {
+				collider.step(deltaTime);
+			});
+			
+			// 충돌 체크
 			collisionTargets.forEach((target, index, arr) => {
 				
 				if (target.type === CLASS) {
@@ -1254,16 +1353,11 @@ SkyEngine.Node = CLASS({
 					delete partHandlerMap[target.id];
 				}
 			});
-		};
-		
-		let setRealProperties = self.setRealProperties = (_drawingX, _drawingY, _realX, _realY, _realScaleX, _realScaleY, _realRadian) => {
-			drawingX = _drawingX;
-			drawingY = _drawingY;
-			realX = _realX;
-			realY = _realY;
-			realScaleX = _realScaleX;
-			realScaleY = _realScaleY;
-			realRadian = _realRadian;
+			
+			// 모든 자식 노드들에 대해 실행
+			self.getChildren().forEach((childNode) => {
+				childNode.step(deltaTime);
+			});
 		};
 		
 		let draw = self.draw = (context) => {

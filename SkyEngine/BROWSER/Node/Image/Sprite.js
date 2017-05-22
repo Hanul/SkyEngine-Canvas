@@ -35,9 +35,7 @@ SkyEngine.Sprite = CLASS({
 			fps = 0;
 		}
 		
-		let setSrc = self.setSrc = (_src) => {
-			src = _src;
-			
+		if (src !== undefined) {
 			img = new Image();
 			
 			img.onload = () => {
@@ -63,51 +61,45 @@ SkyEngine.Sprite = CLASS({
 			};
 			
 			img.src = src;
-		};
-		
-		if (src !== undefined) {
-			setSrc(src);
 		}
 		
-		let addSrc = self.addSrc = (src) => {
-			
-			let img = new Image();
-			
-			if (imgs === undefined) {
-				imgs = [];
-			}
-				
-			img.onload = () => {
-				
-				width = img.width;
-				height = img.height;
-				
-				if (spriteWidth === undefined) {
-					spriteWidth = width;
-				}
-				
-				if (spriteHeight === undefined) {
-					spriteHeight = height;
-				}
-				
-				if (frameCount === undefined) {
-					frameCount = 1;
-				} else {
-					frameCount += 1;
-				}
-				
-				img.onload = undefined;
-				
-				self.fireEvent('load');
-			};
-			
-			img.src = src;
-			
-			imgs.push(img);
-		};
-		
 		if (srcs !== undefined) {
-			EACH(srcs, addSrc);
+			EACH(srcs, (src) => {
+				
+				let img = new Image();
+				
+				if (imgs === undefined) {
+					imgs = [];
+				}
+					
+				img.onload = () => {
+					
+					width = img.width;
+					height = img.height;
+					
+					if (spriteWidth === undefined) {
+						spriteWidth = width;
+					}
+					
+					if (spriteHeight === undefined) {
+						spriteHeight = height;
+					}
+					
+					if (frameCount === undefined) {
+						frameCount = 1;
+					} else {
+						frameCount += 1;
+					}
+					
+					img.onload = undefined;
+					
+					self.fireEvent('load');
+				};
+				
+				img.src = src;
+				
+				imgs.push(img);
+			});
 		}
 		
 		let step;
@@ -121,11 +113,22 @@ SkyEngine.Sprite = CLASS({
 				
 				if (frameCount !== undefined) {
 					if (frame >= frameCount) {
-						frame = 0;
+						frame -= frameCount;
 					}
 				}
 				
 				origin(deltaTime);
+			};
+		});
+		
+		let show;
+		OVERRIDE(self.show, (origin) => {
+			
+			show = self.show = () => {
+				
+				frame = 0;
+				
+				origin();
 			};
 		});
 		
