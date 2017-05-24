@@ -280,6 +280,13 @@ SkyEngine.Node = CLASS({
 		let getBeforeX = self.getBeforeX = () =>								{ return beforeX; };
 		let getBeforeY = self.getBeforeY = () =>								{ return beforeY; };
 		
+		let genRealProperties = () => {
+			setAngle(angle);
+			setScaleX(scaleX);
+			setScaleY(scaleY);
+			genRealPosition();
+		};
+		
 		// 파라미터 초기화
 		if (params !== undefined) {
 			
@@ -796,13 +803,30 @@ SkyEngine.Node = CLASS({
 			return parentNode;
 		};
 		
-		let setParent = self.setParent = (_parentNode) => {
-			parentNode = _parentNode;
-			targetNode = parentNode;
-		};
-		
 		let setTarget = self.setTarget = (_targetNode) => {
 			targetNode = _targetNode;
+			
+			genRealProperties();
+			
+			// 모든 터치 영역에 대해 실행
+			self.getTouchAreas().forEach((touchArea) => {
+				touchArea.setTarget(self);
+			});
+			
+			// 모든 충돌 영역에 대해 실행
+			self.getColliders().forEach((collider) => {
+				collider.setTarget(self);
+			});
+			
+			// 모든 자식 노드들에 대해 실행
+			self.getChildren().forEach((childNode) => {
+				childNode.setTarget(self);
+			});
+		};
+		
+		let setParent = self.setParent = (_parentNode) => {
+			parentNode = _parentNode;
+			setTarget(parentNode);
 		};
 		
 		let appendToParent = () => {
@@ -1280,11 +1304,7 @@ SkyEngine.Node = CLASS({
 				}
 			}
 			
-			setAngle(angle);
-			setScaleX(scaleX);
-			setScaleY(scaleY);
-			setX(x);
-			setY(y);
+			genRealProperties();
 			
 			// 모든 터치 영역에 대해 실행
 			self.getTouchAreas().forEach((touchArea) => {

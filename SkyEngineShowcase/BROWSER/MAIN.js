@@ -61,5 +61,10 @@ SkyEngineShowcase.MAIN = METHOD({
 			uri : 'test/collision',
 			target : SkyEngineShowcase.CollisionTest
 		});
+		
+		SkyEngineShowcase.MATCH_VIEW({
+			uri : 'test/intersection',
+			target : SkyEngineShowcase.IntersectionTest
+		});
 	}
 });

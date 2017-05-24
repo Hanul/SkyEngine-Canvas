@@ -108,24 +108,24 @@ SkyEngine('Util').Collision = OBJECT({
 			
 			aStartX *= aScaleX;
 			aStartY *= aScaleY;
-				
-			aEndX *= aScaleX;
-			aEndY *= aScaleY;
 			
 			let aTempStartX = aX + aCos * aStartX + aSin * aStartY;
 			let aTempStartY = aY + aSin * aStartX + aCos * aStartY;
+				
+			aEndX *= aScaleX;
+			aEndY *= aScaleY;
 			
 			let aTempEndX = aX + aCos * aEndX + aSin * aEndY;
 			let aTempEndY = aY + aSin * aEndX + aCos * aEndY;
 			
 			bStartX *= bScaleX;
 			bStartY *= bScaleY;
-				
-			bEndX *= bScaleX;
-			bEndY *= bScaleY;
 			
 			let bTempStartX = bX + bCos * bStartX + bSin * bStartY;
 			let bTempStartY = bY + bSin * bStartX + bCos * bStartY;
+			
+			bEndX *= bScaleX;
+			bEndY *= bScaleY;
 			
 			let bTempEndX = bX + bCos * bEndX + bSin * bEndY;
 			let bTempEndY = bY + bSin * bEndX + bCos * bEndY;
@@ -142,6 +142,67 @@ SkyEngine('Util').Collision = OBJECT({
 				let ub = ((aTempStartY - aTempEndY) * (bTempEndX - aTempStartX) + (aTempEndX - aTempStartX) * (bTempEndY - aTempStartY)) / denom;
 				
 				return 0 <= ua && ua <= 1 && 0 <= ub && ub <= 1;
+			}
+		};
+		
+		let findIntersectionPoint = self.findIntersectionPoint = (
+			aX, aY,
+			aStartX, aStartY,
+			aEndX, aEndY,
+			aScaleX, aScaleY,
+			aSin, aCos,
+			
+			bX, bY,
+			bStartX, bStartY,
+			bEndX, bEndY,
+			bScaleX, bScaleY,
+			bSin, bCos
+		) => {
+			
+			if (checkLineLine(
+				aX, aY,
+				aStartX, aStartY,
+				aEndX, aEndY,
+				aScaleX, aScaleY,
+				aSin, aCos,
+				
+				bX, bY,
+				bStartX, bStartY,
+				bEndX, bEndY,
+				bScaleX, bScaleY,
+				bSin, bCos
+			) === true) {
+				
+				aStartX *= aScaleX;
+				aStartY *= aScaleY;
+				
+				let aTempStartX = aX + aCos * aStartX + aSin * aStartY;
+				let aTempStartY = aY + aSin * aStartX + aCos * aStartY;
+					
+				aEndX *= aScaleX;
+				aEndY *= aScaleY;
+				
+				let aTempEndX = aX + aCos * aEndX + aSin * aEndY;
+				let aTempEndY = aY + aSin * aEndX + aCos * aEndY;
+				
+				bStartX *= bScaleX;
+				bStartY *= bScaleY;
+				
+				let bTempStartX = bX + bCos * bStartX + bSin * bStartY;
+				let bTempStartY = bY + bSin * bStartX + bCos * bStartY;
+				
+				bEndX *= bScaleX;
+				bEndY *= bScaleY;
+				
+				let bTempEndX = bX + bCos * bEndX + bSin * bEndY;
+				let bTempEndY = bY + bSin * bEndX + bCos * bEndY;
+				
+				let denom = (aTempEndX - aTempStartX) * (bTempEndY - bTempStartY) - (bTempEndX - bTempStartX) * (aTempEndY - aTempStartY);
+				
+				return {
+					x : ((aTempEndX * aTempStartY - aTempEndY * aTempStartX) * (bTempEndX - bTempStartX) - (aTempEndX - aTempStartX) * (bTempEndX * bTempStartY - bTempEndY * bTempStartX)) / denom,
+					y : ((aTempEndX * aTempStartY - aTempEndY * aTempStartX) * (bTempEndY - bTempStartY) - (aTempEndY - aTempStartY) * (bTempEndX * bTempStartY - bTempEndY * bTempStartX)) / denom 
+				};
 			}
 		};
 		
@@ -243,6 +304,96 @@ SkyEngine('Util').Collision = OBJECT({
 			a *= 2;
 			
 			return checkBetween((-b - discrim) / a, tempStartX, tempEndX) === true || checkBetween((-b + discrim) / a, tempStartX, tempEndX) === true;
+		};
+		
+		let findCircleIntersectionPoints = self.findCircleIntersectionPoints = (
+			lineX, lineY,
+			lineStartX, lineStartY,
+			lineEndX, lineEndY,
+			lineScaleX, lineScaleY,
+			lineSin, lineCos,
+			
+			circleX, circleY,
+			circleWidth, circleHeight,
+			circleScaleX, circleScaleY,
+			circleSin, circleCos
+		) => {
+			
+			let points = [];
+			
+			if (checkLineCircle(
+				lineX, lineY,
+				lineStartX, lineStartY,
+				lineEndX, lineEndY,
+				lineScaleX, lineScaleY,
+				lineSin, lineCos,
+				
+				circleX, circleY,
+				circleWidth, circleHeight,
+				circleScaleX, circleScaleY,
+				circleSin, circleCos
+			) === true) {
+				
+				let lineTempStartX = lineX + lineCos * lineStartX + lineSin * lineStartY - circleX;
+				let lineTempStartY = lineY + lineSin * lineStartX + lineCos * lineStartY - circleY;
+				
+				let lineTempEndX = lineX + lineCos * lineEndX + lineSin * lineEndY - circleX;
+				let lineTempEndY = lineY + lineSin * lineEndX + lineCos * lineEndY - circleY;
+				
+				let x1 = circleCos * lineTempStartX + circleSin * lineTempStartY;
+				let y1 = -circleSin * lineTempStartX + circleCos * lineTempStartY;
+				
+				let x2 = circleCos * lineTempEndX + circleSin * lineTempEndY;
+				let y2 = -circleSin * lineTempEndX + circleCos * lineTempEndY;
+				
+				circleWidth *= circleScaleX;
+				circleHeight *= circleScaleY;
+				
+				let h = circleWidth / 2;
+				let v = circleHeight / 2;
+				
+				let a = (y2 - y1) / (x2 - x1);
+				let b = (y1 - a * x1);
+				
+				let r = a * a * h * h + v * v;
+				let s = 2 * a * b * h * h;
+				let t = h * h * b * b - h * h * v * v;
+				
+				let d = s * s - 4 * r * t;
+				
+				if (d > 0) {
+					let xi1 = (-s + Math.sqrt(d)) / (2 * r);
+					let xi2 = (-s - Math.sqrt(d)) / (2 * r);
+				
+					let yi1 = a * xi1 + b;
+					let yi2 = a * xi2 + b;
+				
+					if ((x1 < x2 ? x1 : x2) <= xi1 && xi1 <= (x1 < x2 ? x2 : x1) && (y1 < y2 ? y1 : y2) <= yi1 && yi1 <= (y1 < y2 ? y2 : y1)) {
+						points.push({
+							x : circleCos * xi1 - circleSin * yi1 + circleX,
+							y : circleSin * xi1 + circleCos * yi1 + circleY
+						});
+					}
+					if ((x1 < x2 ? x1 : x2) <= xi2 && xi2 <= (x1 < x2 ? x2 : x1) && (y1 < y2 ? y1 : y2) <= yi2 && yi2 <= (y1 < y2 ? y2 : y1)) {
+						points.push({
+							x : circleCos * xi2 - circleSin * yi2 + circleX,
+							y : circleSin * xi2 + circleCos * yi2 + circleY
+						});
+					}
+				} else if (d == 0) {
+					let xi = -s / (2 * r);
+					let yi = a * xi + b;
+					
+					if ((x1 < x2 ? x1 : x2) <= xi && xi <= (x1 < x2 ? x2 : x1) && (y1 < y2 ? y1 : y2) <= yi && yi <= (y1 < y2 ? y2 : y1)) {
+						points.push({
+							x : circleCos * xi - circleSin * yi + circleX,
+							y : circleSin * xi + circleCos * yi + circleY
+						});
+					}
+				}
+			}
+			
+			return points;
 		};
 		
 		let checkLinePolygon = self.checkLinePolygon = (
