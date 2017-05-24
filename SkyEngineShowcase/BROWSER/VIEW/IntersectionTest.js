@@ -178,6 +178,7 @@ SkyEngineShowcase.IntersectionTest = CLASS({
 		inner.on('close', () => {
 			line.remove();
 			line2.remove();
+			circle.remove();
 			
 			EACH(circles, (circle) => {
 				circle.remove();

@@ -806,22 +806,25 @@ SkyEngine.Node = CLASS({
 		let setTarget = self.setTarget = (_targetNode) => {
 			targetNode = _targetNode;
 			
-			genRealProperties();
-			
-			// 모든 터치 영역에 대해 실행
-			self.getTouchAreas().forEach((touchArea) => {
-				touchArea.setTarget(self);
-			});
-			
-			// 모든 충돌 영역에 대해 실행
-			self.getColliders().forEach((collider) => {
-				collider.setTarget(self);
-			});
-			
-			// 모든 자식 노드들에 대해 실행
-			self.getChildren().forEach((childNode) => {
-				childNode.setTarget(self);
-			});
+			if (targetNode !== undefined) {
+				
+				genRealProperties();
+				
+				// 모든 터치 영역에 대해 실행
+				self.getTouchAreas().forEach((touchArea) => {
+					touchArea.setTarget(self);
+				});
+				
+				// 모든 충돌 영역에 대해 실행
+				self.getColliders().forEach((collider) => {
+					collider.setTarget(self);
+				});
+				
+				// 모든 자식 노드들에 대해 실행
+				self.getChildren().forEach((childNode) => {
+					childNode.setTarget(self);
+				});
+			}
 		};
 		
 		let setParent = self.setParent = (_parentNode) => {
