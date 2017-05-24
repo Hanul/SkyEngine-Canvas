@@ -71,7 +71,8 @@ SkyEngine.Line = CLASS({
 						area.getEndY(),
 						area.getRealScaleX(),
 						area.getRealScaleY(),
-						area.getRealRadian(),
+						area.getRealSin(),
+						area.getRealCos(),
 						
 						self.getDrawingX(),
 						self.getDrawingY(),
@@ -81,7 +82,8 @@ SkyEngine.Line = CLASS({
 						endY,
 						self.getRealScaleX(),
 						self.getRealScaleY(),
-						self.getRealRadian()) === true) {
+						self.getRealSin(),
+						self.getRealCos()) === true) {
 						
 						return true;
 					}

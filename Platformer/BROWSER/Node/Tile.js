@@ -1,14 +1,23 @@
-Platformer.Tile = CLASS({
+Platformer.Tile = CLASS((cls) => {
 	
-	preset : () => {
-		return SkyEngine.Image;
-	},
+	const WIDTH = 128;
+	const HEIGHT = 128;
 	
-	init : (inner, self) => {
+	cls.WIDTH = WIDTH;
+	cls.HEIGHT = HEIGHT;
+	
+	return {
 		
-		self.addCollider(SkyEngine.Rect({
-			width : 128,
-			height : 128
-		}));
-	}
+		preset : () => {
+			return SkyEngine.Image;
+		},
+		
+		init : (inner, self) => {
+			
+			self.addCollider(SkyEngine.Rect({
+				width : WIDTH,
+				height : HEIGHT
+			}));
+		}
+	};
 });

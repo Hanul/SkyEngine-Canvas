@@ -15,23 +15,14 @@ SkyEngine('Util').Collision = OBJECT({
 			rectX, rectY,
 			rectWidth, rectHeight,
 			rectScaleX, rectScaleY,
-			rectRadian
+			rectSin, rectCos
 		) => {
 			
-			let tempX = pointX;
-			let tempY = pointY;
+			pointX -= rectX;
+			pointY -= rectY;
 			
-			if (rectRadian !== 0) {
-				
-				let cos = Math.cos(rectRadian);
-				let sin = Math.sin(rectRadian);
-				
-				pointX -= rectX;
-				pointY -= rectY;
-				
-				tempX = rectX + cos * pointX + sin * pointY;
-				tempY = rectY - sin * pointX + cos * pointY;
-			}
+			let tempX = rectX + rectCos * pointX + rectSin * pointY;
+			let tempY = rectY - rectSin * pointX + rectCos * pointY;
 			
 			rectWidth *= rectScaleX;
 			rectHeight *= rectScaleY;
@@ -48,16 +39,8 @@ SkyEngine('Util').Collision = OBJECT({
 			circleX, circleY,
 			circleWidth, circleHeight,
 			circleScaleX, circleScaleY,
-			circleRadian
+			circleSin, circleCos
 		) => {
-
-			let cos = 1;
-			let sin = 0;
-			
-			if (circleRadian !== 0) {
-				cos = Math.cos(circleRadian);
-				sin = Math.sin(circleRadian);
-			}
 			
 			circleWidth *= circleScaleX;
 			circleHeight *= circleScaleY;
@@ -65,8 +48,8 @@ SkyEngine('Util').Collision = OBJECT({
 			pointX -= circleX;
 			pointY -= circleY;
 
-			let tempX = 2 * (cos * pointX + sin * pointY) / circleWidth;
-			let tempY = 2 * (sin * pointX - cos * pointY) / circleHeight;
+			let tempX = 2 * (circleCos * pointX + circleSin * pointY) / circleWidth;
+			let tempY = 2 * (circleSin * pointX - circleCos * pointY) / circleHeight;
 			
 			return tempX * tempX + tempY * tempY <= 1;
 		};
@@ -77,23 +60,14 @@ SkyEngine('Util').Collision = OBJECT({
 			polygonX, polygonY,
 			points,
 			polygonScaleX, polygonScaleY,
-			polygonRadian
+			polygonSin, polygonCos
 		) => {
 			
-			let tempX = pointX;
-			let tempY = pointY;
+			pointX -= polygonX;
+			pointY -= polygonY;
 			
-			if (polygonRadian !== 0) {
-				
-				let cos = Math.cos(polygonRadian);
-				let sin = Math.sin(polygonRadian);
-				
-				pointX -= polygonX;
-				pointY -= polygonY;
-				
-				tempX = polygonX + cos * pointX + sin * pointY;
-				tempY = polygonY - sin * pointX + cos * pointY;
-			}
+			let tempX = polygonX + polygonCos * pointX + polygonSin * pointY;
+			let tempY = polygonY - polygonSin * pointX + polygonCos * pointY;
 			
 			tempX -= polygonX;
 			tempY -= polygonY;
@@ -123,20 +97,14 @@ SkyEngine('Util').Collision = OBJECT({
 			aStartX, aStartY,
 			aEndX, aEndY,
 			aScaleX, aScaleY,
-			aRadian,
+			aSin, aCos,
 			
 			bX, bY,
 			bStartX, bStartY,
 			bEndX, bEndY,
 			bScaleX, bScaleY,
-			bRadian
+			bSin, bCos
 		) => {
-			
-			let aTempStartX = aX;
-			let aTempStartY = aY;
-			
-			let aTempEndX = aX;
-			let aTempEndY = aY;
 			
 			aStartX *= aScaleX;
 			aStartY *= aScaleY;
@@ -144,32 +112,11 @@ SkyEngine('Util').Collision = OBJECT({
 			aEndX *= aScaleX;
 			aEndY *= aScaleY;
 			
-			if (aRadian === 0) {
-				
-				aTempStartX += aStartX;
-				aTempStartY += aStartY;
-				
-				aTempEndX += aEndX;
-				aTempEndY += aEndY;
-			}
+			let aTempStartX = aX + aCos * aStartX + aSin * aStartY;
+			let aTempStartY = aY + aSin * aStartX + aCos * aStartY;
 			
-			else {
-					
-				let cos = Math.cos(aRadian);
-				let sin = Math.sin(aRadian);
-				
-				aTempStartX += cos * aStartX + sin * aStartY;
-				aTempStartY += sin * aStartX + cos * aStartY;
-				
-				aTempEndX += cos * aEndX + sin * aEndY;
-				aTempEndY += sin * aEndX + cos * aEndY;
-			}
-			
-			let bTempStartX = bX;
-			let bTempStartY = bY;
-			
-			let bTempEndX = bX;
-			let bTempEndY = bY;
+			let aTempEndX = aX + aCos * aEndX + aSin * aEndY;
+			let aTempEndY = aY + aSin * aEndX + aCos * aEndY;
 			
 			bStartX *= bScaleX;
 			bStartY *= bScaleY;
@@ -177,26 +124,11 @@ SkyEngine('Util').Collision = OBJECT({
 			bEndX *= bScaleX;
 			bEndY *= bScaleY;
 			
-			if (bRadian === 0) {
-				
-				bTempStartX += bStartX;
-				bTempStartY += bStartY;
-				
-				bTempEndX += bEndX;
-				bTempEndY += bEndY;
-			}
+			let bTempStartX = bX + bCos * bStartX + bSin * bStartY;
+			let bTempStartY = bY + bSin * bStartX + bCos * bStartY;
 			
-			else {
-				
-				let cos = Math.cos(bRadian);
-				let sin = Math.sin(bRadian);
-				
-				bTempStartX += cos * bStartX + sin * bStartY;
-				bTempStartY += sin * bStartX + cos * bStartY;
-				
-				bTempEndX += cos * bEndX + sin * bEndY;
-				bTempEndY += sin * bEndX + cos * bEndY;
-			}
+			let bTempEndX = bX + bCos * bEndX + bSin * bEndY;
+			let bTempEndY = bY + bSin * bEndX + bCos * bEndY;
 			
 			let denom = (aTempEndX - aTempStartX) * (bTempEndY - bTempStartY) - (bTempEndX - bTempStartX) * (aTempEndY - aTempStartY);
 			
@@ -218,40 +150,19 @@ SkyEngine('Util').Collision = OBJECT({
 			lineStartX, lineStartY,
 			lineEndX, lineEndY,
 			lineScaleX, lineScaleY,
-			lineRadian,
+			lineSin, lineCos,
 			
 			rectX, rectY,
 			rectWidth, rectHeight,
 			rectScaleX, rectScaleY,
-			rectRadian
+			rectSin, rectCos
 		) => {
 			
-			let lineTempStartX = lineX;
-			let lineTempStartY = lineY;
+			let lineTempStartX = lineX + lineCos * lineStartX + lineSin * lineStartY;
+			let lineTempStartY = lineY + lineSin * lineStartX + lineCos * lineStartY;
 			
-			let lineTempEndX = lineX;
-			let lineTempEndY = lineY;
-			
-			if (lineRadian === 0) {
-				
-				lineTempStartX += lineStartX * lineScaleX;
-				lineTempStartY += lineStartY * lineScaleY;
-				
-				lineTempEndX += lineEndX * lineScaleX;
-				lineTempEndY += lineEndY * lineScaleY;
-			}
-			
-			else {
-				
-				let cos = Math.cos(lineRadian);
-				let sin = Math.sin(lineRadian);
-				
-				lineTempStartX += cos * lineStartX + sin * lineStartY;
-				lineTempStartY += sin * lineStartX + cos * lineStartY;
-				
-				lineTempEndX += cos * lineEndX + sin * lineEndY;
-				lineTempEndY += sin * lineEndX + cos * lineEndY;
-			}
+			let lineTempEndX = lineX + lineCos * lineEndX + lineSin * lineEndY;
+			let lineTempEndY = lineY + lineSin * lineEndX + lineCos * lineEndY;
 			
 			let rectPoint1X, rectPoint1Y;
 			let rectPoint2X, rectPoint2Y;
@@ -261,32 +172,18 @@ SkyEngine('Util').Collision = OBJECT({
 			rectWidth *= rectScaleX / 2;
 			rectHeight *= rectScaleY / 2;
 			
-			if (rectRadian === 0) {
-				
-				rectPoint1X = rectX - rectWidth;	rectPoint1Y = rectY - rectHeight;
-				rectPoint2X = rectX + rectWidth;	rectPoint2Y = rectY - rectHeight;
-				rectPoint3X = rectX + rectWidth;	rectPoint3Y = rectY + rectHeight;
-				rectPoint4X = rectX - rectWidth;	rectPoint4Y = rectY + rectHeight;
-			}
+			let cw = rectCos * rectWidth;	let ch = rectCos * rectHeight;
+			let sw = -rectSin * rectWidth;	let sh = -rectSin * rectHeight;
 			
-			else {
-				
-				let cos = Math.cos(-rectRadian);
-				let sin = Math.sin(-rectRadian);
-				
-				let cw = cos * rectWidth;	let ch = cos * rectHeight;
-				let sw = sin * rectWidth;	let sh = sin * rectHeight;
-				
-				rectPoint1X = rectX - cw - sh;	rectPoint1Y = rectY + sw - ch;
-				rectPoint2X = rectX + cw - sh;	rectPoint2Y = rectY - sw - ch;
-				rectPoint3X = rectX + cw + sh;	rectPoint3Y = rectY - sw + ch;
-				rectPoint4X = rectX - cw + sh;	rectPoint4Y = rectY + sw + ch;
-			}
+			rectPoint1X = rectX - cw - sh;	rectPoint1Y = rectY + sw - ch;
+			rectPoint2X = rectX + cw - sh;	rectPoint2Y = rectY - sw - ch;
+			rectPoint3X = rectX + cw + sh;	rectPoint3Y = rectY - sw + ch;
+			rectPoint4X = rectX - cw + sh;	rectPoint4Y = rectY + sw + ch;
 			
-			return checkLineLine(0, 0, lineTempStartX, lineTempStartY, lineTempEndX, lineTempEndY, 1, 1, 0, 0, 0, rectPoint1X, rectPoint1Y, rectPoint2X, rectPoint2Y, 1, 1, 0) === true ||
-				checkLineLine(0, 0, lineTempStartX, lineTempStartY, lineTempEndX, lineTempEndY, 1, 1, 0, 0, 0, rectPoint2X, rectPoint2Y, rectPoint3X, rectPoint3Y, 1, 1, 0) === true ||
-				checkLineLine(0, 0, lineTempStartX, lineTempStartY, lineTempEndX, lineTempEndY, 1, 1, 0, 0, 0, rectPoint3X, rectPoint3Y, rectPoint4X, rectPoint4Y, 1, 1, 0) === true ||
-				checkLineLine(0, 0, lineTempStartX, lineTempStartY, lineTempEndX, lineTempEndY, 1, 1, 0, 0, 0, rectPoint4X, rectPoint4Y, rectPoint1X, rectPoint1Y, 1, 1, 0) === true;
+			return checkLineLine(0, 0, lineTempStartX, lineTempStartY, lineTempEndX, lineTempEndY, 1, 1, 0, 1, 0, 0, rectPoint1X, rectPoint1Y, rectPoint2X, rectPoint2Y, 1, 1, 0, 1) === true ||
+				checkLineLine(0, 0, lineTempStartX, lineTempStartY, lineTempEndX, lineTempEndY, 1, 1, 0, 1, 0, 0, rectPoint2X, rectPoint2Y, rectPoint3X, rectPoint3Y, 1, 1, 0, 1) === true ||
+				checkLineLine(0, 0, lineTempStartX, lineTempStartY, lineTempEndX, lineTempEndY, 1, 1, 0, 1, 0, 0, rectPoint3X, rectPoint3Y, rectPoint4X, rectPoint4Y, 1, 1, 0, 1) === true ||
+				checkLineLine(0, 0, lineTempStartX, lineTempStartY, lineTempEndX, lineTempEndY, 1, 1, 0, 1, 0, 0, rectPoint4X, rectPoint4Y, rectPoint1X, rectPoint1Y, 1, 1, 0, 1) === true;
 		};
 		
 		let checkLineCircle = self.checkLineCircle = (
@@ -294,58 +191,25 @@ SkyEngine('Util').Collision = OBJECT({
 			lineStartX, lineStartY,
 			lineEndX, lineEndY,
 			lineScaleX, lineScaleY,
-			lineRadian,
+			lineSin, lineCos,
 			
 			circleX, circleY,
 			circleWidth, circleHeight,
 			circleScaleX, circleScaleY,
-			circleRadian
+			circleSin, circleCos
 		) => {
 			
-			let lineTempStartX = lineX;
-			let lineTempStartY = lineY;
+			let lineTempStartX = lineX + lineCos * lineStartX + lineSin * lineStartY - circleX;
+			let lineTempStartY = lineY + lineSin * lineStartX + lineCos * lineStartY - circleY;
 			
-			let lineTempEndX = lineX;
-			let lineTempEndY = lineY;
+			let lineTempEndX = lineX + lineCos * lineEndX + lineSin * lineEndY - circleX;
+			let lineTempEndY = lineY + lineSin * lineEndX + lineCos * lineEndY - circleY;
 			
-			if (lineRadian === 0) {
-				
-				lineTempStartX += lineStartX * lineScaleX;
-				lineTempStartY += lineStartY * lineScaleY;
-				
-				lineTempEndX += lineEndX * lineScaleX;
-				lineTempEndY += lineEndY * lineScaleY;
-			}
+			let tempStartX = circleCos * lineTempStartX + circleSin * lineTempStartY;
+			let tempStartY = -circleSin * lineTempStartX + circleCos * lineTempStartY;
 			
-			else {
-				
-				let cos = Math.cos(lineRadian);
-				let sin = Math.sin(lineRadian);
-				
-				lineTempStartX += cos * lineStartX + sin * lineStartY;
-				lineTempStartY += sin * lineStartX + cos * lineStartY;
-				
-				lineTempEndX += cos * lineEndX + sin * lineEndY;
-				lineTempEndY += sin * lineEndX + cos * lineEndY;
-			}
-			
-			let tempStartX = lineTempStartX;
-			let tempStartY = lineTempStartY;
-			
-			let tempEndX = lineTempEndX;
-			let tempEndY = lineTempEndY;
-			
-			if (circleRadian !== 0) {
-				
-				let cos = Math.cos(circleRadian);
-				let sin = Math.sin(circleRadian);
-				
-				tempStartX = cos * lineTempStartX + sin * lineTempStartY;
-				tempStartY = -sin * lineTempStartX + cos * lineTempStartY;
-				
-				tempEndX = cos * lineTempEndX + sin * lineTempEndY;
-				tempEndY = -sin * lineTempEndX + cos * lineTempEndY;
-			}
+			let tempEndX = circleCos * lineTempEndX + circleSin * lineTempEndY;
+			let tempEndY = -circleSin * lineTempEndX + circleCos * lineTempEndY;
 			
 			circleWidth *= circleScaleX;
 			circleHeight *= circleScaleY;
@@ -353,10 +217,10 @@ SkyEngine('Util').Collision = OBJECT({
 			let m = (tempEndY - tempStartY) / (tempEndX - tempStartX);
 			
 			if (Math.abs(m) > 1024) {
-				return checkLineCircle(0, 0, tempStartY, tempStartX, tempEndY, tempEndX, 1, 1, 0, 0, 0, circleHeight, circleWidth, 1, 1, 0);
+				return checkLineCircle(0, 0, tempStartY, tempStartX, tempEndY, tempEndX, 1, 1, 0, 1, 0, 0, circleHeight, circleWidth, 1, 1, 0, 1);
 			}
 			
-			if (checkPointInCircle(tempEndX, tempEndY, 0, 0, circleWidth, circleHeight, 1, 1, 0) === true) {
+			if (checkPointInCircle(tempEndX, tempEndY, 0, 0, circleWidth, circleHeight, 1, 1, 0, 1) === true) {
 				return true;
 			}
 			
@@ -386,40 +250,19 @@ SkyEngine('Util').Collision = OBJECT({
 			lineStartX, lineStartY,
 			lineEndX, lineEndY,
 			lineScaleX, lineScaleY,
-			lineRadian,
+			lineSin, lineCos,
 			
 			polygonX, polygonY,
 			points,
 			polygonScaleX, polygonScaleY,
-			polygonRadian
+			polygonSin, polygonCos
 		) => {
 			
-			let lineTempStartX = lineX;
-			let lineTempStartY = lineY;
+			let lineTempStartX = lineX + lineCos * lineStartX + lineSin * lineStartY;
+			let lineTempStartY = lineY + lineSin * lineStartX + lineCos * lineStartY;
 			
-			let lineTempEndX = lineX;
-			let lineTempEndY = lineY;
-			
-			if (lineRadian === 0) {
-				
-				lineTempStartX += lineStartX * lineScaleX;
-				lineTempStartY += lineStartY * lineScaleY;
-				
-				lineTempEndX += lineEndX * lineScaleX;
-				lineTempEndY += lineEndY * lineScaleY;
-			}
-			
-			else {
-				
-				let cos = Math.cos(lineRadian);
-				let sin = Math.sin(lineRadian);
-				
-				lineTempStartX += cos * lineStartX + sin * lineStartY;
-				lineTempStartY += sin * lineStartX + cos * lineStartY;
-				
-				lineTempEndX += cos * lineEndX + sin * lineEndY;
-				lineTempEndY += sin * lineEndX + cos * lineEndY;
-			}
+			let lineTempEndX = lineX + lineCos * lineEndX + lineSin * lineEndY;
+			let lineTempEndY = lineY + lineSin * lineEndX + lineCos * lineEndY;
 			
 			let length = points.length;
 			
@@ -431,24 +274,13 @@ SkyEngine('Util').Collision = OBJECT({
 				let jX = points[j].x * polygonScaleX;
 				let jY = points[j].y * polygonScaleY;
 				
-				let polygonPoint1X, polygonPoint1Y;
-				let polygonPoint2X, polygonPoint2Y;
+				let polygonPoint1X = polygonX + polygonCos * iX - polygonSin * iY;
+				let polygonPoint1Y = polygonY + polygonSin * iX + polygonCos * iY;
 				
-				if (polygonRadian === 0) {
-					polygonPoint1X = polygonX + iX;	polygonPoint1Y = polygonY + iY;
-					polygonPoint2X = polygonX + jX;	polygonPoint2Y = polygonY + jY;
-				}
+				let polygonPoint2X = polygonX + polygonCos * jX - polygonSin * jY;
+				let polygonPoint2Y = polygonY + polygonSin * jX + polygonCos * jY;
 				
-				else {
-					
-					let cos = Math.cos(-polygonRadian);
-					let sin = Math.sin(-polygonRadian);
-					
-					polygonPoint1X = polygonX + cos * iX + sin * iY;	polygonPoint1Y = polygonY - sin * iX + cos * iY;
-					polygonPoint2X = polygonX + cos * jX + sin * jY;	polygonPoint2Y = polygonY - sin * jX + cos * jY;
-				}
-				
-				if (checkLineLine(0, 0, lineTempStartX, lineTempStartY, lineTempEndX, lineTempEndY, 1, 1, 0, 0, 0, polygonPoint1X, polygonPoint1Y, polygonPoint2X, polygonPoint2Y, 1, 1, 0) === true) {
+				if (checkLineLine(0, 0, lineTempStartX, lineTempStartY, lineTempEndX, lineTempEndY, 1, 1, 0, 1, 0, 0, polygonPoint1X, polygonPoint1Y, polygonPoint2X, polygonPoint2Y, 1, 1, 0, 1) === true) {
 					return true;
 				}
 			}
@@ -460,12 +292,12 @@ SkyEngine('Util').Collision = OBJECT({
 			aX, aY,
 			aWidth, aHeight,
 			aScaleX, aScaleY,
-			aRadian,
+			aSin, aCos,
 			
 			bX, bY,
 			bWidth, bHeight,
 			bScaleX, bScaleY,
-			bRadian
+			bSin, bCos
 		) => {
 			
 			let aPoint1X, aPoint1Y;
@@ -476,27 +308,13 @@ SkyEngine('Util').Collision = OBJECT({
 			aWidth *= aScaleX / 2;
 			aHeight *= aScaleY / 2;
 			
-			if (aRadian === 0) {
-				
-				aPoint1X = aX - aWidth;	aPoint1Y = aY - aHeight;
-				aPoint2X = aX + aWidth;	aPoint2Y = aY - aHeight;
-				aPoint3X = aX + aWidth;	aPoint3Y = aY + aHeight;
-				aPoint4X = aX - aWidth;	aPoint4Y = aY + aHeight;
-			}
+			let aCW = aCos * aWidth;	let aCH = aCos * aHeight;
+			let aSW = -aSin * aWidth;	let aSH = -aSin * aHeight;
 			
-			else {
-				
-				let cos = Math.cos(-aRadian);
-				let sin = Math.sin(-aRadian);
-				
-				let cw = cos * aWidth;	let ch = cos * aHeight;
-				let sw = sin * aWidth;	let sh = sin * aHeight;
-				
-				aPoint1X = aX - cw - sh;	aPoint1Y = aY + sw - ch;
-				aPoint2X = aX + cw - sh;	aPoint2Y = aY - sw - ch;
-				aPoint3X = aX + cw + sh;	aPoint3Y = aY - sw + ch;
-				aPoint4X = aX - cw + sh;	aPoint4Y = aY + sw + ch;
-			}
+			aPoint1X = aX - aCW - aSH;	aPoint1Y = aY + aSW - aCH;
+			aPoint2X = aX + aCW - aSH;	aPoint2Y = aY - aSW - aCH;
+			aPoint3X = aX + aCW + aSH;	aPoint3Y = aY - aSW + aCH;
+			aPoint4X = aX - aCW + aSH;	aPoint4Y = aY + aSW + aCH;
 			
 			let bPoint1X, bPoint1Y;
 			let bPoint2X, bPoint2Y;
@@ -506,59 +324,45 @@ SkyEngine('Util').Collision = OBJECT({
 			bWidth *= bScaleX / 2;
 			bHeight *= bScaleY / 2;
 			
-			if (bRadian === 0) {
-				
-				bPoint1X = bX - bWidth;	bPoint1Y = bY - bHeight;
-				bPoint2X = bX + bWidth;	bPoint2Y = bY - bHeight;
-				bPoint3X = bX + bWidth;	bPoint3Y = bY + bHeight;
-				bPoint4X = bX - bWidth;	bPoint4Y = bY + bHeight;
-			}
+			let bCW = bCos * bWidth;	let bCH = bCos * bHeight;
+			let bSW = -bSin * bWidth;	let bSH = -bSin * bHeight;
 			
-			else {
-				
-				let cos = Math.cos(-bRadian);
-				let sin = Math.sin(-bRadian);
-				
-				let cw = cos * bWidth;	let ch = cos * bHeight;
-				let sw = sin * bWidth;	let sh = sin * bHeight;
-				
-				bPoint1X = bX - cw - sh;	bPoint1Y = bY + sw - ch;
-				bPoint2X = bX + cw - sh;	bPoint2Y = bY - sw - ch;
-				bPoint3X = bX + cw + sh;	bPoint3Y = bY - sw + ch;
-				bPoint4X = bX - cw + sh;	bPoint4Y = bY + sw + ch;
-			}
+			bPoint1X = bX - bCW - bSH;	bPoint1Y = bY + bSW - bCH;
+			bPoint2X = bX + bCW - bSH;	bPoint2Y = bY - bSW - bCH;
+			bPoint3X = bX + bCW + bSH;	bPoint3Y = bY - bSW + bCH;
+			bPoint4X = bX - bCW + bSH;	bPoint4Y = bY + bSW + bCH;
 			
-			return checkLineLine(0, 0, aPoint1X, aPoint1Y, aPoint2X, aPoint2Y, 1, 1, 0, 0, 0, bPoint1X, bPoint1Y, bPoint2X, bPoint2Y, 1, 1, 0) === true ||
-				checkLineLine(0, 0, aPoint1X, aPoint1Y, aPoint2X, aPoint2Y, 1, 1, 0, 0, 0, bPoint2X, bPoint2Y, bPoint3X, bPoint3Y, 1, 1, 0) === true ||
-				checkLineLine(0, 0, aPoint1X, aPoint1Y, aPoint2X, aPoint2Y, 1, 1, 0, 0, 0, bPoint3X, bPoint3Y, bPoint4X, bPoint4Y, 1, 1, 0) === true ||
-				checkLineLine(0, 0, aPoint1X, aPoint1Y, aPoint2X, aPoint2Y, 1, 1, 0, 0, 0, bPoint4X, bPoint4Y, bPoint1X, bPoint1Y, 1, 1, 0) === true ||
+			return checkLineLine(0, 0, aPoint1X, aPoint1Y, aPoint2X, aPoint2Y, 1, 1, 0, 1, 0, 0, bPoint1X, bPoint1Y, bPoint2X, bPoint2Y, 1, 1, 0, 1) === true ||
+				checkLineLine(0, 0, aPoint1X, aPoint1Y, aPoint2X, aPoint2Y, 1, 1, 0, 1, 0, 0, bPoint2X, bPoint2Y, bPoint3X, bPoint3Y, 1, 1, 0, 1) === true ||
+				checkLineLine(0, 0, aPoint1X, aPoint1Y, aPoint2X, aPoint2Y, 1, 1, 0, 1, 0, 0, bPoint3X, bPoint3Y, bPoint4X, bPoint4Y, 1, 1, 0, 1) === true ||
+				checkLineLine(0, 0, aPoint1X, aPoint1Y, aPoint2X, aPoint2Y, 1, 1, 0, 1, 0, 0, bPoint4X, bPoint4Y, bPoint1X, bPoint1Y, 1, 1, 0, 1) === true ||
 				
-				checkLineLine(0, 0, aPoint2X, aPoint2Y, aPoint3X, aPoint3Y, 1, 1, 0, 0, 0, bPoint1X, bPoint1Y, bPoint2X, bPoint2Y, 1, 1, 0) === true ||
-				checkLineLine(0, 0, aPoint2X, aPoint2Y, aPoint3X, aPoint3Y, 1, 1, 0, 0, 0, bPoint2X, bPoint2Y, bPoint3X, bPoint3Y, 1, 1, 0) === true ||
-				checkLineLine(0, 0, aPoint2X, aPoint2Y, aPoint3X, aPoint3Y, 1, 1, 0, 0, 0, bPoint3X, bPoint3Y, bPoint4X, bPoint4Y, 1, 1, 0) === true ||
-				checkLineLine(0, 0, aPoint2X, aPoint2Y, aPoint3X, aPoint3Y, 1, 1, 0, 0, 0, bPoint4X, bPoint4Y, bPoint1X, bPoint1Y, 1, 1, 0) === true ||
+				checkLineLine(0, 0, aPoint2X, aPoint2Y, aPoint3X, aPoint3Y, 1, 1, 0, 1, 0, 0, bPoint1X, bPoint1Y, bPoint2X, bPoint2Y, 1, 1, 0, 1) === true ||
+				checkLineLine(0, 0, aPoint2X, aPoint2Y, aPoint3X, aPoint3Y, 1, 1, 0, 1, 0, 0, bPoint2X, bPoint2Y, bPoint3X, bPoint3Y, 1, 1, 0, 1) === true ||
+				checkLineLine(0, 0, aPoint2X, aPoint2Y, aPoint3X, aPoint3Y, 1, 1, 0, 1, 0, 0, bPoint3X, bPoint3Y, bPoint4X, bPoint4Y, 1, 1, 0, 1) === true ||
+				checkLineLine(0, 0, aPoint2X, aPoint2Y, aPoint3X, aPoint3Y, 1, 1, 0, 1, 0, 0, bPoint4X, bPoint4Y, bPoint1X, bPoint1Y, 1, 1, 0, 1) === true ||
 				
-				checkLineLine(0, 0, aPoint3X, aPoint3Y, aPoint4X, aPoint4Y, 1, 1, 0, 0, 0, bPoint1X, bPoint1Y, bPoint2X, bPoint2Y, 1, 1, 0) === true ||
-				checkLineLine(0, 0, aPoint3X, aPoint3Y, aPoint4X, aPoint4Y, 1, 1, 0, 0, 0, bPoint2X, bPoint2Y, bPoint3X, bPoint3Y, 1, 1, 0) === true ||
-				checkLineLine(0, 0, aPoint3X, aPoint3Y, aPoint4X, aPoint4Y, 1, 1, 0, 0, 0, bPoint3X, bPoint3Y, bPoint4X, bPoint4Y, 1, 1, 0) === true ||
-				checkLineLine(0, 0, aPoint3X, aPoint3Y, aPoint4X, aPoint4Y, 1, 1, 0, 0, 0, bPoint4X, bPoint4Y, bPoint1X, bPoint1Y, 1, 1, 0) === true ||
+				checkLineLine(0, 0, aPoint3X, aPoint3Y, aPoint4X, aPoint4Y, 1, 1, 0, 1, 0, 0, bPoint1X, bPoint1Y, bPoint2X, bPoint2Y, 1, 1, 0, 1) === true ||
+				checkLineLine(0, 0, aPoint3X, aPoint3Y, aPoint4X, aPoint4Y, 1, 1, 0, 1, 0, 0, bPoint2X, bPoint2Y, bPoint3X, bPoint3Y, 1, 1, 0, 1) === true ||
+				checkLineLine(0, 0, aPoint3X, aPoint3Y, aPoint4X, aPoint4Y, 1, 1, 0, 1, 0, 0, bPoint3X, bPoint3Y, bPoint4X, bPoint4Y, 1, 1, 0, 1) === true ||
+				checkLineLine(0, 0, aPoint3X, aPoint3Y, aPoint4X, aPoint4Y, 1, 1, 0, 1, 0, 0, bPoint4X, bPoint4Y, bPoint1X, bPoint1Y, 1, 1, 0, 1) === true ||
 				
-				checkLineLine(0, 0, aPoint4X, aPoint4Y, aPoint1X, aPoint1Y, 1, 1, 0, 0, 0, bPoint1X, bPoint1Y, bPoint2X, bPoint2Y, 1, 1, 0) === true ||
-				checkLineLine(0, 0, aPoint4X, aPoint4Y, aPoint1X, aPoint1Y, 1, 1, 0, 0, 0, bPoint2X, bPoint2Y, bPoint3X, bPoint3Y, 1, 1, 0) === true ||
-				checkLineLine(0, 0, aPoint4X, aPoint4Y, aPoint1X, aPoint1Y, 1, 1, 0, 0, 0, bPoint3X, bPoint3Y, bPoint4X, bPoint4Y, 1, 1, 0) === true ||
-				checkLineLine(0, 0, aPoint4X, aPoint4Y, aPoint1X, aPoint1Y, 1, 1, 0, 0, 0, bPoint4X, bPoint4Y, bPoint1X, bPoint1Y, 1, 1, 0) === true;
+				checkLineLine(0, 0, aPoint4X, aPoint4Y, aPoint1X, aPoint1Y, 1, 1, 0, 1, 0, 0, bPoint1X, bPoint1Y, bPoint2X, bPoint2Y, 1, 1, 0, 1) === true ||
+				checkLineLine(0, 0, aPoint4X, aPoint4Y, aPoint1X, aPoint1Y, 1, 1, 0, 1, 0, 0, bPoint2X, bPoint2Y, bPoint3X, bPoint3Y, 1, 1, 0, 1) === true ||
+				checkLineLine(0, 0, aPoint4X, aPoint4Y, aPoint1X, aPoint1Y, 1, 1, 0, 1, 0, 0, bPoint3X, bPoint3Y, bPoint4X, bPoint4Y, 1, 1, 0, 1) === true ||
+				checkLineLine(0, 0, aPoint4X, aPoint4Y, aPoint1X, aPoint1Y, 1, 1, 0, 1, 0, 0, bPoint4X, bPoint4Y, bPoint1X, bPoint1Y, 1, 1, 0, 1) === true;
 		};
 		
 		let checkRectCircle = self.checkRectCircle = (
 			rectX, rectY,
 			rectWidth, rectHeight,
 			rectScaleX, rectScaleY,
-			rectRadian,
+			rectSin, rectCos,
 			
 			circleX, circleY,
 			circleWidth, circleHeight,
 			circleScaleX, circleScaleY,
-			circleRadian) => {
+			circleSin, circleCos) => {
 			
 			let rectPoint1X, rectPoint1Y;
 			let rectPoint2X, rectPoint2Y;
@@ -568,47 +372,33 @@ SkyEngine('Util').Collision = OBJECT({
 			rectWidth *= rectScaleX / 2;
 			rectHeight *= rectScaleY / 2;
 			
-			if (rectRadian === 0) {
-				
-				rectPoint1X = rectX - rectWidth;	rectPoint1Y = rectY - rectHeight;
-				rectPoint2X = rectX + rectWidth;	rectPoint2Y = rectY - rectHeight;
-				rectPoint3X = rectX + rectWidth;	rectPoint3Y = rectY + rectHeight;
-				rectPoint4X = rectX - rectWidth;	rectPoint4Y = rectY + rectHeight;
-			}
+			let cw = rectCos * rectWidth;	let ch = rectCos * rectHeight;
+			let sw = -rectSin * rectWidth;	let sh = -rectSin * rectHeight;
 			
-			else {
-				
-				let cos = Math.cos(-rectRadian);
-				let sin = Math.sin(-rectRadian);
-				
-				let cw = cos * rectWidth;	let ch = cos * rectHeight;
-				let sw = sin * rectWidth;	let sh = sin * rectHeight;
-				
-				rectPoint1X = rectX - cw - sh;	rectPoint1Y = rectY + sw - ch;
-				rectPoint2X = rectX + cw - sh;	rectPoint2Y = rectY - sw - ch;
-				rectPoint3X = rectX + cw + sh;	rectPoint3Y = rectY - sw + ch;
-				rectPoint4X = rectX - cw + sh;	rectPoint4Y = rectY + sw + ch;
-			}
+			rectPoint1X = rectX - cw - sh;	rectPoint1Y = rectY + sw - ch;
+			rectPoint2X = rectX + cw - sh;	rectPoint2Y = rectY - sw - ch;
+			rectPoint3X = rectX + cw + sh;	rectPoint3Y = rectY - sw + ch;
+			rectPoint4X = rectX - cw + sh;	rectPoint4Y = rectY + sw + ch;
 			
 			circleWidth *= circleScaleX;
 			circleHeight *= circleScaleY;
 			
-			return checkLineCircle(0, 0, rectPoint1X, rectPoint1Y, rectPoint2X, rectPoint2Y, 1, 1, 0, circleX, circleY, circleWidth, circleScaleX, 1, 1, circleRadian) === true ||
-				checkLineCircle(0, 0, rectPoint2X, rectPoint2Y, rectPoint3X, rectPoint3Y, 1, 1, 0, circleX, circleY, circleWidth, circleScaleX, 1, 1, circleRadian) === true ||
-				checkLineCircle(0, 0, rectPoint3X, rectPoint3Y, rectPoint4X, rectPoint4Y, 1, 1, 0, circleX, circleY, circleWidth, circleScaleX, 1, 1, circleRadian) === true ||
-				checkLineCircle(0, 0, rectPoint4X, rectPoint4Y, rectPoint1X, rectPoint1Y, 1, 1, 0, circleX, circleY, circleWidth, circleScaleX, 1, 1, circleRadian) === true;
+			return checkLineCircle(0, 0, rectPoint1X, rectPoint1Y, rectPoint2X, rectPoint2Y, 1, 1, 0, 1, circleX, circleY, circleWidth, circleHeight, 1, 1, circleSin, circleCos) === true ||
+				checkLineCircle(0, 0, rectPoint2X, rectPoint2Y, rectPoint3X, rectPoint3Y, 1, 1, 0, 1, circleX, circleY, circleWidth, circleHeight, 1, 1, circleSin, circleCos) === true ||
+				checkLineCircle(0, 0, rectPoint3X, rectPoint3Y, rectPoint4X, rectPoint4Y, 1, 1, 0, 1, circleX, circleY, circleWidth, circleHeight, 1, 1, circleSin, circleCos) === true ||
+				checkLineCircle(0, 0, rectPoint4X, rectPoint4Y, rectPoint1X, rectPoint1Y, 1, 1, 0, 1, circleX, circleY, circleWidth, circleHeight, 1, 1, circleSin, circleCos) === true;
 		};
 		
 		let checkRectPolygon = self.checkRectPolygon = (
 			rectX, rectY,
 			rectWidth, rectHeight,
 			rectScaleX, rectScaleY,
-			rectRadian,
+			rectSin, rectCos,
 			
 			polygonX, polygonY,
 			points,
 			polygonScaleX, polygonScaleY,
-			polygonRadian
+			polygonSin, polygonCos
 		) => {
 			
 			let rectPoint1X, rectPoint1Y;
@@ -619,27 +409,13 @@ SkyEngine('Util').Collision = OBJECT({
 			rectWidth *= rectScaleX / 2;
 			rectHeight *= rectScaleY / 2;
 			
-			if (rectRadian === 0) {
-				
-				rectPoint1X = rectX - rectWidth;	rectPoint1Y = rectY - rectHeight;
-				rectPoint2X = rectX + rectWidth;	rectPoint2Y = rectY - rectHeight;
-				rectPoint3X = rectX + rectWidth;	rectPoint3Y = rectY + rectHeight;
-				rectPoint4X = rectX - rectWidth;	rectPoint4Y = rectY + rectHeight;
-			}
+			let cw = rectCos * rectWidth;	let ch = rectCos * rectHeight;
+			let sw = -rectSin * rectWidth;	let sh = -rectSin * rectHeight;
 			
-			else {
-				
-				let cos = Math.cos(-rectRadian);
-				let sin = Math.sin(-rectRadian);
-				
-				let cw = cos * rectWidth;	let ch = cos * rectHeight;
-				let sw = sin * rectWidth;	let sh = sin * rectHeight;
-				
-				rectPoint1X = rectX - cw - sh;	rectPoint1Y = rectY + sw - ch;
-				rectPoint2X = rectX + cw - sh;	rectPoint2Y = rectY - sw - ch;
-				rectPoint3X = rectX + cw + sh;	rectPoint3Y = rectY - sw + ch;
-				rectPoint4X = rectX - cw + sh;	rectPoint4Y = rectY + sw + ch;
-			}
+			rectPoint1X = rectX - cw - sh;	rectPoint1Y = rectY + sw - ch;
+			rectPoint2X = rectX + cw - sh;	rectPoint2Y = rectY - sw - ch;
+			rectPoint3X = rectX + cw + sh;	rectPoint3Y = rectY - sw + ch;
+			rectPoint4X = rectX - cw + sh;	rectPoint4Y = rectY + sw + ch;
 			
 			let length = points.length;
 			
@@ -651,28 +427,17 @@ SkyEngine('Util').Collision = OBJECT({
 				let jX = points[j].x * polygonScaleX;
 				let jY = points[j].y * polygonScaleY;
 				
-				let polygonPoint1X, polygonPoint1Y;
-				let polygonPoint2X, polygonPoint2Y;
+				let polygonPoint1X = polygonX + polygonCos * iX - polygonSin * iY;
+				let polygonPoint1Y = polygonY + polygonSin * iX + polygonCos * iY;
 				
-				if (polygonRadian === 0) {
-					polygonPoint1X = polygonX + iX;	polygonPoint1Y = polygonY + iY;
-					polygonPoint2X = polygonX + jX;	polygonPoint2Y = polygonY + jY;
-				}
-				
-				else {
-					
-					let cos = Math.cos(-polygonRadian);
-					let sin = Math.sin(-polygonRadian);
-					
-					polygonPoint1X = polygonX + cos * iX + sin * iY;	polygonPoint1Y = polygonY - sin * iX + cos * iY;
-					polygonPoint2X = polygonX + cos * jX + sin * jY;	polygonPoint2Y = polygonY - sin * jX + cos * jY;
-				}
+				let polygonPoint2X = polygonX + polygonCos * jX - polygonSin * jY;
+				let polygonPoint2Y = polygonY + polygonSin * jX + polygonCos * jY;
 				
 				if (
-				checkLineLine(0, 0, rectPoint1X, rectPoint1Y, rectPoint2X, rectPoint2Y, 1, 1, 0, 0, 0, polygonPoint1X, polygonPoint1Y, polygonPoint2X, polygonPoint2Y, 1, 1, 0) === true ||
-				checkLineLine(0, 0, rectPoint2X, rectPoint2Y, rectPoint3X, rectPoint3Y, 1, 1, 0, 0, 0, polygonPoint1X, polygonPoint1Y, polygonPoint2X, polygonPoint2Y, 1, 1, 0) === true ||
-				checkLineLine(0, 0, rectPoint3X, rectPoint3Y, rectPoint4X, rectPoint4Y, 1, 1, 0, 0, 0, polygonPoint1X, polygonPoint1Y, polygonPoint2X, polygonPoint2Y, 1, 1, 0) === true ||
-				checkLineLine(0, 0, rectPoint4X, rectPoint4Y, rectPoint1X, rectPoint1Y, 1, 1, 0, 0, 0, polygonPoint1X, polygonPoint1Y, polygonPoint2X, polygonPoint2Y, 1, 1, 0) === true) {
+				checkLineLine(0, 0, rectPoint1X, rectPoint1Y, rectPoint2X, rectPoint2Y, 1, 1, 0, 1, 0, 0, polygonPoint1X, polygonPoint1Y, polygonPoint2X, polygonPoint2Y, 1, 1, 0, 1) === true ||
+				checkLineLine(0, 0, rectPoint2X, rectPoint2Y, rectPoint3X, rectPoint3Y, 1, 1, 0, 1, 0, 0, polygonPoint1X, polygonPoint1Y, polygonPoint2X, polygonPoint2Y, 1, 1, 0, 1) === true ||
+				checkLineLine(0, 0, rectPoint3X, rectPoint3Y, rectPoint4X, rectPoint4Y, 1, 1, 0, 1, 0, 0, polygonPoint1X, polygonPoint1Y, polygonPoint2X, polygonPoint2Y, 1, 1, 0, 1) === true ||
+				checkLineLine(0, 0, rectPoint4X, rectPoint4Y, rectPoint1X, rectPoint1Y, 1, 1, 0, 1, 0, 0, polygonPoint1X, polygonPoint1Y, polygonPoint2X, polygonPoint2Y, 1, 1, 0, 1) === true) {
 					return true;
 				}
 			}
@@ -684,12 +449,12 @@ SkyEngine('Util').Collision = OBJECT({
 			aX, aY,
 			aWidth, aHeight,
 			aScaleX, aScaleY,
-			aRadian,
+			aSin, aCos,
 			
 			bX, bY,
 			bWidth, bHeight,
 			bScaleX, bScaleY,
-			bRadian
+			bSin, bCos
 		) => {
 			
 			aWidth *= aScaleX;
@@ -709,45 +474,39 @@ SkyEngine('Util').Collision = OBJECT({
 			}
 			
 			if (
-			checkPointInCircle(bX, bY, aX, aY, aWidth, aHeight, 1, 1, aRadian) === true ||
-			checkPointInCircle(aX, aY, bX, bY, bWidth, bHeight, 1, 1, bRadian) === true) {
+			checkPointInCircle(bX, bY, aX, aY, aWidth, aHeight, 1, 1, aSin, aCos) === true ||
+			checkPointInCircle(aX, aY, bX, bY, bWidth, bHeight, 1, 1, bSin, bCos) === true) {
 				return true;
 			}
 			
-			let A = Math.cos(aRadian);
-			let B = Math.sin(aRadian);
+			let a = aCos * aX + aSin * aY;
+			let c = -aSin * aX + aCos * aY;
 			
-			let a = A * aX + B * aY;
-			let c = -B * aX + A * aY;
-			
-			B = -B;
+			aSin = -aSin;
 			
 			let b = aWidth * aWidth / 4;
 			let d = aHeight * aHeight / 4;
 			
-			let aa = (A * A / b) + (B * B / d);
-			let ab = (-2 * A * B / b) + (2 * A * B / d);
-			let ac = (B * B / b) + (A * A / d);
-			let ad = (-2 * a * A / b) - (2 * c * B / d);
-			let ae = (2 * a * B / b) - (2 * c * A / d);
+			let aa = (aCos * aCos / b) + (aSin * aSin / d);
+			let ab = (-2 * aCos * aSin / b) + (2 * aCos * aSin / d);
+			let ac = (aSin * aSin / b) + (aCos * aCos / d);
+			let ad = (-2 * a * aCos / b) - (2 * c * aSin / d);
+			let ae = (2 * a * aSin / b) - (2 * c * aCos / d);
 			let af = (a * a / b) + (c * c / d) - 1;
 			
-			A = Math.cos(bRadian);
-			B = Math.sin(bRadian);
+			a = bCos * bX + bSin * bY;
+			c = -bSin * bX + bCos * bY;
 			
-			a = A * bX + B * bY;
-			c = -B * bX + A * bY;
-			
-			B = -B;
+			bSin = -bSin;
 			
 			b = bWidth * bWidth / 4;
 			d = bHeight * bHeight / 4;
 			
-			let ba = (A * A / b) + (B * B / d);
-			let bb = (-2 * A * B / b) + (2 * A * B / d);
-			let bc = (B * B / b) + (A * A / d);
-			let bd = (-2 * a * A / b) - (2 * c * B / d);
-			let be = (2 * a * B / b) - (2 * c * A / d);
+			let ba = (bCos * bCos / b) + (bSin * bSin / d);
+			let bb = (-2 * bCos * bSin / b) + (2 * bCos * bSin / d);
+			let bc = (bSin * bSin / b) + (bCos * bCos / d);
+			let bd = (-2 * a * bCos / b) - (2 * c * bSin / d);
+			let be = (2 * a * bSin / b) - (2 * c * bCos / d);
 			let bf = (a * a / b) + (c * c / d) - 1;
 			
 			let z0 = af * aa * bd * bd + aa * aa * bf * bf - ad * aa * bd * bf + ba * ba * af * af - 2 * aa * bf * ba * af - ad * bd * ba * af + ba * ad * ad * bf;
@@ -791,12 +550,13 @@ SkyEngine('Util').Collision = OBJECT({
 			circleX, circleY,
 			circleWidth, circleHeight,
 			circleScaleX, circleScaleY,
-			circleRadian,
+			circleSin, circleCos,
 			
 			polygonX, polygonY,
 			points,
 			polygonScaleX, polygonScaleY,
-			polygonRadian) => {
+			polygonSin, polygonCos
+		) => {
 			
 			circleWidth *= circleScaleX;
 			circleHeight *= circleScaleY;
@@ -811,24 +571,13 @@ SkyEngine('Util').Collision = OBJECT({
 				let jX = points[j].x * polygonScaleX;
 				let jY = points[j].y * polygonScaleY;
 				
-				let polygonPoint1X, polygonPoint1Y;
-				let polygonPoint2X, polygonPoint2Y;
+				let polygonPoint1X = polygonX + polygonCos * iX - polygonSin * iY;
+				let polygonPoint1Y = polygonY + polygonSin * iX + polygonCos * iY;
 				
-				if (polygonRadian === 0) {
-					polygonPoint1X = polygonX + iX;	polygonPoint1Y = polygonY + iY;
-					polygonPoint2X = polygonX + jX;	polygonPoint2Y = polygonY + jY;
-				}
+				let polygonPoint2X = polygonX + polygonCos * jX - polygonSin * jY;
+				let polygonPoint2Y = polygonY + polygonSin * jX + polygonCos * jY;
 				
-				else {
-					
-					let cos = Math.cos(-polygonRadian);
-					let sin = Math.sin(-polygonRadian);
-					
-					polygonPoint1X = polygonX + cos * iX + sin * iY;	polygonPoint1Y = polygonY - sin * iX + cos * iY;
-					polygonPoint2X = polygonX + cos * jX + sin * jY;	polygonPoint2Y = polygonY - sin * jX + cos * jY;
-				}
-				
-				if (checkLineCircle(0, 0, polygonPoint1X, polygonPoint1Y, polygonPoint2X, polygonPoint2Y, 1, 1, 0, circleX, circleY, circleWidth, circleHeight, 1, 1, circleRadian) === true) {
+				if (checkLineCircle(0, 0, polygonPoint1X, polygonPoint1Y, polygonPoint2X, polygonPoint2Y, 1, 1, 0, 1, circleX, circleY, circleWidth, circleHeight, 1, 1, circleSin, circleCos) === true) {
 					return true;
 				}
 			}
@@ -840,12 +589,12 @@ SkyEngine('Util').Collision = OBJECT({
 			aX, aY,
 			aPoints,
 			aScaleX, aScaleY,
-			aRadian,
+			aSin, aCos,
 			
 			bX, bY,
 			bPoints,
 			bScaleX, bScaleY,
-			bRadian
+			bSin, bCos
 		) => {
 			
 			let aLength = aPoints.length;
@@ -859,22 +608,11 @@ SkyEngine('Util').Collision = OBJECT({
 				let jX = aPoints[j].x * aScaleX;
 				let jY = aPoints[j].y * aScaleY;
 				
-				let aPoint1X, aPoint1Y;
-				let aPoint2X, aPoint2Y;
+				let aPoint1X = aX + aCos * iX - aSin * iY;
+				let aPoint1Y = aY + aSin * iX + aCos * iY;
 				
-				if (aRadian === 0) {
-					aPoint1X = aX + iX;	aPoint1Y = aY + iY;
-					aPoint2X = aX + jX;	aPoint2Y = aY + jY;
-				}
-				
-				else {
-					
-					let cos = Math.cos(-aRadian);
-					let sin = Math.sin(-aRadian);
-					
-					aPoint1X = aX + cos * iX + sin * iY;	aPoint1Y = aY - sin * iX + cos * iY;
-					aPoint2X = aX + cos * jX + sin * jY;	aPoint2Y = aY - sin * jX + cos * jY;
-				}
+				let aPoint2X = aX + aCos * jX - aSin * jY;
+				let aPoint2Y = aY + aSin * jX + aCos * jY;
 				
 				for (let k = 0, l = bLength - 1; k < bLength; l = k, k += 1) {
 					
@@ -884,24 +622,13 @@ SkyEngine('Util').Collision = OBJECT({
 					let lX = bPoints[l].x * bScaleX;
 					let lY = bPoints[l].y * bScaleY;
 					
-					let bPoint1X, bPoint1Y;
-					let bPoint2X, bPoint2Y;
+					let bPoint1X = bX + bCos * kX - bSin * kY;
+					let bPoint1Y = bY + bSin * kX + bCos * kY;
 					
-					if (bRadian === 0) {
-						bPoint1X = bX + kX;	bPoint1Y = bY + kY;
-						bPoint2X = bX + lX;	bPoint2Y = bY + lY;
-					}
+					let bPoint2X = bX + bCos * lX - bSin * lY;
+					let bPoint2Y = bY + bSin * lX + bCos * lY;
 					
-					else {
-						
-						let cos = Math.cos(-bRadian);
-						let sin = Math.sin(-bRadian);
-						
-						bPoint1X = bX + cos * kX + sin * kY;	bPoint1Y = bY - sin * kX + cos * kY;
-						bPoint2X = bX + cos * lX + sin * lY;	bPoint2Y = bY - sin * lX + cos * lY;
-					}
-					
-					if (checkLineLine(0, 0, aPoint1X, aPoint1Y, aPoint2X, aPoint2Y, 1, 1, 0, 0, 0, bPoint1X, bPoint1Y, bPoint2X, bPoint2Y, 1, 1, 0) === true) {
+					if (checkLineLine(0, 0, aPoint1X, aPoint1Y, aPoint2X, aPoint2Y, 1, 1, 0, 1, 0, 0, bPoint1X, bPoint1Y, bPoint2X, bPoint2Y, 1, 1, 0, 1) === true) {
 						return true;
 					}
 				}

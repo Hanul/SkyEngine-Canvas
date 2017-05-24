@@ -47,7 +47,8 @@ SkyEngine.Polygon = CLASS({
 					points,
 					self.getRealScaleX(),
 					self.getRealScaleY(),
-					self.getRealRadian()) === true || origin(pointX, pointY) === true;
+					self.getRealSin(),
+					self.getRealCos()) === true || origin(pointX, pointY) === true;
 			};
 		});
 		
@@ -72,14 +73,16 @@ SkyEngine.Polygon = CLASS({
 						area.getEndY(),
 						area.getRealScaleX(),
 						area.getRealScaleY(),
-						area.getRealRadian(),
+						area.getRealSin(),
+						area.getRealCos(),
 						
 						self.getDrawingX(),
 						self.getDrawingY(),
 						points,
 						self.getRealScaleX(),
 						self.getRealScaleY(),
-						self.getRealRadian()
+						self.getRealSin(),
+						self.getRealCos()
 						
 					) === true) {
 						return true;
@@ -96,14 +99,16 @@ SkyEngine.Polygon = CLASS({
 						area.getHeight(),
 						area.getRealScaleX(),
 						area.getRealScaleY(),
-						area.getRealRadian(),
+						area.getRealSin(),
+						area.getRealCos(),
 						
 						self.getDrawingX(),
 						self.getDrawingY(),
 						points,
 						self.getRealScaleX(),
 						self.getRealScaleY(),
-						self.getRealRadian()
+						self.getRealSin(),
+						self.getRealCos()
 						
 					) === true) {
 						return true;
@@ -120,14 +125,16 @@ SkyEngine.Polygon = CLASS({
 						area.getHeight(),
 						area.getRealScaleX(),
 						area.getRealScaleY(),
-						area.getRealRadian(),
+						area.getRealSin(),
+						area.getRealCos(),
 						
 						self.getDrawingX(),
 						self.getDrawingY(),
 						points,
 						self.getRealScaleX(),
 						self.getRealScaleY(),
-						self.getRealRadian()
+						self.getRealSin(),
+						self.getRealCos()
 						
 					) === true) {
 						return true;
@@ -143,14 +150,16 @@ SkyEngine.Polygon = CLASS({
 						area.getPoints(),
 						area.getRealScaleX(),
 						area.getRealScaleY(),
-						area.getRealRadian(),
+						area.getRealSin(),
+						area.getRealCos(),
 						
 						self.getDrawingX(),
 						self.getDrawingY(),
 						points,
 						self.getRealScaleX(),
 						self.getRealScaleY(),
-						self.getRealRadian()
+						self.getRealSin(),
+						self.getRealCos()
 						
 					) === true) {
 						return true;

@@ -231,7 +231,7 @@ SkyEngine.Node = CLASS({
 			angle = _angle;
 			
 			if (targetNode === undefined) {
-				realRadian = angle;
+				realRadian = angle * Math.PI / 180;
 			} else {
 				realRadian = targetNode.getRealRadian() + angle * Math.PI / 180;
 			}
@@ -415,12 +415,13 @@ SkyEngine.Node = CLASS({
 				}
 				
 				if (speedOrParams.maxSpeed !== undefined) {
-					maxSpeedX = -speedOrParams.maxSpeed;
+					minSpeedX = -speedOrParams.maxSpeed;
 				}
 			}
 			
 			else {
-				speedX = -speedOrParams;
+				accelX = 0;
+				speedX = minSpeedX = -speedOrParams;
 			}
 		};
 		
@@ -459,7 +460,8 @@ SkyEngine.Node = CLASS({
 			}
 			
 			else {
-				speedX = speedOrParams;
+				accelX = 0;
+				speedX = maxSpeedX = speedOrParams;
 			}
 		};
 		
@@ -493,12 +495,13 @@ SkyEngine.Node = CLASS({
 				}
 				
 				if (speedOrParams.maxSpeed !== undefined) {
-					maxSpeedY = -speedOrParams.maxSpeed;
+					minSpeedY = -speedOrParams.maxSpeed;
 				}
 			}
 			
 			else {
-				speedY = -speedOrParams;
+				accelY = 0;
+				speedY = minSpeedY = -speedOrParams;
 			}
 		};
 		
@@ -537,7 +540,8 @@ SkyEngine.Node = CLASS({
 			}
 			
 			else {
-				speedY = speedOrParams;
+				accelY = 0;
+				speedY = maxSpeedY = speedOrParams;
 			}
 		};
 		

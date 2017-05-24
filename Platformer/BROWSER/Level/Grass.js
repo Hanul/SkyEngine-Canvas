@@ -6,6 +6,8 @@ Platformer.Grass = CLASS({
 	
 	init : (inner) => {
 		
+		SkyEngine.Screen.setScale(0.5);
+		
 		// 중력
 		let gravity = 3000;
 		
@@ -66,13 +68,14 @@ Platformer.Grass = CLASS({
 		// 타일과 만났다.
 		player.onMeet(Platformer.Tile, (tile) => {
 			
-			if (player.getBeforeY() <= tile.getY() - 64) {
-				player.setY(tile.getY() - 64);
+			if (player.getBeforeY() <= tile.getY() - Platformer.Tile.HEIGHT / 2) {
+				player.setY(tile.getY() - Platformer.Tile.HEIGHT / 2);
 				player.setAccelY(0);
 				player.stopDown();
 				
 				if (player.getState() === 'jump') {
-					if (player.getSpeedX() !== 0) {
+					// 이동중이고, 가속도가 없어야 합니다. (가속도가 있다는 것은 멈추는 중인 상황임)
+					if (player.getSpeedX() !== 0 && player.getAccelX() === 0) {
 						player.setState('walk');
 					} else {
 						player.setState('idle');
@@ -119,7 +122,7 @@ Platformer.Grass = CLASS({
 		EVENT('keyup', (e) => {
 			
 			if (player.getSpeedX() < 0 && e.getKey() === 'ArrowLeft') {
-				player.stopLeft();
+				player.stopLeft(2500);
 				
 				if (player.getState() !== 'jump') {
 					player.setState('idle');
@@ -127,7 +130,7 @@ Platformer.Grass = CLASS({
 			}
 			
 			if (player.getSpeedX() > 0 && e.getKey() === 'ArrowRight') {
-				player.stopRight();
+				player.stopRight(2500);
 				
 				if (player.getState() !== 'jump') {
 					player.setState('idle');
