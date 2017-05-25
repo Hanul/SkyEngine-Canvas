@@ -21,6 +21,26 @@ SkyEngineShowcase.IntersectionTest = CLASS({
 			endY : 10
 		}));
 		
+		let rect = SkyEngine.Rect({
+			x : -50,
+			y : 80,
+			width : 60,
+			height : 40,
+			color : 'green',
+			scale : 1.2,
+			angle : 45,
+			on : {
+				touchstart : () => {
+					console.log('This is Rect!');
+				}
+			}
+		}).appendTo(SkyEngine.Screen);
+		
+		rect.addCollider(SkyEngine.Rect({
+			width : 60,
+			height : 40
+		}));
+		
 		let circle = SkyEngine.Circle({
 			x : 50,
 			y : -50,
@@ -39,6 +59,42 @@ SkyEngineShowcase.IntersectionTest = CLASS({
 		circle.addCollider(SkyEngine.Circle({
 			width : 60,
 			height : 40
+		}));
+		
+		let polygon = SkyEngine.Polygon({
+			x : 250,
+			y : 30,
+			points : [{
+				x : -30,
+				y : 50
+			}, {
+				x : 50,
+				y : 40
+			}, {
+				x : 20,
+				y : -50
+			}],
+			color : 'green',
+			scale : 0.7,
+			angle : 45,
+			on : {
+				touchstart : () => {
+					console.log('This is Polygon!');
+				}
+			}
+		}).appendTo(SkyEngine.Screen);
+		
+		polygon.addCollider(SkyEngine.Polygon({
+			points : [{
+				x : -30,
+				y : 50
+			}, {
+				x : 50,
+				y : 40
+			}, {
+				x : 20,
+				y : -50
+			}]
 		}));
 		
 		let line2 = SkyEngine.Line({
@@ -60,68 +116,9 @@ SkyEngineShowcase.IntersectionTest = CLASS({
 		
 		let circles = [];
 		
-		line2.onMeet(SkyEngine.Line, (line) => {
+		line2.onMeet(SkyEngine.Figure, (line) => {
 			
-			let intersectionPoint = SkyEngine.Util.Collision.findIntersectionPoint(
-				
-				line.getDrawingX(),
-				line.getDrawingY(),
-				line.getStartX(),
-				line.getStartY(),
-				line.getEndX(),
-				line.getEndY(),
-				line.getRealScaleX(),
-				line.getRealScaleY(),
-				line.getRealSin(),
-				line.getRealCos(),
-				
-				line2.getDrawingX(),
-				line2.getDrawingY(),
-				line2.getStartX(),
-				line2.getStartY(),
-				line2.getEndX(),
-				line2.getEndY(),
-				line2.getRealScaleX(),
-				line2.getRealScaleY(),
-				line2.getRealSin(),
-				line2.getRealCos()
-			);
-			
-			circles.push(SkyEngine.Circle({
-				x : intersectionPoint.x,
-				y : intersectionPoint.y,
-				width : 10,
-				height : 10,
-				color : 'yellow'
-			}).appendTo(SkyEngine.Screen));
-		});
-		
-		line2.onMeet(SkyEngine.Circle, (circle) => {
-			
-			let intersectionPoints = SkyEngine.Util.Collision.findCircleIntersectionPoints(
-				
-				line2.getDrawingX(),
-				line2.getDrawingY(),
-				line2.getStartX(),
-				line2.getStartY(),
-				line2.getEndX(),
-				line2.getEndY(),
-				line2.getRealScaleX(),
-				line2.getRealScaleY(),
-				line2.getRealSin(),
-				line2.getRealCos(),
-				
-				circle.getDrawingX(),
-				circle.getDrawingY(),
-				circle.getWidth(),
-				circle.getHeight(),
-				circle.getRealScaleX(),
-				circle.getRealScaleY(),
-				circle.getRealSin(),
-				circle.getRealCos()
-			);
-			
-			EACH(intersectionPoints, (intersectionPoint) => {
+			EACH(line2.findIntersectionPoints(line), (intersectionPoint) => {
 				
 				circles.push(SkyEngine.Circle({
 					x : intersectionPoint.x,
@@ -177,8 +174,10 @@ SkyEngineShowcase.IntersectionTest = CLASS({
 		
 		inner.on('close', () => {
 			line.remove();
-			line2.remove();
+			rect.remove();
 			circle.remove();
+			polygon.remove();
+			line2.remove();
 			
 			EACH(circles, (circle) => {
 				circle.remove();
