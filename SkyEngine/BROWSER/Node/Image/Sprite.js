@@ -139,12 +139,18 @@ SkyEngine.Sprite = CLASS({
 				
 				if (imgs !== undefined) {
 					if (frameCount !== undefined) {
-						context.drawImage(
-							imgs[Math.floor(frame)],
-							-width / 2,
-							-height / 2,
-							width,
-							height);
+						
+						let frameImg = imgs[Math.floor(frame)];
+						
+						if (frameImg !== undefined) {
+							
+							context.drawImage(
+								frameImg,
+								-width / 2,
+								-height / 2,
+								width,
+								height);
+						}
 					}
 				}
 				
