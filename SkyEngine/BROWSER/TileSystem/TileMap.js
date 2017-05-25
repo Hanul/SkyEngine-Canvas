@@ -17,13 +17,18 @@ SkyEngine.TileMap = CLASS({
 		let tileWidth = params.tileWidth;
 		let tileHeight = params.tileHeight;
 		let tileMap = params.tileMap;
+		let collisionMap = params.collisionMap;
 		
 		EACH(tileMap, (tiles, i) => {
 			EACH(tiles, (tile, j) => {
 				if (tile !== undefined) {
-					tile.setX((j - tiles.length / 2) * tileWidth);
-					tile.setY((i - tileMap.length / 2) * tileHeight);
-					self.append(tile);
+					self.append((collisionMap[i][j] === 1 ? SkyEngine.CollisionTile : SkyEngine.Tile)({
+						x : (j - tiles.length / 2) * tileWidth,
+						y : (i - tileMap.length / 2) * tileHeight,
+						width : tileWidth,
+						height : tileHeight,
+						c : tile
+					}));
 				}
 			});
 		});
