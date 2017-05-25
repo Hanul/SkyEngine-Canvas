@@ -21,7 +21,7 @@ Platformer.Grass = CLASS({
 			centerY : 92,
 			accelY : gravity,
 			collider : SkyEngine.Rect({
-				width : 134,
+				width : 80,
 				height : 184
 			}),
 			stateNodes : {
@@ -50,6 +50,7 @@ Platformer.Grass = CLASS({
 		
 		// 땅
 		let lands = SkyEngine.TileMap({
+			x : -100,
 			y : 300,
 			tileWidth : 128,
 			tileHeight : 128,
@@ -62,6 +63,15 @@ Platformer.Grass = CLASS({
 			})]],
 			collisionMap : [[1, 1, 0, 1]]
 		}).appendTo(SkyEngine.Screen);
+		
+		lands.addTile({
+			row : -1,
+			col : -2,
+			tile : SkyEngine.Image({
+				src : Platformer.R('Ground/Grass/grass.png')
+			}),
+			isCollider : true
+		});
 		
 		// 타일과 만났다.
 		player.onMeet(SkyEngine.CollisionTile, (tile) => {
@@ -108,7 +118,7 @@ Platformer.Grass = CLASS({
 				}
 			}
 			
-			if (e.getKey() === ' ' && player.getState() !== 'jump') {
+			if (e.getKey() === ' ' && player.getState() !== 'jump' && player.getSpeedY() === 0) {
 				player.setSpeedY(-1200);
 				player.setAccelY(gravity);
 				
