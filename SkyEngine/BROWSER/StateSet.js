@@ -14,6 +14,8 @@ SkyEngine.StateSet = CLASS({
 		
 		let stateNodes = {};
 		let state;
+		let toState;
+		let animationEndHandler;
 		
 		let setStateNode = self.setStateNode = (params) => {
 			//REQUIRED: params
@@ -44,6 +46,11 @@ SkyEngine.StateSet = CLASS({
 		
 		let setState = self.setState = (_state) => {
 			
+			if (animationEndHandler !== undefined) {
+				stateNodes[state].off('animationend', animationEndHandler);
+				animationEndHandler = undefined;
+			}
+			
 			if (state !== _state) {
 				
 				state = _state;
@@ -57,6 +64,18 @@ SkyEngine.StateSet = CLASS({
 		};
 		
 		setState(params.baseState);
+		
+		let setToState = self.setToState = (_toState) => {
+			
+			if (state !== _toState) {
+				
+				toState = _toState;
+				
+				stateNodes[state].on('animationend', animationEndHandler = () => {
+					setState(toState);
+				});
+			}
+		};
 		
 		let getState = self.getState = () => {
 			return state;

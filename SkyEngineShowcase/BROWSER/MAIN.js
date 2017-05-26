@@ -71,5 +71,10 @@ SkyEngineShowcase.MAIN = METHOD({
 			uri : 'test/performance',
 			target : SkyEngineShowcase.PerformanceTest
 		});
+		
+		SkyEngineShowcase.MATCH_VIEW({
+			uri : 'test/raycast',
+			target : SkyEngineShowcase.RaycastTest
+		});
 	}
 });

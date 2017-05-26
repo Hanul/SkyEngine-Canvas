@@ -14,7 +14,8 @@ SkyEngineShowcase.MainMenu = CLASS({
 				width : '100%',
 				height : '100%',
 				overflowY : 'scroll',
-				textAlign : 'center'
+				textAlign : 'center',
+				paddingBottom : 20
 			},
 			c : [H1({
 				style : {
@@ -177,6 +178,18 @@ SkyEngineShowcase.MainMenu = CLASS({
 						on : {
 							tap : () => {
 								SkyEngineShowcase.GO('test/performance');
+							}
+						}
+					})
+				}), LI({
+					style : {
+						marginTop : 15
+					},
+					c : A({
+						c : '레이캐스트 테스트',
+						on : {
+							tap : () => {
+								SkyEngineShowcase.GO('test/raycast');
 							}
 						}
 					})

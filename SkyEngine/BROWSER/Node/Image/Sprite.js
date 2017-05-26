@@ -29,7 +29,11 @@ SkyEngine.Sprite = CLASS({
 		let width;
 		let height;
 		
+		let realFrame = 0;
 		let frame = 0;
+		let beforeFrame = 0;
+		
+		let isStopped = false;
 		
 		if (fps === undefined) {
 			fps = 0;
@@ -102,22 +106,34 @@ SkyEngine.Sprite = CLASS({
 			});
 		}
 		
-		let step;
-		OVERRIDE(self.step, (origin) => {
+		let getFrame = self.getFrame = () => {
+			return frame;
+		};
+		
+		let getBeforeFrame = self.getBeforeFrame = () => {
+			return beforeFrame;
+		};
+		
+		let stop = self.stop = () => {
+			isStopped = true;
+		};
+		
+		let resume = self.resume = () => {
+			isStopped = false;
+		};
+		
+		let hide;
+		OVERRIDE(self.hide, (origin) => {
 			
-			step = self.step = (deltaTime) => {
+			hide = self.hide = () => {
 				
-				if (fps > 0) {
-					frame += fps * deltaTime / 1000;
-				}
+				realFrame = 0;
+				frame = 0;
+				beforeFrame = 0;
 				
-				if (frameCount !== undefined) {
-					if (frame >= frameCount) {
-						frame -= frameCount;
-					}
-				}
+				stop();
 				
-				origin(deltaTime);
+				origin();
 			};
 		});
 		
@@ -126,9 +142,43 @@ SkyEngine.Sprite = CLASS({
 			
 			show = self.show = () => {
 				
+				realFrame = 0;
 				frame = 0;
+				beforeFrame = 0;
+				
+				resume();
 				
 				origin();
+			};
+		});
+		
+		let step;
+		OVERRIDE(self.step, (origin) => {
+			
+			step = self.step = (deltaTime) => {
+				
+				if (isStopped !== true) {
+					
+					if (fps > 0) {
+						realFrame += fps * deltaTime / 1000;
+					}
+					
+					if (frameCount !== undefined) {
+						if (realFrame >= frameCount) {
+							realFrame -= frameCount;
+							self.fireEvent('animationend');
+						}
+					}
+					
+					beforeFrame = frame;
+					frame = Math.floor(realFrame);
+					
+					if (frame !== beforeFrame) {
+						self.fireEvent('framechange');
+					}
+				}
+				
+				origin(deltaTime);
 			};
 		});
 		
@@ -140,7 +190,7 @@ SkyEngine.Sprite = CLASS({
 				if (imgs !== undefined) {
 					if (frameCount !== undefined) {
 						
-						let frameImg = imgs[Math.floor(frame)];
+						let frameImg = imgs[frame];
 						
 						if (frameImg !== undefined) {
 							
@@ -160,7 +210,7 @@ SkyEngine.Sprite = CLASS({
 					
 					context.drawImage(
 						img,
-						spriteWidth * Math.floor(frame % (width / spriteWidth)), spriteHeight * Math.floor(frame / (width / spriteWidth)),
+						spriteWidth * Math.floor(realFrame % (width / spriteWidth)), spriteHeight * Math.floor(realFrame / (width / spriteWidth)),
 						spriteWidth, spriteHeight,
 						-spriteWidth / 2, -spriteHeight / 2,
 						spriteWidth,

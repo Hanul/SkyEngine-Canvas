@@ -20,8 +20,8 @@ SkyEngine.Screen = OBJECT({
 		let canvas = CANVAS().appendTo(wrapper);
 		let context = canvas.getContext('2d');
 		
-		let canvasWidth;
-		let canvasHeight;
+		let width;
+		let height;
 		
 		let deltaTime;
 		
@@ -233,10 +233,10 @@ SkyEngine.Screen = OBJECT({
 			self.step(deltaTime);
 			
 			// 모든 노드를 그립니다.
-			context.clearRect(0, 0, canvasWidth, canvasHeight);
+			context.clearRect(0, 0, width, height);
 			
 			context.save();
-			context.translate(canvasWidth / 2, canvasHeight / 2);
+			context.translate(width / 2, height / 2);
 			
 			drawAll(self, context, self.getAlpha());
 			
@@ -246,17 +246,25 @@ SkyEngine.Screen = OBJECT({
 		// 화면 크기가 변경되는 경우, 캔버스의 크기 또한 변경되어야 합니다.
 		EVENT('resize', RAR(() => {
 			
-			canvasWidth = WIN_WIDTH();
-			canvasHeight = WIN_HEIGHT();
+			width = WIN_WIDTH();
+			height = WIN_HEIGHT();
 			
 			canvas.setSize({
-				width : canvasWidth,
-				height : canvasHeight
+				width : width,
+				height : height
 			});
 		}));
 		
 		self.on('remove', () => {
 			loop.remove();
 		});
+		
+		let getWidth = self.getWidth = () => {
+			return width;
+		};
+		
+		let getHeight = self.getHeight = () => {
+			return height;
+		};
 	}
 });

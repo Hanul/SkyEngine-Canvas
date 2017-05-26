@@ -98,7 +98,7 @@ Platformer.Grass = CLASS({
 		});
 		
 		// 키를 눌렀다.
-		EVENT('keydown', (e) => {
+		let keydownEvent = EVENT('keydown', (e) => {
 			
 			if (e.getKey() === 'ArrowLeft') {
 				player.moveLeft(500);
@@ -127,7 +127,7 @@ Platformer.Grass = CLASS({
 		});
 		
 		// 키를 뗐다.
-		EVENT('keyup', (e) => {
+		let keyupEvent = EVENT('keyup', (e) => {
 			
 			if (player.getSpeedX() < 0 && e.getKey() === 'ArrowLeft') {
 				player.stopLeft(2500);
@@ -149,6 +149,9 @@ Platformer.Grass = CLASS({
 		inner.on('close', () => {
 			bg.remove();
 			player.remove();
+			
+			keydownEvent.remove();
+			keyupEvent.remove();
 		});
 	}
 });

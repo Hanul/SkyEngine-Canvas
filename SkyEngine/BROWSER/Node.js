@@ -1007,7 +1007,7 @@ SkyEngine.Node = CLASS({
 			if (eventMap[eventName] !== undefined) {
 				
 				eventMap[eventName].forEach((eventHandler) => {
-					eventHandler();
+					eventHandler(self);
 				});
 			}
 		};
@@ -1021,6 +1021,8 @@ SkyEngine.Node = CLASS({
 			}
 			
 			meetHandlerMap[target.id].push(handler);
+			
+			checkAllCollisions();
 		};
 		
 		let offMeet = self.offMeet = (target, handler) => {
@@ -1144,6 +1146,77 @@ SkyEngine.Node = CLASS({
 			childNodes.every((childNode) => {
 				return childNode.checkCollision(target) !== true;
 			}) !== true;
+		};
+		
+		let checkOffScreen = self.checkOffScreen = () => {
+			
+			return (drawingX < -SkyEngine.Screen.getWidth() / 2 || drawingX > SkyEngine.Screen.getWidth() / 2 || drawingY < -SkyEngine.Screen.getHeight() / 2 || drawingY > SkyEngine.Screen.getHeight() / 2) && childNodes.every((childNode) => {
+				return childNode.checkOffScreen(target) === true;
+			}) === true;
+		};
+		
+		let checkAllCollisions = () => {
+			
+			collisionTargets.forEach((target, index, arr) => {
+				
+				if (target.type === CLASS) {
+					
+					SkyEngine.Screen.getRegisteredNodes(target).forEach((realTarget, i) => {
+						
+						if (realTarget !== self) {
+							
+							if (realTarget.checkIsRemoved() !== true) {
+								
+								if (self.checkCollision(realTarget) === true || (self.type !== realTarget.type && realTarget.checkCollision(self) === true)) {
+									
+									if (collidingNodeIds[realTarget.id] === undefined) {
+										collidingNodeIds[realTarget.id] = true;
+										
+										runMeetHandlers(target, realTarget);
+									}
+								}
+								
+								else if (collidingNodeIds[realTarget.id] !== undefined) {
+									delete collidingNodeIds[realTarget.id];
+									
+									runPartHandlers(target, realTarget);
+								}
+							}
+							
+							else {
+								delete collidingNodeIds[realTarget.id];
+							}
+						}
+					});
+				}
+				
+				else if (target.checkIsRemoved() !== true) {
+					
+					if (self.checkCollision(target) === true || (self.type !== target.type && target.checkCollision(self) === true)) {
+						
+						if (collidingNodeIds[target.id] === undefined) {
+							collidingNodeIds[target.id] = true;
+							
+							runMeetHandlers(target, target);
+						}
+					}
+					
+					else if (collidingNodeIds[target.id] !== undefined) {
+						delete collidingNodeIds[target.id];
+						
+						runPartHandlers(target, target);
+					}
+				}
+				
+				else {
+					
+					arr.splice(index, 1);
+					
+					delete collidingNodeIds[target.id];
+					delete meetHandlerMap[target.id];
+					delete partHandlerMap[target.id];
+				}
+			});
 		};
 		
 		let step = self.step = (deltaTime) => {
@@ -1320,71 +1393,24 @@ SkyEngine.Node = CLASS({
 			});
 			
 			// 충돌 체크
-			collisionTargets.forEach((target, index, arr) => {
-				
-				if (target.type === CLASS) {
-					
-					SkyEngine.Screen.getRegisteredNodes(target).forEach((realTarget, i) => {
-						
-						if (realTarget !== self) {
-							
-							if (realTarget.checkIsRemoved() !== true) {
-								
-								if (self.checkCollision(realTarget) === true || (self.type !== realTarget.type && realTarget.checkCollision(self) === true)) {
-									
-									if (collidingNodeIds[realTarget.id] === undefined) {
-										collidingNodeIds[realTarget.id] = true;
-										
-										runMeetHandlers(target, realTarget);
-									}
-								}
-								
-								else if (collidingNodeIds[realTarget.id] !== undefined) {
-									delete collidingNodeIds[realTarget.id];
-									
-									runPartHandlers(target, realTarget);
-								}
-							}
-							
-							else {
-								delete collidingNodeIds[realTarget.id];
-							}
-						}
-					});
-				}
-				
-				else if (target.checkIsRemoved() !== true) {
-					
-					if (self.checkCollision(target) === true || (self.type !== target.type && target.checkCollision(self) === true)) {
-						
-						if (collidingNodeIds[target.id] === undefined) {
-							collidingNodeIds[target.id] = true;
-							
-							runMeetHandlers(target, target);
-						}
-					}
-					
-					else if (collidingNodeIds[target.id] !== undefined) {
-						delete collidingNodeIds[target.id];
-						
-						runPartHandlers(target, target);
-					}
-				}
-				
-				else {
-					
-					arr.splice(index, 1);
-					
-					delete collidingNodeIds[target.id];
-					delete meetHandlerMap[target.id];
-					delete partHandlerMap[target.id];
-				}
-			});
+			checkAllCollisions();
 			
 			// 모든 자식 노드들에 대해 실행
-			self.getChildren().forEach((childNode) => {
-				childNode.step(deltaTime);
-			});
+			if (childNodes !== undefined) {
+				childNodes.forEach((childNode) => {
+					childNode.step(deltaTime);
+				});
+			}
+			
+			if (eventMap !== undefined) {
+				if (eventMap.offscreen !== undefined && checkOffScreen() === true) {
+					fireEvent('offscreen');
+				}
+				if (eventMap.nextstep !== undefined) {
+					off('nextstep');
+					fireEvent('nextstep');
+				}
+			}
 		};
 		
 		let draw = self.draw = (context) => {
