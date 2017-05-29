@@ -11,12 +11,16 @@ SkyEngine.TileMap = CLASS({
 		//REQUIRED: params
 		//REQUIRED: params.tileWidth
 		//REQUIRED: params.tileHeight
-		//REQUIRED: params.tileMap
-		//REQUIRED: params.collisionMap
+		//OPTIONAL: params.tileMap
+		//OPTIONAL: params.tileKeySet
+		//OPTIONAL: params.tileKeyMap
+		//OPTIONAL: params.collisionMap
 		
 		let tileWidth = params.tileWidth;
 		let tileHeight = params.tileHeight;
 		let tileMap = params.tileMap;
+		let tileKeySet = params.tileKeySet;
+		let tileKeyMap = params.tileKeyMap;
 		let collisionMap = params.collisionMap;
 		
 		let addTile = self.addTile = (params) => {
@@ -31,7 +35,7 @@ SkyEngine.TileMap = CLASS({
 			let tile = params.tile;
 			let isCollider = params.isCollider;
 			
-			self.append((isCollider === true || (collisionMap[row] !== undefined && collisionMap[row][col] === 1) ? SkyEngine.CollisionTile : SkyEngine.Tile)({
+			self.append((isCollider === true || (collisionMap !== undefined && collisionMap[row] !== undefined && collisionMap[row][col] === 1) ? SkyEngine.CollisionTile : SkyEngine.Tile)({
 				x : col * tileWidth,
 				y : row * tileHeight,
 				width : tileWidth,
@@ -40,16 +44,32 @@ SkyEngine.TileMap = CLASS({
 			}));
 		};
 		
-		EACH(tileMap, (tiles, i) => {
-			EACH(tiles, (tile, j) => {
-				if (tile !== undefined) {
+		if (tileMap !== undefined) {
+			
+			EACH(tileMap, (tiles, i) => {
+				EACH(tiles, (tile, j) => {
+					if (tile !== undefined) {
+						addTile({
+							row : i,
+							col : j,
+							tile : tile
+						});
+					}
+				});
+			});
+		}
+		
+		if (tileKeyMap !== undefined) {
+			
+			EACH(tileKeyMap, (tileKeys, i) => {
+				EACH(tileKeys, (tileKey, j) => {
 					addTile({
 						row : i,
 						col : j,
-						tile : tile
+						tile : tileKeySet[timeKey].clone()
 					});
-				}
+				});
 			});
-		});
+		}
 	}
 });

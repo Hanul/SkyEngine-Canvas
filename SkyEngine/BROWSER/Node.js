@@ -1420,6 +1420,10 @@ SkyEngine.Node = CLASS({
 		let drawArea = self.drawArea = (context) => {
 			// to implement.
 		};
+		
+		let clone = self.clone = () => {
+			//TODO: 작성해야함
+		};
 	},
 	
 	afterInit : (inner, self, params) => {

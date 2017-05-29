@@ -78,15 +78,15 @@ SkyEngineShowcase.RaycastTest = CLASS({
 							if (sprite.getBeforeFrame() === 0) {
 								
 								let targetEnemy;
+								let targetEnemyIntersectionPointX;
 								
-								let bulletCollider;
 								let bullet = SkyEngine.Line({
 									startX : hero.getX() + 65,
 									startY : hero.getY() + 24,
 									endX : SkyEngine.Screen.getWidth(),
 									endY : hero.getY() + 24,
 									border : '1px solid #fff',
-									collider : bulletCollider = SkyEngine.Line({
+									collider : SkyEngine.Line({
 										startX : hero.getX() + 65,
 										startY : hero.getY() + 24,
 										endX : SkyEngine.Screen.getWidth(),
@@ -110,10 +110,21 @@ SkyEngineShowcase.RaycastTest = CLASS({
 								}).appendTo(SkyEngine.Screen);
 								
 								bullet.onMeet(Enemy, (enemy) => {
-									if (targetEnemy === undefined || targetEnemy.getX() > enemy.getX()) {
+									
+									let intersectionPoints = bullet.findIntersectionPoints(enemy.getColliders()[0]);
+									let intersectionPointX;
+									
+									EACH(intersectionPoints, (intersectionPoint) => {
+										if (intersectionPointX === undefined || intersectionPointX > intersectionPoint.x) {
+											intersectionPointX = intersectionPoint.x;
+										}
+									});
+									
+									if (targetEnemy === undefined || targetEnemyIntersectionPointX > intersectionPointX) {
+										targetEnemyIntersectionPointX = intersectionPointX;
 										targetEnemy = enemy;
-										bullet.setEndX(enemy.getX());
-										bulletCollider.setEndX(enemy.getX());
+										bullet.setEndX(intersectionPointX);
+										bullet.getColliders()[0].setEndX(intersectionPointX);
 									}
 								});
 							}

@@ -143,6 +143,8 @@ SkyEngine.Screen = OBJECT({
 			context.rotate(node.getRealRadian());
 			context.scale(node.getRealScaleX(), node.getRealScaleY());
 			
+			context.lineWidth = 1 / (node.getRealScaleX() > node.getRealScaleY() ? node.getRealScaleX() : node.getRealScaleY());
+			
 			context.beginPath();
 			
 			node.drawArea(context);
