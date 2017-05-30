@@ -111,8 +111,8 @@ SkyEngine.Node = CLASS({
 				let plusX = x * targetNode.getRealScaleX();
 				let plusY = y * targetNode.getRealScaleY();
 				
-				realX = targetNode.getDrawingX() + plusX * targetNode.getRealCos() - plusY * targetNode.getRealSin();
-				realY = targetNode.getDrawingY() + plusX * targetNode.getRealSin() + plusY * targetNode.getRealCos();
+				realX = targetNode.getRealX() + plusX * targetNode.getRealCos() - plusY * targetNode.getRealSin();
+				realY = targetNode.getRealY() + plusX * targetNode.getRealSin() + plusY * targetNode.getRealCos();
 				
 				let plusCenterX = centerX * targetNode.getRealScaleY();
 				let plusCenterY = centerY * targetNode.getRealScaleY();
@@ -836,27 +836,22 @@ SkyEngine.Node = CLASS({
 			
 			let parentChildren = parentNode.getChildren();
 			
-			let minIndex = 0;
-			let maxIndex = parentChildren.length - 1;
+			let low = 0;
+			let high = parentChildren.length;
 			
-			let index = -1;
-			
-			while (minIndex <= maxIndex) {
+			while (low < high) {
 				
-				index = Math.ceil((minIndex + maxIndex) / 2);
+				// >>> 1은 2로 나누고 나머지를 버리는 것과 동일
+				let mid = (low + high) >>> 1;
 				
-				let node = parentChildren[index];
-				
-				if (node.getZ() <= z) {
-					minIndex = index + 1;
-				} else if (node.getZ() > z) {
-					maxIndex = index - 1;
+				if (parentChildren[mid].getZ() < z) {
+					low = mid + 1;
 				} else {
-					break;
+					high = mid;
 				}
 			}
 			
-			parentChildren.splice(index + 1, 0, self);
+			parentChildren.splice(low, 0, self);
 		};
 		
 		let removeFromParent = () => {
@@ -1421,8 +1416,24 @@ SkyEngine.Node = CLASS({
 			// to implement.
 		};
 		
-		let clone = self.clone = () => {
+		let clone = self.clone = (appendParams) => {
+			//OPTIONAL: appendParams
+			
+			let newParams = {
+				x : x,
+				y : y
+			};
+			
 			//TODO: 작성해야함
+			
+			if (appendParams !== undefined) {
+				EXTEND({
+					origin : newParams,
+					extend : appendParams
+				});
+			}
+			
+			return self.type(newParams);
 		};
 	},
 	
