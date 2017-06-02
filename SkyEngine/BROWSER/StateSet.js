@@ -80,5 +80,42 @@ SkyEngine.StateSet = CLASS({
 		let getState = self.getState = () => {
 			return state;
 		};
+		
+		let clone;
+		OVERRIDE(self.clone, (origin) => {
+			
+			clone = self.clone = (appendParams) => {
+				//OPTIONAL: appendParams
+				
+				let exceptChildNodes = [];
+				
+				EACH(stateNodes, (node) => {
+					exceptChildNodes.push(node);
+				});
+				
+				let newParams = {
+					exceptChildNodes : exceptChildNodes,
+					baseState : state
+				};
+				
+				if (appendParams !== undefined) {
+					EXTEND({
+						origin : newParams,
+						extend : appendParams
+					});
+				}
+				
+				let clone = origin(newParams);
+				
+				EACH(stateNodes, (node, state) => {
+					setStateNode({
+						state : state,
+						node : node.clone()
+					});
+				});
+				
+				return clone;
+			};
+		});
 	}
 });

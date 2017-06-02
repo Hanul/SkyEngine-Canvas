@@ -23,6 +23,10 @@ SkyEngine.TileMap = CLASS({
 		let tileKeyMap = params.tileKeyMap;
 		let collisionMap = params.collisionMap;
 		
+		if (collisionMap === undefined) {
+			collisionMap = [];
+		}
+		
 		let addTile = self.addTile = (params) => {
 			//REQUIRED: params
 			//REQUIRED: params.row
@@ -35,7 +39,14 @@ SkyEngine.TileMap = CLASS({
 			let tile = params.tile;
 			let isCollider = params.isCollider;
 			
-			self.append((isCollider === true || (collisionMap !== undefined && collisionMap[row] !== undefined && collisionMap[row][col] === 1) ? SkyEngine.CollisionTile : SkyEngine.Tile)({
+			if (isCollider === true) {
+				if (collisionMap[row] === undefined) {
+					collisionMap[row] = [];
+				}
+				collisionMap[row][col] = 1;
+			}
+			
+			self.append((collisionMap[row] !== undefined && collisionMap[row][col] === 1 ? SkyEngine.CollisionTile : SkyEngine.Tile)({
 				x : col * tileWidth,
 				y : row * tileHeight,
 				width : tileWidth,
@@ -57,19 +68,52 @@ SkyEngine.TileMap = CLASS({
 					}
 				});
 			});
+			
+			tileMap = undefined;
 		}
 		
 		if (tileKeyMap !== undefined) {
 			
 			EACH(tileKeyMap, (tileKeys, i) => {
 				EACH(tileKeys, (tileKey, j) => {
-					addTile({
-						row : i,
-						col : j,
-						tile : tileKeySet[timeKey].clone()
-					});
+					
+					let tile = tileKeySet[tileKey];
+					
+					if (tile !== undefined) {
+						
+						addTile({
+							row : i,
+							col : j,
+							tile : tile.clone()
+						});
+					}
 				});
 			});
+			
+			tileKeyMap = undefined;
 		}
+		
+		let clone;
+		OVERRIDE(self.clone, (origin) => {
+			
+			clone = self.clone = (appendParams) => {
+				//OPTIONAL: appendParams
+				
+				let newParams = {
+					tileWidth : tileWidth,
+					tileHeight : tileHeight,
+					collisionMap : collisionMap
+				};
+				
+				if (appendParams !== undefined) {
+					EXTEND({
+						origin : newParams,
+						extend : appendParams
+					});
+				}
+				
+				return origin(newParams);
+			};
+		});
 	}
 });

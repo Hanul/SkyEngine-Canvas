@@ -153,5 +153,27 @@ SkyEngine.Rect = CLASS({
 				origin(context);
 			};
 		});
+		
+		let clone;
+		OVERRIDE(self.clone, (origin) => {
+			
+			clone = self.clone = (appendParams) => {
+				//OPTIONAL: appendParams
+				
+				let newParams = {
+					width : width,
+					height : height
+				};
+				
+				if (appendParams !== undefined) {
+					EXTEND({
+						origin : newParams,
+						extend : appendParams
+					});
+				}
+				
+				return origin(newParams);
+			};
+		});
 	}
 });

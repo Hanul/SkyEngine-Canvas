@@ -844,7 +844,7 @@ SkyEngine.Node = CLASS({
 				// >>> 1은 2로 나누고 나머지를 버리는 것과 동일
 				let mid = (low + high) >>> 1;
 				
-				if (parentChildren[mid].getZ() < z) {
+				if (parentChildren[mid].getZ() <= z) {
 					low = mid + 1;
 				} else {
 					high = mid;
@@ -940,7 +940,7 @@ SkyEngine.Node = CLASS({
 			}
 			
 			// 모든 이벤트 제거
-			EACH(eventMap, (eventHandler, eventName) => {
+			EACH(eventMap, (events, eventName) => {
 				SkyEngine.Screen.unregisterEventNode(eventName, self);
 			});
 			eventMap = undefined;
@@ -1418,22 +1418,121 @@ SkyEngine.Node = CLASS({
 		
 		let clone = self.clone = (appendParams) => {
 			//OPTIONAL: appendParams
+			//OPTIONAL: appendParams.exceptChildNodes
 			
 			let newParams = {
 				x : x,
-				y : y
+				y : y,
+				centerX : centerX,
+				centerY : centerY,
+				z : z,
+				speedX : speedX,
+				speedY : speedY,
+				accelX : accelX,
+				accelY : accelY,
+				minSpeedX : minSpeedX,
+				minSpeedY : minSpeedY,
+				maxSpeedX : maxSpeedX,
+				maxSpeedY : maxSpeedY,
+				toX : toX,
+				toY : toY,
+				
+				scaleX : scaleX,
+				scaleY : scaleY,
+				scalingSpeedX : scalingSpeedX,
+				scalingSpeedY : scalingSpeedY,
+				scalingAccelX : scalingAccelX,
+				scalingAccelY : scalingAccelY,
+				minScalingSpeedX : minScalingSpeedX,
+				minScalingSpeedY : minScalingSpeedY,
+				maxScalingSpeedX : maxScalingSpeedX,
+				maxScalingSpeedY : maxScalingSpeedY,
+				toScaleX : toScaleX,
+				toScaleY : toScaleY,
+				
+				angle : angle,
+				rotationSpeed : rotationSpeed,
+				rotationAccel : rotationAccel,
+				minRotationSpeed : minRotationSpeed,
+				maxRotationSpeed : maxRotationSpeed,
+				toAngle : toAngle,
+				
+				alpha : alpha,
+				fadingSpeed : fadingSpeed,
+				fadingAccel : fadingAccel,
+				minFadingSpeed : minFadingSpeed,
+				maxFadingSpeed : maxFadingSpeed,
+				toAlpha : toAlpha
 			};
 			
-			//TODO: 작성해야함
+			let exceptChildNodes;
 			
 			if (appendParams !== undefined) {
+				
+				if (appendParams.exceptChildNodes !== undefined) {
+					exceptChildNodes = appendParams.exceptChildNodes;
+					delete appendParams.exceptChildNodes;
+				}
+				
 				EXTEND({
 					origin : newParams,
 					extend : appendParams
 				});
 			}
 			
-			return self.type(newParams);
+			let clone = self.type(newParams);
+			
+			EACH(colliders, (collider) => {
+				clone.addCollider(collider.clone());
+			});
+			
+			EACH(touchAreas, (touchArea) => {
+				clone.addTouchArea(touchArea.clone());
+			});
+			
+			EACH(childNodes, (childNode) => {
+				if (exceptChildNodes === undefined || CHECK_IS_IN({
+					array : exceptChildNodes,
+					value : childNode
+				}) !== true) {
+					clone.append(childNode.clone());
+				}
+			});
+			
+			EACH(eventMap, (events, eventName) => {
+				EACH(events, (eventHandler) => {
+					clone.on(eventName, eventHandler);
+				});
+			});
+			
+			EACH(collisionTargets, (collisionTarget) => {
+				
+				if (meetHandlerMap[target.id] !== undefined) {
+					EACH(meetHandlerMap[target.id], (meetHandler) => {
+						clone.onMeet(collisionTarget, meetHandler);
+					});
+				}
+				
+				if (partHandlerMap[target.id] !== undefined) {
+					EACH(partHandlerMap[target.id], (partHandler) => {
+						clone.onPart(collisionTarget, partHandler);
+					});
+				}
+			});
+			
+			if (filterStyle !== undefined) {
+				clone.setFilter(filterStyle);
+			}
+			
+			if (blendMode !== undefined) {
+				clone.setBlendMode(blendMode);
+			}
+			
+			if (isHiding === true) {
+				clone.hide();
+			}
+			
+			return clone;
 		};
 	},
 	
