@@ -19,11 +19,7 @@ SkyEngine은 기본적으로 스프라이트 기반 2D 게임 개발에 적합�
 - Spine 모듈
 
 ## 설치하기
-1. 프로젝트의 `DEPENDENCY` 파일에 `Hanul/SkyEngine`를 추가합니다.
-2. [`ubm`](https://www.npmjs.com/package/ubm)을 이용해 설치합니다.
-    ```
-    ubm install
-    ```
+프로젝트의 `DEPENDENCY` 파일에 `Hanul/SkyEngine`를 추가합니다.
 
 ## 구성 요소
 SkyEngine은 다음과 같은 것들로 구성되어 있습니다.
@@ -39,7 +35,7 @@ SkyEngine은 다음과 같은 것들로 구성되어 있습니다.
 ### 파티클 시스템
 파티클 시스템은 구현중입니다.
 
-## 문서
+## 기타 문서
 * [튜토리얼](DOC/Tutorial.md)
 * [API 문서](API/README.md)
 
