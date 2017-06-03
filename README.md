@@ -1,5 +1,5 @@
 # ![SkyEngine Logo](https://raw.githubusercontent.com/Hanul/SkyEngine/master/logo.png)
-[UPPERCASE](http://uppercase.io) 기반 게임 엔진
+SkyEngine은 [UPPERCASE](http://uppercase.io) 기반 2D 게임 엔진입니다.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
