@@ -167,3 +167,41 @@ SkyEngine.Nody({
 - `getToAlpha()`
 
 ## 기타 함수
+
+
+
+
+
+### 이벤트
+#### `on`
+- `'tap'`
+- `'touchstart'`
+- `'touchend'`
+- `'animationend'` 애니메이션이 끝난 경우
+- `'framechange'` 애니메이션의 프레임이 변경된 경우
+- `'offscreen'` 화면을 벗어나는 경우
+- `'nextstep'` 다음 프레임이 되었을 경우
+
+#### `onMeet`
+#### `onPart`
+
+### 필터
+
+### 블렌드 모드
+
+### 노드 확장하기
+
+### 내장 확장 노드
+#### 모양 노드
+* `SkyEngine.Line`
+* `SkyEngine.Rect`
+* `SkyEngine.Circle`
+* `SkyEngine.Polygon`
+
+#### 이미지 노드
+* `SkyEngine.Image`
+* `SkyEngine.Sprite`
+* `SkyEngine.Silhouette`
+
+#### DOM 노드
+* `SkyEngine.Dom`

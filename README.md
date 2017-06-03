@@ -1,5 +1,7 @@
-# SkyEngine
+# ![SkyEngine Logo](https://raw.githubusercontent.com/Hanul/SkyEngine/master/logo.png)
 [UPPERCASE](http://uppercase.io) 기반 게임 엔진
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 ## 특징
 * HTML5 Canvas 기반 게임 엔진입니다.
@@ -23,10 +25,28 @@ SkyEngine은 기본적으로 스프라이트 기반 2D 게임 개발에 적합�
     ubm install
     ```
 
+## 구성 요소
+SkyEngine은 다음과 같은 것들로 구성되어 있습니다.
+
+### [스크린 노드](DOC/Screen.md)
+게임 화면 전체를 다루는 오브젝트입니다. 모든 노드는 스크린 노드 하위 노드로 구성됩니다.
+
+### [노드](DOC/Node.md)
+노드 시스템은 SkyEngine의 근간을 이루는 시스템입니다.
+
+### [타일 맵](DOC/TileMap.md)
+
+### 파티클 시스템
+파티클 시스템은 구현중입니다.
+
 ## 문서
 * [튜토리얼](DOC/Tutorial.md)
-* [가이드](DOC/Guide.md)
 * [API 문서](API/README.md)
+
+## 아직 구현되지 않은 기능
+- 타일맵 상에서 길찾기 시스템
+- 노드가 화면 밖으로 나갔는지 체크하는 함수
+- 파티클 시스템
 
 ## 라이센스
 [MIT](LICENSE)
