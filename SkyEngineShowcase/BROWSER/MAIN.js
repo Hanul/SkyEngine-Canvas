@@ -76,5 +76,10 @@ SkyEngineShowcase.MAIN = METHOD({
 			uri : 'test/raycast',
 			target : SkyEngineShowcase.RaycastTest
 		});
+		
+		SkyEngineShowcase.MATCH_VIEW({
+			uri : 'test/tilemap',
+			target : SkyEngineShowcase.TileMapTest
+		});
 	}
 });

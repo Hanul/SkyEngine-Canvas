@@ -99,7 +99,7 @@ SkyEngine.TileMap = CLASS({
 			EACH(tileMap, (tiles, i) => {
 				EACH(tiles, (tile, j) => {
 					if (tile !== undefined) {
-						addTile({
+						self.addTile({
 							row : i,
 							col : j,
 							tile : tile
@@ -120,7 +120,7 @@ SkyEngine.TileMap = CLASS({
 					
 					if (tile !== undefined) {
 						
-						addTile({
+						self.addTile({
 							row : i,
 							col : j,
 							tile : tile.clone()

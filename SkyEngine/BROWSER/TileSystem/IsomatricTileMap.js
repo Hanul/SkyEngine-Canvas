@@ -23,6 +23,8 @@ SkyEngine.IsomatricTileMap = CLASS({
 				
 				tileNode.setX(col * self.getTileWidth() + (row % 2) * self.getTileWidth() / 2);
 				tileNode.setY(row * self.getTileHeight() / 2);
+				
+				return tileNode;
 			};
 		});
 	}

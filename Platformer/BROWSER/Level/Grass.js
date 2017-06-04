@@ -18,21 +18,19 @@ Platformer.Grass = CLASS({
 		
 		// 플레이어 캐릭터
 		let player = SkyEngine.StateSet({
+			centerY : 92,
 			accelY : gravity,
 			collider : SkyEngine.Rect({
-				centerY : 92,
 				width : 80,
 				height : 184
 			}),
 			stateNodes : {
 				idle : SkyEngine.Sprite({
-					centerY : 92,
 					srcs : [
 						Platformer.R('Players/Green/alienGreen_stand.png')
 					]
 				}),
 				walk : SkyEngine.Sprite({
-					centerY : 92,
 					srcs : [
 						Platformer.R('Players/Green/alienGreen_walk1.png'),
 						Platformer.R('Players/Green/alienGreen_walk2.png')
@@ -41,7 +39,6 @@ Platformer.Grass = CLASS({
 					isHiding : true
 				}),
 				jump : SkyEngine.Sprite({
-					centerY : 92,
 					srcs : [
 						Platformer.R('Players/Green/alienGreen_jump.png')
 					],

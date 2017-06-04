@@ -111,11 +111,11 @@ SkyEngine.Node = CLASS({
 				let plusX = x * targetNode.getRealScaleX();
 				let plusY = y * targetNode.getRealScaleY();
 				
-				realX = targetNode.getRealX() + plusX * targetNode.getRealCos() - plusY * targetNode.getRealSin();
-				realY = targetNode.getRealY() + plusX * targetNode.getRealSin() + plusY * targetNode.getRealCos();
+				realX = targetNode.getDrawingX() + plusX * targetNode.getRealCos() - plusY * targetNode.getRealSin();
+				realY = targetNode.getDrawingY() + plusX * targetNode.getRealSin() + plusY * targetNode.getRealCos();
 				
-				let plusCenterX = centerX * targetNode.getRealScaleY();
-				let plusCenterY = centerY * targetNode.getRealScaleY();
+				let plusCenterX = centerX * realScaleX;
+				let plusCenterY = centerY * realScaleY;
 				
 				drawingX = realX - plusCenterX * realCos + plusCenterY * realSin;
 				drawingY = realY - plusCenterX * realSin - plusCenterY * realCos;

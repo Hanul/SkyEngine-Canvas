@@ -33,7 +33,7 @@ SkyEngineShowcase.NodeTest = CLASS({
 				c : SkyEngine.Rect({
 					centerY : -30,
 					angle : -40,
-					y : 60,
+					y : 30,
 					width : 20,
 					height : 60,
 					color : 'purple'
@@ -52,7 +52,7 @@ SkyEngineShowcase.NodeTest = CLASS({
 				c : SkyEngine.Rect({
 					centerY : -30,
 					angle : 40,
-					y : 60,
+					y : 30,
 					width : 20,
 					height : 60,
 					color : 'purple'
