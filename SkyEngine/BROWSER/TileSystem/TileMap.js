@@ -18,14 +18,19 @@ SkyEngine.TileMap = CLASS({
 		
 		let tileWidth = params.tileWidth;
 		let tileHeight = params.tileHeight;
-		let tileMap = params.tileMap;
-		let tileKeySet = params.tileKeySet;
-		let tileKeyMap = params.tileKeyMap;
 		let collisionMap = params.collisionMap;
 		
 		if (collisionMap === undefined) {
 			collisionMap = [];
 		}
+		
+		let getTileWidth = self.getTileWidth = () => {
+			return tileWidth;
+		};
+		
+		let getTileHeight = self.getTileHeight = () => {
+			return tileHeight;
+		};
 		
 		let addTile = self.addTile = (params) => {
 			//REQUIRED: params
@@ -46,14 +51,48 @@ SkyEngine.TileMap = CLASS({
 				collisionMap[row][col] = 1;
 			}
 			
-			self.append((collisionMap[row] !== undefined && collisionMap[row][col] === 1 ? SkyEngine.CollisionTile : SkyEngine.Tile)({
+			let tileNode = (collisionMap[row] !== undefined && collisionMap[row][col] === 1 ? SkyEngine.CollisionTile : SkyEngine.Tile)({
 				x : col * tileWidth,
 				y : row * tileHeight,
 				width : tileWidth,
 				height : tileHeight,
 				c : tile
-			}));
+			});
+			
+			self.append(tileNode);
+			
+			return tileNode;
 		};
+		
+		let clone;
+		OVERRIDE(self.clone, (origin) => {
+			
+			clone = self.clone = (appendParams) => {
+				//OPTIONAL: appendParams
+				
+				let newParams = {
+					tileWidth : tileWidth,
+					tileHeight : tileHeight,
+					collisionMap : collisionMap
+				};
+				
+				if (appendParams !== undefined) {
+					EXTEND({
+						origin : newParams,
+						extend : appendParams
+					});
+				}
+				
+				return origin(newParams);
+			};
+		});
+	},
+	
+	afterInit : (inner, self, params) => {
+		
+		let tileMap = params.tileMap;
+		let tileKeySet = params.tileKeySet;
+		let tileKeyMap = params.tileKeyMap;
 		
 		if (tileMap !== undefined) {
 			
@@ -92,28 +131,5 @@ SkyEngine.TileMap = CLASS({
 			
 			tileKeyMap = undefined;
 		}
-		
-		let clone;
-		OVERRIDE(self.clone, (origin) => {
-			
-			clone = self.clone = (appendParams) => {
-				//OPTIONAL: appendParams
-				
-				let newParams = {
-					tileWidth : tileWidth,
-					tileHeight : tileHeight,
-					collisionMap : collisionMap
-				};
-				
-				if (appendParams !== undefined) {
-					EXTEND({
-						origin : newParams,
-						extend : appendParams
-					});
-				}
-				
-				return origin(newParams);
-			};
-		});
 	}
 });
