@@ -28,6 +28,9 @@ SkyEngine.Screen = OBJECT({
 		let registeredNodeMap = {};
 		let registeredEventNodeMap = {};
 		
+		let followXNode;
+		let followYNode;
+		
 		// 드로잉 노드 등록
 		let registerNode = self.registerNode = (node) => {
 			
@@ -238,7 +241,7 @@ SkyEngine.Screen = OBJECT({
 			context.clearRect(0, 0, width, height);
 			
 			context.save();
-			context.translate(width / 2, height / 2);
+			context.translate(width / 2 - getFollowX(), height / 2 - getFollowY());
 			
 			drawAll(self, context, self.getAlpha());
 			
@@ -260,6 +263,60 @@ SkyEngine.Screen = OBJECT({
 		self.on('remove', () => {
 			loop.remove();
 		});
+		
+		let followX = self.followX = (node) => {
+			followXNode = node;
+		};
+		
+		let followY = self.followY = (node) => {
+			followYNode = node;
+		};
+		
+		let follow = self.follow = (node) => {
+			followX(node);
+			followY(node);
+		};
+		
+		let unfollowX = self.unfollowX = (node) => {
+			followXNode = undefined;
+		};
+		
+		let unfollowY = self.unfollowY = (node) => {
+			followYNode = undefined;
+		};
+		
+		let unfollow = self.unfollow = (node) => {
+			unfollowX();
+			unfollowY();
+		};
+		
+		let getFollowX = self.getFollowX = () => {
+			
+			if (followXNode === undefined) {
+				return 0;
+			}
+			
+			if (followXNode.checkIsRemoved() === true) {
+				followXNode = undefined;
+				return 0;
+			}
+			
+			return followXNode.getRealX();
+		};
+		
+		let getFollowY = self.getFollowY = () => {
+			
+			if (followYNode === undefined) {
+				return 0;
+			}
+			
+			if (followYNode.checkIsRemoved() === true) {
+				followYNode = undefined;
+				return 0;
+			}
+			
+			return followYNode.getRealY();
+		};
 		
 		let getWidth = self.getWidth = () => {
 			return width;

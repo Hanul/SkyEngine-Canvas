@@ -37,31 +37,15 @@ SkyEngine.TileMap = CLASS({
 			//REQUIRED: params.row
 			//REQUIRED: params.col
 			//REQUIRED: params.tile
-			//OPTIONAL: params.isCollider
 			
 			let row = params.row;
 			let col = params.col;
 			let tile = params.tile;
-			let isCollider = params.isCollider;
 			
-			if (isCollider === true) {
-				if (collisionMap[row] === undefined) {
-					collisionMap[row] = [];
-				}
-				collisionMap[row][col] = 1;
-			}
+			tile.setX(col * tileWidth);
+			tile.setY(row * tileHeight);
 			
-			let tileNode = (collisionMap[row] !== undefined && collisionMap[row][col] === 1 ? SkyEngine.CollisionTile : SkyEngine.Tile)({
-				x : col * tileWidth,
-				y : row * tileHeight,
-				width : tileWidth,
-				height : tileHeight,
-				c : tile
-			});
-			
-			self.append(tileNode);
-			
-			return tileNode;
+			self.append(tile);
 		};
 		
 		let clone;

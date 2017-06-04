@@ -192,16 +192,17 @@ SkyEngine.Nody({
 ### 노드 확장하기
 
 ### 내장 확장 노드
-#### 모양 노드
-* `SkyEngine.Line`
-* `SkyEngine.Rect`
-* `SkyEngine.Circle`
-* `SkyEngine.Polygon`
+#### 도형 노드
+* [직선 노드](Node/Line.md)
+* [사각형 노드](Node/Rect.md)
+* [원 노드](Node/Circle.md)
+* [다각형 노드](Node/Polygon.md)
 
 #### 이미지 노드
-* `SkyEngine.Image`
-* `SkyEngine.Sprite`
-* `SkyEngine.Silhouette`
+* [이미지 노드](Node/Image.md)
+* [스프라이트 애니메이션 노드](Node/Sprite.md)
+* [실루엣 노드](Node/Silhouette.md)
 
 #### DOM 노드
-* `SkyEngine.Dom`
+* [DOM 노드](Node/Dom.md)
+

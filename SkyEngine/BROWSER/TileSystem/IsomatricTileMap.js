@@ -18,13 +18,12 @@ SkyEngine.IsomatricTileMap = CLASS({
 				
 				let row = params.row;
 				let col = params.col;
+				let tile = params.tile;
 				
-				let tileNode = origin(params);
+				tile.setX(col * self.getTileWidth() + (row % 2) * self.getTileWidth() / 2);
+				tile.setY(row * self.getTileHeight() / 2);
 				
-				tileNode.setX(col * self.getTileWidth() + (row % 2) * self.getTileWidth() / 2);
-				tileNode.setY(row * self.getTileHeight() / 2);
-				
-				return tileNode;
+				self.append(tile);
 			};
 		});
 	}

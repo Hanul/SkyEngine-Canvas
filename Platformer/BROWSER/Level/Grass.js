@@ -6,15 +6,18 @@ Platformer.Grass = CLASS({
 	
 	init : (inner) => {
 		
-		SkyEngine.Screen.setScale(0.5);
+		let rootNode = SkyEngine.Node({
+			scale : 0.5
+		}).appendTo(SkyEngine.Screen);
 		
 		// 중력
 		let gravity = 3000;
 		
 		// 배경 이미지
-		let bg = SkyEngine.Image({
-			src : Platformer.R('Backgrounds/blue_land.png')
-		}).appendTo(SkyEngine.Screen);
+		let bg = SkyEngine.Background({
+			src : Platformer.R('Backgrounds/blue_land.png'),
+			isNotToRepeatY : true
+		}).appendTo(rootNode);
 		
 		// 플레이어 캐릭터
 		let player = SkyEngine.StateSet({
@@ -46,7 +49,15 @@ Platformer.Grass = CLASS({
 				})
 			},
 			baseState : 'idle'
-		}).appendTo(SkyEngine.Screen);
+		}).appendTo(rootNode);
+		
+		SkyEngine.Screen.followX(player);
+		
+		let GrassTile = CLASS({
+			preset : () => {
+				return SkyEngine.Image;
+			}
+		});
 		
 		// 땅
 		let lands = SkyEngine.TileMap({
@@ -55,28 +66,34 @@ Platformer.Grass = CLASS({
 			tileWidth : 128,
 			tileHeight : 128,
 			tileKeySet : {
-				1 : SkyEngine.Image({
-					src : Platformer.R('Ground/Grass/grass.png')
+				1 : GrassTile({
+					src : Platformer.R('Ground/Grass/grass.png'),
+					collider : SkyEngine.Rect({
+						width : 128,
+						height : 128
+					})
 				})
 			},
-			tileKeyMap : [[1, 1, 0, 1]],
-			collisionMap : [[1, 1, 0, 1]]
-		}).appendTo(SkyEngine.Screen);
+			tileKeyMap : [[1, 1, 0, 1, 1, 1, 1, 1, 1]]
+		}).appendTo(rootNode);
 		
 		lands.addTile({
 			row : -1,
 			col : -2,
-			tile : SkyEngine.Image({
-				src : Platformer.R('Ground/Grass/grass.png')
-			}),
-			isCollider : true
+			tile : GrassTile({
+				src : Platformer.R('Ground/Grass/grass.png'),
+				collider : SkyEngine.Rect({
+					width : 128,
+					height : 128
+				})
+			})
 		});
 		
 		// 타일과 만났다.
-		player.onMeet(SkyEngine.CollisionTile, (tile) => {
+		player.onMeet(GrassTile, (tile) => {
 			
-			if (player.getBeforeY() <= lands.getY() + tile.getY() - tile.getHeight() / 2) {
-				player.setY(lands.getY() + tile.getY() - tile.getHeight() / 2);
+			if (player.getBeforeY() <= lands.getY() + tile.getY() - 128 / 2) {
+				player.setY(lands.getY() + tile.getY() - 128 / 2);
 				player.setAccelY(0);
 				player.stopDown();
 				
@@ -146,8 +163,7 @@ Platformer.Grass = CLASS({
 		});
 		
 		inner.on('close', () => {
-			bg.remove();
-			player.remove();
+			rootNode.remove();
 			
 			keydownEvent.remove();
 			keyupEvent.remove();
