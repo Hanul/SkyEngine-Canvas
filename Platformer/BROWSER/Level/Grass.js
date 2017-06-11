@@ -53,12 +53,6 @@ Platformer.Grass = CLASS({
 		
 		SkyEngine.Screen.followX(player);
 		
-		let GrassTile = CLASS({
-			preset : () => {
-				return SkyEngine.Image;
-			}
-		});
-		
 		// 땅
 		let lands = SkyEngine.TileMap({
 			x : -100,
@@ -66,31 +60,25 @@ Platformer.Grass = CLASS({
 			tileWidth : 128,
 			tileHeight : 128,
 			tileKeySet : {
-				1 : GrassTile({
-					src : Platformer.R('Ground/Grass/grass.png'),
-					collider : SkyEngine.Rect({
-						width : 128,
-						height : 128
-					})
+				1 : SkyEngine.Image({
+					src : Platformer.R('Ground/Grass/grass.png')
 				})
 			},
-			tileKeyMap : [[1, 1, 0, 1, 1, 1, 1, 1, 1]]
+			tileKeyMap : [[1, 1, 0, 1, 1, 1, 1, 1, 1]],
+			collisionMap : [[1, 1, 0, 1, 1, 1, 1, 1, 1]]
 		}).appendTo(rootNode);
 		
 		lands.addTile({
 			row : -1,
 			col : -2,
-			tile : GrassTile({
-				src : Platformer.R('Ground/Grass/grass.png'),
-				collider : SkyEngine.Rect({
-					width : 128,
-					height : 128
-				})
-			})
+			tile : SkyEngine.Image({
+				src : Platformer.R('Ground/Grass/grass.png')
+			}),
+			isCollider : true
 		});
 		
 		// 타일과 만났다.
-		player.onMeet(GrassTile, (tile) => {
+		player.onMeet(SkyEngine.CollisionTile, (tile) => {
 			
 			if (player.getBeforeY() <= lands.getY() + tile.getY() - 128 / 2) {
 				player.setY(lands.getY() + tile.getY() - 128 / 2);
