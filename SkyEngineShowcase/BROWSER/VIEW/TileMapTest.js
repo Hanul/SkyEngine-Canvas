@@ -45,6 +45,17 @@ SkyEngineShowcase.TileMapTest = CLASS({
 			]
 		}).appendTo(SkyEngine.Screen);
 		
+		let path = tileMap.findPath({
+			startRow : 0,
+			startCol : 1,
+			endRow : 4,
+			endCol : 7
+		});
+		
+		EACH(path, (point) => {
+			console.log(point.row, point.col);
+		});
+		
 		let isomatricTileMap = SkyEngine.IsomatricTileMap({
 			centerX : 64 * 4,
 			centerY : 33 * 4,

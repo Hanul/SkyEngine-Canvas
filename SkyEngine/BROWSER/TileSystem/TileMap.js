@@ -113,6 +113,71 @@ SkyEngine.TileMap = CLASS({
 			//REQUIRED: params.endRow
 			//REQUIRED: params.endCol
 			
+			let startRow = params.startRow;
+			let startCol = params.startCol;
+			let endRow = params.endRow;
+			let endCol = params.endCol;
+			
+			let costMap = [];
+			
+			let queue = [];
+			
+			let regist = (parent, row, col) => {
+				
+				if (collisionMap[row] !== undefined && collisionMap[row][col] === 0) {
+					
+					if (costMap[row] === undefined) {
+						costMap[row] = [];
+					}
+					
+					let cost = parent.cost + 1;
+					
+					if (costMap[row][col] === undefined || costMap[row][col] > cost) {
+						
+						costMap[row][col] = cost;
+						
+						queue.push({
+							parent : parent,
+							row : row,
+							col : col,
+							cost : cost
+						});
+					}
+				}
+			};
+			
+			regist({
+				cost : -1
+			}, startRow, startCol);
+			
+			while (queue.length > 0) {
+				let point = queue.shift();
+				
+				// 찾았다.
+				if (point.row === endRow && point.col === endCol) {
+					
+					let path = [];
+					
+					let nowPoint = point;
+					
+					while (nowPoint.cost >= 0) {
+						
+						path.unshift({
+							row : nowPoint.row,
+							col : nowPoint.col
+						});
+						
+						nowPoint = nowPoint.parent;
+					}
+					
+					return path;
+				}
+				
+				regist(point, point.row - 1, point.col);
+				regist(point, point.row, point.col + 1);
+				regist(point, point.row + 1, point.col);
+				regist(point, point.row, point.col - 1);
+			}
 		};
 	},
 	
