@@ -32,6 +32,16 @@ SkyEngineShowcase.TileMapTest = CLASS({
 				['grass', 'dirt',  'grass', 'dirt',  'grass', 'grass', 'grass', 'grass'],
 				['grass', 'dirt',  'dirt',  'dirt',  'grass', 'stone', 'stone', 'stone'],
 				['grass', 'grass', 'grass', 'grass', 'grass', 'stone', 'stone', 'stone']
+			],
+			collisionMap : [
+				[1, 0, 1, 1, 1, 1, 1, 1],
+				[1, 0, 1, 0, 0, 0, 1, 1],
+				[1, 0, 1, 0, 1, 0, 1, 1],
+				[1, 0, 1, 0, 1, 0, 1, 1],
+				[1, 0, 1, 0, 1, 0, 0, 0],
+				[1, 0, 1, 0, 1, 1, 1, 1],
+				[1, 0, 0, 0, 1, 1, 1, 1],
+				[1, 1, 1, 1, 1, 1, 1, 1]
 			]
 		}).appendTo(SkyEngine.Screen);
 		
@@ -74,6 +84,26 @@ SkyEngineShowcase.TileMapTest = CLASS({
 					['water', 'water', 'water', 'water', 'water', 'water', 'water', 'water'],
 				['water', 'water', 'water', 'water', 'water', 'water', 'water', 'water'],
 					['water', 'water', 'water', 'water', 'water', 'water', 'water', 'water']
+			],
+			collisionMap : [
+				[0, 0, 0, 0, 0, 0, 0, 0],
+					[0, 0, 0, 0, 0, 0, 0, 0],
+				[0, 0, 0, 0, 0, 0, 0, 0],
+					[0, 0, 0, 0, 0, 0, 0, 0],
+				[0, 0, 0, 0, 0, 0, 0, 0],
+					[0, 0, 0, 0, 0, 0, 0, 0],
+				[0, 0, 0, 0, 0, 0, 0, 0],
+					[0, 0, 0, 0, 0, 0, 0, 0],
+				[0, 0, 0, 0, 0, 0, 0, 0],
+					[0, 0, 0, 0, 0, 0, 0, 0],
+				[0, 0, 0, 0, 0, 0, 0, 0],
+					[0, 0, 0, 0, 0, 0, 0, 0],
+				[0, 0, 0, 0, 0, 0, 0, 0],
+					[0, 0, 0, 0, 0, 0, 0, 0],
+				[0, 0, 0, 0, 0, 0, 0, 0],
+					[1, 1, 1, 1, 1, 1, 1, 1],
+				[1, 1, 1, 1, 1, 1, 1, 1],
+					[1, 1, 1, 1, 1, 1, 1, 1]
 			]
 		}).appendTo(SkyEngine.Screen);
 		
@@ -111,6 +141,16 @@ SkyEngineShowcase.TileMapTest = CLASS({
 				['grass', 'water', 'grass', 'water', 'grass', 'grass', 'grass',    'grass'   ],
 				['grass', 'water', 'water', 'water', 'grass', 'grass', 'fire',     'fire'    ],
 				['grass', 'grass', 'grass', 'grass', 'grass', 'fire',  'fire',     'fire'    ]
+			],
+			collisionMap : [
+				[1, 0, 1, 1, 1, 1, 1, 1],
+				[1, 0, 1, 0, 0, 0, 1, 1],
+				[1, 0, 1, 0, 1, 0, 1, 1],
+				[1, 0, 1, 0, 1, 0, 1, 1],
+				[1, 0, 1, 0, 1, 0, 0, 0],
+				[1, 0, 1, 0, 1, 1, 1, 1],
+				[1, 0, 0, 0, 1, 1, 1, 1],
+				[1, 1, 1, 1, 1, 1, 1, 1]
 			]
 		}).appendTo(SkyEngine.Screen);
 		

@@ -42,11 +42,11 @@ SkyEngine('Util').Collision = OBJECT({
 			circleSin, circleCos
 		) => {
 			
-			circleWidth *= circleScaleX;
-			circleHeight *= circleScaleY;
-			
 			pointX -= circleX;
 			pointY -= circleY;
+			
+			circleWidth *= circleScaleX;
+			circleHeight *= circleScaleY;
 
 			let tempX = 2 * (circleCos * pointX + circleSin * pointY) / circleWidth;
 			let tempY = 2 * (circleSin * pointX - circleCos * pointY) / circleHeight;
@@ -163,12 +163,32 @@ SkyEngine('Util').Collision = OBJECT({
 			
 			let lineTempStartX = lineX + lineCos * lineStartX + lineSin * lineStartY;
 			let lineTempStartY = lineY + lineSin * lineStartX + lineCos * lineStartY;
-				
+			
+			if (checkPointInRect(
+			lineTempStartX, lineTempStartY,
+			
+			rectX, rectY,
+			rectWidth, rectHeight,
+			rectScaleX, rectScaleY,
+			rectSin, rectCos) === true) {
+				return true;
+			}
+			
 			lineEndX *= lineScaleX;
 			lineEndY *= lineScaleY;
 			
 			let lineTempEndX = lineX + lineCos * lineEndX + lineSin * lineEndY;
 			let lineTempEndY = lineY + lineSin * lineEndX + lineCos * lineEndY;
+			
+			if (checkPointInRect(
+			lineTempEndX, lineTempEndY,
+			
+			rectX, rectY,
+			rectWidth, rectHeight,
+			rectScaleX, rectScaleY,
+			rectSin, rectCos) === true) {
+				return true;
+			}
 			
 			let rectPoint1X, rectPoint1Y;
 			let rectPoint2X, rectPoint2Y;
@@ -208,14 +228,40 @@ SkyEngine('Util').Collision = OBJECT({
 			lineStartX *= lineScaleX;
 			lineStartY *= lineScaleY;
 			
-			let lineTempStartX = lineX + lineCos * lineStartX + lineSin * lineStartY - circleX;
-			let lineTempStartY = lineY + lineSin * lineStartX + lineCos * lineStartY - circleY;
-				
+			let lineTempStartX = lineX + lineCos * lineStartX + lineSin * lineStartY;
+			let lineTempStartY = lineY + lineSin * lineStartX + lineCos * lineStartY;
+			
+			if (checkPointInCircle(
+			lineTempStartX, lineTempStartY,
+			
+			circleX, circleY,
+			circleWidth, circleHeight,
+			circleScaleX, circleScaleY,
+			circleSin, circleCos) === true) {
+				return true;
+			}
+			
 			lineEndX *= lineScaleX;
 			lineEndY *= lineScaleY;
 			
-			let lineTempEndX = lineX + lineCos * lineEndX + lineSin * lineEndY - circleX;
-			let lineTempEndY = lineY + lineSin * lineEndX + lineCos * lineEndY - circleY;
+			let lineTempEndX = lineX + lineCos * lineEndX + lineSin * lineEndY;
+			let lineTempEndY = lineY + lineSin * lineEndX + lineCos * lineEndY;
+			
+			if (checkPointInCircle(
+			lineTempEndX, lineTempEndY,
+			
+			circleX, circleY,
+			circleWidth, circleHeight,
+			circleScaleX, circleScaleY,
+			circleSin, circleCos) === true) {
+				return true;
+			}
+			
+			lineTempStartX -= circleX;
+			lineTempStartY -= circleY;
+			
+			lineTempEndX -= circleX;
+			lineTempEndY -= circleY;
 			
 			let tempStartX = circleCos * lineTempStartX + circleSin * lineTempStartY;
 			let tempStartY = -circleSin * lineTempStartX + circleCos * lineTempStartY;
@@ -275,12 +321,32 @@ SkyEngine('Util').Collision = OBJECT({
 			
 			let lineTempStartX = lineX + lineCos * lineStartX + lineSin * lineStartY;
 			let lineTempStartY = lineY + lineSin * lineStartX + lineCos * lineStartY;
+			
+			if (checkPointInPolygon(
+			lineTempStartX, lineTempStartY,
+			
+			polygonX, polygonY,
+			polygonPoints,
+			polygonScaleX, polygonScaleY,
+			polygonSin, polygonCos) === true) {
+				return true;
+			}
 				
 			lineEndX *= lineScaleX;
 			lineEndY *= lineScaleY;
 			
 			let lineTempEndX = lineX + lineCos * lineEndX + lineSin * lineEndY;
 			let lineTempEndY = lineY + lineSin * lineEndX + lineCos * lineEndY;
+			
+			if (checkPointInPolygon(
+			lineTempEndX, lineTempEndY,
+			
+			polygonX, polygonY,
+			polygonPoints,
+			polygonScaleX, polygonScaleY,
+			polygonSin, polygonCos) === true) {
+				return true;
+			}
 			
 			let length = polygonPoints.length;
 			
@@ -334,6 +400,40 @@ SkyEngine('Util').Collision = OBJECT({
 			aPoint3X = aX + aCW + aSH;	aPoint3Y = aY - aSW + aCH;
 			aPoint4X = aX - aCW + aSH;	aPoint4Y = aY + aSW + aCH;
 			
+			if (checkPointInRect(
+			aPoint1X, aPoint1Y,
+			
+			bX, bY,
+			bWidth, bHeight,
+			bScaleX, bScaleY,
+			bSin, bCos) === true ||
+				
+			checkPointInRect(
+			aPoint2X, aPoint2Y,
+			
+			bX, bY,
+			bWidth, bHeight,
+			bScaleX, bScaleY,
+			bSin, bCos) === true ||
+				
+			checkPointInRect(
+			aPoint3X, aPoint3Y,
+			
+			bX, bY,
+			bWidth, bHeight,
+			bScaleX, bScaleY,
+			bSin, bCos) === true ||
+				
+			checkPointInRect(
+			aPoint4X, aPoint4Y,
+			
+			bX, bY,
+			bWidth, bHeight,
+			bScaleX, bScaleY,
+			bSin, bCos) === true) {
+				return true;
+			}
+			
 			let bPoint1X, bPoint1Y;
 			let bPoint2X, bPoint2Y;
 			let bPoint3X, bPoint3Y;
@@ -349,6 +449,40 @@ SkyEngine('Util').Collision = OBJECT({
 			bPoint2X = bX + bCW - bSH;	bPoint2Y = bY - bSW - bCH;
 			bPoint3X = bX + bCW + bSH;	bPoint3Y = bY - bSW + bCH;
 			bPoint4X = bX - bCW + bSH;	bPoint4Y = bY + bSW + bCH;
+			
+			if (checkPointInRect(
+			bPoint1X, bPoint1Y,
+			
+			aX, aY,
+			aWidth, aHeight,
+			aScaleX, aScaleY,
+			aSin, aCos) === true ||
+				
+			checkPointInRect(
+			bPoint2X, bPoint2Y,
+			
+			aX, aY,
+			aWidth, aHeight,
+			aScaleX, aScaleY,
+			aSin, aCos) === true ||
+				
+			checkPointInRect(
+			bPoint3X, bPoint3Y,
+			
+			aX, aY,
+			aWidth, aHeight,
+			aScaleX, aScaleY,
+			aSin, aCos) === true ||
+				
+			checkPointInRect(
+			bPoint4X, bPoint4Y,
+			
+			aX, aY,
+			aWidth, aHeight,
+			aScaleX, aScaleY,
+			aSin, aCos) === true) {
+				return true;
+			}
 			
 			return checkLineLine(0, 0, aPoint1X, aPoint1Y, aPoint2X, aPoint2Y, 1, 1, 0, 1, 0, 0, bPoint1X, bPoint1Y, bPoint2X, bPoint2Y, 1, 1, 0, 1) === true ||
 				checkLineLine(0, 0, aPoint1X, aPoint1Y, aPoint2X, aPoint2Y, 1, 1, 0, 1, 0, 0, bPoint2X, bPoint2Y, bPoint3X, bPoint3Y, 1, 1, 0, 1) === true ||
@@ -382,6 +516,16 @@ SkyEngine('Util').Collision = OBJECT({
 			circleScaleX, circleScaleY,
 			circleSin, circleCos) => {
 			
+			if (checkPointInRect(
+			circleX, circleY,
+			
+			rectX, rectY,
+			rectWidth, rectHeight,
+			rectScaleX, rectScaleY,
+			rectSin, rectCos) === true) {
+				return true;
+			}
+			
 			let rectPoint1X, rectPoint1Y;
 			let rectPoint2X, rectPoint2Y;
 			let rectPoint3X, rectPoint3Y;
@@ -397,6 +541,40 @@ SkyEngine('Util').Collision = OBJECT({
 			rectPoint2X = rectX + cw - sh;	rectPoint2Y = rectY - sw - ch;
 			rectPoint3X = rectX + cw + sh;	rectPoint3Y = rectY - sw + ch;
 			rectPoint4X = rectX - cw + sh;	rectPoint4Y = rectY + sw + ch;
+			
+			if (checkPointInCircle(
+			rectPoint1X, rectPoint1Y,
+			
+			circleX, circleY,
+			circleWidth, circleHeight,
+			circleScaleX, circleScaleY,
+			circleSin, circleCos) === true ||
+				
+			checkPointInCircle(
+			rectPoint2X, rectPoint2Y,
+			
+			circleX, circleY,
+			circleWidth, circleHeight,
+			circleScaleX, circleScaleY,
+			circleSin, circleCos) === true ||
+				
+			checkPointInCircle(
+			rectPoint3X, rectPoint3Y,
+			
+			circleX, circleY,
+			circleWidth, circleHeight,
+			circleScaleX, circleScaleY,
+			circleSin, circleCos) === true ||
+				
+			checkPointInCircle(
+			rectPoint4X, rectPoint4Y,
+			
+			circleX, circleY,
+			circleWidth, circleHeight,
+			circleScaleX, circleScaleY,
+			circleSin, circleCos) === true) {
+				return true;
+			}
 			
 			circleWidth *= circleScaleX;
 			circleHeight *= circleScaleY;
@@ -435,6 +613,40 @@ SkyEngine('Util').Collision = OBJECT({
 			rectPoint3X = rectX + cw + sh;	rectPoint3Y = rectY - sw + ch;
 			rectPoint4X = rectX - cw + sh;	rectPoint4Y = rectY + sw + ch;
 			
+			if (checkPointInPolygon(
+			rectPoint1X, rectPoint1Y,
+			
+			polygonX, polygonY,
+			polygonPoints,
+			polygonScaleX, polygonScaleY,
+			polygonSin, polygonCos) === true ||
+				
+			checkPointInPolygon(
+			rectPoint2X, rectPoint2Y,
+			
+			polygonX, polygonY,
+			polygonPoints,
+			polygonScaleX, polygonScaleY,
+			polygonSin, polygonCos) === true ||
+				
+			checkPointInPolygon(
+			rectPoint3X, rectPoint3Y,
+			
+			polygonX, polygonY,
+			polygonPoints,
+			polygonScaleX, polygonScaleY,
+			polygonSin, polygonCos) === true ||
+				
+			checkPointInPolygon(
+			rectPoint4X, rectPoint4Y,
+			
+			polygonX, polygonY,
+			polygonPoints,
+			polygonScaleX, polygonScaleY,
+			polygonSin, polygonCos) === true) {
+				return true;
+			}
+			
 			let length = polygonPoints.length;
 			
 			for (let i = 0, j = length - 1; i < length; j = i, i += 1) {
@@ -442,11 +654,21 @@ SkyEngine('Util').Collision = OBJECT({
 				let iX = polygonPoints[i].x * polygonScaleX;
 				let iY = polygonPoints[i].y * polygonScaleY;
 				
-				let jX = polygonPoints[j].x * polygonScaleX;
-				let jY = polygonPoints[j].y * polygonScaleY;
-				
 				let polygonPoint1X = polygonX + polygonCos * iX - polygonSin * iY;
 				let polygonPoint1Y = polygonY + polygonSin * iX + polygonCos * iY;
+				
+				if (checkPointInRect(
+				polygonPoint1X, polygonPoint1Y,
+				
+				rectX, rectY,
+				rectWidth, rectHeight,
+				rectScaleX, rectScaleY,
+				rectSin, rectCos) === true) {
+					return true;
+				}
+				
+				let jX = polygonPoints[j].x * polygonScaleX;
+				let jY = polygonPoints[j].y * polygonScaleY;
 				
 				let polygonPoint2X = polygonX + polygonCos * jX - polygonSin * jY;
 				let polygonPoint2Y = polygonY + polygonSin * jX + polygonCos * jY;
@@ -576,6 +798,16 @@ SkyEngine('Util').Collision = OBJECT({
 			polygonSin, polygonCos
 		) => {
 			
+			if (checkPointInPolygon(
+			circleX, circleY,
+			
+			polygonX, polygonY,
+			polygonPoints,
+			polygonScaleX, polygonScaleY,
+			polygonSin, polygonCos) === true) {
+				return true;
+			}
+			
 			circleWidth *= circleScaleX;
 			circleHeight *= circleScaleY;
 			
@@ -586,11 +818,21 @@ SkyEngine('Util').Collision = OBJECT({
 				let iX = polygonPoints[i].x * polygonScaleX;
 				let iY = polygonPoints[i].y * polygonScaleY;
 				
-				let jX = polygonPoints[j].x * polygonScaleX;
-				let jY = polygonPoints[j].y * polygonScaleY;
-				
 				let polygonPoint1X = polygonX + polygonCos * iX - polygonSin * iY;
 				let polygonPoint1Y = polygonY + polygonSin * iX + polygonCos * iY;
+				
+				if (checkPointInCircle(
+				polygonPoint1X, polygonPoint1Y,
+				
+				circleX, circleY,
+				circleWidth, circleHeight,
+				1, 1,
+				circleSin, circleCos) === true) {
+					return true;
+				}
+				
+				let jX = polygonPoints[j].x * polygonScaleX;
+				let jY = polygonPoints[j].y * polygonScaleY;
 				
 				let polygonPoint2X = polygonX + polygonCos * jX - polygonSin * jY;
 				let polygonPoint2Y = polygonY + polygonSin * jX + polygonCos * jY;
@@ -618,16 +860,45 @@ SkyEngine('Util').Collision = OBJECT({
 			let aLength = aPoints.length;
 			let bLength = bPoints.length;
 			
+			for (let i = 0, j = bLength - 1; i < bLength; j = i, i += 1) {
+				
+				let iX = bPoints[i].x * bScaleX;
+				let iY = bPoints[i].y * bScaleY;
+				
+				let bPoint1X = bX + bCos * iX - bSin * iY;
+				let bPoint1Y = bY + bSin * iX + bCos * iY;
+				
+				if (checkPointInPolygon(
+				bPoint1X, bPoint1Y,
+				
+				aX, aY,
+				aPoints,
+				aScaleX, aScaleY,
+				aSin, aCos) === true) {
+					return true;
+				}
+			}
+			
 			for (let i = 0, j = aLength - 1; i < aLength; j = i, i += 1) {
 				
 				let iX = aPoints[i].x * aScaleX;
 				let iY = aPoints[i].y * aScaleY;
 				
-				let jX = aPoints[j].x * aScaleX;
-				let jY = aPoints[j].y * aScaleY;
-				
 				let aPoint1X = aX + aCos * iX - aSin * iY;
 				let aPoint1Y = aY + aSin * iX + aCos * iY;
+				
+				if (checkPointInPolygon(
+				aPoint1X, aPoint1Y,
+				
+				bX, bY,
+				bPoints,
+				bScaleX, bScaleY,
+				bSin, bCos) === true) {
+					return true;
+				}
+				
+				let jX = aPoints[j].x * aScaleX;
+				let jY = aPoints[j].y * aScaleY;
 				
 				let aPoint2X = aX + aCos * jX - aSin * jY;
 				let aPoint2Y = aY + aSin * jX + aCos * jY;
@@ -637,11 +908,11 @@ SkyEngine('Util').Collision = OBJECT({
 					let kX = bPoints[k].x * bScaleX;
 					let kY = bPoints[k].y * bScaleY;
 					
-					let lX = bPoints[l].x * bScaleX;
-					let lY = bPoints[l].y * bScaleY;
-					
 					let bPoint1X = bX + bCos * kX - bSin * kY;
 					let bPoint1Y = bY + bSin * kX + bCos * kY;
+					
+					let lX = bPoints[l].x * bScaleX;
+					let lY = bPoints[l].y * bScaleY;
 					
 					let bPoint2X = bX + bCos * lX - bSin * lY;
 					let bPoint2Y = bY + bSin * lX + bCos * lY;

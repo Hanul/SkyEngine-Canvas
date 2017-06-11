@@ -14,8 +14,7 @@ SkyEngineShowcase.MainMenu = CLASS({
 				width : '100%',
 				height : '100%',
 				overflowY : 'scroll',
-				textAlign : 'center',
-				paddingBottom : 20
+				textAlign : 'center'
 			},
 			c : [H1({
 				style : {
@@ -26,7 +25,8 @@ SkyEngineShowcase.MainMenu = CLASS({
 			}), UL({
 				style : {
 					marginTop : 20,
-					fontSize : 15
+					fontSize : 15,
+					paddingBottom : 20
 				},
 				c : [LI({
 					c : A({

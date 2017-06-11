@@ -152,6 +152,38 @@ SkyEngine.Sprite = CLASS({
 			};
 		});
 		
+		let checkOffScreen;
+		OVERRIDE(self.checkOffScreen, (origin) => {
+			
+			checkOffScreen = self.checkOffScreen = (area) => {
+				
+				if (width === undefined || checkRectRect(
+					
+					0,
+					0,
+					SkyEngine.Screen.getWidth(),
+					SkyEngine.Screen.getHeight(),
+					1,
+					1,
+					0,
+					1,
+					
+					self.getDrawingX(),
+					self.getDrawingY(),
+					spriteWidth,
+					spriteHeight,
+					self.getRealScaleX(),
+					self.getRealScaleY(),
+					self.getRealSin(),
+					self.getRealCos()) === true) {
+					
+					return false;
+				}
+				
+				return origin(area);
+			};
+		});
+		
 		let step;
 		OVERRIDE(self.step, (origin) => {
 			

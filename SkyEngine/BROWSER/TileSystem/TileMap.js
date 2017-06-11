@@ -37,15 +37,50 @@ SkyEngine.TileMap = CLASS({
 			//REQUIRED: params.row
 			//REQUIRED: params.col
 			//REQUIRED: params.tile
+			//OPTIONAL: params.isCollider
 			
 			let row = params.row;
 			let col = params.col;
 			let tile = params.tile;
+			let isCollider = params.isCollider;
 			
-			tile.setX(col * tileWidth);
-			tile.setY(row * tileHeight);
+			let x = col * tileWidth;
+			let y = row * tileHeight;
 			
-			self.append(tile);
+			if (isCollider === true) {
+				if (collisionMap[row] === undefined) {
+					collisionMap[row] = [];
+				}
+				collisionMap[row][col] = 1;
+			}
+			
+			let tileNode;
+			
+			if (collisionMap[row] !== undefined && collisionMap[row][col] === 1) {
+				tileNode = SkyEngine.CollisionTile({
+					x : x,
+					y : y,
+					c : tile,
+					collider : SkyEngine.Rect({
+						width : tileWidth,
+						height : tileHeight
+					})
+				});
+			}
+			
+			else {
+				tileNode = SkyEngine.Tile({
+					x : x,
+					y : y,
+					c : tile
+				});
+			}
+			
+			self.append(tileNode);
+		};
+		
+		let getCollisionMap = self.getCollisionMap = () => {
+			return collisionMap;
 		};
 		
 		let clone;
@@ -70,6 +105,15 @@ SkyEngine.TileMap = CLASS({
 				return origin(newParams);
 			};
 		});
+		
+		let findPath = self.findPath = (params) => {
+			//REQUIRED: params
+			//REQUIRED: params.startRow
+			//REQUIRED: params.startCol
+			//REQUIRED: params.endRow
+			//REQUIRED: params.endCol
+			
+		};
 	},
 	
 	afterInit : (inner, self, params) => {

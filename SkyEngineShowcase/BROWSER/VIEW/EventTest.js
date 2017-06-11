@@ -41,9 +41,60 @@ SkyEngineShowcase.EventTest = CLASS({
 			on : {
 				touchstart : () => {
 					console.log('This is Circle!');
+				},
+				offscreen :  () => {
+					console.log('Offscreen!');
 				}
 			}
 		}).appendTo(SkyEngine.Screen);
+		
+		circle.moveRight(100);
+		
+		let delay = DELAY(5, () => {
+			circle.stopRight();
+			circle.moveDown(100);
+			
+			delay = DELAY(5, () => {
+				
+				circle.flipX();
+				
+				circle.stopDown();
+				circle.moveLeft(100);
+				
+				let repeat = RAR(() => {
+				
+					delay = DELAY(5, () => {
+						
+						circle.stopLeft();
+						circle.moveUp(100);
+						
+						delay = DELAY(5, () => {
+						
+							circle.flipX();
+							
+							circle.stopUp();
+							circle.moveRight(100);
+							
+							delay = DELAY(5, () => {
+								
+								circle.stopRight();
+								circle.moveDown(100);
+								
+								delay = DELAY(5, () => {
+									
+									circle.flipX();
+									
+									circle.stopDown();
+									circle.moveLeft(100);
+									
+									repeat();
+								});
+							});
+						});
+					});
+				});
+			});
+		});
 		
 		circle.addTouchArea(SkyEngine.Circle({
 			width : 60,
@@ -126,6 +177,8 @@ SkyEngineShowcase.EventTest = CLASS({
 			circle.remove();
 			polygon.remove();
 			character.remove();
+			
+			delay.remove();
 		});
 	}
 });

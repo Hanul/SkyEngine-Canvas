@@ -1145,7 +1145,7 @@ SkyEngine.Node = CLASS({
 		
 		let checkOffScreen = self.checkOffScreen = () => {
 			
-			return (drawingX < -SkyEngine.Screen.getWidth() / 2 || drawingX > SkyEngine.Screen.getWidth() / 2 || drawingY < -SkyEngine.Screen.getHeight() / 2 || drawingY > SkyEngine.Screen.getHeight() / 2) && childNodes.every((childNode) => {
+			return childNodes.every((childNode) => {
 				return childNode.checkOffScreen(target) === true;
 			}) === true;
 		};
@@ -1398,7 +1398,7 @@ SkyEngine.Node = CLASS({
 			}
 			
 			if (eventMap !== undefined) {
-				if (eventMap.offscreen !== undefined && checkOffScreen() === true) {
+				if (eventMap.offscreen !== undefined && self.checkOffScreen() === true) {
 					fireEvent('offscreen');
 				}
 				if (eventMap.nextstep !== undefined) {

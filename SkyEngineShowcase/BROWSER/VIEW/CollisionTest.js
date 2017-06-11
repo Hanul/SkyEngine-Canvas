@@ -195,6 +195,7 @@ SkyEngineShowcase.CollisionTest = CLASS({
 			rect.remove();
 			circle.remove();
 			polygon.remove();
+			
 			delay.remove();
 		});
 	}

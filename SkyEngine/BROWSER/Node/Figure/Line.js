@@ -302,6 +302,7 @@ SkyEngine.Line = CLASS((cls) => {
 			let endY = params.endY;
 			
 			let checkLineLine = SkyEngine.Util.Collision.checkLineLine;
+			let checkLineRect = SkyEngine.Util.Collision.checkLineRect;
 			
 			let setStartX = self.setStartX = (_startX) => {
 				startX = _startX;
@@ -369,6 +370,40 @@ SkyEngine.Line = CLASS((cls) => {
 							
 							return true;
 						}
+					}
+					
+					return origin(area);
+				};
+			});
+			
+			let checkOffScreen;
+			OVERRIDE(self.checkOffScreen, (origin) => {
+				
+				checkOffScreen = self.checkOffScreen = (area) => {
+					
+					if (checkLineRect(
+						
+						self.getDrawingX(),
+						self.getDrawingY(),
+						startX,
+						startY,
+						endX,
+						endY,
+						self.getRealScaleX(),
+						self.getRealScaleY(),
+						self.getRealSin(),
+						self.getRealCos(),
+						
+						0,
+						0,
+						SkyEngine.Screen.getWidth(),
+						SkyEngine.Screen.getHeight(),
+						1,
+						1,
+						0,
+						1) === true) {
+						
+						return true;
 					}
 					
 					return origin(area);

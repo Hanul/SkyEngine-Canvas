@@ -99,6 +99,38 @@ SkyEngine.Image = CLASS((cls) => {
 				};
 			});
 			
+			let checkOffScreen;
+			OVERRIDE(self.checkOffScreen, (origin) => {
+				
+				checkOffScreen = self.checkOffScreen = (area) => {
+					
+					if (width === undefined || checkRectRect(
+						
+						0,
+						0,
+						SkyEngine.Screen.getWidth(),
+						SkyEngine.Screen.getHeight(),
+						1,
+						1,
+						0,
+						1,
+						
+						self.getDrawingX(),
+						self.getDrawingY(),
+						width,
+						height,
+						self.getRealScaleX(),
+						self.getRealScaleY(),
+						self.getRealSin(),
+						self.getRealCos()) === true) {
+						
+						return false;
+					}
+					
+					return origin(area);
+				};
+			});
+			
 			let draw;
 			OVERRIDE(self.draw, (origin) => {
 				

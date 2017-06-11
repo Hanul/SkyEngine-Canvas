@@ -128,7 +128,7 @@ SkyEngine.Screen = OBJECT({
 				
 				EACH(registeredEventNodeMap[eventName], (node) => {
 					
-					if (node.checkTouch(e.getLeft(), e.getTop()) === true) {
+					if (node.checkTouch(e.getLeft() - width / 2, e.getTop() - height / 2) === true) {
 						node.fireEvent(eventName);
 					}
 				});
