@@ -1,4 +1,4 @@
-# CLASS `SkyEngine.Polygon(inner, self, params)`
+# `CLASS ` SkyEngine.Polygon
 폴리곤 노드
 
 ## Mom CLASS

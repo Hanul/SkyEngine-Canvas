@@ -1,4 +1,4 @@
-# CLASS `SkyEngine.Silhouette(inner, self, params)`
+# `CLASS ` SkyEngine.Silhouette
 실루엣 노드
 
 ## Mom CLASS

@@ -1,4 +1,4 @@
-# OBJECT `SkyEngine('Util').ImageData(inner, self)`
+# `OBJECT ` SkyEngineUtil.ImageData
 
 ## Public Members
 

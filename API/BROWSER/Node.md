@@ -1,4 +1,4 @@
-# CLASS `SkyEngine.Node(inner, self, params)`
+# `CLASS ` SkyEngine.Node
 노드 트리를 구성하기 위한 노드 클래스
 
 ## Parameters

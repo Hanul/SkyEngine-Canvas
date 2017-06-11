@@ -1,4 +1,4 @@
-# CLASS `SkyEngine.HexagonTileMap(inner, self, params)`
+# `CLASS ` SkyEngine.HexagonTileMap
 
 ## Mom CLASS
 `SkyEngine.TileMap`

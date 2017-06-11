@@ -1,4 +1,4 @@
-# CLASS `SkyEngine.Line(inner, self, params)`
+# `CLASS ` SkyEngine.Line
 선 노드
 
 ## Mom CLASS

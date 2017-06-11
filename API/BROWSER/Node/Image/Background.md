@@ -1,4 +1,4 @@
-# CLASS `SkyEngine.Background(inner, self, params)`
+# `CLASS ` SkyEngine.Background
 배경 노드
 
 ## Mom CLASS

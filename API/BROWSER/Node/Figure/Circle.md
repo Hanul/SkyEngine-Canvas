@@ -1,4 +1,4 @@
-# CLASS `SkyEngine.Circle(inner, self, params)`
+# `CLASS ` SkyEngine.Circle
 원형 노드
 
 ## Mom CLASS

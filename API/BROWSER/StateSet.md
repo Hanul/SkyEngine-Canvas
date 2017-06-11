@@ -1,4 +1,4 @@
-# CLASS `SkyEngine.StateSet(inner, self, params)`
+# `CLASS ` SkyEngine.StateSet
 상태 세트 노드
 
 ## Mom CLASS

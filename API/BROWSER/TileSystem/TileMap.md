@@ -1,4 +1,4 @@
-# CLASS `SkyEngine.TileMap(inner, self, params)`
+# `CLASS ` SkyEngine.TileMap
 타일 맵
 
 ## Mom CLASS

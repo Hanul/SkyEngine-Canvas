@@ -1,4 +1,4 @@
-# OBJECT `SkyEngine('Util').Collision(inner, self)`
+# `OBJECT ` SkyEngineUtil.Collision
 
 ## Public Members
 

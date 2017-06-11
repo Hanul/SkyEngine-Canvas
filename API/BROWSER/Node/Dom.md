@@ -1,4 +1,4 @@
-# CLASS `SkyEngine.Dom(inner, self, params)`
+# `CLASS ` SkyEngine.Dom
 Dom 노드
 
 ## Mom CLASS

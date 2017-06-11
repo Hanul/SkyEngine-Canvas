@@ -1,4 +1,4 @@
-# CLASS `SkyEngine.IsomatricTileMap(inner, self, params)`
+# `CLASS ` SkyEngine.IsomatricTileMap
 
 ## Mom CLASS
 `SkyEngine.TileMap`

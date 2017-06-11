@@ -1,4 +1,4 @@
-# CLASS `SkyEngine.Rect(inner, self, params)`
+# `CLASS ` SkyEngine.Rect
 사각형 노드
 
 ## Mom CLASS

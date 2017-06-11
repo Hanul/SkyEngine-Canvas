@@ -1,4 +1,4 @@
-# CLASS `SkyEngine.Image(inner, self, params)`
+# `CLASS ` SkyEngine.Image
 이미지 노드
 
 ## Mom CLASS

@@ -1,4 +1,4 @@
-# CLASS `SkyEngine.Sprite(inner, self, params)`
+# `CLASS ` SkyEngine.Sprite
 스프라이트 애니메이션 노드
 
 ## Mom CLASS

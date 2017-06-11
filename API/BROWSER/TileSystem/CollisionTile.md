@@ -1,4 +1,4 @@
-# CLASS `SkyEngine.CollisionTile()`
+# `CLASS ` SkyEngine.CollisionTile
 
 ## Mom CLASS
 `SkyEngine.Tile`

@@ -1,4 +1,4 @@
-# CLASS `SkyEngine.Tile()`
+# `CLASS ` SkyEngine.Tile
 
 ## Mom CLASS
 `SkyEngine.Node`

@@ -1,4 +1,4 @@
-# OBJECT `SkyEngine.Screen(inner, self)`
+# `OBJECT ` SkyEngine.Screen
 게임 화면 전체를 다루는 오브젝트
 
 ## Mom CLASS
