@@ -3,7 +3,13 @@
  */
 SkyEngine.Polygon = CLASS((cls) => {
 	
-	let findRaycastPoints = cls.findRaycastPoints = () => {
+	let findRaycastPoints = cls.findRaycastPoints = (
+		pointX, pointY,
+		
+		polygonX, polygonY,
+		polygonPoints,
+		polygonScaleX, polygonScaleY,
+		polygonSin, polygonCos) => {
 		
 	};
 	

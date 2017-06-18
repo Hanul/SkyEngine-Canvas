@@ -3,8 +3,45 @@
  */
 SkyEngine.Circle = CLASS((cls) => {
 	
-	let findRaycastPoints = cls.findRaycastPoints = () => {
+	let findRaycastPoints = cls.findRaycastPoints = (
+		pointX, pointY,
 		
+		circleX, circleY,
+		circleWidth, circleHeight,
+		circleScaleX, circleScaleY,
+		circleSin, circleCos) => {
+		
+		let tempX = circleCos * pointX + circleSin * pointY;
+		let tempY = -circleSin * pointX + circleCos * pointY;
+		
+		circleWidth *= circleScaleX;
+		circleHeight *= circleScaleY;
+		
+		let h = circleWidth / 2;
+		let v = circleHeight / 2;
+		
+		let startX = 999999;
+		let startY = (1 - tempX * startX / h / h * v * v) / tempY;
+		
+		let endX = -999999;
+		let endY = (1 - tempX * endX / h / h * v * v) / tempY;
+		
+		return SkyEngine.Line.findCircleIntersectionPoints(
+			0,
+			0,
+			startX,
+			startY,
+			endX,
+			endY,
+			1,
+			1,
+			0,
+			1,
+			
+			circleX, circleY,
+			circleWidth, circleHeight,
+			circleScaleX, circleScaleY,
+			circleSin, circleCos);
 	};
 	
 	return {

@@ -3,7 +3,13 @@
  */
 SkyEngine.Rect = CLASS((cls) => {
 	
-	let findRaycastPoints = cls.findRaycastPoints = () => {
+	let findRaycastPoints = cls.findRaycastPoints = (
+		pointX, pointY,
+		
+		rectX, rectY,
+		rectWidth, rectHeight,
+		rectScaleX, rectScaleY,
+		rectSin, rectCos) => {
 		
 	};
 	
