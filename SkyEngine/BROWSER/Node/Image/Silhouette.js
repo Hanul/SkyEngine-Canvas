@@ -21,6 +21,8 @@ SkyEngine.Silhouette = CLASS((cls) => {
 			let color = params.color;
 			let border = params.border;
 			
+			let checkRectRect = SkyEngine.Util.Collision.checkRectRect;
+			
 			let borderPixel;
 			let borderStyle;
 			let borderColor;

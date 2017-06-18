@@ -78,6 +78,16 @@ SkyEngineShowcase.MAIN = METHOD({
 		});
 		
 		SkyEngineShowcase.MATCH_VIEW({
+			uri : 'test/hitscan',
+			target : SkyEngineShowcase.HitscanShootingTest
+		});
+		
+		SkyEngineShowcase.MATCH_VIEW({
+			uri : 'test/projectile',
+			target : SkyEngineShowcase.ProjectileShootingTest
+		});
+		
+		SkyEngineShowcase.MATCH_VIEW({
 			uri : 'test/tilemap',
 			target : SkyEngineShowcase.TileMapTest
 		});

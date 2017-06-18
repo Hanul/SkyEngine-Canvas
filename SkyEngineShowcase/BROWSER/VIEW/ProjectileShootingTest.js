@@ -1,10 +1,48 @@
-SkyEngineShowcase.ShootingTest = CLASS({
+SkyEngineShowcase.ProjectileShootingTest = CLASS({
 	
 	preset : () => {
 		return VIEW;
 	},
 	
 	init : (inner) => {
+		
+		let Enemy = CLASS({
+			preset : () => {
+				return SkyEngine.Sprite;
+			}
+		});
+		
+		let enemies = [];
+		REPEAT(100, () => {
+			
+			enemies.push(Enemy({
+				x : 500 + RANDOM({
+					min : -300,
+					max : 300
+				}),
+				y : RANDOM({
+					min : -300,
+					max : 300
+				}),
+				scale : -0.5,
+				srcs : RUN(() => {
+					
+					let srcs = [];
+					
+					REPEAT(20, (i) => {
+						srcs.push(SkyEngineShowcase.R('knife/idle/survivor-idle_knife_' + i + '.png'));
+					});
+					
+					return srcs;
+				}),
+				fps : 24,
+				collider : SkyEngine.Rect({
+					x : -30,
+					width : 70,
+					height : 70
+				})
+			}).appendTo(SkyEngine.Screen));
+		});
 		
 		let hero = SkyEngine.StateSet({
 			x : -500,
@@ -39,7 +77,7 @@ SkyEngineShowcase.ShootingTest = CLASS({
 						framechange : (sprite) => {
 							if (sprite.getBeforeFrame() === 0) {
 								
-								SkyEngine.Sprite({
+								let bullet = SkyEngine.Sprite({
 									src : SkyEngineShowcase.R('bullet.png'),
 									x : hero.getX() + 70,
 									y : hero.getY() + 24,
@@ -50,8 +88,23 @@ SkyEngineShowcase.ShootingTest = CLASS({
 										offscreen : (bullet) => {
 											bullet.remove();
 										}
-									}
+									},
+									collider : SkyEngine.Circle({
+										width : 16,
+										height : 16
+									})
 								}).appendTo(SkyEngine.Screen);
+								
+								bullet.onMeet(Enemy, (enemy) => {
+									bullet.remove();
+									
+									REMOVE({
+										array : enemies,
+										value : enemy
+									});
+									
+									enemy.remove();
+								});
 							}
 						}
 					}
@@ -96,6 +149,9 @@ SkyEngineShowcase.ShootingTest = CLASS({
 		
 		inner.on('close', () => {
 			hero.remove();
+			EACH(enemies, (enemy) => {
+				enemy.remove();
+			});
 			
 			keydownEvent.remove();
 			keyupEvent.remove();

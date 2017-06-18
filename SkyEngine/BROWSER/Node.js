@@ -1132,15 +1132,17 @@ SkyEngine.Node = CLASS({
 				return false;
 			}
 						
-			return colliders.every((collider) => {
-				return target.getColliders().every((targetCollider) => {
+			return isRemoved !== true &&
+			
+			(colliders.every((collider) => {
+				return target.checkIsRemoved() !== true && target.getColliders().every((targetCollider) => {
 					return collider.checkArea(targetCollider) !== true;
 				});
 			}) !== true ||
 			
 			childNodes.every((childNode) => {
 				return childNode.checkCollision(target) !== true;
-			}) !== true;
+			}) !== true);
 		};
 		
 		let checkOffScreen = self.checkOffScreen = () => {
@@ -1164,14 +1166,14 @@ SkyEngine.Node = CLASS({
 								
 								if (self.checkCollision(realTarget) === true || (self.type !== realTarget.type && realTarget.checkCollision(self) === true)) {
 									
-									if (collidingNodeIds[realTarget.id] === undefined) {
+									if (isRemoved !== true && collidingNodeIds[realTarget.id] === undefined) {
 										collidingNodeIds[realTarget.id] = true;
 										
 										runMeetHandlers(target, realTarget);
 									}
 								}
 								
-								else if (collidingNodeIds[realTarget.id] !== undefined) {
+								else if (isRemoved !== true && collidingNodeIds[realTarget.id] !== undefined) {
 									delete collidingNodeIds[realTarget.id];
 									
 									runPartHandlers(target, realTarget);
@@ -1397,14 +1399,13 @@ SkyEngine.Node = CLASS({
 				});
 			}
 			
-			if (eventMap !== undefined) {
-				if (eventMap.offscreen !== undefined && self.checkOffScreen() === true) {
-					fireEvent('offscreen');
-				}
-				if (eventMap.nextstep !== undefined) {
-					off('nextstep');
-					fireEvent('nextstep');
-				}
+			if (eventMap !== undefined && eventMap.offscreen !== undefined && self.checkOffScreen() === true) {
+				fireEvent('offscreen');
+			}
+			
+			if (eventMap !== undefined && eventMap.nextstep !== undefined) {
+				off('nextstep');
+				fireEvent('nextstep');
 			}
 		};
 		

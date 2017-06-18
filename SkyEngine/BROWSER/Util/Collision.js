@@ -389,11 +389,8 @@ SkyEngine('Util').Collision = OBJECT({
 			let aPoint3X, aPoint3Y;
 			let aPoint4X, aPoint4Y;
 			
-			aWidth *= aScaleX / 2;
-			aHeight *= aScaleY / 2;
-			
-			let aCW = aCos * aWidth;	let aCH = aCos * aHeight;
-			let aSW = -aSin * aWidth;	let aSH = -aSin * aHeight;
+			let aCW = aCos * aWidth / 2;	let aCH = aCos * aHeight / 2;
+			let aSW = -aSin * aWidth / 2;	let aSH = -aSin * aHeight / 2;
 			
 			aPoint1X = aX - aCW - aSH;	aPoint1Y = aY + aSW - aCH;
 			aPoint2X = aX + aCW - aSH;	aPoint2Y = aY - aSW - aCH;
@@ -439,11 +436,8 @@ SkyEngine('Util').Collision = OBJECT({
 			let bPoint3X, bPoint3Y;
 			let bPoint4X, bPoint4Y;
 			
-			bWidth *= bScaleX / 2;
-			bHeight *= bScaleY / 2;
-			
-			let bCW = bCos * bWidth;	let bCH = bCos * bHeight;
-			let bSW = -bSin * bWidth;	let bSH = -bSin * bHeight;
+			let bCW = bCos * bWidth / 2;	let bCH = bCos * bHeight / 2;
+			let bSW = -bSin * bWidth / 2;	let bSH = -bSin * bHeight / 2;
 			
 			bPoint1X = bX - bCW - bSH;	bPoint1Y = bY + bSW - bCH;
 			bPoint2X = bX + bCW - bSH;	bPoint2Y = bY - bSW - bCH;
@@ -602,11 +596,8 @@ SkyEngine('Util').Collision = OBJECT({
 			let rectPoint3X, rectPoint3Y;
 			let rectPoint4X, rectPoint4Y;
 			
-			rectWidth *= rectScaleX / 2;
-			rectHeight *= rectScaleY / 2;
-			
-			let cw = rectCos * rectWidth;	let ch = rectCos * rectHeight;
-			let sw = -rectSin * rectWidth;	let sh = -rectSin * rectHeight;
+			let cw = rectCos * rectWidth / 2;	let ch = rectCos * rectHeight / 2;
+			let sw = -rectSin * rectWidth / 2;	let sh = -rectSin * rectHeight / 2;
 			
 			rectPoint1X = rectX - cw - sh;	rectPoint1Y = rectY + sw - ch;
 			rectPoint2X = rectX + cw - sh;	rectPoint2Y = rectY - sw - ch;

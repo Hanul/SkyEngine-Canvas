@@ -17,6 +17,8 @@ SkyEngine.Image = CLASS((cls) => {
 			
 			let src = params.src;
 			
+			let checkRectRect = SkyEngine.Util.Collision.checkRectRect;
+			
 			let imageData;
 			let isImageDataLoading = false;
 			

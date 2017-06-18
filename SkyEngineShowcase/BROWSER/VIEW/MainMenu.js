@@ -198,6 +198,30 @@ SkyEngineShowcase.MainMenu = CLASS({
 						marginTop : 15
 					},
 					c : A({
+						c : '슈팅 테스트 (히트스캔)',
+						on : {
+							tap : () => {
+								SkyEngineShowcase.GO('test/hitscan');
+							}
+						}
+					})
+				}), LI({
+					style : {
+						marginTop : 15
+					},
+					c : A({
+						c : '슈팅 테스트 (투사체)',
+						on : {
+							tap : () => {
+								SkyEngineShowcase.GO('test/projectile');
+							}
+						}
+					})
+				}), LI({
+					style : {
+						marginTop : 15
+					},
+					c : A({
 						c : '타일맵 테스트',
 						on : {
 							tap : () => {

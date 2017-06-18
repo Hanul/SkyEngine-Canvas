@@ -23,6 +23,8 @@ SkyEngine.Sprite = CLASS({
 		let frameCount = params.frameCount;
 		let fps = params.fps;
 		
+		let checkRectRect = SkyEngine.Util.Collision.checkRectRect;
+		
 		let img;
 		let imgs;
 		
