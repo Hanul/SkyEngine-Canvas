@@ -77,14 +77,11 @@ Platformer.Grass = CLASS({
 			isCollider : true
 		});
 		
-		let isPlayerLeftStuck = false;
-		let isPlayerRightStuck = false;
-		
 		// 타일과 만났다.
 		player.onMeet(SkyEngine.CollisionTile, (tile) => {
 			
-			if (player.getBeforeY() <= lands.getY() + tile.getY() - 128 / 2) {
-				player.setY(lands.getY() + tile.getY() - 128 / 2);
+			if (player.getBeforeY() <= lands.getY() + tile.getY() - lands.getTileHeight() / 2) {
+				player.setY(lands.getY() + tile.getY() - lands.getTileHeight() / 2);
 				player.setAccelY(0);
 				player.stopDown();
 				
@@ -100,14 +97,12 @@ Platformer.Grass = CLASS({
 			
 			else {
 				if (player.getSpeedX() < 0) {
-					player.setX(lands.getX() + tile.getX() + 128 / 2 + 40);
-					player.stopLeft();
-					isPlayerLeftStuck = true;
+					player.setX(lands.getX() + tile.getX() + lands.getTileWidth() / 2 + player.getColliders()[0].getWidth() / 2);
+					player.stuckLeft();
 				}
 				if (player.getSpeedX() > 0) {
-					player.setX(lands.getX() + tile.getX() - 128 / 2 - 40);
-					player.stopRight();
-					isPlayerRightStuck = true;
+					player.setX(lands.getX() + tile.getX() - lands.getTileWidth() / 2 - player.getColliders()[0].getWidth() / 2);
+					player.stuckRight();
 				}
 			}
 		});
@@ -118,11 +113,9 @@ Platformer.Grass = CLASS({
 			
 			if (player.getState() === 'walk') {
 				if (player.getScaleX() === -1) {
-					isPlayerLeftStuck = false;
-					player.moveLeft(500);
+					player.unstuckLeft();
 				} else {
-					isPlayerRightStuck = false;
-					player.moveRight(500);
+					player.unstuckRight();
 				}
 			}
 		});
@@ -131,9 +124,7 @@ Platformer.Grass = CLASS({
 		let keydownEvent = EVENT('keydown', (e) => {
 			
 			if (e.getKey() === 'ArrowLeft') {
-				if (isPlayerLeftStuck !== true) {
-					player.moveLeft(500);
-				}
+				player.moveLeft(500);
 				player.setScaleX(-1);
 				
 				if (player.getState() !== 'jump') {
@@ -142,9 +133,7 @@ Platformer.Grass = CLASS({
 			}
 			
 			if (e.getKey() === 'ArrowRight') {
-				if (isPlayerRightStuck !== true) {
-					player.moveRight(500);
-				}
+				player.moveRight(500);
 				player.setScaleX(1);
 				
 				if (player.getState() !== 'jump') {

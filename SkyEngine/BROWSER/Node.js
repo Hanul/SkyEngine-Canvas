@@ -98,6 +98,11 @@ SkyEngine.Node = CLASS({
 		let filterStyle;
 		let blendMode;
 		
+		let isStuckLeft;
+		let isStuckRight;
+		let isStuckTop;
+		let isStuckBottom;
+		
 		let genRealPosition = () => {
 			
 			if (targetNode === undefined) {
@@ -602,6 +607,38 @@ SkyEngine.Node = CLASS({
 					maxSpeedY = params.maxSpeed * toY / length;
 				}
 			}
+		};
+		
+		let stuckLeft = self.stuckLeft = () => {
+			isStuckLeft = true;
+		};
+		
+		let unstuckLeft = self.unstuckLeft = () => {
+			isStuckLeft = false;
+		};
+		
+		let stuckRight = self.stuckRight = () => {
+			isStuckRight = true;
+		};
+		
+		let unstuckRight = self.unstuckRight = () => {
+			isStuckRight = false;
+		};
+		
+		let stuckTop = self.stuckTop = () => {
+			isStuckTop = true;
+		};
+		
+		let unstuckTop = self.unstuckTop = () => {
+			isStuckTop = false;
+		};
+		
+		let stuckBottom = self.stuckBottom = () => {
+			isStuckBottom = true;
+		};
+		
+		let unstuckBottom = self.unstuckBottom = () => {
+			isStuckBottom = false;
 		};
 		
 		let rotate = self.rotate = (speedOrParams) => {
@@ -1263,25 +1300,37 @@ SkyEngine.Node = CLASS({
 			}
 			
 			if (speedX !== 0) {
-				x += speedX * deltaTime / 1000;
 				
-				if (toX !== undefined) {
+				let dx = speedX * deltaTime / 1000;
+				
+				if ((dx < 0 && isStuckLeft !== true) || (dx > 0 && isStuckRight !== true)) {
 					
-					if ((speedX > 0 && x > toX) || (speedX < 0 && x < toX)) {
-						x = toX;
-						speedX = 0;
+					x += dx;
+					
+					if (toX !== undefined) {
+						
+						if ((speedX > 0 && x > toX) || (speedX < 0 && x < toX)) {
+							x = toX;
+							speedX = 0;
+						}
 					}
 				}
 			}
 			
 			if (speedY !== 0) {
-				y += speedY * deltaTime / 1000;
 				
-				if (toY !== undefined) {
+				let dy = speedY * deltaTime / 1000;
+				
+				if ((dy < 0 && isStuckTop !== true) || (dy > 0 && isStuckBottom !== true)) {
 					
-					if ((speedY > 0 && y > toY) || (speedY < 0 && y < toY)) {
-						y = toY;
-						speedY = 0;
+					y += dy;
+					
+					if (toY !== undefined) {
+						
+						if ((speedY > 0 && y > toY) || (speedY < 0 && y < toY)) {
+							y = toY;
+							speedY = 0;
+						}
 					}
 				}
 			}
