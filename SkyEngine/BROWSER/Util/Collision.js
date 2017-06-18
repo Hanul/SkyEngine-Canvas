@@ -384,6 +384,12 @@ SkyEngine('Util').Collision = OBJECT({
 			bSin, bCos
 		) => {
 			
+			aWidth *= aScaleX;
+			aHeight *= aScaleY;
+			
+			bWidth *= bScaleX;
+			bHeight *= bScaleY;
+			
 			let aPoint1X, aPoint1Y;
 			let aPoint2X, aPoint2Y;
 			let aPoint3X, aPoint3Y;
@@ -402,7 +408,7 @@ SkyEngine('Util').Collision = OBJECT({
 			
 			bX, bY,
 			bWidth, bHeight,
-			bScaleX, bScaleY,
+			1, 1,
 			bSin, bCos) === true ||
 				
 			checkPointInRect(
@@ -410,7 +416,7 @@ SkyEngine('Util').Collision = OBJECT({
 			
 			bX, bY,
 			bWidth, bHeight,
-			bScaleX, bScaleY,
+			1, 1,
 			bSin, bCos) === true ||
 				
 			checkPointInRect(
@@ -418,7 +424,7 @@ SkyEngine('Util').Collision = OBJECT({
 			
 			bX, bY,
 			bWidth, bHeight,
-			bScaleX, bScaleY,
+			1, 1,
 			bSin, bCos) === true ||
 				
 			checkPointInRect(
@@ -426,7 +432,7 @@ SkyEngine('Util').Collision = OBJECT({
 			
 			bX, bY,
 			bWidth, bHeight,
-			bScaleX, bScaleY,
+			1, 1,
 			bSin, bCos) === true) {
 				return true;
 			}
@@ -449,7 +455,7 @@ SkyEngine('Util').Collision = OBJECT({
 			
 			aX, aY,
 			aWidth, aHeight,
-			aScaleX, aScaleY,
+			1, 1,
 			aSin, aCos) === true ||
 				
 			checkPointInRect(
@@ -457,7 +463,7 @@ SkyEngine('Util').Collision = OBJECT({
 			
 			aX, aY,
 			aWidth, aHeight,
-			aScaleX, aScaleY,
+			1, 1,
 			aSin, aCos) === true ||
 				
 			checkPointInRect(
@@ -465,7 +471,7 @@ SkyEngine('Util').Collision = OBJECT({
 			
 			aX, aY,
 			aWidth, aHeight,
-			aScaleX, aScaleY,
+			1, 1,
 			aSin, aCos) === true ||
 				
 			checkPointInRect(
@@ -473,7 +479,7 @@ SkyEngine('Util').Collision = OBJECT({
 			
 			aX, aY,
 			aWidth, aHeight,
-			aScaleX, aScaleY,
+			1, 1,
 			aSin, aCos) === true) {
 				return true;
 			}
@@ -591,6 +597,9 @@ SkyEngine('Util').Collision = OBJECT({
 			polygonSin, polygonCos
 		) => {
 			
+			rectWidth *= rectScaleX;
+			rectHeight *= rectScaleY;
+			
 			let rectPoint1X, rectPoint1Y;
 			let rectPoint2X, rectPoint2Y;
 			let rectPoint3X, rectPoint3Y;
@@ -653,7 +662,7 @@ SkyEngine('Util').Collision = OBJECT({
 				
 				rectX, rectY,
 				rectWidth, rectHeight,
-				rectScaleX, rectScaleY,
+				1, 1,
 				rectSin, rectCos) === true) {
 					return true;
 				}

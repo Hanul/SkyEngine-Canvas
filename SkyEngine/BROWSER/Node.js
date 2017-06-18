@@ -1131,21 +1131,35 @@ SkyEngine.Node = CLASS({
 		
 		let checkCollision = self.checkCollision = (target) => {
 			
-			if (self.checkIsHiding() === true || target.checkIsHiding() === true) {
+			if (isRemoved === true || self.checkIsHiding() === true) {
 				return false;
 			}
-						
-			return isRemoved !== true &&
 			
-			(colliders.every((collider) => {
-				return target.checkIsRemoved() !== true && target.getColliders().every((targetCollider) => {
-					return collider.checkArea(targetCollider) !== true;
-				});
-			}) !== true ||
+			else if (target.type === CLASS) {
+				
+				return SkyEngine.Screen.getRegisteredNodes(target).every((realTarget) => {
+					if (realTarget !== self) {
+						return self.checkCollision(realTarget) !== true;
+					}
+				}) !== true;
+			}
 			
-			childNodes.every((childNode) => {
-				return childNode.checkCollision(target) !== true;
-			}) !== true);
+			else {
+					
+				if (target.checkIsHiding() === true) {
+					return false;
+				}
+							
+				return colliders.every((collider) => {
+					return target.checkIsRemoved() !== true && target.getColliders().every((targetCollider) => {
+						return collider.checkArea(targetCollider) !== true;
+					});
+				}) !== true ||
+				
+				childNodes.every((childNode) => {
+					return childNode.checkCollision(target) !== true;
+				}) !== true;
+			}
 		};
 		
 		let checkOffScreen = self.checkOffScreen = () => {
@@ -1161,7 +1175,7 @@ SkyEngine.Node = CLASS({
 				
 				if (target.type === CLASS) {
 					
-					SkyEngine.Screen.getRegisteredNodes(target).forEach((realTarget, i) => {
+					SkyEngine.Screen.getRegisteredNodes(target).forEach((realTarget) => {
 						
 						if (realTarget !== self) {
 							

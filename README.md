@@ -39,6 +39,9 @@ SkyEngine은 다음과 같은 것들로 구성되어 있습니다.
 * [튜토리얼](DOC/Tutorial.md)
 * [API 문서](API/README.md)
 
+## TODO
+https://trello.com/b/S3rayJx2/skyengine
+
 ## 라이센스
 [MIT](LICENSE)
 

@@ -77,6 +77,9 @@ Platformer.Grass = CLASS({
 			isCollider : true
 		});
 		
+		let isPlayerLeftStuck = false;
+		let isPlayerRightStuck = false;
+		
 		// 타일과 만났다.
 		player.onMeet(SkyEngine.CollisionTile, (tile) => {
 			
@@ -94,18 +97,43 @@ Platformer.Grass = CLASS({
 					}
 				}
 			}
+			
+			else {
+				if (player.getSpeedX() < 0) {
+					player.setX(lands.getX() + tile.getX() + 128 / 2 + 40);
+					player.stopLeft();
+					isPlayerLeftStuck = true;
+				}
+				if (player.getSpeedX() > 0) {
+					player.setX(lands.getX() + tile.getX() - 128 / 2 - 40);
+					player.stopRight();
+					isPlayerRightStuck = true;
+				}
+			}
 		});
 		
 		// 땅과 떨어졌다.
 		player.onPart(lands, () => {
 			player.setAccelY(gravity);
+			
+			if (player.getState() === 'walk') {
+				if (player.getScaleX() === -1) {
+					isPlayerLeftStuck = false;
+					player.moveLeft(500);
+				} else {
+					isPlayerRightStuck = false;
+					player.moveRight(500);
+				}
+			}
 		});
 		
 		// 키를 눌렀다.
 		let keydownEvent = EVENT('keydown', (e) => {
 			
 			if (e.getKey() === 'ArrowLeft') {
-				player.moveLeft(500);
+				if (isPlayerLeftStuck !== true) {
+					player.moveLeft(500);
+				}
 				player.setScaleX(-1);
 				
 				if (player.getState() !== 'jump') {
@@ -114,7 +142,9 @@ Platformer.Grass = CLASS({
 			}
 			
 			if (e.getKey() === 'ArrowRight') {
-				player.moveRight(500);
+				if (isPlayerRightStuck !== true) {
+					player.moveRight(500);
+				}
 				player.setScaleX(1);
 				
 				if (player.getState() !== 'jump') {
@@ -133,17 +163,19 @@ Platformer.Grass = CLASS({
 		// 키를 뗐다.
 		let keyupEvent = EVENT('keyup', (e) => {
 			
-			if (player.getSpeedX() < 0 && e.getKey() === 'ArrowLeft') {
-				player.stopLeft(2500);
-				
+			if (player.getScaleX() === -1 && e.getKey() === 'ArrowLeft') {
+				if (player.getSpeedX() < 0) {
+					player.stopLeft(2500);
+				}
 				if (player.getState() !== 'jump') {
 					player.setState('idle');
 				}
 			}
 			
-			if (player.getSpeedX() > 0 && e.getKey() === 'ArrowRight') {
-				player.stopRight(2500);
-				
+			if (player.getScaleX() === 1 && e.getKey() === 'ArrowRight') {
+				if (player.getSpeedX() > 0) {
+					player.stopRight(2500);
+				}
 				if (player.getState() !== 'jump') {
 					player.setState('idle');
 				}
