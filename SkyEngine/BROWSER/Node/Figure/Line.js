@@ -283,6 +283,10 @@ SkyEngine.Line = CLASS((cls) => {
 		return points;
 	};
 	
+	let findRaycastPoints = cls.findRaycastPoints = () => {
+		
+	};
+	
 	return {
 		
 		preset : () => {
@@ -295,14 +299,26 @@ SkyEngine.Line = CLASS((cls) => {
 			//REQUIRED: params.startY
 			//REQUIRED: params.endX
 			//REQUIRED: params.endY
+			//OPTIONAL: params.isEndless
 			
 			let startX = params.startX;
 			let startY = params.startY;
 			let endX = params.endX;
 			let endY = params.endY;
+			let isEndless = params.isEndless;
 			
 			let checkLineLine = SkyEngine.Util.Collision.checkLineLine;
 			let checkLineRect = SkyEngine.Util.Collision.checkLineRect;
+			
+			if (isEndless === true) {
+				if (endX === startX) {
+					endX = (999999 - startY) / (endY - startY) * (endX - startX) + startX;
+					endY = 999999;
+				} else {
+					endY = (endY - startY) / (endX - startX) * (999999 - startX) + startY;
+					endX = 999999;
+				}
+			}
 			
 			let setStartX = self.setStartX = (_startX) => {
 				startX = _startX;

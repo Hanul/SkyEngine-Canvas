@@ -98,7 +98,6 @@ SkyEngine.Node = CLASS({
 		let filterStyle;
 		let blendMode;
 		
-		// for position
 		let genRealPosition = () => {
 			
 			if (targetNode === undefined) {
@@ -122,6 +121,7 @@ SkyEngine.Node = CLASS({
 			}
 		};
 		
+		// for position
 		let setX = self.setX = (_x) =>							{ x = _x; genRealPosition(); };
 		let getX = self.getX = () =>							{ return x; };
 		let setY = self.setY = (_y) =>							{ y = _y; genRealPosition(); };
@@ -981,15 +981,18 @@ SkyEngine.Node = CLASS({
 		};
 		
 		let off = self.off = (eventName, eventHandler) => {
-		
-			if (eventMap[eventName] !== undefined) {
+			
+			if (isRemoved !== true && eventMap[eventName] !== undefined) {
 				
-				REMOVE({
-					array : eventMap[eventName],
-					value : eventHandler
-				});
+				if (eventHandler !== undefined) {
+					
+					REMOVE({
+						array : eventMap[eventName],
+						value : eventHandler
+					});
+				}
 				
-				if (eventMap[eventName].length === 0) {
+				if (eventHandler === undefined || eventMap[eventName].length === 0) {
 					delete eventMap[eventName];
 					
 					SkyEngine.Screen.unregisterEventNode(eventName, self);
@@ -1404,8 +1407,12 @@ SkyEngine.Node = CLASS({
 			}
 			
 			if (eventMap !== undefined && eventMap.nextstep !== undefined) {
-				off('nextstep');
 				fireEvent('nextstep');
+				off('nextstep');
+			}
+			
+			if (eventMap !== undefined && eventMap.move !== undefined && (x !== beforeX || y !== beforeY)) {
+				fireEvent('move');
 			}
 		};
 		

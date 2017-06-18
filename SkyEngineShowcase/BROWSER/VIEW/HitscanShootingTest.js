@@ -83,14 +83,16 @@ SkyEngineShowcase.HitscanShootingTest = CLASS({
 								let bullet = SkyEngine.Line({
 									startX : hero.getX() + 65,
 									startY : hero.getY() + 24,
-									endX : SkyEngine.Screen.getWidth(),
+									endX : hero.getX() + 66,
 									endY : hero.getY() + 24,
+									isEndless : true,
 									border : '1px solid #fff',
 									collider : SkyEngine.Line({
 										startX : hero.getX() + 65,
 										startY : hero.getY() + 24,
-										endX : SkyEngine.Screen.getWidth(),
-										endY : hero.getY() + 24
+										endX : hero.getX() + 66,
+										endY : hero.getY() + 24,
+										isEndless : true
 									}),
 									on : {
 										nextstep : (bullet) => {

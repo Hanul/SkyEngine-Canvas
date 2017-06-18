@@ -6,173 +6,108 @@ SkyEngineShowcase.RaycastTest = CLASS({
 	
 	init : (inner) => {
 		
-		let Enemy = CLASS({
-			preset : () => {
-				return SkyEngine.Sprite;
-			}
-		});
-		
-		let enemies = [];
-		REPEAT(100, () => {
+		let genLight = () => {
 			
-			enemies.push(Enemy({
-				x : 500 + RANDOM({
-					min : -300,
-					max : 300
+		};
+		
+		let torch = SkyEngine.Sprite({
+			src : SkyEngineShowcase.R('torch.png'),
+			spriteWidth : 32,
+			fps : 10,
+			on : {
+				move : () => {
+					genLight();
+				}
+			}
+		}).appendTo(SkyEngine.Screen);
+		
+		let balls = [];
+		
+		REPEAT(50, () => {
+			
+			balls.push(SkyEngine.Image({
+				src : SkyEngineShowcase.R('ball.png'),
+				x : RANDOM({
+					min : -600,
+					max : 600
 				}),
 				y : RANDOM({
 					min : -300,
 					max : 300
 				}),
-				scale : -0.5,
-				srcs : RUN(() => {
-					
-					let srcs = [];
-					
-					REPEAT(20, (i) => {
-						srcs.push(SkyEngineShowcase.R('knife/idle/survivor-idle_knife_' + i + '.png'));
-					});
-					
-					return srcs;
-				}),
-				fps : 24,
-				collider : SkyEngine.Rect({
-					x : -30,
-					width : 70,
-					height : 70
+				scale : 0.2,
+				collider : SkyEngine.Circle({
+					width : 99,
+					height : 96
 				})
 			}).appendTo(SkyEngine.Screen));
 		});
 		
-		let hero = SkyEngine.StateSet({
-			x : -500,
-			scale : 0.5,
-			stateNodes : {
-				idle : SkyEngine.Sprite({
-					srcs : RUN(() => {
-						
-						let srcs = [];
-						
-						REPEAT(20, (i) => {
-							srcs.push(SkyEngineShowcase.R('rifle/idle/survivor-idle_rifle_' + i + '.png'));
-						});
-						
-						return srcs;
-					}),
-					fps : 24
+		let boxes = [];
+		
+		REPEAT(50, () => {
+			
+			boxes.push(SkyEngine.Image({
+				src : SkyEngineShowcase.R('box.png'),
+				x : RANDOM({
+					min : -600,
+					max : 600
 				}),
-				shoot : SkyEngine.Sprite({
-					srcs : RUN(() => {
-						
-						let srcs = [];
-						
-						REPEAT(3, (i) => {
-							srcs.push(SkyEngineShowcase.R('rifle/shoot/survivor-shoot_rifle_' + i + '.png'));
-						});
-						
-						return srcs;
-					}),
-					fps : 24,
-					on : {
-						framechange : (sprite) => {
-							if (sprite.getBeforeFrame() === 0) {
-								
-								let targetEnemy;
-								let targetEnemyIntersectionPointX;
-								
-								let bullet = SkyEngine.Line({
-									startX : hero.getX() + 65,
-									startY : hero.getY() + 24,
-									endX : SkyEngine.Screen.getWidth(),
-									endY : hero.getY() + 24,
-									border : '1px solid #fff',
-									collider : SkyEngine.Line({
-										startX : hero.getX() + 65,
-										startY : hero.getY() + 24,
-										endX : SkyEngine.Screen.getWidth(),
-										endY : hero.getY() + 24
-									}),
-									on : {
-										nextstep : (bullet) => {
-											bullet.remove();
-											
-											if (targetEnemy !== undefined) {
-												
-												REMOVE({
-													array : enemies,
-													value : targetEnemy
-												});
-												
-												targetEnemy.remove();
-											}
-										} 
-									}
-								}).appendTo(SkyEngine.Screen);
-								
-								bullet.onMeet(Enemy, (enemy) => {
-									
-									let intersectionPoints = bullet.findIntersectionPoints(enemy.getColliders()[0]);
-									let intersectionPointX;
-									
-									EACH(intersectionPoints, (intersectionPoint) => {
-										if (intersectionPointX === undefined || intersectionPointX > intersectionPoint.x) {
-											intersectionPointX = intersectionPoint.x;
-										}
-									});
-									
-									if (targetEnemy === undefined || targetEnemyIntersectionPointX > intersectionPointX) {
-										targetEnemyIntersectionPointX = intersectionPointX;
-										targetEnemy = enemy;
-										bullet.setEndX(intersectionPointX);
-										bullet.getColliders()[0].setEndX(intersectionPointX);
-									}
-								});
-							}
-						}
-					}
+				y : RANDOM({
+					min : -300,
+					max : 300
+				}),
+				scale : 0.05,
+				collider : SkyEngine.Rect({
+					width : 512,
+					height : 512
 				})
-			},
-			baseState : 'idle'
-		}).appendTo(SkyEngine.Screen);
+			}).appendTo(SkyEngine.Screen));
+		});
+		
+		genLight();
 		
 		let keydownEvent = EVENT('keydown', (e) => {
 			
 			if (e.getKey().toUpperCase() === 'A') {
-				hero.setState('shoot');
+				torch.setState('shoot');
 			}
 			
 			else if (e.getKey() === 'ArrowUp') {
-				hero.moveUp(200);
+				torch.moveUp(200);
 			} else if (e.getKey() === 'ArrowDown') {
-				hero.moveDown(200);
+				torch.moveDown(200);
 			} else if (e.getKey() === 'ArrowLeft') {
-				hero.moveLeft(200);
+				torch.moveLeft(200);
 			} else if (e.getKey() === 'ArrowRight') {
-				hero.moveRight(200);
+				torch.moveRight(200);
 			}
 		});
 		
 		let keyupEvent = EVENT('keyup', (e) => {
 			
 			if (e.getKey().toUpperCase() === 'A') {
-				hero.setToState('idle');
+				torch.setToState('idle');
 			}
 			
 			else if (e.getKey() === 'ArrowUp') {
-				hero.stopUp();
+				torch.stopUp();
 			} else if (e.getKey() === 'ArrowDown') {
-				hero.stopDown();
+				torch.stopDown();
 			} else if (e.getKey() === 'ArrowLeft') {
-				hero.stopLeft();
+				torch.stopLeft();
 			} else if (e.getKey() === 'ArrowRight') {
-				hero.stopRight();
+				torch.stopRight();
 			}
 		});
 		
 		inner.on('close', () => {
-			hero.remove();
-			EACH(enemies, (enemy) => {
-				enemy.remove();
+			torch.remove();
+			EACH(balls, (ball) => {
+				ball.remove();
+			});
+			EACH(boxes, (box) => {
+				box.remove();
 			});
 			
 			keydownEvent.remove();
