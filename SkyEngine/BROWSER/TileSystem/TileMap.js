@@ -122,7 +122,7 @@ SkyEngine.TileMap = CLASS({
 			
 			let queue = [];
 			
-			let regist = (parent, row, col) => {
+			let register = (parent, row, col) => {
 				
 				if (collisionMap[row] !== undefined && collisionMap[row][col] === 0) {
 					
@@ -146,7 +146,7 @@ SkyEngine.TileMap = CLASS({
 				}
 			};
 			
-			regist({
+			register({
 				cost : -1
 			}, startRow, startCol);
 			
@@ -173,10 +173,10 @@ SkyEngine.TileMap = CLASS({
 					return path;
 				}
 				
-				regist(point, point.row - 1, point.col);
-				regist(point, point.row, point.col + 1);
-				regist(point, point.row + 1, point.col);
-				regist(point, point.row, point.col - 1);
+				register(point, point.row - 1, point.col);
+				register(point, point.row, point.col + 1);
+				register(point, point.row + 1, point.col);
+				register(point, point.row, point.col - 1);
 			}
 		};
 	},

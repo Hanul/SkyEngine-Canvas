@@ -25,7 +25,7 @@ SkyEngineShowcase.RaycastTest = CLASS({
 		
 		let genLight = () => {
 			
-			let points = [/*{
+			let points = [{
 				x : -SkyEngine.Screen.getWidth() / 2,
 				y : -SkyEngine.Screen.getHeight() / 2
 			}, {
@@ -37,60 +37,128 @@ SkyEngineShowcase.RaycastTest = CLASS({
 			}, {
 				x : -SkyEngine.Screen.getWidth() / 2,
 				y : SkyEngine.Screen.getHeight() / 2
-			}*/];
+			}];
 			
 			if (light !== undefined) {
 				light.remove();
 			}
 			
 			balls.forEach((ball) => {
-				
 				ball.getCollider().findRaycastPoints(torch.getX(), torch.getY()).forEach((point) => {
-					
+					point.target = ball;
 					points.push(point);
-					
-					/*if (point.x === torch.getX()) {
-						point.x = (point.y < 0 ? -999999 : 999999 - torch.getY()) / (point.y - torch.getY()) * (point.x - torch.getX()) + torch.getX();
-						point.y = point.y < 0 ? -999999 : 999999;
-					} else {
-						point.y = (point.y - torch.getY()) / (point.x - torch.getX()) * (point.x < 0 ? -999999 : 999999 - torch.getX()) + torch.getY();
-						point.x = point.x < 0 ? -999999 : 999999;
-					}
-					
-					EACH(SkyEngine.Line.findRectIntersectionPoints(
-						0, 0,
-						torch.getX(), torch.getY(),
-						point.x, point.y,
-						1, 1,
-						0, 1,
-						
-						0, 0,
-						SkyEngine.Screen.getWidth(), SkyEngine.Screen.getHeight(),
-						1, 1,
-						0, 1
-					), (point) => {
-						points.push(point);
-					});*/
 				});
 			});
 			
 			boxes.forEach((box) => {
-				
 				box.getCollider().findRaycastPoints(torch.getX(), torch.getY()).forEach((point) => {
-					
+					point.target = box;
 					points.push(point);
-					
-					/*SkyEngine.Line({
-						startX : torch.getX(),
-						startY : torch.getY(),
-						endX : point.x,
-						endY : point.y,
-						border : '1px solid red'
-					}).appendTo(SkyEngine.Screen);*/
 				});
 			});
 			
-			points.sort((pointA, pointB) => {
+			let foundPoints = [];
+			
+			points.forEach((point) => {
+				
+				if (point.x === torch.getX()) {
+					point.x = (point.y < 0 ? -999999 : 999999 - torch.getY()) / (point.y - torch.getY()) * (point.x - torch.getX()) + torch.getX();
+					point.y = point.y < 0 ? -999999 : 999999;
+				} else {
+					point.y = (point.y - torch.getY()) / (point.x - torch.getX()) * (point.x < 0 ? -999999 : 999999 - torch.getX()) + torch.getY();
+					point.x = point.x < 0 ? -999999 : 999999;
+				}
+				
+				let minDistance, foundPoint;
+				
+				EACH(SkyEngine.Line.findRectIntersectionPoints(
+					0, 0,
+					torch.getX(), torch.getY(),
+					point.x, point.y,
+					1, 1,
+					0, 1,
+					
+					0, 0,
+					SkyEngine.Screen.getWidth(), SkyEngine.Screen.getHeight(),
+					1, 1,
+					0, 1
+				), (point) => {
+					
+					let xs = point.x - torch.getX();
+					let ys = point.y - torch.getY();
+					
+					minDistance = xs * xs + ys * ys;
+					foundPoint = point;
+				});
+				
+				balls.forEach((ball) => {
+					
+					if (point.target !== ball) {
+						
+						let collider = ball.getCollider();
+						
+						EACH(SkyEngine.Line.findCircleIntersectionPoints(
+							0, 0,
+							torch.getX(), torch.getY(),
+							point.x, point.y,
+							1, 1,
+							0, 1,
+							
+							collider.getDrawingX(), collider.getDrawingY(),
+							collider.getWidth(), collider.getHeight(),
+							collider.getRealScaleX(), collider.getRealScaleY(),
+							collider.getRealSin(), collider.getRealCos()
+						), (point) => {
+							
+							let xs = point.x - torch.getX();
+							let ys = point.y - torch.getY();
+							let distance = xs * xs + ys * ys;
+							
+							if (distance < minDistance) {
+								minDistance = distance;
+								foundPoint = point;
+							}
+						});
+					}
+				});
+				
+				boxes.forEach((box) => {
+					
+					if (point.target !== box) {
+						
+						let collider = box.getCollider();
+						
+						EACH(SkyEngine.Line.findRectIntersectionPoints(
+							0, 0,
+							torch.getX(), torch.getY(),
+							point.x, point.y,
+							1, 1,
+							0, 1,
+							
+							collider.getDrawingX(), collider.getDrawingY(),
+							collider.getWidth(), collider.getHeight(),
+							collider.getRealScaleX(), collider.getRealScaleY(),
+							collider.getRealSin(), collider.getRealCos()
+						), (point) => {
+							
+							let xs = point.x - torch.getX();
+							let ys = point.y - torch.getY();
+							let distance = xs * xs + ys * ys;
+							
+							if (distance < minDistance) {
+								minDistance = distance;
+								foundPoint = point;
+							}
+						});
+					}
+				});
+				
+				if (foundPoint !== undefined) {
+					foundPoints.push(foundPoint);
+				}
+			});
+			
+			foundPoints.sort((pointA, pointB) => {
 				
 				if (pointA.angle === undefined) {
 					genAngle(pointA);
@@ -104,8 +172,8 @@ SkyEngineShowcase.RaycastTest = CLASS({
 			});
 			
 			light = SkyEngine.Polygon({
-				points : points,
-				color : 'red',
+				points : foundPoints,
+				color : '#FFCC00',
 				z : -1
 			}).appendTo(SkyEngine.Screen);
 		};
@@ -209,6 +277,10 @@ SkyEngineShowcase.RaycastTest = CLASS({
 			EACH(boxes, (box) => {
 				box.remove();
 			});
+			
+			if (light !== undefined) {
+				light.remove();
+			}
 			
 			keydownEvent.remove();
 			keyupEvent.remove();
