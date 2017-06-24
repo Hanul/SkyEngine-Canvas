@@ -1137,6 +1137,10 @@ SkyEngine.Node = CLASS({
 			return colliders;
 		};
 		
+		let getCollider = self.getCollider = () => {
+			return colliders[0];
+		};
+		
 		let checkPoint = self.checkPoint = (pointX, pointY) => {
 			
 			return childNodes.every((childNode) => {
@@ -1605,6 +1609,8 @@ SkyEngine.Node = CLASS({
 			
 			return clone;
 		};
+		
+		genRealProperties();
 	},
 	
 	afterInit : (inner, self, params) => {

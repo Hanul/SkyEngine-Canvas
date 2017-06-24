@@ -11,8 +11,8 @@ SkyEngine.Circle = CLASS((cls) => {
 		circleScaleX, circleScaleY,
 		circleSin, circleCos) => {
 		
-		let tempX = circleCos * pointX + circleSin * pointY;
-		let tempY = -circleSin * pointX + circleCos * pointY;
+		let tempX = circleCos * pointX + circleSin * pointY - circleX;
+		let tempY = -circleSin * pointX + circleCos * pointY - circleY;
 		
 		circleWidth *= circleScaleX;
 		circleHeight *= circleScaleY;
@@ -20,11 +20,13 @@ SkyEngine.Circle = CLASS((cls) => {
 		let h = circleWidth / 2;
 		let v = circleHeight / 2;
 		
-		let startX = 999999;
-		let startY = (1 - tempX * startX / h / h * v * v) / tempY;
+		let startX = 99999;
+		let startY = (1 - tempX * startX / h / h * v * v) / tempY + circleY;
+		startX += circleX;
 		
-		let endX = -999999;
-		let endY = (1 - tempX * endX / h / h * v * v) / tempY;
+		let endX = -99999;
+		let endY = (1 - tempX * endX / h / h * v * v) / tempY + circleY;
+		endX += circleX;
 		
 		return SkyEngine.Line.findCircleIntersectionPoints(
 			0,
@@ -40,7 +42,7 @@ SkyEngine.Circle = CLASS((cls) => {
 			
 			circleX, circleY,
 			circleWidth, circleHeight,
-			circleScaleX, circleScaleY,
+			1, 1,
 			circleSin, circleCos);
 	};
 	
@@ -273,6 +275,20 @@ SkyEngine.Circle = CLASS((cls) => {
 					return origin(newParams);
 				};
 			});
+			
+			let findRaycastPoints = self.findRaycastPoints = (pointX, pointY) => {
+				return cls.findRaycastPoints(
+				pointX, pointY,
+				
+				self.getDrawingX(),
+				self.getDrawingY(),
+				width,
+				height,
+				self.getRealScaleX(),
+				self.getRealScaleY(),
+				self.getRealSin(),
+				self.getRealCos());
+			};
 		}
 	};
 });

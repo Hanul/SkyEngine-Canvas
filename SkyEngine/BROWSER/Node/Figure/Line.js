@@ -319,11 +319,11 @@ SkyEngine.Line = CLASS((cls) => {
 			
 			if (isEndless === true) {
 				if (endX === startX) {
-					endX = (999999 - startY) / (endY - startY) * (endX - startX) + startX;
-					endY = 999999;
+					endX = (endY < 0 ? -999999 : 999999 - startY) / (endY - startY) * (endX - startX) + startX;
+					endY = endY < 0 ? -999999 : 999999;
 				} else {
-					endY = (endY - startY) / (endX - startX) * (999999 - startX) + startY;
-					endX = 999999;
+					endY = (endY - startY) / (endX - startX) * (endX < 0 ? -999999 : 999999 - startX) + startY;
+					endX = endX < 0 ? -999999 : 999999;
 				}
 			}
 			

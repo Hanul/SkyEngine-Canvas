@@ -6,8 +6,108 @@ SkyEngineShowcase.RaycastTest = CLASS({
 	
 	init : (inner) => {
 		
+		let light;
+		
+		let genAngle = (point) => {
+			
+			let xs = point.x - torch.getX();
+			xs = xs * xs;
+			
+			let ys = point.y - torch.getY();
+			ys = ys * ys;
+			
+			point.angle = Math.acos((point.x - torch.getX()) / Math.sqrt(xs + ys));
+			
+			if (point.y > torch.getY()) {
+			    point.angle = Math.PI + Math.PI - point.angle;
+			}
+		};
+		
 		let genLight = () => {
 			
+			let points = [/*{
+				x : -SkyEngine.Screen.getWidth() / 2,
+				y : -SkyEngine.Screen.getHeight() / 2
+			}, {
+				x : SkyEngine.Screen.getWidth() / 2,
+				y : -SkyEngine.Screen.getHeight() / 2
+			}, {
+				x : SkyEngine.Screen.getWidth() / 2,
+				y : SkyEngine.Screen.getHeight() / 2
+			}, {
+				x : -SkyEngine.Screen.getWidth() / 2,
+				y : SkyEngine.Screen.getHeight() / 2
+			}*/];
+			
+			if (light !== undefined) {
+				light.remove();
+			}
+			
+			balls.forEach((ball) => {
+				
+				ball.getCollider().findRaycastPoints(torch.getX(), torch.getY()).forEach((point) => {
+					
+					points.push(point);
+					
+					/*if (point.x === torch.getX()) {
+						point.x = (point.y < 0 ? -999999 : 999999 - torch.getY()) / (point.y - torch.getY()) * (point.x - torch.getX()) + torch.getX();
+						point.y = point.y < 0 ? -999999 : 999999;
+					} else {
+						point.y = (point.y - torch.getY()) / (point.x - torch.getX()) * (point.x < 0 ? -999999 : 999999 - torch.getX()) + torch.getY();
+						point.x = point.x < 0 ? -999999 : 999999;
+					}
+					
+					EACH(SkyEngine.Line.findRectIntersectionPoints(
+						0, 0,
+						torch.getX(), torch.getY(),
+						point.x, point.y,
+						1, 1,
+						0, 1,
+						
+						0, 0,
+						SkyEngine.Screen.getWidth(), SkyEngine.Screen.getHeight(),
+						1, 1,
+						0, 1
+					), (point) => {
+						points.push(point);
+					});*/
+				});
+			});
+			
+			boxes.forEach((box) => {
+				
+				box.getCollider().findRaycastPoints(torch.getX(), torch.getY()).forEach((point) => {
+					
+					points.push(point);
+					
+					/*SkyEngine.Line({
+						startX : torch.getX(),
+						startY : torch.getY(),
+						endX : point.x,
+						endY : point.y,
+						border : '1px solid red'
+					}).appendTo(SkyEngine.Screen);*/
+				});
+			});
+			
+			points.sort((pointA, pointB) => {
+				
+				if (pointA.angle === undefined) {
+					genAngle(pointA);
+				}
+				
+				if (pointB.angle === undefined) {
+					genAngle(pointB);
+				}
+				
+				return pointA.angle - pointB.angle;
+			});
+			
+			light = SkyEngine.Polygon({
+				points : points,
+				color : 'red',
+				z : -1
+			}).appendTo(SkyEngine.Screen);
 		};
 		
 		let torch = SkyEngine.Sprite({

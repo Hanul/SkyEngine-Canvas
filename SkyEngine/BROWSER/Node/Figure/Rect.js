@@ -11,6 +11,121 @@ SkyEngine.Rect = CLASS((cls) => {
 		rectScaleX, rectScaleY,
 		rectSin, rectCos) => {
 		
+		let rectPoint1X, rectPoint1Y;
+		let rectPoint2X, rectPoint2Y;
+		let rectPoint3X, rectPoint3Y;
+		let rectPoint4X, rectPoint4Y;
+		
+		rectWidth *= rectScaleX;
+		rectHeight *= rectScaleY;
+		
+		let cw = rectCos * rectWidth / 2;	let ch = rectCos * rectHeight / 2;
+		let sw = -rectSin * rectWidth / 2;	let sh = -rectSin * rectHeight / 2;
+		
+		rectPoint1X = rectX - cw - sh;	rectPoint1Y = rectY + sw - ch;
+		rectPoint2X = rectX + cw - sh;	rectPoint2Y = rectY - sw - ch;
+		rectPoint3X = rectX + cw + sh;	rectPoint3Y = rectY - sw + ch;
+		rectPoint4X = rectX - cw + sh;	rectPoint4Y = rectY + sw + ch;
+		
+		let xs = rectPoint1X - pointX;
+		xs = xs * xs;
+		
+		let ys = rectPoint1Y - pointY;
+		ys = ys * ys;
+		
+		let angle = Math.acos((rectPoint1X - pointX) / Math.sqrt(xs + ys));
+		
+		if (rectPoint1Y > pointY) {
+		    angle = Math.PI + Math.PI - angle;
+		}
+		
+		let minAngle = angle;
+		let x1 = rectPoint1X;
+		let y1 = rectPoint1Y;
+		
+		let maxAngle = angle;
+		let x2 = rectPoint1X;
+		let y2 = rectPoint1Y;
+		
+		xs = rectPoint2X - pointX;
+		xs = xs * xs;
+		
+		ys = rectPoint2Y - pointY;
+		ys = ys * ys;
+		
+		angle = Math.acos((rectPoint2X - pointX) / Math.sqrt(xs + ys));
+		
+		if (rectPoint2Y > pointY) {
+		    angle = Math.PI + Math.PI - angle;
+		}
+		
+		if (minAngle > angle) {
+			minAngle = angle;
+			x1 = rectPoint2X;
+			y1 = rectPoint2Y;
+		}
+		
+		if (maxAngle < angle) {
+			maxAngle = angle;
+			x2 = rectPoint2X;
+			y2 = rectPoint2Y;
+		}
+		
+		xs = rectPoint3X - pointX;
+		xs = xs * xs;
+		
+		ys = rectPoint3Y - pointY;
+		ys = ys * ys;
+		
+		angle = Math.acos((rectPoint3X - pointX) / Math.sqrt(xs + ys));
+		
+		if (rectPoint3Y > pointY) {
+		    angle = Math.PI + Math.PI - angle;
+		}
+		
+		if (minAngle > angle) {
+			minAngle = angle;
+			x1 = rectPoint3X;
+			y1 = rectPoint3Y;
+		}
+		
+		if (maxAngle < angle) {
+			maxAngle = angle;
+			x2 = rectPoint3X;
+			y2 = rectPoint3Y;
+		}
+		
+		xs = rectPoint4X - pointX;
+		xs = xs * xs;
+		
+		ys = rectPoint4Y - pointY;
+		ys = ys * ys;
+		
+		angle = Math.acos((rectPoint4X - pointX) / Math.sqrt(xs + ys));
+		
+		if (rectPoint4Y > pointY) {
+		    angle = Math.PI + Math.PI - angle;
+		}
+		
+		if (minAngle > angle) {
+			minAngle = angle;
+			x1 = rectPoint4X;
+			y1 = rectPoint4Y;
+		}
+		
+		if (maxAngle < angle) {
+			maxAngle = angle;
+			x2 = rectPoint4X;
+			y2 = rectPoint4Y;
+		}
+		
+		return [{
+			x : x1,
+			y : y1
+		}, {
+			x : x2,
+			y : y2
+		}];
 	};
 	
 	return {
@@ -219,6 +334,20 @@ SkyEngine.Rect = CLASS((cls) => {
 					return origin(newParams);
 				};
 			});
+			
+			let findRaycastPoints = self.findRaycastPoints = (pointX, pointY) => {
+				return cls.findRaycastPoints(
+				pointX, pointY,
+				
+				self.getDrawingX(),
+				self.getDrawingY(),
+				width,
+				height,
+				self.getRealScaleX(),
+				self.getRealScaleY(),
+				self.getRealSin(),
+				self.getRealCos());
+			};
 		}
 	};
 });

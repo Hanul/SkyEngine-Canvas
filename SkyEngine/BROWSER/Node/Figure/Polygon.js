@@ -277,6 +277,19 @@ SkyEngine.Polygon = CLASS((cls) => {
 					return origin(newParams);
 				};
 			});
+			
+			let findRaycastPoints = self.findRaycastPoints = (pointX, pointY) => {
+				return cls.findRaycastPoints(
+				pointX, pointY,
+				
+				self.getDrawingX(),
+				self.getDrawingY(),
+				points,
+				self.getRealScaleX(),
+				self.getRealScaleY(),
+				self.getRealSin(),
+				self.getRealCos());
+			};
 		}
 	};
 });

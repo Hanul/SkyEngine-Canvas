@@ -113,7 +113,7 @@ SkyEngineShowcase.HitscanShootingTest = CLASS({
 								
 								bullet.onMeet(Enemy, (enemy) => {
 									
-									let intersectionPoints = bullet.findIntersectionPoints(enemy.getColliders()[0]);
+									let intersectionPoints = bullet.findIntersectionPoints(enemy.getCollider());
 									let intersectionPointX;
 									
 									EACH(intersectionPoints, (intersectionPoint) => {
@@ -126,7 +126,7 @@ SkyEngineShowcase.HitscanShootingTest = CLASS({
 										targetEnemyIntersectionPointX = intersectionPointX;
 										targetEnemy = enemy;
 										bullet.setEndX(intersectionPointX);
-										bullet.getColliders()[0].setEndX(intersectionPointX);
+										bullet.getCollider().setEndX(intersectionPointX);
 									}
 								});
 							}
