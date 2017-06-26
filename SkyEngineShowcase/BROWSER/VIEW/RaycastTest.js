@@ -8,23 +8,30 @@ SkyEngineShowcase.RaycastTest = CLASS({
 		
 		let light;
 		
-		let genAngle = (point) => {
+		// 앵글의 제곱을 계산합니다.
+		let genAngleSquare = (point) => {
 			
 			let xs = point.x - torch.getX();
-			xs = xs * xs;
-			
 			let ys = point.y - torch.getY();
-			ys = ys * ys;
 			
-			point.angle = Math.acos((point.x - torch.getX()) / Math.sqrt(xs + ys));
+			point.angleSquare = Math.acos(xs / Math.sqrt(xs * xs + ys * ys));
 			
 			if (point.y > torch.getY()) {
-			    point.angle = Math.PI + Math.PI - point.angle;
+			    point.angleSquare = Math.PI + Math.PI - point.angleSquare;
 			}
 		};
+			
+			let lines = [];
 		
+		// 빛을 생성합니다.
 		let genLight = () => {
 			
+			// 이미 빛이 있다면 제거
+			if (light !== undefined) {
+				light.remove();
+			}
+			
+			// 화면의 끝 지점을 포함합니다.
 			let points = [{
 				x : -SkyEngine.Screen.getWidth() / 2,
 				y : -SkyEngine.Screen.getHeight() / 2
@@ -39,10 +46,7 @@ SkyEngineShowcase.RaycastTest = CLASS({
 				y : SkyEngine.Screen.getHeight() / 2
 			}];
 			
-			if (light !== undefined) {
-				light.remove();
-			}
-			
+			// 모든 공들 확인
 			balls.forEach((ball) => {
 				ball.getCollider().findRaycastPoints(torch.getX(), torch.getY()).forEach((point) => {
 					point.target = ball;
@@ -50,6 +54,7 @@ SkyEngineShowcase.RaycastTest = CLASS({
 				});
 			});
 			
+			// 모든 박스들 확인
 			boxes.forEach((box) => {
 				box.getCollider().findRaycastPoints(torch.getX(), torch.getY()).forEach((point) => {
 					point.target = box;
@@ -57,20 +62,38 @@ SkyEngineShowcase.RaycastTest = CLASS({
 				});
 			});
 			
+			// 모든 별들 확인
+			stars.forEach((star) => {
+				star.getCollider().findRaycastPoints(torch.getX(), torch.getY()).forEach((point) => {
+					point.target = star;
+					points.push(point);
+				});
+			});
+			
 			let foundPoints = [];
 			
+			// 모든 점들 검사
 			points.forEach((point) => {
 				
-				if (point.x === torch.getX()) {
-					point.x = (point.y < 0 ? -999999 : 999999 - torch.getY()) / (point.y - torch.getY()) * (point.x - torch.getX()) + torch.getX();
-					point.y = point.y < 0 ? -999999 : 999999;
+				let originX = point.x;
+				let originY = point.y;
+				
+				let xs = point.x - torch.getX();
+				let ys = point.y - torch.getY();
+				let originDistance = xs * xs + ys * ys;
+				
+				// 무한한 직선 그림
+				if (Math.abs(point.x - torch.getX()) < Math.abs(point.y - torch.getY())) {
+					point.x = ((point.y - torch.getY() < 0 ? -999999 : 999999) - torch.getY()) / (point.y - torch.getY()) * (point.x - torch.getX()) + torch.getX();
+					point.y = point.y - torch.getY() < 0 ? -999999 : 999999;
 				} else {
-					point.y = (point.y - torch.getY()) / (point.x - torch.getX()) * (point.x < 0 ? -999999 : 999999 - torch.getX()) + torch.getY();
-					point.x = point.x < 0 ? -999999 : 999999;
+					point.y = (point.y - torch.getY()) / (point.x - torch.getX()) * ((point.x - torch.getX() < 0 ? -999999 : 999999) - torch.getX()) + torch.getY();
+					point.x = point.x - torch.getX() < 0 ? -999999 : 999999;
 				}
 				
 				let minDistance, foundPoint;
 				
+				// 직선과 스크린의 교점을 검색
 				EACH(SkyEngine.Line.findRectIntersectionPoints(
 					0, 0,
 					torch.getX(), torch.getY(),
@@ -91,6 +114,7 @@ SkyEngineShowcase.RaycastTest = CLASS({
 					foundPoint = point;
 				});
 				
+				// 직선과 모든 공들의 교점을 검색
 				balls.forEach((ball) => {
 					
 					if (point.target !== ball) {
@@ -122,6 +146,7 @@ SkyEngineShowcase.RaycastTest = CLASS({
 					}
 				});
 				
+				// 직선과 모든 박스들의 교점을 검색
 				boxes.forEach((box) => {
 					
 					if (point.target !== box) {
@@ -153,29 +178,78 @@ SkyEngineShowcase.RaycastTest = CLASS({
 					}
 				});
 				
+				// 직선과 모든 별들의 교점을 검색
+				stars.forEach((star) => {
+					
+					if (point.target !== star) {
+						
+						let collider = star.getCollider();
+						
+						EACH(SkyEngine.Line.findPolygonIntersectionPoints(
+							0, 0,
+							torch.getX(), torch.getY(),
+							point.x, point.y,
+							1, 1,
+							0, 1,
+							
+							collider.getDrawingX(), collider.getDrawingY(),
+							collider.getPoints(),
+							collider.getRealScaleX(), collider.getRealScaleY(),
+							collider.getRealSin(), collider.getRealCos()
+						), (point) => {
+							
+							let xs = point.x - torch.getX();
+							let ys = point.y - torch.getY();
+							let distance = xs * xs + ys * ys;
+							
+							if (distance < minDistance) {
+								minDistance = distance;
+								foundPoint = point;
+							}
+						});
+					}
+				});
+				
 				if (foundPoint !== undefined) {
 					foundPoints.push(foundPoint);
+					
+					// 원래 타겟의 거리보다 먼 교점인 경우, 타겟 내부 점 추가
+					if (point.target !== undefined && originDistance < minDistance) {
+						foundPoints.push({
+							x : (originX * 2 + point.target.getX()) / 3,
+							y : (originY * 2 + point.target.getY()) / 3
+						});
+					}
 				}
 			});
 			
+			// 모든 교점들 각도로 정렬
 			foundPoints.sort((pointA, pointB) => {
 				
-				if (pointA.angle === undefined) {
-					genAngle(pointA);
+				if (pointA.angleSquare === undefined) {
+					genAngleSquare(pointA);
 				}
 				
-				if (pointB.angle === undefined) {
-					genAngle(pointB);
+				if (pointB.angleSquare === undefined) {
+					genAngleSquare(pointB);
 				}
 				
-				return pointA.angle - pointB.angle;
+				return pointA.angleSquare - pointB.angleSquare;
 			});
 			
+			// 그라디언트 색상 생성
+			let gradient = SkyEngine.Screen.getCanvasContext().createRadialGradient(torch.getX(), torch.getY(), 0, torch.getX(), torch.getY(), 500);
+			gradient.addColorStop(0, '#FFCC00');
+			gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+			
+			// 빛 생성
 			light = SkyEngine.Polygon({
 				points : foundPoints,
-				color : '#FFCC00',
+				color : gradient,
 				z : -1
 			}).appendTo(SkyEngine.Screen);
+			
+			light.setFilter('blur(2px)');
 		};
 		
 		let torch = SkyEngine.Sprite({
@@ -191,7 +265,7 @@ SkyEngineShowcase.RaycastTest = CLASS({
 		
 		let balls = [];
 		
-		REPEAT(50, () => {
+		REPEAT(10, () => {
 			
 			balls.push(SkyEngine.Image({
 				src : SkyEngineShowcase.R('ball.png'),
@@ -213,7 +287,7 @@ SkyEngineShowcase.RaycastTest = CLASS({
 		
 		let boxes = [];
 		
-		REPEAT(50, () => {
+		REPEAT(10, () => {
 			
 			boxes.push(SkyEngine.Image({
 				src : SkyEngineShowcase.R('box.png'),
@@ -229,6 +303,57 @@ SkyEngineShowcase.RaycastTest = CLASS({
 				collider : SkyEngine.Rect({
 					width : 512,
 					height : 512
+				})
+			}).appendTo(SkyEngine.Screen));
+		});
+		
+		let stars = [];
+		
+		REPEAT(10, () => {
+			
+			stars.push(SkyEngine.Image({
+				src : SkyEngineShowcase.R('star.png'),
+				x : RANDOM({
+					min : -600,
+					max : 600
+				}),
+				y : RANDOM({
+					min : -300,
+					max : 300
+				}),
+				scale : 0.1,
+				collider : SkyEngine.Polygon({
+					points : [{
+						x : 0,
+						y : -100
+					}, {
+						x : 50,
+						y : -38
+					}, {
+						x : 100,
+						y : -26
+					}, {
+						x : 63,
+						y : 26
+					}, {
+						x : 65,
+						y : 100
+					}, {
+						x : 0,
+						y : 70
+					}, {
+						x : -65,
+						y : 100
+					}, {
+						x : -63,
+						y : 26
+					}, {
+						x : -100,
+						y : -26
+					}, {
+						x : -50,
+						y : -38
+					}]
 				})
 			}).appendTo(SkyEngine.Screen));
 		});
@@ -276,6 +401,9 @@ SkyEngineShowcase.RaycastTest = CLASS({
 			});
 			EACH(boxes, (box) => {
 				box.remove();
+			});
+			EACH(stars, (star) => {
+				star.remove();
 			});
 			
 			if (light !== undefined) {

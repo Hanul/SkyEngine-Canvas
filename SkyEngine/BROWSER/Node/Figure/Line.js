@@ -318,12 +318,12 @@ SkyEngine.Line = CLASS((cls) => {
 			let checkLineRect = SkyEngine.Util.Collision.checkLineRect;
 			
 			if (isEndless === true) {
-				if (endX === startX) {
-					endX = (endY < 0 ? -999999 : 999999 - startY) / (endY - startY) * (endX - startX) + startX;
-					endY = endY < 0 ? -999999 : 999999;
+				if (Math.abs(endX - startX) < Math.abs(endY - startY)) {
+					endX = ((endY - startY < 0 ? -999999 : 999999) - startY) / (endY - startY) * (endX - startX) + startX;
+					endY = endY - startY < 0 ? -999999 : 999999;
 				} else {
-					endY = (endY - startY) / (endX - startX) * (endX < 0 ? -999999 : 999999 - startX) + startY;
-					endX = endX < 0 ? -999999 : 999999;
+					endY = (endY - startY) / (endX - startX) * ((endX - startX < 0 ? -999999 : 999999) - startX) + startY;
+					endX = endX - startX < 0 ? -999999 : 999999;
 				}
 			}
 			

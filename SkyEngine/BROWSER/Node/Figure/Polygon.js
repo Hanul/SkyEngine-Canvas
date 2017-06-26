@@ -11,6 +11,53 @@ SkyEngine.Polygon = CLASS((cls) => {
 		polygonScaleX, polygonScaleY,
 		polygonSin, polygonCos) => {
 		
+		let length = polygonPoints.length;
+		
+		let minAngleSquare;
+		let x1;
+		let y1;
+		
+		let maxAngleSquare;
+		let x2;
+		let y2;
+		
+		for (let i = 0; i < length; i += 1) {
+			
+			let iX = polygonPoints[i].x * polygonScaleX;
+			let iY = polygonPoints[i].y * polygonScaleY;
+			
+			let polygonPointX = polygonX + polygonCos * iX - polygonSin * iY;
+			let polygonPointY = polygonY + polygonSin * iX + polygonCos * iY;
+			
+			let xs = polygonPointX - pointX;
+			let ys = polygonPointY - pointY;
+			
+			let angleSquare = Math.acos(xs / Math.sqrt(xs * xs + ys * ys));
+			
+			if (ys > 0) {
+			    angleSquare = Math.PI + Math.PI - angleSquare;
+			}
+			
+			if (minAngleSquare == undefined || minAngleSquare > angleSquare) {
+				minAngleSquare = angleSquare;
+				x1 = polygonPointX;
+				y1 = polygonPointY;
+			}
+			
+			if (maxAngleSquare == undefined || maxAngleSquare < angleSquare) {
+				maxAngleSquare = angleSquare;
+				x2 = polygonPointX;
+				y2 = polygonPointY;
+			}
+		}
+		
+		return minAngleSquare === undefined ? [] : [{
+			x : x1,
+			y : y1
+		}, {
+			x : x2,
+			y : y2
+		}];
 	};
 	
 	return {

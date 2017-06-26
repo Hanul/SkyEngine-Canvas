@@ -28,93 +28,81 @@ SkyEngine.Rect = CLASS((cls) => {
 		rectPoint4X = rectX - cw + sh;	rectPoint4Y = rectY + sw + ch;
 		
 		let xs = rectPoint1X - pointX;
-		xs = xs * xs;
-		
 		let ys = rectPoint1Y - pointY;
-		ys = ys * ys;
 		
-		let angle = Math.acos((rectPoint1X - pointX) / Math.sqrt(xs + ys));
+		let angleSquare = Math.acos(xs / Math.sqrt(xs * xs + ys * ys));
 		
-		if (rectPoint1Y > pointY) {
-		    angle = Math.PI + Math.PI - angle;
+		if (ys > 0) {
+		    angleSquare = Math.PI + Math.PI - angleSquare;
 		}
 		
-		let minAngle = angle;
+		let minAngleSquare = angleSquare;
 		let x1 = rectPoint1X;
 		let y1 = rectPoint1Y;
 		
-		let maxAngle = angle;
+		let maxAngleSquare = angleSquare;
 		let x2 = rectPoint1X;
 		let y2 = rectPoint1Y;
 		
 		xs = rectPoint2X - pointX;
-		xs = xs * xs;
-		
 		ys = rectPoint2Y - pointY;
-		ys = ys * ys;
 		
-		angle = Math.acos((rectPoint2X - pointX) / Math.sqrt(xs + ys));
+		angleSquare = Math.acos(xs / Math.sqrt(xs * xs + ys * ys));
 		
-		if (rectPoint2Y > pointY) {
-		    angle = Math.PI + Math.PI - angle;
+		if (ys > 0) {
+		    angleSquare = Math.PI + Math.PI - angleSquare;
 		}
 		
-		if (minAngle > angle) {
-			minAngle = angle;
+		if (minAngleSquare > angleSquare) {
+			minAngleSquare = angleSquare;
 			x1 = rectPoint2X;
 			y1 = rectPoint2Y;
 		}
 		
-		if (maxAngle < angle) {
-			maxAngle = angle;
+		if (maxAngleSquare < angleSquare) {
+			maxAngleSquare = angleSquare;
 			x2 = rectPoint2X;
 			y2 = rectPoint2Y;
 		}
 		
 		xs = rectPoint3X - pointX;
-		xs = xs * xs;
-		
 		ys = rectPoint3Y - pointY;
-		ys = ys * ys;
 		
-		angle = Math.acos((rectPoint3X - pointX) / Math.sqrt(xs + ys));
+		angleSquare = Math.acos(xs / Math.sqrt(xs * xs + ys * ys));
 		
-		if (rectPoint3Y > pointY) {
-		    angle = Math.PI + Math.PI - angle;
+		if (ys > 0) {
+		    angleSquare = Math.PI + Math.PI - angleSquare;
 		}
 		
-		if (minAngle > angle) {
-			minAngle = angle;
+		if (minAngleSquare > angleSquare) {
+			minAngleSquare = angleSquare;
 			x1 = rectPoint3X;
 			y1 = rectPoint3Y;
 		}
 		
-		if (maxAngle < angle) {
-			maxAngle = angle;
+		if (maxAngleSquare < angleSquare) {
+			maxAngleSquare = angleSquare;
 			x2 = rectPoint3X;
 			y2 = rectPoint3Y;
 		}
 		
 		xs = rectPoint4X - pointX;
-		xs = xs * xs;
-		
 		ys = rectPoint4Y - pointY;
-		ys = ys * ys;
 		
-		angle = Math.acos((rectPoint4X - pointX) / Math.sqrt(xs + ys));
+		angleSquare = Math.acos(xs / Math.sqrt(xs * xs + ys * ys));
 		
-		if (rectPoint4Y > pointY) {
-		    angle = Math.PI + Math.PI - angle;
+		if (ys > 0) {
+		    angleSquare = Math.PI + Math.PI - angleSquare;
 		}
 		
-		if (minAngle > angle) {
-			minAngle = angle;
+		if (minAngleSquare > angleSquare) {
+			minAngleSquare = angleSquare;
 			x1 = rectPoint4X;
 			y1 = rectPoint4Y;
 		}
 		
-		if (maxAngle < angle) {
-			maxAngle = angle;
+		if (maxAngleSquare < angleSquare) {
+			maxAngleSquare = angleSquare;
 			x2 = rectPoint4X;
 			y2 = rectPoint4Y;
 		}

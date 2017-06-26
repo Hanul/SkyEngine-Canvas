@@ -325,5 +325,9 @@ SkyEngine.Screen = OBJECT({
 		let getHeight = self.getHeight = () => {
 			return height;
 		};
+		
+		let getCanvasContext = self.getCanvasContext = () => {
+			return context;
+		};
 	}
 });
