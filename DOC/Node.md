@@ -1,3 +1,5 @@
+작성중
+
 # 노드
 ```javascript
 SkyEngine.Node({
@@ -70,14 +72,14 @@ SkyEngine의 모든 구성요소는 노드입니다. 즉 SkyEngine을 기반으�
 - `toAlpha` 페이드 알파 값 목적지
 
 ## 기타 파라미터
-- `collider` 충돌 영역. 하나의 영역을 지정하거나, 영역들의 배열을 지정할 수 있습니다.
-- `touchArea` 터치 영역. 하나의 영역을 지정하거나, 영역들의 배열을 지정할 수 있습니다.
+- `collider` 충돌 영역. 하나의 영역을 지정하거나, 영역들의 배열을 지정할 수 있습니다. 영역에 대한 자세한 내용은 [영역 설정 문서](Area.md)를 참고해주시기 바랍니다.
+- `touchArea` 터치 영역. 하나의 영역을 지정하거나, 영역들의 배열을 지정할 수 있습니다. 영역에 대한 자세한 내용은 [영역 설정 문서](Area.md)를 참고해주시기 바랍니다.
 - `c` 자식 노드. 하나의 노드를 지정하거나, 노드들의 배열을 지정할 수 있습니다.
-- `on` 이벤트
+- `on` 이벤트. 이벤트에 관한 자세한 내용은 [이벤트 항목](#이벤트)을 참고해주시기 바랍니다.
 
 사용 가능한 함수는 다음과 같습니다.
 ## 위치 관련 함수
-### 파라미터 세팅
+### 파라미터 설정
 - `setX(x)`
 - `getX()`
 - `setY(y)`
@@ -106,40 +108,40 @@ SkyEngine의 모든 구성요소는 노드입니다. 즉 SkyEngine을 기반으�
 - `getToY()`
 
 ## 배율 관련 함수
-### 파라미터 세팅
+### 파라미터 설정
 - `setScaleX(scaleX)`
 - `getScaleX()`
 - `setScaleY(scaleY)`
 - `getScaleY()`
-- `setScale(scale)`
+- `setScale(scale)` x 배율과 y 배율을 동시에 설정합니다.
 - `setScalingSpeedX(scalingSpeedX)`
 - `getScalingSpeedX()`
 - `setScalingSpeedY(scalingSpeedY)`
-- `getScalingSpeedY()`
+- `getScalingSpeedY()` x 배율과 y 배율이 커지는 속도를 동시에 설정합니다.
 - `setScalingSpeed(scalingSpeed)`
 - `setScalingAccelX(scalingAccelX)`
 - `getScalingAccelX()`
 - `setScalingAccelY(scalingAccelY)`
 - `getScalingAccelY()`
-- `setScalingAccel(scalingAccel)`
+- `setScalingAccel(scalingAccel)` x 배율과 y 배율이 커지는 가속도를 동시에 설정합니다.
 - `setMinScalingSpeedX(minScalingSpeedX)`
 - `getMinScalingSpeedX()`
 - `setMinScalingSpeedY(minScalingSpeedY)`
 - `getMinScalingSpeedY()`
-- `setMinScalingSpeed(minScalingSpeed)`
+- `setMinScalingSpeed(minScalingSpeed)` x 배율과 y 배율이 커지는 최소 속도를 동시에 설정합니다.
 - `setMaxScalingSpeedX(maxScalingSpeedX)`
 - `getMaxScalingSpeedX()`
 - `setMaxScalingSpeedY(maxScalingSpeedY)`
 - `getMaxScalingSpeedY()`
-- `setMaxScalingSpeed(maxScalingSpeed)`
+- `setMaxScalingSpeed(maxScalingSpeed)` x 배율과 y 배율이 커지는 최대 속도를 동시에 설정합니다.
 - `setToScaleX(toScaleX)`
 - `getToScaleX()`
 - `setToScaleY(toScaleY)`
 - `getToScaleY()`
-- `setToScale(toScale)`
+- `setToScale(toScale)` x 배율과 y 배율의 목적지를 동시에 설정합니다.
 
 ## 회전 관련 함수
-### 파라미터 세팅
+### 파라미터 설정
 - `setAngle(angle)`
 - `getAngle()`
 - `setRotationSpeed(rotationSpeed)`
@@ -154,7 +156,7 @@ SkyEngine의 모든 구성요소는 노드입니다. 즉 SkyEngine을 기반으�
 - `getToAngle()`
 
 ## 페이드 관련
-### 파라미터 세팅
+### 파라미터 설정
 - `setAlpha(alpha)`
 - `getAlpha()`
 - `setFadingSpeed(fadingSpeed)`
@@ -170,41 +172,37 @@ SkyEngine의 모든 구성요소는 노드입니다. 즉 SkyEngine을 기반으�
 
 ## 기타 함수
 
-
-
-
-
-### 이벤트
-#### `on`
+## 이벤트
+### `on`
 - `'tap'`
 - `'touchstart'`
 - `'touchend'`
-- `'animationend'` 애니메이션이 끝난 경우
-- `'framechange'` 애니메이션의 프레임이 변경된 경우
-- `'offscreen'` 화면을 벗어나는 경우
-- `'nextstep'` 다음 프레임이 되었을 경우
+- `'offscreen'` 노드가 화면을 벗어날 때
+- `'nextstep'` 다음 프레임으로 넘어갈 때
+- `'move'` 노드가 움직일 때
 
-#### `onMeet`
-#### `onPart`
+### `onMeet`
 
-### 필터
+### `onPart`
 
-### 블렌드 모드
+## 필터
 
-### 노드 확장하기
+## 블렌드 모드
 
-### 내장 확장 노드
-#### 도형 노드
+## 노드 확장하기
+
+## 내장 확장 노드
+### 도형 노드
 * [직선 노드](Node/Line.md)
 * [사각형 노드](Node/Rect.md)
 * [원 노드](Node/Circle.md)
 * [다각형 노드](Node/Polygon.md)
 
-#### 이미지 노드
+### 이미지 노드
 * [이미지 노드](Node/Image.md)
 * [스프라이트 애니메이션 노드](Node/Sprite.md)
 * [실루엣 노드](Node/Silhouette.md)
 
-#### DOM 노드
+### DOM 노드
 * [DOM 노드](Node/Dom.md)
 

@@ -126,7 +126,6 @@ SkyEngine.Node = CLASS({
 			}
 		};
 		
-		// for position
 		let setX = self.setX = (_x) =>							{ x = _x; genRealPosition(); };
 		let getX = self.getX = () =>							{ return x; };
 		let setY = self.setY = (_y) =>							{ y = _y; genRealPosition(); };
@@ -165,7 +164,6 @@ SkyEngine.Node = CLASS({
 		let setToY = self.setToY = (_toY) =>					{ toY = _toY; };
 		let getToY = self.getToY = () =>						{ return toY; };
 		
-		// for scale
 		let setScaleX = self.setScaleX = (_scaleX) => {
 			scaleX = _scaleX;
 			
@@ -186,52 +184,68 @@ SkyEngine.Node = CLASS({
 			}
 		};
 		let getScaleY = self.getScaleY = () =>											{ return scaleY; };
+		
+		// x 배율과 y 배율을 동시에 설정합니다.
 		let setScale = self.setScale = (scale) => {
 			setScaleX(scale);
 			setScaleY(scale);
 		};
+		
 		let setScalingSpeedX = self.setScalingSpeedX = (_scalingSpeedX) =>				{ scalingSpeedX = _scalingSpeedX; };
 		let getScalingSpeedX = self.getScalingSpeedX = () =>							{ return scalingSpeedX; };
 		let setScalingSpeedY = self.setScalingSpeedY = (_scalingSpeedY) =>				{ scalingSpeedY = _scalingSpeedY; };
 		let getScalingSpeedY = self.getScalingSpeedY = () =>							{ return scalingSpeedY; };
+		
+		// x 배율과 y 배율이 커지는 속도를 동시에 설정합니다.
 		let setScalingSpeed = self.setScalingSpeed = (scalingSpeed) => {
 			scalingSpeedX = scalingSpeed;
 			scalingSpeedY = scalingSpeed;
 		};
+		
 		let setScalingAccelX = self.setScalingAccelX = (_scalingAccelX) =>				{ scalingAccelX = _scalingAccelX; };
 		let getScalingAccelX = self.getScalingAccelX = () =>							{ return scalingAccelX; };
 		let setScalingAccelY = self.setScalingAccelY = (_scalingAccelY) =>				{ scalingAccelY = _scalingAccelY; };
 		let getScalingAccelY = self.getScalingAccelY = () =>							{ return scalingAccelY; };
+		
+		// x 배율과 y 배율이 커지는 가속도를 동시에 설정합니다.
 		let setScalingAccel = self.setScalingAccel = (scalingAccel) => {
 			scalingAccelX = scalingAccel;
 			scalingAccelY = scalingAccel;
 		};
+		
 		let setMinScalingSpeedX = self.setMinScalingSpeedX = (_minScalingSpeedX) =>		{ minScalingSpeedX = _minScalingSpeedX; };
 		let getMinScalingSpeedX = self.getMinScalingSpeedX = () =>						{ return minScalingSpeedX; };
 		let setMinScalingSpeedY = self.setMinScalingSpeedY = (_minScalingSpeedY) =>		{ minScalingSpeedY = _minScalingSpeedY; };
 		let getMinScalingSpeedY = self.getMinScalingSpeedY = () =>						{ return minScalingSpeedY; };
+		
+		// x 배율과 y 배율이 커지는 최소 속도를 동시에 설정합니다.
 		let setMinScalingSpeed = self.setMinScalingSpeed = (minScalingSpeed) => {
 			minScalingSpeedX = minScalingSpeed;
 			minScalingSpeedY = minScalingSpeed;
 		};
+		
 		let setMaxScalingSpeedX = self.setMaxScalingSpeedX = (_maxScalingSpeedX) =>		{ maxScalingSpeedX = _maxScalingSpeedX; };
 		let getMaxScalingSpeedX = self.getMaxScalingSpeedX = () =>						{ return maxScalingSpeedX; };
 		let setMaxScalingSpeedY = self.setMaxScalingSpeedY = (_maxScalingSpeedY) =>		{ maxScalingSpeedY = _maxScalingSpeedY; };
 		let getMaxScalingSpeedY = self.getMaxScalingSpeedY = () =>						{ return maxScalingSpeedY; };
+		
+		// x 배율과 y 배율이 커지는 최대 속도를 동시에 설정합니다.
 		let setMaxScalingSpeed = self.setMaxScalingSpeed = (maxScalingSpeed) => {
 			maxScalingSpeedX = maxScalingSpeed;
 			maxScalingSpeedY = maxScalingSpeed;
 		};
+		
 		let setToScaleX = self.setToScaleX = (_toScaleX) =>								{ toScaleX = _toScaleX; };
 		let getToScaleX = self.getToScaleX = () =>										{ return toScaleX; };
 		let setToScaleY = self.setToScaleY = (_toScaleY) =>								{ toScaleY = _toScaleY; };
 		let getToScaleY = self.getToScaleY = () =>										{ return toScaleY; };
+		
+		// x 배율과 y 배율의 목적지를 동시에 설정합니다.
 		let setToScale = self.setToScale = (toScale) => {
 			toScaleX = toScale;
 			toScaleY = toScale;
 		};
 		
-		// for angle
 		let setAngle = self.setAngle = (_angle) => {
 			angle = _angle;
 			
@@ -256,7 +270,6 @@ SkyEngine.Node = CLASS({
 		let setToAngle = self.setToAngle = (_toAngle) =>								{ toAngle = _toAngle; };
 		let getToAngle = self.getToAngle = () =>										{ return toAngle; };
 		
-		// for alpha
 		let setAlpha = self.setAlpha = (_alpha) =>								{ alpha = _alpha; };
 		let getAlpha = self.getAlpha = () =>									{ return alpha; };
 		let setFadingSpeed = self.setFadingSpeed = (_fadingSpeed) =>			{ fadingSpeed = _fadingSpeed; };
@@ -270,7 +283,6 @@ SkyEngine.Node = CLASS({
 		let setToAlpha = self.setToAlpha = (_toAlpha) =>						{ toAlpha = _toAlpha; };
 		let getToAlpha = self.getToAlpha = () =>								{ return toAlpha; };
 		
-		// for real properties
 		let getDrawingX = self.getDrawingX = () =>								{ return drawingX; };
 		let getDrawingY = self.getDrawingY = () =>								{ return drawingY; };
 		let getRealX = self.getRealX = () =>									{ return realX; };
@@ -281,7 +293,6 @@ SkyEngine.Node = CLASS({
 		let getRealSin = self.getRealSin = () =>								{ return realSin; };
 		let getRealCos = self.getRealCos = () =>								{ return realCos; };
 		
-		// for before properties
 		let getBeforeX = self.getBeforeX = () =>								{ return beforeX; };
 		let getBeforeY = self.getBeforeY = () =>								{ return beforeY; };
 		
