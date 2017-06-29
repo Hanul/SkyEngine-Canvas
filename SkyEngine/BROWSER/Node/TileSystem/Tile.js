@@ -1,3 +1,6 @@
+/*
+ * 타일 노드
+ */
 SkyEngine.Tile = CLASS({
 	
 	preset : () => {

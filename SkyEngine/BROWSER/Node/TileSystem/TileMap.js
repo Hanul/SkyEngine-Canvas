@@ -1,5 +1,5 @@
 /*
- * 타일 맵
+ * 타일맵 노드
  */
 SkyEngine.TileMap = CLASS({
 	

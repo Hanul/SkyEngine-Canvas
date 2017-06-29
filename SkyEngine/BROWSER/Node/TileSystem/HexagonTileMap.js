@@ -1,3 +1,6 @@
+/*
+ * 헥사곤 타일맵 노드
+ */
 SkyEngine.HexagonTileMap = CLASS({
 	
 	preset : () => {

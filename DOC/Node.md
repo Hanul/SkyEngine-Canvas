@@ -1,8 +1,6 @@
 # 노드
-`SkyEngine.Node` 노드 트리를 구성하기 위한 노드 클래스
-
 ```javascript
-SkyEngine.Nody({
+SkyEngine.Node({
 	x : 30,
 	y : -40,
 	c : SkyEngine.Circle({
@@ -13,7 +11,11 @@ SkyEngine.Nody({
 }).appendTo(SkyEngine.Screen);
 ```
 
-노드의 움직임, 크기조절, 회전, 페이드 인/아웃 등 각종 기능이 포함되어 있습니다. SkyEngine의 모든 노드는 `SkyEngine.Node`를 상속합니다.
+SkyEngine의 모든 구성요소는 노드입니다. 즉 SkyEngine을 기반으로 한 게임은 노드들의 집합이라 할 수 있습니다.
+
+개발의 관점에서 살펴보면, SkyEngine의 모든 노드 클래스는 `SkyEngine.Node`를 상속합니다.
+
+`SkyEngine.Node`에는 노드의 움직임, 크기조절, 회전, 페이드 인/아웃 등 각종 기능이 포함되어 있습니다.
 
 사용 가능한 파라미터는 다음과 같습니다.
 ## 위치 관련 파라미터

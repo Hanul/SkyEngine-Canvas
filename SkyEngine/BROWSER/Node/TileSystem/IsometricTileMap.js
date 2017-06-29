@@ -1,4 +1,7 @@
-SkyEngine.IsomatricTileMap = CLASS({
+/*
+ * 아이소메트릭 타일맵 노드
+ */
+SkyEngine.IsometricTileMap = CLASS({
 	
 	preset : () => {
 		return SkyEngine.TileMap;

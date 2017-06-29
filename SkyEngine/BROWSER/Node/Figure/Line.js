@@ -1,5 +1,5 @@
 /*
- * 선 노드
+ * 직선 노드
  */
 SkyEngine.Line = CLASS((cls) => {
 	
