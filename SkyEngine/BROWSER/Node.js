@@ -22,24 +22,24 @@ SkyEngine.Node = CLASS({
 		//OPTIONAL: params.toX					x 좌표 목적지. 이동하다 목적지에 도착하면 속도가 0이 됩니다.
 		//OPTIONAL: params.toY					y 좌표 목적지. 이동하다 목적지에 도착하면 속도가 0이 됩니다.
 		
-		//OPTIONAL: params.scale				배율
-		//OPTIONAL: params.scaleX				x 배율
-		//OPTIONAL: params.scaleY				y 배율
-		//OPTIONAL: params.scalingSpeed			배율이 커지는 속도
-		//OPTIONAL: params.scalingSpeedX		x 배율이 커지는 속도
-		//OPTIONAL: params.scalingSpeedY		y 배율이 커지는 속도
-		//OPTIONAL: params.scalingAccel			배율이 커지는 가속도
-		//OPTIONAL: params.scalingAccelX		x 배율이 커지는 가속도
-		//OPTIONAL: params.scalingAccelY		y 배율이 커지는 가속도
-		//OPTIONAL: params.minScalingSpeed		배율이 커지는 최소 속도
-		//OPTIONAL: params.minScalingSpeedX		x 배율이 커지는 최소 속도
-		//OPTIONAL: params.minScalingSpeedY		y 배율이 커지는 최소 속도
-		//OPTIONAL: params.maxScalingSpeed		배율이 커지는 최대 속도
-		//OPTIONAL: params.maxScalingSpeedX		x 배율이 커지는 최대 속도
-		//OPTIONAL: params.maxScalingSpeedY		y 배율이 커지는 최대 속도
-		//OPTIONAL: params.toScale				배율이 커지는 목적지
-		//OPTIONAL: params.toScaleX				x 배율이 커지는 목적지
-		//OPTIONAL: params.toScaleY				y 배율이 커지는 목적지
+		//OPTIONAL: params.scale				스케일
+		//OPTIONAL: params.scaleX				x 스케일
+		//OPTIONAL: params.scaleY				y 스케일
+		//OPTIONAL: params.scalingSpeed			스케일이 커지는 속도
+		//OPTIONAL: params.scalingSpeedX		x 스케일이 커지는 속도
+		//OPTIONAL: params.scalingSpeedY		y 스케일이 커지는 속도
+		//OPTIONAL: params.scalingAccel			스케일이 커지는 가속도
+		//OPTIONAL: params.scalingAccelX		x 스케일이 커지는 가속도
+		//OPTIONAL: params.scalingAccelY		y 스케일이 커지는 가속도
+		//OPTIONAL: params.minScalingSpeed		스케일이 커지는 최소 속도
+		//OPTIONAL: params.minScalingSpeedX		x 스케일이 커지는 최소 속도
+		//OPTIONAL: params.minScalingSpeedY		y 스케일이 커지는 최소 속도
+		//OPTIONAL: params.maxScalingSpeed		스케일이 커지는 최대 속도
+		//OPTIONAL: params.maxScalingSpeedX		x 스케일이 커지는 최대 속도
+		//OPTIONAL: params.maxScalingSpeedY		y 스케일이 커지는 최대 속도
+		//OPTIONAL: params.toScale				스케일이 커지는 목적지
+		//OPTIONAL: params.toScaleX				x 스케일이 커지는 목적지
+		//OPTIONAL: params.toScaleY				y 스케일이 커지는 목적지
 		
 		//OPTIONAL: params.angle				회전 각도
 		//OPTIONAL: params.rotationSpeed		회전 속도
@@ -100,8 +100,8 @@ SkyEngine.Node = CLASS({
 		
 		let isStuckLeft;
 		let isStuckRight;
-		let isStuckTop;
-		let isStuckBottom;
+		let isStuckUp;
+		let isStuckDown;
 		
 		let genRealPosition = () => {
 			
@@ -185,7 +185,7 @@ SkyEngine.Node = CLASS({
 		};
 		let getScaleY = self.getScaleY = () =>											{ return scaleY; };
 		
-		// x 배율과 y 배율을 동시에 설정합니다.
+		// x 스케일과 y 스케일을 동시에 설정합니다.
 		let setScale = self.setScale = (scale) => {
 			setScaleX(scale);
 			setScaleY(scale);
@@ -196,7 +196,7 @@ SkyEngine.Node = CLASS({
 		let setScalingSpeedY = self.setScalingSpeedY = (_scalingSpeedY) =>				{ scalingSpeedY = _scalingSpeedY; };
 		let getScalingSpeedY = self.getScalingSpeedY = () =>							{ return scalingSpeedY; };
 		
-		// x 배율과 y 배율이 커지는 속도를 동시에 설정합니다.
+		// x 스케일과 y 스케일이 커지는 속도를 동시에 설정합니다.
 		let setScalingSpeed = self.setScalingSpeed = (scalingSpeed) => {
 			scalingSpeedX = scalingSpeed;
 			scalingSpeedY = scalingSpeed;
@@ -207,7 +207,7 @@ SkyEngine.Node = CLASS({
 		let setScalingAccelY = self.setScalingAccelY = (_scalingAccelY) =>				{ scalingAccelY = _scalingAccelY; };
 		let getScalingAccelY = self.getScalingAccelY = () =>							{ return scalingAccelY; };
 		
-		// x 배율과 y 배율이 커지는 가속도를 동시에 설정합니다.
+		// x 스케일과 y 스케일이 커지는 가속도를 동시에 설정합니다.
 		let setScalingAccel = self.setScalingAccel = (scalingAccel) => {
 			scalingAccelX = scalingAccel;
 			scalingAccelY = scalingAccel;
@@ -218,7 +218,7 @@ SkyEngine.Node = CLASS({
 		let setMinScalingSpeedY = self.setMinScalingSpeedY = (_minScalingSpeedY) =>		{ minScalingSpeedY = _minScalingSpeedY; };
 		let getMinScalingSpeedY = self.getMinScalingSpeedY = () =>						{ return minScalingSpeedY; };
 		
-		// x 배율과 y 배율이 커지는 최소 속도를 동시에 설정합니다.
+		// x 스케일과 y 스케일이 커지는 최소 속도를 동시에 설정합니다.
 		let setMinScalingSpeed = self.setMinScalingSpeed = (minScalingSpeed) => {
 			minScalingSpeedX = minScalingSpeed;
 			minScalingSpeedY = minScalingSpeed;
@@ -229,7 +229,7 @@ SkyEngine.Node = CLASS({
 		let setMaxScalingSpeedY = self.setMaxScalingSpeedY = (_maxScalingSpeedY) =>		{ maxScalingSpeedY = _maxScalingSpeedY; };
 		let getMaxScalingSpeedY = self.getMaxScalingSpeedY = () =>						{ return maxScalingSpeedY; };
 		
-		// x 배율과 y 배율이 커지는 최대 속도를 동시에 설정합니다.
+		// x 스케일과 y 스케일이 커지는 최대 속도를 동시에 설정합니다.
 		let setMaxScalingSpeed = self.setMaxScalingSpeed = (maxScalingSpeed) => {
 			maxScalingSpeedX = maxScalingSpeed;
 			maxScalingSpeedY = maxScalingSpeed;
@@ -240,7 +240,7 @@ SkyEngine.Node = CLASS({
 		let setToScaleY = self.setToScaleY = (_toScaleY) =>								{ toScaleY = _toScaleY; };
 		let getToScaleY = self.getToScaleY = () =>										{ return toScaleY; };
 		
-		// x 배율과 y 배율의 목적지를 동시에 설정합니다.
+		// x 스케일과 y 스케일의 목적지를 동시에 설정합니다.
 		let setToScale = self.setToScale = (toScale) => {
 			toScaleX = toScale;
 			toScaleY = toScale;
@@ -636,20 +636,20 @@ SkyEngine.Node = CLASS({
 			isStuckRight = false;
 		};
 		
-		let stuckTop = self.stuckTop = () => {
-			isStuckTop = true;
+		let stuckUp = self.stuckUp = () => {
+			isStuckUp = true;
 		};
 		
-		let unstuckTop = self.unstuckTop = () => {
-			isStuckTop = false;
+		let unstuckUp = self.unstuckUp = () => {
+			isStuckUp = false;
 		};
 		
-		let stuckBottom = self.stuckBottom = () => {
-			isStuckBottom = true;
+		let stuckDown = self.stuckDown = () => {
+			isStuckDown = true;
 		};
 		
-		let unstuckBottom = self.unstuckBottom = () => {
-			isStuckBottom = false;
+		let unstuckDown = self.unstuckDown = () => {
+			isStuckDown = false;
 		};
 		
 		let rotate = self.rotate = (speedOrParams) => {
@@ -1137,6 +1137,10 @@ SkyEngine.Node = CLASS({
 			return touchAreas;
 		};
 		
+		let getTouchArea = self.getTouchArea = () => {
+			return touchAreas[0];
+		};
+		
 		let addCollider = self.addCollider = (collider) => {
 			//REQUIRED: collider
 			
@@ -1336,7 +1340,7 @@ SkyEngine.Node = CLASS({
 				
 				let dy = speedY * deltaTime / 1000;
 				
-				if ((dy < 0 && isStuckTop !== true) || (dy > 0 && isStuckBottom !== true)) {
+				if ((dy < 0 && isStuckUp !== true) || (dy > 0 && isStuckDown !== true)) {
 					
 					y += dy;
 					

@@ -1,5 +1,5 @@
 /*
- * 스프라이트 애니메이션 노드
+ * 스프라이트 노드
  */
 SkyEngine.Sprite = CLASS({
 	
