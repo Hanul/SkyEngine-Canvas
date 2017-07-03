@@ -18,12 +18,6 @@ SkyEngine.Dom = CLASS({
 			style = params.style;
 		}
 		
-		let originX;
-		let originY;
-		let originRadian;
-		let originAlpha;
-		let originFilter;
-		
 		let dom = DIV({
 			style : {
 				position : 'fixed'
@@ -59,27 +53,13 @@ SkyEngine.Dom = CLASS({
 			
 			draw = self.draw = (context) => {
 				
-				if (
-				originX !== self.getDrawingX() ||
-				originY !== self.getDrawingY() ||
-				originRadian !== self.getRealRadian() ||
-				originAlpha !== context.globalAlpha ||
-				originFilter !== context.filter) {
-					
-					originX = self.getDrawingX();
-					originY = self.getDrawingY();
-					originRadian = self.getRealRadian();
-					originAlpha = context.globalAlpha;
-					originFilter = context.filter;
-					
-					dom.addStyle({
-						left : originX - dom.getWidth() / 2,
-						top : originY - dom.getHeight() / 2,
-						transform : 'rotate(' + originRadian + 'rad)',
-						opacity : originAlpha,
-						filter : originFilter
-					});
-				}
+				dom.addStyle({
+					left : SkyEngine.Screen.getWidth() / 2 + self.getDrawingX() - dom.getWidth() / 2,
+					top : SkyEngine.Screen.getHeight() / 2 + self.getDrawingY() - dom.getHeight() / 2,
+					transform : 'rotate(' + self.getRealRadian() + 'rad) scale(' + self.getRealScaleX() + ', ' + self.getRealScaleY() + ')',
+					opacity : context.globalAlpha,
+					filter : context.filter
+				});
 				
 				origin(context);
 			};
