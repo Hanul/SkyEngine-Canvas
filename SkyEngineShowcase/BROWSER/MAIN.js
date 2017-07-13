@@ -91,5 +91,10 @@ SkyEngineShowcase.MAIN = METHOD({
 			uri : 'test/tilemap',
 			target : SkyEngineShowcase.TileMapTest
 		});
+		
+		SkyEngineShowcase.MATCH_VIEW({
+			uri : 'test/particle',
+			target : SkyEngineShowcase.ParticleTest
+		});
 	}
 });

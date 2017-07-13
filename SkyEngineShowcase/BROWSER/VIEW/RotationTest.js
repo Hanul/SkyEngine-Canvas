@@ -24,7 +24,7 @@ SkyEngineShowcase.RotationTest = CLASS({
 		character.rotateTo({
 			speed : 360,
 			toAngle : 360
-		})
+		});
 		
 		inner.on('close', () => {
 			character.remove();

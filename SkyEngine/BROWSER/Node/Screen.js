@@ -132,8 +132,6 @@ SkyEngine.Screen = OBJECT({
 						node.fireEvent(eventName);
 					}
 				});
-				
-				e.stop();
 			});
 		});
 		
