@@ -283,17 +283,6 @@ SkyEngine.Line = CLASS((cls) => {
 		return points;
 	};
 	
-	let findRaycastPoints = cls.findRaycastPoints = (
-		pointX, pointY,
-		
-		lineX, lineY,
-		lineStartX, lineStartY,
-		lineEndX, lineEndY,
-		lineScaleX, lineScaleY,
-		lineSin, lineCos) => {
-		
-	};
-	
 	return {
 		
 		preset : () => {
