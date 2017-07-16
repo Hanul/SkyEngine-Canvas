@@ -15,107 +15,350 @@ SkyEngine.ParticleSystem = CLASS(() => {
 		
 		init : (inner, self, params) => {
 			//REQUIRED: params
-			//REQUIRED: params.src
+			//OPTIONAL: params.particleSrc
+			
+			//OPTIONAL: params.particleFigure
+			//OPTIONAL: params.particleStartX
+			//OPTIONAL: params.particleStartY
+			//OPTIONAL: params.particleEndX
+			//OPTIONAL: params.particleEndY
+			//OPTIONAL: params.particleWidth
+			//OPTIONAL: params.particleHeight
+			//OPTIONAL: params.particlePoints
+			//OPTIONAL: params.particleColor
+			//OPTIONAL: params.particleBorder
+			//OPTIONAL: params.particleColorR
+			//OPTIONAL: params.minParticleColorR
+			//OPTIONAL: params.maxParticleColorR
+			//OPTIONAL: params.particleColorG
+			//OPTIONAL: params.minParticleColorG
+			//OPTIONAL: params.maxParticleColorG
+			//OPTIONAL: params.particleColorB
+			//OPTIONAL: params.minParticleColorB
+			//OPTIONAL: params.maxParticleColorB
+			
+			//OPTIONAL: params.particleCenterX
+			//OPTIONAL: params.particleCenterY
+			
+			//OPTIONAL: params.particleCount
+			//OPTIONAL: params.minParticleCount
+			//OPTIONAL: params.maxParticleCount
+			
 			//OPTIONAL: params.particleX
 			//OPTIONAL: params.minParticleX
 			//OPTIONAL: params.maxParticleX
 			//OPTIONAL: params.particleY
 			//OPTIONAL: params.minParticleY
 			//OPTIONAL: params.maxParticleY
-			//OPTIONAL: params.particleCount
-			//REQUIRED: params.minParticleCount
-			//REQUIRED: params.maxParticleCount
+			
 			//OPTIONAL: params.particleLifetime
-			//REQUIRED: params.minParticleLifetime
-			//REQUIRED: params.maxParticleLifetime
+			//OPTIONAL: params.minParticleLifetime
+			//OPTIONAL: params.maxParticleLifetime
+			
+			//OPTIONAL: params.particleDirection
+			//OPTIONAL: params.minParticleDirection
+			//OPTIONAL: params.maxParticleDirection
+			
 			//OPTIONAL: params.particleSpeed
-			//REQUIRED: params.minParticleSpeed
-			//REQUIRED: params.maxParticleSpeed
+			//OPTIONAL: params.minParticleSpeed
+			//OPTIONAL: params.maxParticleSpeed
+			//OPTIONAL: params.particleAccelX
+			//OPTIONAL: params.particleAccelY
+			
 			//OPTIONAL: params.particleScale
-			//REQUIRED: params.minParticleScale
-			//REQUIRED: params.maxParticleScale
+			//OPTIONAL: params.minParticleScale
+			//OPTIONAL: params.maxParticleScale
+			//OPTIONAL: params.particleScalingSpeed
+			
+			//OPTIONAL: params.isParticleAngleToDirection	파티클의 각도가 방향에 따르는지 여부
 			//OPTIONAL: params.particleAngle
-			//REQUIRED: params.minParticleAngle
-			//REQUIRED: params.maxParticleAngle
+			//OPTIONAL: params.minParticleAngle
+			//OPTIONAL: params.maxParticleAngle
+			//OPTIONAL: params.particleRotationSpeed
+	
+			//OPTIONAL: params.particleAlpha
+			//OPTIONAL: params.minParticleAlpha
+			//OPTIONAL: params.maxParticleAlpha
+			//OPTIONAL: params.particleFadingSpeed
 			
-			let src = params.src;
+			let particleSrc = params.particleSrc;
 			
-			let minX = params.minX;
-			let maxX = params.maxX;
+			let particleFigure = params.particleFigure;
+			let particleStartX = params.particleStartX;
+			let particleStartY = params.particleStartY;
+			let particleEndX = params.particleEndX;
+			let particleEndY = params.particleEndY;
+			let particleWidth = params.particleWidth;
+			let particleHeight = params.particleHeight;
+			let particlePoints = params.particlePoints;
+			let particleColor = params.particleColor;
+			let particleBorder = params.particleBorder;
+			let particleColorR = params.particleColorR;
+			let minParticleColorR = params.minParticleColorR;
+			let maxParticleColorR = params.maxParticleColorR;
+			let particleColorG = params.particleColorG;
+			let minParticleColorG = params.minParticleColorG;
+			let maxParticleColorG = params.maxParticleColorG;
+			let particleColorB = params.particleColorB;
+			let minParticleColorB = params.minParticleColorB;
+			let maxParticleColorB = params.maxParticleColorB;
 			
-			let minY = params.minY;
-			let maxY = params.maxY;
+			let particleCenterX = params.particleCenterX;
+			let particleCenterY = params.particleCenterY;
 			
-			let minCount = params.minCount;
-			let maxCount = params.maxCount;
+			let particleCount = params.particleCount;
+			let minParticleCount = params.minParticleCount;
+			let maxParticleCount = params.maxParticleCount;
 			
-			let minLifetime = params.minLifetime;
-			let maxLifetime = params.maxLifetime;
+			let particleX = params.particleX;
+			let minParticleX = params.minParticleX;
+			let maxParticleX = params.maxParticleX;
+			let particleY = params.particleY;
+			let minParticleY = params.minParticleY;
+			let maxParticleY = params.maxParticleY;
 			
-			let minSpeed = params.minSpeed;
-			let maxSpeed = params.maxSpeed;
+			let particleLifetime = params.particleLifetime;
+			let minParticleLifetime = params.minParticleLifetime;
+			let maxParticleLifetime = params.maxParticleLifetime;
 			
-			let minScale = params.minScale;
-			let maxScale = params.maxScale;
+			let particleDirection = params.particleDirection;
+			let minParticleDirection = params.minParticleDirection;
+			let maxParticleDirection = params.maxParticleDirection;
 			
-			let minAngle = params.minAngle;
-			let maxAngle = params.maxAngle;
+			let particleSpeed = params.particleSpeed;
+			let minParticleSpeed = params.minParticleSpeed;
+			let maxParticleSpeed = params.maxParticleSpeed;
+			let particleAccelX = params.particleAccelX;
+			let particleAccelY = params.particleAccelY;
 			
-			if (minX === undefined) {
-				minX = 0;
+			let particleScale = params.particleScale;
+			let minParticleScale = params.minParticleScale;
+			let maxParticleScale = params.maxParticleScale;
+			let particleScalingSpeed = params.particleScalingSpeed;
+			
+			let isParticleAngleToDirection = params.isParticleAngleToDirection;
+			let particleAngle = params.particleAngle;
+			let minParticleAngle = params.minParticleAngle;
+			let maxParticleAngle = params.maxParticleAngle;
+			let particleRotationSpeed = params.particleRotationSpeed;
+			
+			let particleAlpha = params.particleAlpha;
+			let minParticleAlpha = params.minParticleAlpha;
+			let maxParticleAlpha = params.maxParticleAlpha;
+			let particleFadingSpeed = params.particleFadingSpeed;
+			
+			let particleRotationSpeedRadian;
+			
+			if (particleColorR === undefined) {
+				particleColorR = 0;
+			}
+			if (minParticleColorR === undefined) {
+				minParticleColorR = particleColorR;
+			}
+			if (maxParticleColorR === undefined) {
+				maxParticleColorR = particleColorR;
 			}
 			
-			if (maxX === undefined) {
-				maxX = 0;
+			if (particleColorG === undefined) {
+				particleColorG = 0;
+			}
+			if (minParticleColorG === undefined) {
+				minParticleColorG = particleColorG;
+			}
+			if (maxParticleColorG === undefined) {
+				maxParticleColorG = particleColorG;
 			}
 			
-			if (minY === undefined) {
-				minY = 0;
+			if (particleColorB === undefined) {
+				particleColorB = 0;
+			}
+			if (minParticleColorB === undefined) {
+				minParticleColorB = particleColorB;
+			}
+			if (maxParticleColorB === undefined) {
+				maxParticleColorB = particleColorB;
 			}
 			
-			if (maxY === undefined) {
-				maxY = 0;
+			if (particleCenterX === undefined) {
+				particleCenterX = 0;
+			}
+			if (particleCenterY === undefined) {
+				particleCenterY = 0;
+			}
+			
+			if (minParticleCount === undefined) {
+				minParticleCount = particleCount;
+			}
+			if (maxParticleCount === undefined) {
+				maxParticleCount = particleCount;
+			}
+			
+			if (particleX === undefined) {
+				particleX = 0;
+			}
+			if (minParticleX === undefined) {
+				minParticleX = particleX;
+			}
+			if (maxParticleX === undefined) {
+				maxParticleX = particleX;
+			}
+			
+			if (particleY === undefined) {
+				particleY = 0;
+			}
+			if (minParticleY === undefined) {
+				minParticleY = particleY;
+			}
+			if (maxParticleY === undefined) {
+				maxParticleY = particleY;
+			}
+			
+			if (minParticleLifetime === undefined) {
+				minParticleLifetime = particleLifetime;
+			}
+			if (maxParticleLifetime === undefined) {
+				maxParticleLifetime = particleLifetime;
+			}
+			
+			if (minParticleDirection === undefined) {
+				minParticleDirection = particleDirection;
+			}
+			if (maxParticleDirection === undefined) {
+				maxParticleDirection = particleDirection;
+			}
+			
+			if (minParticleSpeed === undefined) {
+				minParticleSpeed = particleSpeed;
+			}
+			if (maxParticleSpeed === undefined) {
+				maxParticleSpeed = particleSpeed;
+			}
+			
+			if (particleAccelX === undefined) {
+				particleAccelX = 0;
+			}
+			if (particleAccelY === undefined) {
+				particleAccelY = 0;
+			}
+			
+			if (particleScale === undefined) {
+				particleScale = 0;
+			}
+			if (minParticleScale === undefined) {
+				minParticleScale = particleScale;
+			}
+			if (maxParticleScale === undefined) {
+				maxParticleScale = particleScale;
+			}
+			
+			if (particleScalingSpeed === undefined) {
+				particleScalingSpeed = 0;
+			}
+			
+			if (particleAngle === undefined) {
+				particleAngle = 0;
+			}
+			if (minParticleAngle === undefined) {
+				minParticleAngle = particleAngle;
+			}
+			if (maxParticleAngle === undefined) {
+				maxParticleAngle = particleAngle;
+			}
+			
+			if (particleRotationSpeed === undefined) {
+				particleRotationSpeed = 0;
+				particleRotationSpeedRadian = 0;
+			} else {
+				particleRotationSpeedRadian = particleRotationSpeed * Math.PI / 180;
+			}
+			
+			if (particleAlpha === undefined) {
+				particleAlpha = 1;
+			}
+			if (minParticleAlpha === undefined) {
+				minParticleAlpha = particleAlpha;
+			}
+			if (maxParticleAlpha === undefined) {
+				maxParticleAlpha = particleAlpha;
+			}
+			
+			let particleBorderPixel;
+			let particleBorderStyle;
+			let particleBorderColor;
+			
+			if (particleBorder !== undefined) {
+				let split = particleBorder.split(' ');
+				particleBorderPixel = INTEGER(split[0]);
+				particleBorderStyle = split[1];
+				particleBorderColor = split[2];
 			}
 			
 			let width;
 			let height;
 			
-			let img = new Image();
+			let img;
 			
-			img.onload = () => {
+			if (particleSrc !== undefined) {
 				
-				width = img.width;
-				height = img.height;
+				img = new Image();
 				
-				img.onload = undefined;
+				img.onload = () => {
+					
+					width = img.width;
+					height = img.height;
+					
+					img.onload = undefined;
+					
+					self.fireEvent('load');
+				};
 				
-				self.fireEvent('load');
-			};
-			
-			img.src = src;
+				img.src = particleSrc;
+			}
 			
 			let particleInfos = [];
 			
-			let burst = self.burst = () => {
+			let endHandler;
+			
+			let burst = self.burst = (_endHandler) => {
 				
-				REPEAT(random(minCount, maxCount), () => {
+				endHandler = _endHandler;
+				
+				REPEAT(random(minParticleCount, maxParticleCount), () => {
 					
-					let radian = random(minAngle, maxAngle) * Math.PI / 180;
+					let direction = random(minParticleDirection, maxParticleDirection) * Math.PI / 180;
 					
-					let speed = random(minSpeed, maxSpeed);
+					let sin = Math.sin(direction);
+					let cos = Math.cos(direction);
 					
-					let sin = Math.sin(radian);
-					let cos = Math.cos(radian);
+					let speed = random(minParticleSpeed, maxParticleSpeed);
 					
-					particleInfos.push({
-						x : random(minX, maxX),
-						y : random(minY, maxY),
+					let particleInfo = {
 						time : 0,
-						lifetime : random(minLifetime, maxLifetime),
-						scale : random(minScale, maxScale),
-						dx : speed * cos - speed * sin,
-						dy : speed * sin + speed * cos
-					});
+						lifetime : random(minParticleLifetime, maxParticleLifetime),
+						x : random(minParticleX, maxParticleX),
+						y : random(minParticleY, maxParticleY),
+						direction : direction,
+						speedX : speed * cos - speed * sin,
+						speedY : speed * sin + speed * cos,
+						scale : random(minParticleScale, maxParticleScale),
+						radian : random(minParticleAngle, maxParticleAngle) * Math.PI / 180,
+						alpha : random(minParticleAlpha, maxParticleAlpha)
+					};
+					
+					if (particleFigure !== undefined && particleColor === undefined) {
+						particleInfo.color = 'rgb(' + RANDOM({
+							min : minParticleColorR,
+							max : maxParticleColorR
+						}) + ', ' + RANDOM({
+							min : minParticleColorG,
+							max : maxParticleColorG
+						}) + ', ' + RANDOM({
+							min : minParticleColorB,
+							max : maxParticleColorB
+						}) + ')';
+					}
+					
+					particleInfos.push(particleInfo);
 				});
 			};
 			
@@ -126,14 +369,37 @@ SkyEngine.ParticleSystem = CLASS(() => {
 					
 					particleInfos.forEach((particleInfo, i) => {
 						
-						let scale = particleInfo.scale;
-						
-						particleInfo.x += particleInfo.dx / scale;
-						particleInfo.y += particleInfo.dy / scale;
 						particleInfo.time += deltaTime;
 						
 						if (particleInfo.time > particleInfo.lifetime) {
 							particleInfos.splice(i, 1);
+							
+							if (endHandler !== undefined && particleInfos.length === 0) {
+								endHandler(self);
+							}
+						}
+						
+						else {
+							
+							particleInfo.speedX += particleAccelX * deltaTime / 1000;
+							particleInfo.speedY += particleAccelY * deltaTime / 1000;
+							
+							particleInfo.x += particleInfo.speedX * deltaTime / 1000;
+							particleInfo.y += particleInfo.speedY * deltaTime / 1000;
+							
+							particleInfo.scale += particleScalingSpeed * deltaTime / 1000;
+							
+							if (particleInfo.scale < 0) {
+								particleInfo.scale = 0;
+							}
+							
+							particleInfo.radian += particleRotationSpeedRadian * deltaTime / 1000;
+							
+							particleInfo.alpha += particleFadingSpeed * deltaTime / 1000;
+							
+							if (particleInfo.alpha < 0) {
+								particleInfo.alpha = 0;
+							}
 						}
 					});
 					
@@ -152,14 +418,85 @@ SkyEngine.ParticleSystem = CLASS(() => {
 						
 						context.save();
 						
+						context.translate(particleInfo.x, particleInfo.y);
+						
+						if (isParticleAngleToDirection === true) {
+							context.rotate(particleInfo.direction);
+						} else {
+							context.rotate(particleInfo.radian);
+						}
+						
 						context.scale(scale, scale);
 						
-						context.drawImage(
-							img,
-							particleInfo.x - width / 2,
-							particleInfo.y - height / 2,
-							width,
-							height);
+						context.globalAlpha *= particleInfo.alpha;
+						
+						if (particleFigure === undefined) {
+							
+							context.drawImage(
+								img,
+								particleCenterX - width / 2,
+								particleCenterY - height / 2,
+								width,
+								height);
+						}
+						
+						else {
+							
+							context.beginPath();
+							
+							if (particleFigure === 'line') {
+								context.moveTo(particleCenterX + particleStartX, particleCenterY + particleStartY);
+								context.lineTo(particleCenterX + particleEndX, particleCenterY + particleEndY);
+							}
+							
+							else if (particleFigure === 'rect') {
+								context.rect(particleCenterX - particleWidth / 2, particleCenterX - particleHeight / 2, particleWidth, particleHeight);
+							}
+							
+							else if (particleFigure === 'circle') {
+								context.ellipse(particleCenterX, particleCenterY, particleWidth / 2, particleHeight / 2, 0, 0, 2 * Math.PI);
+							}
+							
+							else if (particleFigure === 'polygon') {
+								
+								if (particlePoints.length > 0) {
+									
+									context.moveTo(particleCenterX + particlePoints[0].x, particleCenterY + particlePoints[0].y);
+									
+									for (let i = 1; i < particlePoints.length; i += 1) {
+										let point = particlePoints[i];
+										context.lineTo(particleCenterX + point.x, particleCenterY + point.y);
+									}
+									
+									context.lineTo(particleCenterX + particlePoints[0].x, particleCenterY + particlePoints[0].y);
+								}
+							}
+							
+							if (particleColor !== undefined) {
+								context.fillStyle = particleColor;
+								context.fill();
+							}
+							
+							else if (particleInfo.color !== undefined) {
+								context.fillStyle = particleInfo.color;
+								context.fill();
+							}
+							
+							if (particleBorder !== undefined) {
+								context.lineWidth = particleBorderPixel;
+								context.strokeStyle = particleBorderColor;
+								
+								if (particleBorderStyle === 'dashed') {
+									context.setLineDash([5]);
+								} else if (particleBorderStyle === 'dotted') {
+									context.setLineDash([2]);
+								}
+								
+								context.stroke();
+							}
+							
+							context.closePath();
+						}
 						
 						context.restore();
 					});

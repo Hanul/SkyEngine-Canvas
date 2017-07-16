@@ -54,6 +54,9 @@ SkyEngine.Node = CLASS({
 		//OPTIONAL: params.minFadingSpeed		최소 페이드 속도
 		//OPTIONAL: params.maxFadingSpeed		최대 페이드 속도
 		//OPTIONAL: params.toAlpha				페이드 알파 값 목적지
+		
+		//OPTIONAL: params.filter
+		//OPTIONAL: params.blendMode
 
 		//OPTIONAL: params.collider				충돌 영역. 하나의 영역을 지정하거나, 영역들의 배열을 지정할 수 있습니다.
 		//OPTIONAL: params.touchArea			터치 영역. 하나의 영역을 지정하거나, 영역들의 배열을 지정할 수 있습니다.
@@ -96,7 +99,7 @@ SkyEngine.Node = CLASS({
 
 		let partHandlerMap = {};
 
-		let filterStyle;
+		let filter;
 		let blendMode;
 
 		let isStuckLeft;
@@ -759,6 +762,9 @@ SkyEngine.Node = CLASS({
 			if (params.isHiding !== undefined) {
 				isHiding = params.isHiding;
 			}
+			
+			filter = params.filter;
+			blendMode = params.blendMode;
 		}
 
 		// 초기화 되지 않은 파라미터에 기본값 지정
@@ -834,18 +840,18 @@ SkyEngine.Node = CLASS({
 			SkyEngine.Screen.registerNode(self);
 		}
 
-		let setFilter = self.setFilter = (_filterStyle) => {
-			//REQUIRED: filterStyle
+		let setFilter = self.setFilter = (_filter) => {
+			//REQUIRED: filter
 
-			filterStyle = _filterStyle;
+			filter = _filter;
 		};
 
 		let getFilter = self.getFilter = () => {
-			return filterStyle;
+			return filter;
 		};
 
 		let removeFilter = self.removeFilter = () => {
-			filterStyle = undefined;
+			filter = undefined;
 		};
 
 		let setBlendMode = self.setBlendMode = (_blendMode) => {
@@ -1886,35 +1892,44 @@ SkyEngine.Node = CLASS({
 			genRealProperties();
 
 			// 모든 터치 영역에 대해 실행
-			self.getTouchAreas().forEach((touchArea) => {
-				touchArea.step(deltaTime);
-			});
+			if (isRemoved !== true) {
+				
+				touchAreas.forEach((touchArea) => {
+					touchArea.step(deltaTime);
+				});
+			}
 
 			// 모든 충돌 영역에 대해 실행
-			self.getColliders().forEach((collider) => {
-				collider.step(deltaTime);
-			});
-
-			// 충돌 체크
-			checkAllCollisions();
+			if (isRemoved !== true) {
+				
+				colliders.forEach((collider) => {
+					collider.step(deltaTime);
+				});
+			}
+			
+			if (isRemoved !== true) {
+				
+				// 충돌 체크
+				checkAllCollisions();
+			}
 
 			// 모든 자식 노드들에 대해 실행
-			if (childNodes !== undefined) {
+			if (isRemoved !== true) {
 				childNodes.forEach((childNode) => {
 					childNode.step(deltaTime);
 				});
 			}
 
-			if (eventMap !== undefined && eventMap.offscreen !== undefined && self.checkOffScreen() === true) {
+			if (isRemoved !== true && eventMap.offscreen !== undefined && self.checkOffScreen() === true) {
 				fireEvent('offscreen');
 			}
 
-			if (eventMap !== undefined && eventMap.nextstep !== undefined) {
+			if (isRemoved !== true && eventMap.nextstep !== undefined) {
 				fireEvent('nextstep');
 				off('nextstep');
 			}
 
-			if (eventMap !== undefined && eventMap.move !== undefined && (x !== beforeX || y !== beforeY)) {
+			if (isRemoved !== true && eventMap.move !== undefined && (x !== beforeX || y !== beforeY)) {
 				fireEvent('move');
 			}
 		};
@@ -2031,8 +2046,8 @@ SkyEngine.Node = CLASS({
 				}
 			});
 
-			if (filterStyle !== undefined) {
-				clone.setFilter(filterStyle);
+			if (filter !== undefined) {
+				clone.setFilter(filter);
 			}
 
 			if (blendMode !== undefined) {

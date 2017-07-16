@@ -6,57 +6,63 @@ SkyEngineShowcase.ParticleTest = CLASS({
 	
 	init : (inner) => {
 		
-		let particle = SkyEngine.Particle({
-			src : SkyEngineShowcase.R('star.png'),
-			minCount : 50,
-			maxCount : 100,
-			minLifetime : 200,
-			maxLifetime : 500,
-			minSpeed : 3,
-			maxSpeed : 7,
-			minScale : 0.05,
-			maxScale : 0.2,
-			minAngle : 0,
-			maxAngle : 360
+		let particle = SkyEngine.ParticleSystem({
+			particleSrc : SkyEngineShowcase.R('star.png'),
+			minParticleCount : 50,
+			maxParticleCount : 100,
+			minParticleLifetime : 200,
+			maxParticleLifetime : 500,
+			minParticleDirection : 0,
+			maxParticleDirection : 360,
+			minParticleSpeed : 100,
+			maxParticleSpeed : 300,
+			minParticleScale : 0.05,
+			maxParticleScale : 0.2,
+			particleRotationSpeed : 1000,
+			particleFadingSpeed : -2
 		}).appendTo(SkyEngine.Screen);
 		
-		/*let rain = SkyEngine.Particle({
-			src : SkyEngineShowcase.R('rain.png'),
-			minX : -SkyEngine.Screen.getWidth() / 2,
-			maxX : SkyEngine.Screen.getWidth() / 2,
-			minCount : 50,
-			maxCount : 100,
-			minLifetime : 1000,
-			maxLifetime : 1000,
-			minSpeed : 3,
-			maxSpeed : 7,
-			minScale : 0.5,
-			maxScale : 1,
-			minAngle : 30,
-			maxAngle : 30
+		let rain = SkyEngine.ParticleSystem({
+			particleFigure : 'line',
+			particleStartX : -20,
+			particleStartY : -50,
+			particleEndX : 20,
+			particleEndY : 50,
+			particleBorder : '1px solid #ffffff',
+			minParticleX : -SkyEngine.Screen.getWidth() / 2 - 100,
+			maxParticleX : SkyEngine.Screen.getWidth() / 2,
+			minParticleCount : 50,
+			maxParticleCount : 100,
+			particleLifetime : 1000,
+			minParticleSpeed : 300,
+			maxParticleSpeed : 700,
+			minParticleScale : 0.3,
+			maxParticleScale : 0.7,
+			minParticleDirection : 30,
+			maxParticleDirection : 30
 		}).appendTo(SkyEngine.Screen);
 		
 		let moveRainEvent = EVENT('resize', RAR(() => {
 			rain.setY(-SkyEngine.Screen.getHeight() / 2);
-		}));*/
+		}));
 		
 		let touchEvent = EVENT('touchstart', (e) => {
 			particle.burst();
 			e.stop();
 		});
 		
-		/*let rainInterval = INTERVAL(0.1, () => {
+		let rainInterval = INTERVAL(0.1, () => {
 			rain.burst();
-		});*/
+		});
 		
 		inner.on('close', () => {
 			
 			particle.remove();
-			//rain.remove();
+			rain.remove();
 			
 			touchEvent.remove();
 			
-			//rainInterval.remove();
+			rainInterval.remove();
 		});
 	}
 });

@@ -241,6 +241,18 @@ SkyEngineShowcase.MainMenu = CLASS({
 							}
 						}
 					})
+				}), LI({
+					style : {
+						marginTop : 15
+					},
+					c : A({
+						c : '파티클 테스트 2',
+						on : {
+							tap : () => {
+								SkyEngineShowcase.GO('test/particle2');
+							}
+						}
+					})
 				})]
 			})]
 		}).appendTo(BODY);
