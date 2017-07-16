@@ -237,7 +237,9 @@ SkyEngine.Silhouette = CLASS((cls) => {
 				
 				remove = self.remove = () => {
 					
+					img.onload = undefined;
 					img = undefined;
+					
 					imageData = undefined;
 					
 					polygon = undefined;

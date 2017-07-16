@@ -145,6 +145,18 @@ SkyEngine.Background = CLASS({
 			};
 		});
 		
+		let remove;
+		OVERRIDE(self.remove, (origin) => {
+			
+			remove = self.remove = () => {
+				
+				img.onload = undefined;
+				img = undefined;
+				
+				origin();
+			};
+		});
+		
 		let clone;
 		OVERRIDE(self.clone, (origin) => {
 			

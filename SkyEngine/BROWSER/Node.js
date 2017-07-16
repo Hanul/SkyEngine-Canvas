@@ -1008,37 +1008,40 @@ SkyEngine.Node = CLASS({
 
 		let moveTo = self.moveTo = (params) => {
 			//REQUIRED: params
-			//OPTIONAL: params.toX
-			//OPTIONAL: params.toY
+			//OPTIONAL: params.x
+			//OPTIONAL: params.y
 			//OPTIONAL: params.speed
 			//OPTIONAL: params.accel
 			//OPTIONAL: params.maxSpeed
 
-			if (params.toY === undefined) {
-				toX = params.toX;
+			if (params.y === undefined) {
+				toX = params.x;
 				moveRight(params);
-			} else if (params.toX === undefined) {
-				toY = params.toY;
+			} else if (params.x === undefined) {
+				toY = params.y;
 				moveDown(params);
 			} else {
-				toX = params.toX;
-				toY = params.toY;
+				toX = params.x;
+				toY = params.y;
+				
+				let dx = (toX - x);
+				let dy = (toY - y);
 
-				let length = Math.sqrt(toX * toX + toY * toY);
+				let length = Math.sqrt(dx * dx + dy * dy);
 
 				if (params.speed !== undefined) {
-					speedX = params.speed * toX / length;
-					speedY = params.speed * toY / length;
+					speedX = params.speed * dx / length;
+					speedY = params.speed * dy / length;
 				}
 
 				if (params.accel !== undefined) {
-					accelX = params.accel * toX / length;
-					accelY = params.accel * toY / length;
+					accelX = params.accel * dx / length;
+					accelY = params.accel * dy / length;
 				}
 
 				if (params.maxSpeed !== undefined) {
-					maxSpeedX = params.maxSpeed * toX / length;
-					maxSpeedY = params.maxSpeed * toY / length;
+					maxSpeedX = params.maxSpeed * dx / length;
+					maxSpeedY = params.maxSpeed * dy / length;
 				}
 			}
 		};
@@ -1381,14 +1384,20 @@ SkyEngine.Node = CLASS({
 
 			node.appendTo(self);
 		};
-
-		let remove = self.remove = () => {
-
-			// 모든 자식 노드 제거
+		
+		let empty = self.empty = () => {
+			
 			childNodes.forEach((childNode) => {
 				childNode.setParent(undefined);
 				childNode.remove();
 			});
+			childNodes = [];
+		};
+
+		let remove = self.remove = () => {
+
+			empty();
+			
 			childNodes = undefined;
 
 			if (parentNode !== undefined) {
@@ -1461,12 +1470,25 @@ SkyEngine.Node = CLASS({
 			}
 		};
 
-		let fireEvent = self.fireEvent = (eventName) => {
+		let fireEvent = self.fireEvent = (eventNameOrParams) => {
+			//REQUIRED: eventNameOrParams
+			//REQUIRED: eventNameOrParams.eventName
+			//OPTIONAL: eventNameOrParams.e
+			
+			let eventName;
+			let e;
+			
+			if (CHECK_IS_DATA(eventNameOrParams) !== true) {
+				eventName = eventNameOrParams;
+			} else {
+				eventName = eventNameOrParams.eventName;
+				e = eventNameOrParams.e;
+			}
 
 			if (eventMap[eventName] !== undefined) {
 
 				eventMap[eventName].forEach((eventHandler) => {
-					eventHandler(self);
+					eventHandler(e === undefined ? EMPTY_E() : e, self);
 				});
 			}
 		};

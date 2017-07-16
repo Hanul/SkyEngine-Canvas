@@ -18,11 +18,21 @@ SkyEngine.TileMap = CLASS({
 		
 		let tileWidth = params.tileWidth;
 		let tileHeight = params.tileHeight;
+		let tileKeySet = params.tileKeySet;
+		let tileKeyMap = params.tileKeyMap;
 		let collisionMap = params.collisionMap;
 		
+		if (tileKeySet === undefined) {
+			tileKeySet = {};
+		}
+		if (tileKeyMap === undefined) {
+			tileKeyMap = [];
+		}
 		if (collisionMap === undefined) {
 			collisionMap = [];
 		}
+		
+		let tileNodeMap = [];
 		
 		let getTileWidth = self.getTileWidth = () => {
 			return tileWidth;
@@ -32,20 +42,44 @@ SkyEngine.TileMap = CLASS({
 			return tileHeight;
 		};
 		
+		let addTileNodeToMap = inner.addTileNodeToMap = (params) => {
+			//REQUIRED: params
+			//REQUIRED: params.row
+			//REQUIRED: params.col
+			//REQUIRED: params.tileNode
+			
+			let row = params.row;
+			let col = params.col;
+			let tileNode = params.tileNode;
+			
+			if (tileNodeMap[row] === undefined) {
+				tileNodeMap[row] = [];
+			}
+			tileNodeMap[row][col] = tileNode;
+		};
+		
 		let addTile = self.addTile = (params) => {
 			//REQUIRED: params
 			//REQUIRED: params.row
 			//REQUIRED: params.col
-			//REQUIRED: params.tile
+			//OPTIONAL: params.tile
 			//OPTIONAL: params.isCollider
+			//OPTIONAL: params.key
 			
 			let row = params.row;
 			let col = params.col;
 			let tile = params.tile;
 			let isCollider = params.isCollider;
+			let key = params.key;
 			
-			let x = col * tileWidth;
-			let y = row * tileHeight;
+			if (key !== undefined) {
+				tile = tileKeySet[key].clone();
+				
+				if (tileKeyMap[row] === undefined) {
+					tileKeyMap[row] = [];
+				}
+				tileKeyMap[row][col] = key;
+			}
 			
 			if (isCollider === true) {
 				if (collisionMap[row] === undefined) {
@@ -53,6 +87,9 @@ SkyEngine.TileMap = CLASS({
 				}
 				collisionMap[row][col] = 1;
 			}
+			
+			let x = col * tileWidth;
+			let y = row * tileHeight;
 			
 			let tileNode;
 			
@@ -77,11 +114,182 @@ SkyEngine.TileMap = CLASS({
 			}
 			
 			self.append(tileNode);
+			
+			addTileNodeToMap({
+				row : row,
+				col : col,
+				tileNode : tileNode
+			});
+		};
+		
+		let getTileKey = self.getTileKey = (params) => {
+			//REQUIRED: params
+			//REQUIRED: params.row
+			//REQUIRED: params.col
+			
+			let row = params.row;
+			let col = params.col;
+			
+			if (tileKeyMap !== undefined && tileKeyMap[row] !== undefined) {
+				return tileKeyMap[row][col];
+			}
+		};
+		
+		let getTile = self.getTile = (params) => {
+			//REQUIRED: params
+			//REQUIRED: params.row
+			//REQUIRED: params.col
+			
+			let row = params.row;
+			let col = params.col;
+			
+			if (tileNodeMap[row] !== undefined && tileNodeMap[row][col] !== undefined) {
+				return tileNodeMap[row][col].getChildren()[0];
+			}
+		};
+		
+		let moveTile = self.moveTile = (params) => {
+			//REQUIRED: params
+			//REQUIRED: params.fromRow
+			//REQUIRED: params.fromCol
+			//REQUIRED: params.toRow
+			//REQUIRED: params.toCol
+			//OPTIONAL: params.speed
+			//OPTIONAL: params.accel
+			
+			let fromRow = params.fromRow;
+			let fromCol = params.fromCol;
+			let toRow = params.toRow;
+			let toCol = params.toCol;
+			let speed = params.speed;
+			let accel = params.accel;
+			
+			let t;
+			
+			if (collisionMap[toRow] === undefined) {
+				collisionMap[toRow] = [];
+			} else {
+				t = collisionMap[toRow][toCol];
+			}
+			
+			if (collisionMap[fromRow] === undefined) {
+				collisionMap[fromRow] = [];
+			} else {
+				collisionMap[toRow][toCol] = collisionMap[fromRow][fromCol];
+			}
+			
+			collisionMap[fromRow][fromCol] = t;
+			
+			t = undefined;
+			
+			if (tileKeyMap[toRow] === undefined) {
+				tileKeyMap[toRow] = [];
+			} else {
+				t = tileKeyMap[toRow][toCol];
+			}
+			
+			if (tileKeyMap[fromRow] === undefined) {
+				tileKeyMap[fromRow] = [];
+			} else {
+				tileKeyMap[toRow][toCol] = tileKeyMap[fromRow][fromCol];
+			}
+			
+			tileKeyMap[fromRow][fromCol] = t;
+			
+			let fromTileNode;
+			if (tileNodeMap[fromRow] !== undefined) {
+				fromTileNode = tileNodeMap[fromRow][fromCol];
+			}
+			
+			let toTileNode;
+			if (tileNodeMap[toRow] !== undefined) {
+				toTileNode = tileNodeMap[toRow][toCol];
+			}
+			
+			if (speed !== undefined || accel !== undefined) {
+				fromTileNode.moveTo({
+					x : toCol * tileWidth,
+					y : toRow * tileHeight,
+					speed : speed,
+					accel : accel
+				});
+			} else {
+				fromTileNode.setPosition({
+					x : toCol * tileWidth,
+					y : toRow * tileHeight
+				});
+			}
+			
+			addTileNodeToMap({
+				row : toRow,
+				col : toCol,
+				tileNode : fromTileNode
+			});
+			
+			if (toTileNode === undefined) {
+				tileNodeMap[fromRow][fromCol] = undefined;
+			} else {
+				
+				if (speed !== undefined || accel !== undefined) {
+					toTileNode.moveTo({
+						x : fromCol * tileWidth,
+						y : fromRow * tileHeight,
+						speed : speed,
+						accel : accel
+					});
+				} else {
+					toTileNode.setPosition({
+						x : fromCol * tileWidth,
+						y : fromRow * tileHeight
+					});
+				}
+				
+				addTileNodeToMap({
+					row : fromRow,
+					col : fromCol,
+					tileNode : toTileNode
+				});
+			}
+		};
+		
+		let removeTile = self.removeTile = (params) => {
+			//REQUIRED: params
+			//REQUIRED: params.row
+			//REQUIRED: params.col
+			
+			let row = params.row;
+			let col = params.col;
+			
+			if (collisionMap[row] !== undefined) {
+				collisionMap[row][col] = undefined;
+			}
+			
+			if (tileKeyMap[row] !== undefined) {
+				tileKeyMap[row][col] = undefined;
+			}
+			
+			if (tileNodeMap[row] !== undefined && tileNodeMap[row][col] !== undefined) {
+				tileNodeMap[row][col].remove();
+				tileNodeMap[row][col] = undefined;
+			}
 		};
 		
 		let getCollisionMap = self.getCollisionMap = () => {
 			return collisionMap;
 		};
+		
+		let empty;
+		OVERRIDE(self.empty, (origin) => {
+			
+			empty = self.empty = () => {
+				
+				tileKeyMap = [];
+				collisionMap = [];
+				tileNodeMap = [];
+				
+				origin();
+			};
+		});
 		
 		let clone;
 		OVERRIDE(self.clone, (origin) => {
@@ -184,7 +392,6 @@ SkyEngine.TileMap = CLASS({
 	afterInit : (inner, self, params) => {
 		
 		let tileMap = params.tileMap;
-		let tileKeySet = params.tileKeySet;
 		let tileKeyMap = params.tileKeyMap;
 		
 		if (tileMap !== undefined) {
@@ -209,20 +416,13 @@ SkyEngine.TileMap = CLASS({
 			EACH(tileKeyMap, (tileKeys, i) => {
 				EACH(tileKeys, (tileKey, j) => {
 					
-					let tile = tileKeySet[tileKey];
-					
-					if (tile !== undefined) {
-						
-						self.addTile({
-							row : i,
-							col : j,
-							tile : tile.clone()
-						});
-					}
+					self.addTile({
+						row : i,
+						col : j,
+						key : tileKey
+					});
 				});
 			});
-			
-			tileKeyMap = undefined;
 		}
 	}
 });

@@ -1,6 +1,5 @@
 /*
  * Dom 노드
- * TODO: Mix in 기술을 통해 DOM 상속
  */
 SkyEngine.Dom = CLASS({
 	

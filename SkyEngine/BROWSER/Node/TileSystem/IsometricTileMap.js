@@ -70,6 +70,12 @@ SkyEngine.IsometricTileMap = CLASS({
 				}
 				
 				self.append(tileNode);
+				
+				inner.addTileNodeToMap({
+					row : row,
+					col : col,
+					tileNode : tileNode
+				});
 			};
 		});
 	}

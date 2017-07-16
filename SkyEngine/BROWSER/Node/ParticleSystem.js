@@ -167,6 +167,20 @@ SkyEngine.ParticleSystem = CLASS(() => {
 					origin(context);
 				};
 			});
+			
+			let remove;
+			OVERRIDE(self.remove, (origin) => {
+				
+				remove = self.remove = () => {
+					
+					img.onload = undefined;
+					img = undefined;
+					
+					particleInfos = undefined;
+					
+					origin();
+				};
+			});
 		}
 	};
 });
