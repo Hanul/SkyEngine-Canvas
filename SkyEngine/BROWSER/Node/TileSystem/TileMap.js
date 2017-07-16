@@ -206,18 +206,21 @@ SkyEngine.TileMap = CLASS({
 				toTileNode = tileNodeMap[toRow][toCol];
 			}
 			
-			if (speed !== undefined || accel !== undefined) {
-				fromTileNode.moveTo({
-					x : toCol * tileWidth,
-					y : toRow * tileHeight,
-					speed : speed,
-					accel : accel
-				});
-			} else {
-				fromTileNode.setPosition({
-					x : toCol * tileWidth,
-					y : toRow * tileHeight
-				});
+			if (fromTileNode !== undefined) {
+				
+				if (speed !== undefined || accel !== undefined) {
+					fromTileNode.moveTo({
+						x : toCol * tileWidth,
+						y : toRow * tileHeight,
+						speed : speed,
+						accel : accel
+					});
+				} else {
+					fromTileNode.setPosition({
+						x : toCol * tileWidth,
+						y : toRow * tileHeight
+					});
+				}
 			}
 			
 			addTileNodeToMap({
@@ -227,7 +230,9 @@ SkyEngine.TileMap = CLASS({
 			});
 			
 			if (toTileNode === undefined) {
-				tileNodeMap[fromRow][fromCol] = undefined;
+				if (tileNodeMap[fromRow] !== undefined) {
+					tileNodeMap[fromRow][fromCol] = undefined;
+				}
 			} else {
 				
 				if (speed !== undefined || accel !== undefined) {

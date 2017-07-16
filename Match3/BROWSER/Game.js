@@ -80,19 +80,11 @@ Match3.Game = CLASS({
 					scale : 0.3
 				}),
 				6 : SkyEngine.Image({
-					src : Match3.R('parrot.png'),
-					scale : 0.3
-				}),
-				7 : SkyEngine.Image({
 					src : Match3.R('penguin.png'),
 					scale : 0.3
 				}),
-				8 : SkyEngine.Image({
+				7 : SkyEngine.Image({
 					src : Match3.R('pig.png'),
-					scale : 0.3
-				}),
-				9 : SkyEngine.Image({
-					src : Match3.R('rabbit.png'),
 					scale : 0.3
 				})
 			},
@@ -243,6 +235,53 @@ Match3.Game = CLASS({
 					col : toRemoveTilePosition.col
 				});
 			});
+			
+			let isFound;
+			
+			REPEAT(7, (i) => {
+				REPEAT(7, (j) => {
+					
+					let row = 7 - i - 1;
+					
+					let nowTileKey = tileMap.getTileKey({
+						row : row,
+						col : j
+					});
+					
+					if (nowTileKey === undefined) {
+						
+						isFound = true;
+						
+						tileMap.moveTile({
+							fromRow : row - 1,
+							fromCol : j,
+							toRow : row,
+							toCol : j,
+							speed : 1000,
+							accel : 1000
+						});
+					}
+				});
+			});
+			
+			REPEAT(7, (i) => {
+				
+				if (tileMap.getTile({
+					row : 0,
+					col : i
+				}) === undefined) {
+					tileMap.addTile({
+						row : 0,
+						col : i,
+						key : RANDOM({
+							min : 1,
+							max : 7
+						})
+					});
+				}
+			});
+			
+			return isFound;
 		};
 		
 		let makeTiles = () => {
@@ -256,7 +295,7 @@ Match3.Game = CLASS({
 						
 						let tileKey = RANDOM({
 							min : 1,
-							max : 9
+							max : 7
 						});
 						
 						if ((tileMap.getTileKey({
@@ -325,48 +364,32 @@ Match3.Game = CLASS({
 				let row = Math.floor((e.getY() / tileMap.getRealScaleY() + 350) / 100);
 				let col = Math.floor((e.getX() / tileMap.getRealScaleX() + 350) / 100);
 				
+				let toRow;
+				let toCol;
+				
 				selectedTile.setAlpha(1);
 				
 				if (row < selectedTileRow && selectedTileRow > 0) {
-					
-					tileMap.moveTile({
-						fromRow : selectedTileRow,
-						fromCol : selectedTileCol,
-						toRow : selectedTileRow - 1,
-						toCol : selectedTileCol,
-						speed : 1000,
-						accel : 1000
-					});
-					
+					toRow = selectedTileRow - 1;
+					toCol = selectedTileCol;
 				} else if (row > selectedTileRow && selectedTileRow < 6) {
-					
-					tileMap.moveTile({
-						fromRow : selectedTileRow,
-						fromCol : selectedTileCol,
-						toRow : selectedTileRow + 1,
-						toCol : selectedTileCol,
-						speed : 1000,
-						accel : 1000
-					});
-					
+					toRow = selectedTileRow + 1;
+					toCol = selectedTileCol;
 				} else if (col < selectedTileCol && selectedTileCol > 0) {
-					
-					tileMap.moveTile({
-						fromRow : selectedTileRow,
-						fromCol : selectedTileCol,
-						toRow : selectedTileRow,
-						toCol : selectedTileCol - 1,
-						speed : 1000,
-						accel : 1000
-					});
-					
+					toRow = selectedTileRow;
+					toCol = selectedTileCol - 1;
 				} else if (col > selectedTileCol && selectedTileCol < 6) {
+					toRow = selectedTileRow;
+					toCol = selectedTileCol + 1;
+				}
+				
+				if (toRow !== undefined && toCol !== undefined) {
 					
 					tileMap.moveTile({
 						fromRow : selectedTileRow,
 						fromCol : selectedTileCol,
-						toRow : selectedTileRow,
-						toCol : selectedTileCol + 1,
+						toRow : toRow,
+						toCol : toCol,
 						speed : 1000,
 						accel : 1000
 					});
@@ -374,11 +397,38 @@ Match3.Game = CLASS({
 				
 				selectedTile = undefined;
 				
-				checkMatch3();
-				
-				// 불가능하면 다시 타일 생성
-				if (checkImpossible() === true) {
-					makeTiles();
+				let f = () => {
+					
+					if (checkMatch3() === true) {
+						DELAY(0.15, f);
+					}
+					
+					// 불가능하면 다시 타일 생성
+					else if (checkImpossible() === true) {
+						makeTiles();
+					}
+					
+					// 원복
+					else {
+						return true;
+					}
+				};
+				if (f() === true) {
+					
+					if (toRow !== undefined && toCol !== undefined) {
+						
+						DELAY(0.15, () => {
+							
+							tileMap.moveTile({
+								fromRow : toRow,
+								fromCol : toCol,
+								toRow : selectedTileRow,
+								toCol : selectedTileCol,
+								speed : 1000,
+								accel : 1000
+							});
+						});
+					}
 				}
 			}
 		});
