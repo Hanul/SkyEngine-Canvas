@@ -74,7 +74,7 @@ SkyEngineShowcase.ProjectileShootingTest = CLASS({
 					}),
 					fps : 10,
 					on : {
-						framechange : (sprite) => {
+						framechange : (e, sprite) => {
 							if (sprite.getBeforeFrame() === 0) {
 								
 								let bullet = SkyEngine.Sprite({
@@ -85,7 +85,7 @@ SkyEngineShowcase.ProjectileShootingTest = CLASS({
 									fps : 10,
 									speedX : 2000,
 									on : {
-										offscreen : (bullet) => {
+										offscreen : (e, bullet) => {
 											bullet.remove();
 										}
 									},

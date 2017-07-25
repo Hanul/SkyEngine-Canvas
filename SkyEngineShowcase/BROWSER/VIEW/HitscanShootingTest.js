@@ -74,7 +74,7 @@ SkyEngineShowcase.HitscanShootingTest = CLASS({
 					}),
 					fps : 24,
 					on : {
-						framechange : (sprite) => {
+						framechange : (e, sprite) => {
 							if (sprite.getBeforeFrame() === 0) {
 								
 								let targetEnemy;
@@ -95,7 +95,7 @@ SkyEngineShowcase.HitscanShootingTest = CLASS({
 										isEndless : true
 									}),
 									on : {
-										nextstep : (bullet) => {
+										nextstep : (e, bullet) => {
 											bullet.remove();
 											
 											if (targetEnemy !== undefined) {

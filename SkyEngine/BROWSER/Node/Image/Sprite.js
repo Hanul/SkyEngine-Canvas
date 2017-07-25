@@ -262,8 +262,10 @@ SkyEngine.Sprite = CLASS({
 				
 				srcs = undefined;
 				
-				img.onload = undefined;
-				img = undefined;
+				if (img !== undefined) {
+					img.onload = undefined;
+					img = undefined;
+				}
 				
 				EACH(imgs, (img) => {
 					img.onload = undefined;
