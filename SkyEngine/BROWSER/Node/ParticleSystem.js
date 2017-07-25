@@ -186,6 +186,10 @@ SkyEngine.ParticleSystem = CLASS(() => {
 				particleCenterY = 0;
 			}
 			
+			if (particleCount === undefined) {
+				particleCount = 1;
+			}
+			
 			if (minParticleCount === undefined) {
 				minParticleCount = particleCount;
 			}
@@ -242,7 +246,7 @@ SkyEngine.ParticleSystem = CLASS(() => {
 			}
 			
 			if (particleScale === undefined) {
-				particleScale = 0;
+				particleScale = 1;
 			}
 			if (minParticleScale === undefined) {
 				minParticleScale = particleScale;
@@ -305,7 +309,14 @@ SkyEngine.ParticleSystem = CLASS(() => {
 				img.onload = () => {
 					
 					width = img.width;
+					if (particleWidth === undefined) {
+						particleWidth = width;
+					}
+					
 					height = img.height;
+					if (particleHeight === undefined) {
+						particleHeight = height;
+					}
 					
 					img.onload = undefined;
 					
@@ -369,7 +380,7 @@ SkyEngine.ParticleSystem = CLASS(() => {
 					
 					particleInfos.forEach((particleInfo, i) => {
 						
-						particleInfo.time += deltaTime;
+						particleInfo.time += deltaTime / 1000;
 						
 						if (particleInfo.time > particleInfo.lifetime) {
 							particleInfos.splice(i, 1);
@@ -510,8 +521,10 @@ SkyEngine.ParticleSystem = CLASS(() => {
 				
 				remove = self.remove = () => {
 					
-					img.onload = undefined;
-					img = undefined;
+					if (img !== undefined) {
+						img.onload = undefined;
+						img = undefined;
+					}
 					
 					particleInfos = undefined;
 					

@@ -1,3 +1,6 @@
+//TODO: 움직이는 동안에 못움직이게
+//TODO: 안보이는 것 위에서 내려오는 기능
+
 Match3.Game = CLASS({
 	
 	preset : () => {

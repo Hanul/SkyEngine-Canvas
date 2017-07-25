@@ -1163,16 +1163,24 @@ SkyEngine.Node = CLASS({
 			scaleY = -scaleY;
 		};
 
-		let fadeIn = self.fadeIn = (speedOrParams) => {
+		let fadeIn = self.fadeIn = (speedOrParams, fadeEndHandler) => {
 			//REQUIRED: speedOrParams
 			//OPTIONAL: speedOrParams.speed
 			//OPTIONAL: speedOrParams.accel
 			//OPTIONAL: speedOrParams.maxSpeed
+			//OPTIONAL: fadeEndHandler
 
 			if (CHECK_IS_DATA(speedOrParams) === true) {
 
 				if (speedOrParams.speed !== undefined) {
 					fadingSpeed = speedOrParams.speed;
+					
+					if (fadeEndHandler !== undefined) {
+						
+						DELAY(1 / Math.abs(fadingSpeed), () => {
+							fadeEndHandler(self);
+						});
+					}
 				}
 
 				if (speedOrParams.accel !== undefined) {
@@ -1184,19 +1192,34 @@ SkyEngine.Node = CLASS({
 				}
 			} else {
 				fadingSpeed = speedOrParams;
+				
+				if (fadeEndHandler !== undefined) {
+					
+					DELAY(1 / Math.abs(fadingSpeed), () => {
+						fadeEndHandler(self);
+					});
+				}
 			}
 		};
 
-		let fadeOut = self.fadeOut = (speedOrParams) => {
+		let fadeOut = self.fadeOut = (speedOrParams, fadeEndHandler) => {
 			//REQUIRED: speedOrParams
 			//OPTIONAL: speedOrParams.speed
 			//OPTIONAL: speedOrParams.accel
 			//OPTIONAL: speedOrParams.maxSpeed
+			//OPTIONAL: fadeEndHandler
 
 			if (CHECK_IS_DATA(speedOrParams) === true) {
 
 				if (speedOrParams.speed !== undefined) {
 					fadingSpeed = -speedOrParams.speed;
+					
+					if (fadeEndHandler !== undefined) {
+						
+						DELAY(1 / Math.abs(fadingSpeed), () => {
+							fadeEndHandler(self);
+						});
+					}
 				}
 
 				if (speedOrParams.accel !== undefined) {
@@ -1208,6 +1231,13 @@ SkyEngine.Node = CLASS({
 				}
 			} else {
 				fadingSpeed = -speedOrParams;
+				
+				if (fadeEndHandler !== undefined) {
+					
+					DELAY(1 / Math.abs(fadingSpeed), () => {
+						fadeEndHandler(self);
+					});
+				}
 			}
 		};
 
