@@ -341,5 +341,4 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
 * [아이소메트릭 타일맵 노드](DOC/Node/TileSystem/IsometricTileMap.md)
 * [헥사곤 타일맵 노드](DOC/Node/TileSystem/HexagonTileMap.md)
 
-### [파티클 노드](Particle.md)
-파티클 노드는 개발중입니다.
+### [파티클 시스템 노드](ParticleSystem.md)
