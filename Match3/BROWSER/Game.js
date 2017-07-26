@@ -96,8 +96,8 @@ Match3.Game = CLASS({
 			touchArea : SkyEngine.Rect({
 				x : 300,
 				y : 300,
-				width : 700,
-				height : 1050
+				width : 1100,
+				height : 1100
 			})
 		}));
 		
@@ -176,68 +176,7 @@ Match3.Game = CLASS({
 			});
 		};
 		
-		let checkMatch3 = () => {
-			
-			let toRemoveTilePositions = [];
-			
-			REPEAT(7, (i) => {
-				REPEAT(7, (j) => {
-					
-					let nowTileKey = tileMap.getTileKey({
-						row : i,
-						col : j
-					});
-					
-					if (tileMap.getTileKey({
-						row : i,
-						col : j + 1
-					}) === nowTileKey && tileMap.getTileKey({
-						row : i,
-						col : j + 2
-					}) === nowTileKey) {
-						toRemoveTilePositions.push({
-							row : i,
-							col : j
-						});
-						toRemoveTilePositions.push({
-							row : i,
-							col : j + 1
-						});
-						toRemoveTilePositions.push({
-							row : i,
-							col : j + 2
-						});
-					}
-					
-					if (tileMap.getTileKey({
-						row : i + 1,
-						col : j
-					}) === nowTileKey && tileMap.getTileKey({
-						row : i + 2,
-						col : j
-					}) === nowTileKey) {
-						toRemoveTilePositions.push({
-							row : i,
-							col : j
-						});
-						toRemoveTilePositions.push({
-							row : i + 1,
-							col : j
-						});
-						toRemoveTilePositions.push({
-							row : i + 2,
-							col : j
-						});
-					}
-				});
-			});
-			
-			EACH(toRemoveTilePositions, (toRemoveTilePosition) => {
-				tileMap.removeTile({
-					row : toRemoveTilePosition.row,
-					col : toRemoveTilePosition.col
-				});
-			});
+		let checkEmpty = () => {
 			
 			let isFound;
 			
@@ -280,6 +219,111 @@ Match3.Game = CLASS({
 							min : 1,
 							max : 7
 						})
+					});
+				}
+			});
+			
+			return isFound;
+		};
+		
+		let checkMatch3 = () => {
+			
+			let toRemoveTilePositions = [];
+			
+			REPEAT(7, (i) => {
+				REPEAT(7, (j) => {
+					
+					let nowTileKey = tileMap.getTileKey({
+						row : i,
+						col : j
+					});
+					
+					if (nowTileKey !== undefined) {
+						
+						if (tileMap.getTileKey({
+							row : i,
+							col : j + 1
+						}) === nowTileKey && tileMap.getTileKey({
+							row : i,
+							col : j + 2
+						}) === nowTileKey) {
+							toRemoveTilePositions.push({
+								row : i,
+								col : j
+							});
+							toRemoveTilePositions.push({
+								row : i,
+								col : j + 1
+							});
+							toRemoveTilePositions.push({
+								row : i,
+								col : j + 2
+							});
+						}
+						
+						if (tileMap.getTileKey({
+							row : i + 1,
+							col : j
+						}) === nowTileKey && tileMap.getTileKey({
+							row : i + 2,
+							col : j
+						}) === nowTileKey) {
+							toRemoveTilePositions.push({
+								row : i,
+								col : j
+							});
+							toRemoveTilePositions.push({
+								row : i + 1,
+								col : j
+							});
+							toRemoveTilePositions.push({
+								row : i + 2,
+								col : j
+							});
+						}
+					}
+				});
+			});
+			
+			let isFound = false;
+			
+			EACH(toRemoveTilePositions, (toRemoveTilePosition) => {
+				
+				let nowTileKey = tileMap.getTileKey({
+					row : toRemoveTilePosition.row,
+					col : toRemoveTilePosition.col
+				});
+				
+				if (nowTileKey !== undefined) {
+					
+					isFound = true;
+					
+					SkyEngine.ParticleSystem({
+						x : toRemoveTilePosition.col * tileMap.getTileWidth(),
+						y : toRemoveTilePosition.row * tileMap.getTileHeight(),
+						particleFigure : 'circle',
+						particleWidth : 30,
+						particleHeight : 30,
+						particleAccelY : 200,
+						particleColor : 'red',
+						minParticleCount : 6,
+						maxParticleCount : 10,
+						minParticleLifetime : 0.1,
+						maxParticleLifetime : 0.5,
+						minParticleDirection : 0,
+						maxParticleDirection : 360,
+						minParticleSpeed : 50,
+						maxParticleSpeed : 500,
+						minParticleScale : 0.3,
+						maxParticleScale : 1,
+						particleScalingSpeed : -1
+					}).appendTo(tileMap).burst((particle) => {
+						particle.remove();
+					});
+					
+					tileMap.removeTile({
+						row : toRemoveTilePosition.row,
+						col : toRemoveTilePosition.col
 					});
 				}
 			});
@@ -402,7 +446,11 @@ Match3.Game = CLASS({
 				
 				let f = () => {
 					
-					if (checkMatch3() === true) {
+					if (checkEmpty() === true) {
+						DELAY(0.15, f);
+					}
+					
+					else if (checkMatch3() === true) {
 						DELAY(0.15, f);
 					}
 					
