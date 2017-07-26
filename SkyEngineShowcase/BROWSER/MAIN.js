@@ -23,6 +23,11 @@ SkyEngineShowcase.MAIN = METHOD({
 		});
 		
 		SkyEngineShowcase.MATCH_VIEW({
+			uri : 'test/dom',
+			target : SkyEngineShowcase.DomTest
+		});
+		
+		SkyEngineShowcase.MATCH_VIEW({
 			uri : 'test/moving',
 			target : SkyEngineShowcase.MovingTest
 		});

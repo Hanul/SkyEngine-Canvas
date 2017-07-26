@@ -66,6 +66,18 @@ SkyEngineShowcase.MainMenu = CLASS({
 						marginTop : 15
 					},
 					c : A({
+						c : 'DOM 테스트',
+						on : {
+							tap : () => {
+								SkyEngineShowcase.GO('test/dom');
+							}
+						}
+					})
+				}), LI({
+					style : {
+						marginTop : 15
+					},
+					c : A({
 						c : '움직임 테스트',
 						on : {
 							tap : () => {

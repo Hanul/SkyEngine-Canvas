@@ -61,6 +61,7 @@ SkyEngine.Node = CLASS({
 		//OPTIONAL: params.collider				충돌 영역. 하나의 영역을 지정하거나, 영역들의 배열을 지정할 수 있습니다.
 		//OPTIONAL: params.touchArea			터치 영역. 하나의 영역을 지정하거나, 영역들의 배열을 지정할 수 있습니다.
 		//OPTIONAL: params.c					자식 노드. 하나의 노드를 지정하거나, 노드들의 배열을 지정할 수 있습니다.
+		//OPTIONAL: params.dom
 		//OPTIONAL: params.on					이벤트
 
 		// properties
@@ -106,6 +107,8 @@ SkyEngine.Node = CLASS({
 		let isStuckRight;
 		let isStuckUp;
 		let isStuckDown;
+		
+		let domWrapper;
 
 		let genRealPosition = () => {
 
@@ -1421,6 +1424,21 @@ SkyEngine.Node = CLASS({
 			node.appendTo(self);
 		};
 		
+		let addDom = self.addDom = (dom) => {
+			//REQUIRED: dom
+			
+			if (domWrapper === undefined) {
+				
+				domWrapper = DIV({
+					style : {
+						position : 'fixed'
+					}
+				}).appendTo(BODY);
+			}
+			
+			domWrapper.append(dom);
+		};
+		
 		let empty = self.empty = () => {
 			
 			childNodes.forEach((childNode) => {
@@ -1467,6 +1485,10 @@ SkyEngine.Node = CLASS({
 			collidingNodeIds = undefined;
 			meetHandlerMap = undefined;
 			partHandlerMap = undefined;
+			
+			if (domWrapper !== undefined) {
+				domWrapper.remove();
+			}
 
 			isRemoved = true;
 		};
@@ -1966,6 +1988,17 @@ SkyEngine.Node = CLASS({
 
 		let draw = self.draw = (context) => {
 			// to implement.
+			
+			if (domWrapper !== undefined) {
+				
+				domWrapper.addStyle({
+					left : SkyEngine.Screen.getWidth() / 2 + drawingX - domWrapper.getWidth() / 2,
+					top : SkyEngine.Screen.getHeight() / 2 + drawingY - domWrapper.getHeight() / 2,
+					transform : 'rotate(' + realRadian + 'rad) scale(' + realScaleX + ', ' + realScaleY + ')',
+					opacity : context.globalAlpha,
+					filter : context.filter
+				});
+			}
 		};
 
 		let drawArea = self.drawArea = (context) => {
@@ -2105,6 +2138,16 @@ SkyEngine.Node = CLASS({
 					});
 				} else {
 					self.append(params.c);
+				}
+			}
+
+			if (params.dom !== undefined) {
+				if (CHECK_IS_ARRAY(params.dom) === true) {
+					EACH(params.dom, (childNode) => {
+						self.addDom(childNode);
+					});
+				} else {
+					self.addDom(params.dom);
 				}
 			}
 
