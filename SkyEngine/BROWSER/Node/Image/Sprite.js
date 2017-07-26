@@ -194,7 +194,7 @@ SkyEngine.Sprite = CLASS({
 				if (isStopped !== true) {
 					
 					if (fps > 0) {
-						realFrame += fps * deltaTime / 1000;
+						realFrame += fps * deltaTime;
 					}
 					
 					if (frameCount !== undefined) {

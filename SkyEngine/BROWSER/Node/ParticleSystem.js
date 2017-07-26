@@ -380,7 +380,7 @@ SkyEngine.ParticleSystem = CLASS(() => {
 					
 					particleInfos.forEach((particleInfo, i) => {
 						
-						particleInfo.time += deltaTime / 1000;
+						particleInfo.time += deltaTime;
 						
 						if (particleInfo.time > particleInfo.lifetime) {
 							particleInfos.splice(i, 1);
@@ -392,21 +392,21 @@ SkyEngine.ParticleSystem = CLASS(() => {
 						
 						else {
 							
-							particleInfo.speedX += particleAccelX * deltaTime / 1000;
-							particleInfo.speedY += particleAccelY * deltaTime / 1000;
+							particleInfo.speedX += particleAccelX * deltaTime;
+							particleInfo.speedY += particleAccelY * deltaTime;
 							
-							particleInfo.x += particleInfo.speedX * deltaTime / 1000;
-							particleInfo.y += particleInfo.speedY * deltaTime / 1000;
+							particleInfo.x += particleInfo.speedX * deltaTime;
+							particleInfo.y += particleInfo.speedY * deltaTime;
 							
-							particleInfo.scale += particleScalingSpeed * deltaTime / 1000;
+							particleInfo.scale += particleScalingSpeed * deltaTime;
 							
 							if (particleInfo.scale < 0) {
 								particleInfo.scale = 0;
 							}
 							
-							particleInfo.radian += particleRotationSpeedRadian * deltaTime / 1000;
+							particleInfo.radian += particleRotationSpeedRadian * deltaTime;
 							
-							particleInfo.alpha += particleFadingSpeed * deltaTime / 1000;
+							particleInfo.alpha += particleFadingSpeed * deltaTime;
 							
 							if (particleInfo.alpha < 0) {
 								particleInfo.alpha = 0;

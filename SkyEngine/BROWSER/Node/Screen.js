@@ -111,7 +111,7 @@ SkyEngine.Screen = OBJECT({
 				
 				if (deltaTime !== undefined) {
 					fpsDom.empty();
-					fpsDom.append('FPS: ' + parseInt(1 / deltaTime * 1000));
+					fpsDom.append('FPS: ' + parseInt(1 / deltaTime));
 				}
 			});
 		}

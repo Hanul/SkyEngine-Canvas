@@ -1752,7 +1752,7 @@ SkyEngine.Node = CLASS({
 			beforeY = y;
 
 			if (accelX !== 0) {
-				speedX += accelX * deltaTime / 1000;
+				speedX += accelX * deltaTime;
 			}
 
 			if (minSpeedX !== undefined && speedX < minSpeedX) {
@@ -1764,7 +1764,7 @@ SkyEngine.Node = CLASS({
 			}
 
 			if (accelY !== 0) {
-				speedY += accelY * deltaTime / 1000;
+				speedY += accelY * deltaTime;
 			}
 
 			if (minSpeedY !== undefined && speedY < minSpeedY) {
@@ -1777,7 +1777,7 @@ SkyEngine.Node = CLASS({
 
 			if (speedX !== 0) {
 
-				let dx = speedX * deltaTime / 1000;
+				let dx = speedX * deltaTime;
 
 				if ((dx < 0 && isStuckLeft !== true) || (dx > 0 && isStuckRight !== true)) {
 
@@ -1795,7 +1795,7 @@ SkyEngine.Node = CLASS({
 
 			if (speedY !== 0) {
 
-				let dy = speedY * deltaTime / 1000;
+				let dy = speedY * deltaTime;
 
 				if ((dy < 0 && isStuckUp !== true) || (dy > 0 && isStuckDown !== true)) {
 
@@ -1812,7 +1812,7 @@ SkyEngine.Node = CLASS({
 			}
 
 			if (scalingAccelX !== 0) {
-				scalingSpeedX += scalingAccelX * deltaTime / 1000;
+				scalingSpeedX += scalingAccelX * deltaTime;
 			}
 
 			if (minScalingSpeedX !== undefined && scalingSpeedX < minScalingSpeedX) {
@@ -1824,7 +1824,7 @@ SkyEngine.Node = CLASS({
 			}
 
 			if (scalingAccelY !== 0) {
-				scalingSpeedY += scalingAccelY * deltaTime / 1000;
+				scalingSpeedY += scalingAccelY * deltaTime;
 			}
 
 			if (minScalingSpeedY !== undefined && scalingSpeedY < minScalingSpeedY) {
@@ -1836,7 +1836,7 @@ SkyEngine.Node = CLASS({
 			}
 
 			if (scalingSpeedX !== 0) {
-				scaleX += scalingSpeedX * deltaTime / 1000;
+				scaleX += scalingSpeedX * deltaTime;
 
 				if (toScaleX !== undefined) {
 
@@ -1848,7 +1848,7 @@ SkyEngine.Node = CLASS({
 			}
 
 			if (scalingSpeedY !== 0) {
-				scaleY += scalingSpeedY * deltaTime / 1000;
+				scaleY += scalingSpeedY * deltaTime;
 
 				if (toScaleY !== undefined) {
 
@@ -1860,7 +1860,7 @@ SkyEngine.Node = CLASS({
 			}
 
 			if (rotationAccel !== 0) {
-				rotationSpeed += rotationAccel * deltaTime / 1000;
+				rotationSpeed += rotationAccel * deltaTime;
 			}
 
 			if (minRotationSpeed !== undefined && rotationSpeed < minRotationSpeed) {
@@ -1872,7 +1872,7 @@ SkyEngine.Node = CLASS({
 			}
 
 			if (rotationSpeed !== 0) {
-				angle += rotationSpeed * deltaTime / 1000;
+				angle += rotationSpeed * deltaTime;
 
 				if (toAngle !== undefined) {
 
@@ -1890,7 +1890,7 @@ SkyEngine.Node = CLASS({
 			}
 
 			if (fadingAccel !== 0) {
-				fadingSpeed += fadingAccel * deltaTime / 1000;
+				fadingSpeed += fadingAccel * deltaTime;
 			}
 
 			if (minFadingSpeed !== undefined && fadingSpeed < minFadingSpeed) {
@@ -1902,7 +1902,7 @@ SkyEngine.Node = CLASS({
 			}
 
 			if (fadingSpeed !== 0) {
-				alpha += fadingSpeed * deltaTime / 1000;
+				alpha += fadingSpeed * deltaTime;
 
 				if (toAlpha !== undefined) {
 
