@@ -8,7 +8,7 @@ SkyEngineShowcase.ParticleTest2 = CLASS({
 		
 		let touchEvent = EVENT('touchstart', (e) => {
 			
-			SkyEngine.ParticleSystem({
+			SkyEngine.ParticleSystemOnce({
 				x : e.getLeft() - SkyEngine.Screen.getWidth() / 2,
 				y : e.getTop() - SkyEngine.Screen.getHeight() / 2,
 				particleFigure : 'circle',
@@ -33,9 +33,7 @@ SkyEngineShowcase.ParticleTest2 = CLASS({
 				maxParticleScale : 1,
 				particleFadingSpeed : -1,
 				blendMode : 'lighter'
-			}).appendTo(SkyEngine.Screen).burst((particle) => {
-				particle.remove();
-			});
+			}).appendTo(SkyEngine.Screen);
 			
 			e.stop();
 		});
