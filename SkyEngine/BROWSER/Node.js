@@ -61,6 +61,7 @@ SkyEngine.Node = CLASS({
 		//OPTIONAL: params.collider				충돌 영역. 하나의 영역을 지정하거나, 영역들의 배열을 지정할 수 있습니다.
 		//OPTIONAL: params.touchArea			터치 영역. 하나의 영역을 지정하거나, 영역들의 배열을 지정할 수 있습니다.
 		//OPTIONAL: params.c					자식 노드. 하나의 노드를 지정하거나, 노드들의 배열을 지정할 수 있습니다.
+		//OPTIONAL: params.domStyle
 		//OPTIONAL: params.dom
 		//OPTIONAL: params.on					이벤트
 
@@ -1424,21 +1425,6 @@ SkyEngine.Node = CLASS({
 			node.appendTo(self);
 		};
 		
-		let addDom = self.addDom = (dom) => {
-			//REQUIRED: dom
-			
-			if (domWrapper === undefined) {
-				
-				domWrapper = DIV({
-					style : {
-						position : 'fixed'
-					}
-				}).appendTo(BODY);
-			}
-			
-			domWrapper.append(dom);
-		};
-		
 		let empty = self.empty = () => {
 			
 			childNodes.forEach((childNode) => {
@@ -1495,6 +1481,35 @@ SkyEngine.Node = CLASS({
 
 		let checkIsRemoved = self.checkIsRemoved = () => {
 			return isRemoved;
+		};
+		
+		let addDom = self.addDom = (dom) => {
+			//REQUIRED: dom
+			
+			if (domWrapper === undefined) {
+				
+				domWrapper = DIV({
+					style : {
+						position : 'fixed'
+					}
+				}).appendTo(BODY);
+			}
+			
+			domWrapper.append(dom);
+		};
+		
+		let addDomStyle = self.addDomStyle = (domStyle) => {
+			
+			if (domWrapper !== undefined) {
+				domWrapper.addStyle(domStyle);
+			}
+		};
+		
+		let removeAllDoms = self.removeAllDoms = () => {
+			
+			if (domWrapper !== undefined) {
+				domWrapper.empty();
+			}
 		};
 
 		let on = self.on = (eventName, eventHandler) => {
@@ -2149,6 +2164,10 @@ SkyEngine.Node = CLASS({
 				} else {
 					self.addDom(params.dom);
 				}
+			}
+			
+			if (params.domStyle !== undefined) {
+				self.addDomStyle(params.domStyle);
 			}
 
 			if (params.on !== undefined) {

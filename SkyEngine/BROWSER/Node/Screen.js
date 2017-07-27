@@ -243,6 +243,7 @@ SkyEngine.Screen = OBJECT({
 			context.clearRect(0, 0, width, height);
 			
 			context.save();
+			context.scale(devicePixelRatio, devicePixelRatio);
 			context.translate(width / 2 - getFollowX(), height / 2 - getFollowY());
 			
 			drawAll(self, context, self.getAlpha());
@@ -256,9 +257,14 @@ SkyEngine.Screen = OBJECT({
 			width = WIN_WIDTH();
 			height = WIN_HEIGHT();
 			
-			canvas.setSize({
+			canvas.addStyle({
 				width : width,
 				height : height
+			});
+			
+			canvas.setSize({
+				width : width * devicePixelRatio,
+				height : height * devicePixelRatio
 			});
 		}));
 		
