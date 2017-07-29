@@ -8,7 +8,7 @@ SkyEngine.Node = CLASS({
 
 		//OPTIONAL: params.x					x 좌표
 		//OPTIONAL: params.y					y 좌표
-		//OPTIONAL: params.z					노드의 드로우 순서를 결정하기 위한 z 인덱스
+		//OPTIONAL: params.zIndex				노드의 드로우 순서를 결정하기 위한 z 인덱스
 		//OPTIONAL: params.centerX				중점의 x 좌표
 		//OPTIONAL: params.centerY				중점의 y 좌표
 		//OPTIONAL: params.speedX				x 좌표 이동 속도
@@ -66,7 +66,7 @@ SkyEngine.Node = CLASS({
 		//OPTIONAL: params.on					이벤트
 
 		// properties
-		let x, y, z, centerX, centerY, scaleX, scaleY, angle, alpha;
+		let x, y, zIndex, centerX, centerY, scaleX, scaleY, angle, alpha;
 		let speedX, speedY, scalingSpeedX, scalingSpeedY, rotationSpeed, fadingSpeed;
 		let accelX, accelY, scalingAccelX, scalingAccelY, rotationAccel, fadingAccel;
 
@@ -156,26 +156,26 @@ SkyEngine.Node = CLASS({
 			return y;
 		};
 
-		let setZ = self.setZ = (_z) => {
-			//REQUIRED: z
+		let setZIndex = self.setZIndex = (_zIndex) => {
+			//REQUIRED: _zIndex
 
 			if (parentNode !== undefined) {
 				removeFromParent();
-				z = _z;
+				zIndex = _zIndex;
 				appendToParent();
 			}
 		};
 
-		let getZ = self.getZ = () => {
-			return z;
+		let getZIndex = self.getZIndex = () => {
+			return zIndex;
 		};
 
-		// x, y, z를 한번에 지정합니다.
+		// x, y, zIndex를 한번에 지정합니다.
 		let setPosition = self.setPosition = (position) => {
 			//REQUIRED: position
 			//OPTIONAL: position.x
 			//OPTIONAL: position.y
-			//OPTIONAL: position.z
+			//OPTIONAL: position.zIndex
 
 			if (position.x !== undefined) {
 				x = position.x;
@@ -188,8 +188,8 @@ SkyEngine.Node = CLASS({
 				genRealPosition();
 			}
 
-			if (position.z !== undefined) {
-				setZ(position.x);
+			if (position.zIndex !== undefined) {
+				setZIndex(position.zIndex);
 			}
 		};
 
@@ -680,7 +680,7 @@ SkyEngine.Node = CLASS({
 			y = params.y;
 			centerX = params.centerX;
 			centerY = params.centerY;
-			z = params.z;
+			zIndex = params.zIndex;
 			if (params.scale !== undefined) {
 				setScale(params.scale);
 			}
@@ -784,8 +784,8 @@ SkyEngine.Node = CLASS({
 		if (centerY === undefined) {
 			centerY = 0;
 		}
-		if (z === undefined) {
-			z = 0;
+		if (zIndex === undefined) {
+			zIndex = 0;
 		}
 		if (speedX === undefined) {
 			speedX = 0;
@@ -1348,7 +1348,7 @@ SkyEngine.Node = CLASS({
 				// >>> 1은 2로 나누고 나머지를 버리는 것과 동일
 				let mid = (low + high) >>> 1;
 
-				if (parentChildren[mid].getZ() <= z) {
+				if (parentChildren[mid].getZIndex() <= zIndex) {
 					low = mid + 1;
 				} else {
 					high = mid;
@@ -1373,9 +1373,9 @@ SkyEngine.Node = CLASS({
 
 				let node = parentChildren[index];
 
-				if (node.getZ() < z) {
+				if (node.getZIndex() < zIndex) {
 					minIndex = index + 1;
-				} else if (node.getZ() > z) {
+				} else if (node.getZIndex() > zIndex) {
 					maxIndex = index - 1;
 				} else {
 
@@ -1392,8 +1392,8 @@ SkyEngine.Node = CLASS({
 						}
 
 						if (
-							parentChildren[index - level].getZ() !== z &&
-							parentChildren[index + level].getZ() !== z) {
+							parentChildren[index - level].getZIndex() !== zIndex &&
+							parentChildren[index + level].getZIndex() !== zIndex) {
 							break;
 						}
 
@@ -1448,6 +1448,9 @@ SkyEngine.Node = CLASS({
 			if (SkyEngine.Screen !== self) {
 				SkyEngine.Screen.unregisterNode(self);
 			}
+			
+			// fire remove event.
+			fireEvent('remove');
 
 			// 모든 이벤트 제거
 			EACH(eventMap, (events, eventName) => {
@@ -2025,48 +2028,48 @@ SkyEngine.Node = CLASS({
 			//OPTIONAL: appendParams.exceptChildNodes
 
 			let newParams = {
-				x: x,
-				y: y,
-				centerX: centerX,
-				centerY: centerY,
-				z: z,
-				speedX: speedX,
-				speedY: speedY,
-				accelX: accelX,
-				accelY: accelY,
-				minSpeedX: minSpeedX,
-				minSpeedY: minSpeedY,
-				maxSpeedX: maxSpeedX,
-				maxSpeedY: maxSpeedY,
-				toX: toX,
-				toY: toY,
+				x : x,
+				y : y,
+				centerX : centerX,
+				centerY : centerY,
+				zIndex : zIndex,
+				speedX : speedX,
+				speedY : speedY,
+				accelX : accelX,
+				accelY : accelY,
+				minSpeedX : minSpeedX,
+				minSpeedY : minSpeedY,
+				maxSpeedX : maxSpeedX,
+				maxSpeedY : maxSpeedY,
+				toX : toX,
+				toY : toY,
 
-				scaleX: scaleX,
-				scaleY: scaleY,
-				scalingSpeedX: scalingSpeedX,
-				scalingSpeedY: scalingSpeedY,
-				scalingAccelX: scalingAccelX,
-				scalingAccelY: scalingAccelY,
-				minScalingSpeedX: minScalingSpeedX,
-				minScalingSpeedY: minScalingSpeedY,
-				maxScalingSpeedX: maxScalingSpeedX,
-				maxScalingSpeedY: maxScalingSpeedY,
-				toScaleX: toScaleX,
-				toScaleY: toScaleY,
+				scaleX : scaleX,
+				scaleY : scaleY,
+				scalingSpeedX : scalingSpeedX,
+				scalingSpeedY : scalingSpeedY,
+				scalingAccelX : scalingAccelX,
+				scalingAccelY : scalingAccelY,
+				minScalingSpeedX : minScalingSpeedX,
+				minScalingSpeedY : minScalingSpeedY,
+				maxScalingSpeedX : maxScalingSpeedX,
+				maxScalingSpeedY : maxScalingSpeedY,
+				toScaleX : toScaleX,
+				toScaleY : toScaleY,
 
-				angle: angle,
-				rotationSpeed: rotationSpeed,
-				rotationAccel: rotationAccel,
-				minRotationSpeed: minRotationSpeed,
-				maxRotationSpeed: maxRotationSpeed,
-				toAngle: toAngle,
+				angle : angle,
+				rotationSpeed : rotationSpeed,
+				rotationAccel : rotationAccel,
+				minRotationSpeed : minRotationSpeed,
+				maxRotationSpeed : maxRotationSpeed,
+				toAngle : toAngle,
 
-				alpha: alpha,
-				fadingSpeed: fadingSpeed,
-				fadingAccel: fadingAccel,
-				minFadingSpeed: minFadingSpeed,
-				maxFadingSpeed: maxFadingSpeed,
-				toAlpha: toAlpha
+				alpha : alpha,
+				fadingSpeed : fadingSpeed,
+				fadingAccel : fadingAccel,
+				minFadingSpeed : minFadingSpeed,
+				maxFadingSpeed : maxFadingSpeed,
+				toAlpha : toAlpha
 			};
 
 			let exceptChildNodes;
@@ -2079,8 +2082,8 @@ SkyEngine.Node = CLASS({
 				}
 
 				EXTEND({
-					origin: newParams,
-					extend: appendParams
+					origin : newParams,
+					extend : appendParams
 				});
 			}
 

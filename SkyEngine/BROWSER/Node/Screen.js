@@ -236,6 +236,10 @@ SkyEngine.Screen = OBJECT({
 			
 			deltaTime = _deltaTime;
 			
+			if (deltaTime > 0.03) {
+				deltaTime = 0.03;
+			}
+			
 			// 모든 노드의 step을 실행합니다.
 			self.step(deltaTime);
 			
