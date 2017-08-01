@@ -13,7 +13,8 @@ SkyEngine.Screen = OBJECT({
 			style : {
 				position : 'fixed',
 				left : 0,
-				top : 0
+				top : 0,
+				zIndex : -1
 			}
 		}).appendTo(BODY);
 		
@@ -103,7 +104,8 @@ SkyEngine.Screen = OBJECT({
 					position : 'fixed',
 					left : 5,
 					top : 5,
-					fontSize : 12
+					fontSize : 12,
+					zIndex : -1
 				}
 			}).appendTo(BODY);
 			
