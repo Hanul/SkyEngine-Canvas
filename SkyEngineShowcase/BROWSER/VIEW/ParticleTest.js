@@ -38,8 +38,8 @@ SkyEngineShowcase.ParticleTest = CLASS({
 			maxParticleSpeed : 700,
 			minParticleScale : 0.3,
 			maxParticleScale : 0.7,
-			minParticleDirection : 30,
-			maxParticleDirection : 30
+			minParticleDirection : 75,
+			maxParticleDirection : 75
 		}).appendTo(SkyEngine.Screen);
 		
 		let moveRainEvent = EVENT('resize', RAR(() => {

@@ -83,6 +83,10 @@ SkyEngine.Node = CLASS({
 
 		// before properties
 		let beforeX, beforeY;
+		
+		let moveEndHandler;
+		let rotateEndHandler;
+		let fadeEndHandler;
 
 		let parentNode, targetNode;
 		let childNodes = [];
@@ -1016,13 +1020,14 @@ SkyEngine.Node = CLASS({
 			}
 		};
 
-		let moveTo = self.moveTo = (params) => {
+		let moveTo = self.moveTo = (params, _moveEndHandler) => {
 			//REQUIRED: params
 			//OPTIONAL: params.x
 			//OPTIONAL: params.y
 			//OPTIONAL: params.speed
 			//OPTIONAL: params.accel
 			//OPTIONAL: params.maxSpeed
+			//OPTIONAL: moveEndHandler
 
 			if (params.y === undefined) {
 				toX = params.x;
@@ -1054,6 +1059,8 @@ SkyEngine.Node = CLASS({
 					maxSpeedY = params.maxSpeed * dy / length;
 				}
 			}
+			
+			moveEndHandler = _moveEndHandler;
 		};
 
 		let stuckLeft = self.stuckLeft = () => {
@@ -1132,13 +1139,14 @@ SkyEngine.Node = CLASS({
 			}
 		};
 
-		let rotateTo = self.rotateTo = (params) => {
+		let rotateTo = self.rotateTo = (params, _rotateEndHandler) => {
 			//REQUIRED: params
 			//REQUIRED: params.toAngle
 			//OPTIONAL: params.speed
 			//OPTIONAL: params.accel
 			//OPTIONAL: params.minSpeed
 			//OPTIONAL: params.maxSpeed
+			//OPTIONAL: rotateEndHandler
 
 			toAngle = params.toAngle;
 
@@ -1157,6 +1165,8 @@ SkyEngine.Node = CLASS({
 			if (params.maxSpeed !== undefined) {
 				maxRotationSpeed = params.maxSpeed;
 			}
+			
+			rotateEndHandler = _rotateEndHandler;
 		};
 
 		let flipX = self.flipX = () => {
@@ -1167,24 +1177,19 @@ SkyEngine.Node = CLASS({
 			scaleY = -scaleY;
 		};
 
-		let fadeIn = self.fadeIn = (speedOrParams, fadeEndHandler) => {
+		let fadeIn = self.fadeIn = (speedOrParams, _fadeEndHandler) => {
 			//REQUIRED: speedOrParams
 			//OPTIONAL: speedOrParams.speed
 			//OPTIONAL: speedOrParams.accel
 			//OPTIONAL: speedOrParams.maxSpeed
 			//OPTIONAL: fadeEndHandler
+			
+			toAlpha = 1;
 
 			if (CHECK_IS_DATA(speedOrParams) === true) {
 
 				if (speedOrParams.speed !== undefined) {
 					fadingSpeed = speedOrParams.speed;
-					
-					if (fadeEndHandler !== undefined) {
-						
-						DELAY(1 / Math.abs(fadingSpeed), () => {
-							fadeEndHandler(self);
-						});
-					}
 				}
 
 				if (speedOrParams.accel !== undefined) {
@@ -1196,22 +1201,19 @@ SkyEngine.Node = CLASS({
 				}
 			} else {
 				fadingSpeed = speedOrParams;
-				
-				if (fadeEndHandler !== undefined) {
-					
-					DELAY(1 / Math.abs(fadingSpeed), () => {
-						fadeEndHandler(self);
-					});
-				}
 			}
+			
+			fadeEndHandler = _fadeEndHandler;
 		};
 
-		let fadeOut = self.fadeOut = (speedOrParams, fadeEndHandler) => {
+		let fadeOut = self.fadeOut = (speedOrParams, _fadeEndHandler) => {
 			//REQUIRED: speedOrParams
 			//OPTIONAL: speedOrParams.speed
 			//OPTIONAL: speedOrParams.accel
 			//OPTIONAL: speedOrParams.maxSpeed
 			//OPTIONAL: fadeEndHandler
+			
+			toAlpha = 0;
 
 			if (CHECK_IS_DATA(speedOrParams) === true) {
 
@@ -1243,6 +1245,8 @@ SkyEngine.Node = CLASS({
 					});
 				}
 			}
+			
+			fadeEndHandler = _fadeEndHandler;
 		};
 
 		let stopFading = self.stopFading = (accel) => {
@@ -1260,13 +1264,14 @@ SkyEngine.Node = CLASS({
 			}
 		};
 
-		let fadeTo = self.fadeTo = (params) => {
+		let fadeTo = self.fadeTo = (params, _fadeEndHandler) => {
 			//REQUIRED: params
 			//REQUIRED: params.toAlpha
 			//OPTIONAL: params.speed
 			//OPTIONAL: params.accel
 			//OPTIONAL: params.minSpeed
 			//OPTIONAL: params.maxSpeed
+			//OPTIONAL: fadeEndHandler
 
 			toAlpha = params.toAlpha;
 
@@ -1285,6 +1290,8 @@ SkyEngine.Node = CLASS({
 			if (params.maxSpeed !== undefined) {
 				maxFadingSpeed = params.maxSpeed;
 			}
+			
+			fadeEndHandler = _fadeEndHandler;
 		};
 
 		let hide = self.hide = () => {
@@ -1501,6 +1508,20 @@ SkyEngine.Node = CLASS({
 			domWrapper.append(dom);
 		};
 		
+		let getDomWrapper = self.getDomWrapper = () => {
+			
+			if (domWrapper === undefined) {
+				
+				domWrapper = DIV({
+					style : {
+						position : 'fixed'
+					}
+				}).appendTo(BODY);
+			}
+			
+			return domWrapper;
+		};
+		
 		let addDomStyle = self.addDomStyle = (domStyle) => {
 			
 			if (domWrapper !== undefined) {
@@ -1683,7 +1704,7 @@ SkyEngine.Node = CLASS({
 
 		let checkTouch = self.checkTouch = (touchX, touchY) => {
 
-			if (self.checkIsHiding() === true) {
+			if (isRemoved === true || self.checkIsHiding() === true) {
 				return false;
 			}
 
@@ -1700,14 +1721,18 @@ SkyEngine.Node = CLASS({
 
 			if (isRemoved === true || self.checkIsHiding() === true) {
 				return false;
-			} else if (target.type === CLASS) {
+			}
+			
+			else if (target.type === CLASS) {
 
 				return SkyEngine.Screen.getRegisteredNodes(target).every((realTarget) => {
 					if (realTarget !== self) {
 						return self.checkCollision(realTarget) !== true;
 					}
 				}) !== true;
-			} else {
+			}
+			
+			else {
 
 				if (target.checkIsHiding() === true) {
 					return false;
@@ -1828,6 +1853,11 @@ SkyEngine.Node = CLASS({
 						if ((speedX > 0 && x > toX) || (speedX < 0 && x < toX)) {
 							x = toX;
 							speedX = 0;
+							
+							if (moveEndHandler !== undefined && speedY === 0) {
+								moveEndHandler();
+								moveEndHandler = undefined;
+							}
 						}
 					}
 				}
@@ -1846,6 +1876,11 @@ SkyEngine.Node = CLASS({
 						if ((speedY > 0 && y > toY) || (speedY < 0 && y < toY)) {
 							y = toY;
 							speedY = 0;
+							
+							if (moveEndHandler !== undefined && speedX === 0) {
+								moveEndHandler();
+								moveEndHandler = undefined;
+							}
 						}
 					}
 				}
@@ -1919,6 +1954,11 @@ SkyEngine.Node = CLASS({
 					if ((rotationSpeed > 0 && angle >= toAngle) || (rotationSpeed < 0 && angle <= toAngle)) {
 						angle = toAngle;
 						rotationSpeed = 0;
+						
+						if (rotateEndHandler !== undefined) {
+							rotateEndHandler();
+							rotateEndHandler = undefined;
+						}
 					}
 				}
 
@@ -1949,6 +1989,11 @@ SkyEngine.Node = CLASS({
 					if ((fadingSpeed > 0 && alpha > toAlpha) || (fadingSpeed < 0 && alpha < toAlpha)) {
 						alpha = toAlpha;
 						fadingSpeed = 0;
+						
+						if (fadeEndHandler !== undefined) {
+							fadeEndHandler();
+							fadeEndHandler = undefined;
+						}
 					}
 				}
 

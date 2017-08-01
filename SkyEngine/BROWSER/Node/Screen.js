@@ -194,15 +194,18 @@ SkyEngine.Screen = OBJECT({
 				
 				context.restore();
 				
-				// 모든 자식 노드를 그립니다.
-				node.getChildren().forEach((childNode) => {
-					drawAll(childNode, context, realAlpha);
-				});
+				if (node.checkIsRemoved() !== true) {
+					
+					// 모든 자식 노드를 그립니다.
+					node.getChildren().forEach((childNode) => {
+						drawAll(childNode, context, realAlpha);
+					});
+				}
 				
 				context.restore();
 				
 				// 개발 모드에서는 중점 및 영역 표시
-				if (CONFIG.SkyEngine.isDebugMode === true) {
+				if (node.checkIsRemoved() !== true && CONFIG.SkyEngine.isDebugMode === true) {
 					
 					// 중점을 그립니다.
 					context.beginPath();

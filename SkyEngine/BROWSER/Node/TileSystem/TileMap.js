@@ -151,7 +151,7 @@ SkyEngine.TileMap = CLASS({
 			}
 		};
 		
-		let moveTile = self.moveTile = (params) => {
+		let moveTile = self.moveTile = (params, endHandler) => {
 			//REQUIRED: params
 			//REQUIRED: params.fromRow
 			//REQUIRED: params.fromCol
@@ -159,6 +159,7 @@ SkyEngine.TileMap = CLASS({
 			//REQUIRED: params.toCol
 			//OPTIONAL: params.speed
 			//OPTIONAL: params.accel
+			//OPTIONAL: endHandler
 			
 			let fromRow = params.fromRow;
 			let fromCol = params.fromCol;
@@ -212,12 +213,16 @@ SkyEngine.TileMap = CLASS({
 			if (fromTileNode !== undefined) {
 				
 				if (speed !== undefined || accel !== undefined) {
+					
 					fromTileNode.moveTo({
 						x : toCol * tileWidth,
 						y : toRow * tileHeight,
 						speed : speed,
 						accel : accel
-					});
+					}, endHandler);
+					
+					endHandler = undefined;
+					
 				} else {
 					fromTileNode.setPosition({
 						x : toCol * tileWidth,
@@ -239,12 +244,16 @@ SkyEngine.TileMap = CLASS({
 			} else {
 				
 				if (speed !== undefined || accel !== undefined) {
+					
 					toTileNode.moveTo({
 						x : fromCol * tileWidth,
 						y : fromRow * tileHeight,
 						speed : speed,
 						accel : accel
-					});
+					}, endHandler);
+					
+					endHandler = undefined;
+					
 				} else {
 					toTileNode.setPosition({
 						x : fromCol * tileWidth,
