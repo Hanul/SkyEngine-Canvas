@@ -19,7 +19,11 @@ SkyEngine은 기본적으로 스프라이트 기반 2D 게임 개발에 적합�
 - [Spine 모듈](https://github.com/Hanul/SkyEngineSpine)
 
 ## 설치하기
-프로젝트의 `DEPENDENCY` 파일에 `Hanul/SkyEngine`를 추가합니다.
+SkyEngine은 UPPERCASE 모듈이기 때문에, 먼저 UPPERCASE가 설치되어 있어야 합니다.
+
+1. [UPPERCASE 설치하기 문서](https://github.com/Hanul/UPPERCASE/blob/master/DOC/INSTALL.md)를 참고하여 UPPERCASE를 설치합니다.
+2. [프로젝트 생성하기 문서](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/CREATE_PROJECT.md)를 참고하여 프로젝트를 생성합니다.
+3. 프로젝트의 `DEPENDENCY` 파일에 `Hanul/SkyEngine`를 추가합니다.
 
 ## 구성 요소
 SkyEngine은 다음과 같은 것들로 구성되어 있습니다.
