@@ -3,7 +3,7 @@
 # 도형
 도형 노드들을 사용하여 직선, 사각형, 원, 다각형을 생성할 수 있습니다. 이 중 사각형, 원, 다각형 노드는 터치 영역 및 충돌 영역으로도 사용될 수 있습니다.
 
-# ![도형들](https://raw.githubusercontent.com/Hanul/SkyEngine/master/DOC/images/figures.png)
+![도형들](https://raw.githubusercontent.com/Hanul/SkyEngine/master/DOC/images/figures.png)
 
 ## 공통 설정 파라미터
 모든 도형 노드들에서 공통으로 설정할 수 있는 파라미터 목록은 다음과 같습니다.
