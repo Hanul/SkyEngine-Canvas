@@ -13,11 +13,9 @@ SkyEngine.Node({
 }).appendTo(SkyEngine.Screen);
 ```
 
-SkyEngine의 모든 구성요소는 노드입니다. 즉 SkyEngine을 기반으로 한 게임은 노드들의 집합이라 할 수 있습니다.
+SkyEngine의 모든 구성요소는 노드입니다. 즉 SkyEngine을 기반으로 한 게임은 노드들의 집합이라 할 수 있습니다. 따라서 SkyEngine의 모든 구성요소는 `SkyEngine.Node`를 상속합니다.
 
-개발의 관점에서 살펴보면, SkyEngine의 모든 노드 클래스는 `SkyEngine.Node`를 상속합니다.
-
-`SkyEngine.Node`에는 노드의 움직임, 크기조절, 회전, 페이드 인/아웃 등 각종 기능이 포함되어 있습니다.
+`SkyEngine.Node`에는 움직임, 크기조절, 회전, 페이드 인/아웃 등 각종 기능들이 포함되어 있습니다.
 
 ## 목차
 - [파라미터](#파라미터)
@@ -296,6 +294,7 @@ circle.setPosition({
 - `'offscreen'` 노드가 화면을 벗어날 때
 - `'nextstep'` 다음 프레임으로 넘어갈 때
 - `'move'` 노드가 움직일 때
+- `'remove'` 
 
 ### `onMeet`
 

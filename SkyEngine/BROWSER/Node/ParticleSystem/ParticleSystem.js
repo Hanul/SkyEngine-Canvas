@@ -360,6 +360,10 @@ SkyEngine.ParticleSystem = CLASS(() => {
 				img.src = particleSrc;
 			}
 			
+			else {
+				self.fireEvent('load');
+			}
+			
 			let particleInfos = [];
 			
 			let endHandler;

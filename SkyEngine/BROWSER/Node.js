@@ -1460,9 +1460,6 @@ SkyEngine.Node = CLASS({
 			fireEvent('remove');
 
 			// 모든 이벤트 제거
-			EACH(eventMap, (events, eventName) => {
-				SkyEngine.Screen.unregisterEventNode(eventName, self);
-			});
 			eventMap = undefined;
 
 			// 모든 터치 영역 제거
@@ -1540,11 +1537,13 @@ SkyEngine.Node = CLASS({
 
 			if (eventMap[eventName] === undefined) {
 				eventMap[eventName] = [];
-
-				SkyEngine.Screen.registerEventNode(eventName, self);
 			}
 
 			eventMap[eventName].push(eventHandler);
+		};
+		
+		let checkIsEventExists = self.checkIsEventExists = (eventName) => {
+			return eventMap[eventName] !== undefined;
 		};
 
 		let off = self.off = (eventName, eventHandler) => {
@@ -1561,8 +1560,6 @@ SkyEngine.Node = CLASS({
 
 				if (eventHandler === undefined || eventMap[eventName].length === 0) {
 					delete eventMap[eventName];
-
-					SkyEngine.Screen.unregisterEventNode(eventName, self);
 				}
 			}
 		};

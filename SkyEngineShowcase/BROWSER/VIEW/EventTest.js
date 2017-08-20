@@ -43,7 +43,7 @@ SkyEngineShowcase.EventTest = CLASS({
 					console.log('This is Circle!');
 				},
 				offscreen :  () => {
-					console.log('Offscreen!');
+					//console.log('Offscreen!');
 				}
 			}
 		}).appendTo(SkyEngine.Screen);
@@ -107,7 +107,8 @@ SkyEngineShowcase.EventTest = CLASS({
 		
 		let polygon = SkyEngine.Polygon({
 			x : -50,
-			y : 50,
+			y : 0,
+			z : 1,
 			points : [{
 				x : -30,
 				y : 50
@@ -122,8 +123,9 @@ SkyEngineShowcase.EventTest = CLASS({
 			scale : 0.7,
 			angle : -45,
 			on : {
-				touchstart : () => {
+				touchstart : (e) => {
 					console.log('This is Polygon!');
+					e.stopBubbling();
 				}
 			}
 		}).appendTo(SkyEngine.Screen);

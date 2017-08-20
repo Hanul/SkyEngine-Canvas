@@ -27,7 +27,6 @@ SkyEngine.Screen = OBJECT({
 		let deltaTime;
 		
 		let registeredNodeMap = {};
-		let registeredEventNodeMap = {};
 		
 		let followXNode;
 		let followYNode;
@@ -76,26 +75,6 @@ SkyEngine.Screen = OBJECT({
 			return registeredNodeMap[cls.id] === undefined ? [] : registeredNodeMap[cls.id];
 		};
 		
-		// 이벤트 노드 등록
-		let registerEventNode = self.registerEventNode = (eventName, node) => {
-			
-			if (registeredEventNodeMap[eventName] !== undefined) {
-				registeredEventNodeMap[eventName].push(node);
-			}
-		};
-		
-		// 이벤트 노드 해제
-		let unregisterEventNode = self.unregisterEventNode = (eventName, node) => {
-			
-			if (registeredEventNodeMap[eventName] !== undefined) {
-				
-				REMOVE({
-					array : registeredEventNodeMap[eventName],
-					value : node
-				});
-			}
-		};
-		
 		// 디버그 모드에서는 FPS 수치 표시
 		if (CONFIG.SkyEngine.isDebugMode === true) {
 			
@@ -124,20 +103,35 @@ SkyEngine.Screen = OBJECT({
 			'touchend'
 		], (eventName) => {
 			
-			registeredEventNodeMap[eventName] = [];
-			
 			canvas.on(eventName, (e) => {
 				
-				EACH(registeredEventNodeMap[eventName], (node) => {
+				let isBubblingStoped;
+				
+				let check = (node) => {
 					
-					if (node.checkTouch(e.getLeft() - width / 2, e.getTop() - height / 2) === true) {
+					if (isBubblingStoped !== true) {
 						
-						node.fireEvent({
-							eventName : eventName,
-							e : SkyEngine.E(e)
-						});
+						REVERSE_EACH(node.getChildren(), check);
+						
+						if (
+						node.checkIsEventExists(eventName) === true &&
+						node.checkTouch(e.getLeft() - width / 2, e.getTop() - height / 2) === true) {
+							
+							let se = SkyEngine.E(e);
+							
+							node.fireEvent({
+								eventName : eventName,
+								e : se
+							});
+							
+							if (se.checkIsBubblingStoped() === true) {
+								isBubblingStoped = true;
+							}
+						}
 					}
-				});
+				};
+				
+				check(self);
 			});
 		});
 		
@@ -249,7 +243,7 @@ SkyEngine.Screen = OBJECT({
 			self.step(deltaTime);
 			
 			// 모든 노드를 그립니다.
-			context.clearRect(0, 0, width, height);
+			context.clearRect(0, 0, width * devicePixelRatio, height * devicePixelRatio);
 			
 			context.save();
 			context.scale(devicePixelRatio, devicePixelRatio);

@@ -17,6 +17,10 @@ SkyEngine.E = CLASS({
 		let stopBubbling = self.stopBubbling = () => {
 			e.stopBubbling();
 		};
+		
+		let checkIsBubblingStoped = self.checkIsBubblingStoped = () => {
+			return e.checkIsBubblingStoped();
+		};
 
 		let stop = self.stop = () => {
 			e.stop();

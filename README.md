@@ -11,7 +11,7 @@ SkyEngine은 [UPPERCASE](http://uppercase.io) 기반 2D 게임 엔진입니다.
 
 ## 다른 게임 엔진과의 차이점
 * 이벤트 기반으로 게임이 동작합니다. 즉 일반적인 게임 엔진 에서의 `step`, `update` 등의 함수를 작성하지 않습니다.
-* 텍스쳐를 더 이상 생각하지 않아도 됩니다.
+* 텍스쳐 및 텍스쳐 그룹 등을 생각하지 않아도 됩니다.
 
 ## 모듈 시스템
 SkyEngine은 기본적으로 스프라이트 기반 2D 게임 개발에 적합합니다. 아래 모듈을 사용하여 추가적인 기능 확장을 할 수 있습니다. 또한 직접 모듈을 만들어 사용하는 것도 가능합니다.
@@ -24,6 +24,7 @@ SkyEngine은 UPPERCASE 모듈이기 때문에, 먼저 UPPERCASE가 설치되어 
 1. [UPPERCASE 설치하기 문서](https://github.com/Hanul/UPPERCASE/blob/master/DOC/INSTALL.md)를 참고하여 UPPERCASE를 설치합니다.
 2. [프로젝트 생성하기 문서](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/CREATE_PROJECT.md)를 참고하여 프로젝트를 생성합니다.
 3. 프로젝트의 `DEPENDENCY` 파일에 `Hanul/SkyEngine`를 추가합니다.
+4. [프로젝트를 실행](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/CREATE_PROJECT.md#프로젝트-실행)하면 자동으로 SkyEngine을 다운로드하고 설치한 후 실행합니다.
 
 ## 구성 요소
 SkyEngine은 다음과 같은 것들로 구성되어 있습니다.

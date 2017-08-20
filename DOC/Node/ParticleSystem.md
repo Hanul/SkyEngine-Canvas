@@ -1,3 +1,14 @@
+작성중
+
+# 파티클 시스템
+
+## 파티클 시스템 노드
+
+### 이벤트
+- `'load'` 파티클 이미지 로딩이 완료되었을 때
+
+## 일회성 파티클 시스템 노드
+
 - particleSrc
 - particleFigure
 - particleStartX
