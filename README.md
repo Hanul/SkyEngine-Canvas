@@ -26,6 +26,10 @@ SkyEngine은 UPPERCASE 모듈이기 때문에, 먼저 UPPERCASE가 설치되어 
 3. 프로젝트의 `DEPENDENCY` 파일에 `Hanul/SkyEngine`를 추가합니다.
 4. [프로젝트를 실행](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/CREATE_PROJECT.md#프로젝트-실행)하면 자동으로 SkyEngine을 다운로드하고 설치한 후 실행합니다.
 
+## 필요한 사전 지식
+- [UPPERCASE를 사용하기 위해 필요한 사전 지식](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE.md#필요한-사전-지식)
+- [UPPERCASE](http://uppercase.io)의 전반적인 인해
+
 ## 구성 요소
 SkyEngine은 다음과 같은 것들로 구성되어 있습니다.
 
