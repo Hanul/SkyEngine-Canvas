@@ -124,8 +124,8 @@ SkyEngine.Rect = CLASS((cls) => {
 	
 		init : (inner, self, params) => {
 			//REQUIRED: params
-			//REQUIRED: params.width
-			//REQUIRED: params.height
+			//REQUIRED: params.width	사각형의 너비
+			//REQUIRED: params.height	사각형의 높이
 			
 			let width = params.width;
 			let height = params.height;

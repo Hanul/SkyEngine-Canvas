@@ -68,7 +68,7 @@ SkyEngine.Polygon = CLASS((cls) => {
 	
 		init : (inner, self, params) => {
 			//REQUIRED: params
-			//REQUIRED: params.points
+			//REQUIRED: params.points	다각형을 이루는 점들의 좌표들
 			
 			let points = params.points
 			
