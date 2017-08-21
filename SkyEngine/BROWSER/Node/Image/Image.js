@@ -231,27 +231,6 @@ SkyEngine.Image = CLASS((cls) => {
 					origin();
 				};
 			});
-			
-			let clone;
-			OVERRIDE(self.clone, (origin) => {
-				
-				clone = self.clone = (appendParams) => {
-					//OPTIONAL: appendParams
-					
-					let newParams = {
-						src : src
-					};
-					
-					if (appendParams !== undefined) {
-						EXTEND({
-							origin : newParams,
-							extend : appendParams
-						});
-					}
-					
-					return origin(newParams);
-				};
-			});
 		}
 	};
 });

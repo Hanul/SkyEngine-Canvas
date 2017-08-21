@@ -73,7 +73,7 @@ SkyEngine.TileMap = CLASS({
 			let key = params.key;
 			
 			if (key !== undefined && tileKeySet[key] !== undefined) {
-				tile = tileKeySet[key].clone();
+				tile = tileKeySet[key]();
 				
 				if (tileKeyMap[row] === undefined) {
 					tileKeyMap[row] = [];
@@ -305,29 +305,6 @@ SkyEngine.TileMap = CLASS({
 				tileNodeMap = [];
 				
 				origin();
-			};
-		});
-		
-		let clone;
-		OVERRIDE(self.clone, (origin) => {
-			
-			clone = self.clone = (appendParams) => {
-				//OPTIONAL: appendParams
-				
-				let newParams = {
-					tileWidth : tileWidth,
-					tileHeight : tileHeight,
-					collisionMap : collisionMap
-				};
-				
-				if (appendParams !== undefined) {
-					EXTEND({
-						origin : newParams,
-						extend : appendParams
-					});
-				}
-				
-				return origin(newParams);
 			};
 		});
 		

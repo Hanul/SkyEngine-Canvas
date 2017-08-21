@@ -284,7 +284,6 @@ circle.setPosition({
 - `checkIsHiding()`
 - `flipX()`
 - `flipY()`
-- `clone()`
 
 ## 이벤트
 ### `on`

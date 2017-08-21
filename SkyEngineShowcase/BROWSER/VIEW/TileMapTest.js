@@ -13,15 +13,21 @@ SkyEngineShowcase.TileMapTest = CLASS({
 			tileWidth : 32,
 			tileHeight : 32,
 			tileKeySet : {
-				grass : SkyEngine.Image({
-					src : SkyEngineShowcase.R('tile/grass.png')
-				}),
-				dirt : SkyEngine.Image({
-					src : SkyEngineShowcase.R('tile/dirt.png')
-				}),
-				stone : SkyEngine.Image({
-					src : SkyEngineShowcase.R('tile/stone.png')
-				})
+				grass : () => {
+					return SkyEngine.Image({
+						src : SkyEngineShowcase.R('tile/grass.png')
+					});
+				},
+				dirt : () => {
+					return SkyEngine.Image({
+						src : SkyEngineShowcase.R('tile/dirt.png')
+					});
+				},
+				stone : () => {
+					return SkyEngine.Image({
+						src : SkyEngineShowcase.R('tile/stone.png')
+					});
+				},
 			},
 			tileKeyMap : [
 				['grass', 'dirt',  'grass', 'grass', 'grass', 'grass', 'grass', 'grass'],
@@ -56,25 +62,31 @@ SkyEngineShowcase.TileMapTest = CLASS({
 			console.log(point.row, point.col);
 		});
 		
-		let isomatricTileMap = SkyEngine.IsomatricTileMap({
+		let isomatricTileMap = SkyEngine.IsometricTileMap({
 			centerX : 64 * 4,
 			centerY : 33 * 4,
 			scale : 0.8,
 			tileWidth : 64,
 			tileHeight : 33,
 			tileKeySet : {
-				grass : SkyEngine.Image({
-					centerY : 10,
-					src : SkyEngineShowcase.R('tile/igrass.png')
-				}),
-				water : SkyEngine.Image({
-					centerY : 16,
-					src : SkyEngineShowcase.R('tile/iwater.png')
-				}),
-				sand : SkyEngine.Image({
-					centerY : 16,
-					src : SkyEngineShowcase.R('tile/isand.png')
-				})
+				grass : () => {
+					return SkyEngine.Image({
+						centerY : 10,
+						src : SkyEngineShowcase.R('tile/igrass.png')
+					});
+				},
+				water : () => {
+					return SkyEngine.Image({
+						centerY : 16,
+						src : SkyEngineShowcase.R('tile/iwater.png')
+					});
+				},
+				sand : () => {
+					return SkyEngine.Image({
+						centerY : 16,
+						src : SkyEngineShowcase.R('tile/isand.png')
+					});
+				}
 			},
 			tileKeyMap : [
 				['grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass'],
@@ -127,21 +139,31 @@ SkyEngineShowcase.TileMapTest = CLASS({
 			tileHeight : 128,
 			overlapHeight : 31,
 			tileKeySet : {
-				grass : SkyEngine.Image({
-					src : SkyEngineShowcase.R('tile/hgrass.png')
-				}),
-				water : SkyEngine.Image({
-					src : SkyEngineShowcase.R('tile/hwater.png')
-				}),
-				sand : SkyEngine.Image({
-					src : SkyEngineShowcase.R('tile/hsand.png')
-				}),
-				mountain : SkyEngine.Image({
-					src : SkyEngineShowcase.R('tile/hmountain.png')
-				}),
-				fire : SkyEngine.Image({
-					src : SkyEngineShowcase.R('tile/hfire.png')
-				})
+				grass : () => {
+					return SkyEngine.Image({
+						src : SkyEngineShowcase.R('tile/hgrass.png')
+					});
+				},
+				water : () => {
+					return SkyEngine.Image({
+						src : SkyEngineShowcase.R('tile/hwater.png')
+					});
+				},
+				sand : () => {
+					return SkyEngine.Image({
+						src : SkyEngineShowcase.R('tile/hsand.png')
+					});
+				},
+				mountain : () => {
+					return SkyEngine.Image({
+						src : SkyEngineShowcase.R('tile/hmountain.png')
+					});
+				},
+				fire : () => {
+					return SkyEngine.Image({
+						src : SkyEngineShowcase.R('tile/hfire.png')
+					});
+				}
 			},
 			tileKeyMap : [
 				['sand',  'water', 'sand',  'grass', 'grass', 'grass', 'mountain', 'mountain'],

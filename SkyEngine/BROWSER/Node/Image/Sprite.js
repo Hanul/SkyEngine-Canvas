@@ -275,31 +275,5 @@ SkyEngine.Sprite = CLASS({
 				origin();
 			};
 		});
-		
-		let clone;
-		OVERRIDE(self.clone, (origin) => {
-			
-			clone = self.clone = (appendParams) => {
-				//OPTIONAL: appendParams
-				
-				let newParams = {
-					src : src,
-					srcs : srcs,
-					spriteWidth : spriteWidth,
-					spriteHeight : spriteHeight,
-					frameCount : frameCount,
-					fps : fps
-				};
-				
-				if (appendParams !== undefined) {
-					EXTEND({
-						origin : newParams,
-						extend : appendParams
-					});
-				}
-				
-				return origin(newParams);
-			};
-		});
 	}
 });
