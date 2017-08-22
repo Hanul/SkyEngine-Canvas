@@ -1,6 +1,3 @@
-//TODO: 움직이는 동안에 못움직이게
-//TODO: 안보이는 것 위에서 내려오는 기능
-
 Match3.Game = CLASS({
 	
 	preset : () => {
@@ -15,19 +12,21 @@ Match3.Game = CLASS({
 			}),
 			
 			// top
-			SkyEngine.Dom({
+			SkyEngine.Node({
 				y : -440,
-				style : {
-					fontSize : 80,
-					color : '#000'
-				},
-				c : 'Match 3'
+				dom : DIV({
+					style : {
+						fontSize : 80,
+						color : '#000'
+					},
+					c : 'Match 3'
+				})
 			}),
 			
 			// bottom
-			SkyEngine.Dom({
+			SkyEngine.Node({
 				y : 440,
-				c : DIV({
+				dom : DIV({
 					style : {
 						position : 'absolute',
 						left : -300,
@@ -62,34 +61,48 @@ Match3.Game = CLASS({
 			x : -300,
 			y : -300,
 			tileKeySet : {
-				1 : SkyEngine.Image({
-					src : Match3.R('snake.png'),
-					scale : 0.3
-				}),
-				2 : SkyEngine.Image({
-					src : Match3.R('giraffe.png'),
-					scale : 0.3
-				}),
-				3 : SkyEngine.Image({
-					src : Match3.R('hippo.png'),
-					scale : 0.3
-				}),
-				4 : SkyEngine.Image({
-					src : Match3.R('monkey.png'),
-					scale : 0.3
-				}),
-				5 : SkyEngine.Image({
-					src : Match3.R('panda.png'),
-					scale : 0.3
-				}),
-				6 : SkyEngine.Image({
-					src : Match3.R('penguin.png'),
-					scale : 0.3
-				}),
-				7 : SkyEngine.Image({
-					src : Match3.R('pig.png'),
-					scale : 0.3
-				})
+				1 : () => {
+					return SkyEngine.Image({
+						src : Match3.R('snake.png'),
+						scale : 0.3
+					});
+				},
+				2 : () => {
+					return SkyEngine.Image({
+						src : Match3.R('giraffe.png'),
+						scale : 0.3
+					});
+				},
+				3 : () => {
+					return SkyEngine.Image({
+						src : Match3.R('hippo.png'),
+						scale : 0.3
+					});
+				},
+				4 : () => {
+					return SkyEngine.Image({
+						src : Match3.R('monkey.png'),
+						scale : 0.3
+					});
+				},
+				5 : () => {
+					return SkyEngine.Image({
+						src : Match3.R('panda.png'),
+						scale : 0.3
+					});
+				},
+				6 : () => {
+					return SkyEngine.Image({
+						src : Match3.R('penguin.png'),
+						scale : 0.3
+					});
+				},
+				7 : () => {
+					return SkyEngine.Image({
+						src : Match3.R('pig.png'),
+						scale : 0.3
+					});
+				}
 			},
 			tileWidth : 100,
 			tileHeight : 100,
@@ -298,9 +311,10 @@ Match3.Game = CLASS({
 					
 					isFound = true;
 					
-					SkyEngine.ParticleSystem({
+					SkyEngine.ParticleSystemOnce({
 						x : toRemoveTilePosition.col * tileMap.getTileWidth(),
 						y : toRemoveTilePosition.row * tileMap.getTileHeight(),
+						zIndex : 1,
 						particleFigure : 'circle',
 						particleWidth : 30,
 						particleHeight : 30,
@@ -317,9 +331,7 @@ Match3.Game = CLASS({
 						minParticleScale : 0.3,
 						maxParticleScale : 1,
 						particleScalingSpeed : -1
-					}).appendTo(tileMap).burst((particle) => {
-						particle.remove();
-					});
+					}).appendTo(tileMap);
 					
 					tileMap.removeTile({
 						row : toRemoveTilePosition.row,
@@ -446,12 +458,14 @@ Match3.Game = CLASS({
 				
 				let f = () => {
 					
+					// 비어있는 타일이 있는 경우 다시 실행
 					if (checkEmpty() === true) {
-						DELAY(0.15, f);
+						f();
 					}
 					
+					// 매칭이 되는 경우 다시 실행
 					else if (checkMatch3() === true) {
-						DELAY(0.15, f);
+						f();
 					}
 					
 					// 불가능하면 다시 타일 생성
@@ -464,11 +478,14 @@ Match3.Game = CLASS({
 						return true;
 					}
 				};
+				
+				// 원복
 				if (f() === true) {
 					
 					if (toRow !== undefined && toCol !== undefined) {
 						
-						DELAY(0.15, () => {
+						// 한칸 이상 이동할 수 없음
+						if ((Math.abs(toRow - selectedTileRow) === 1 && Math.abs(toCol - selectedTileCol) !== 1) || (Math.abs(toRow - selectedTileRow) !== 1 && Math.abs(toCol - selectedTileCol) === 1)) {
 							
 							tileMap.moveTile({
 								fromRow : toRow,
@@ -478,7 +495,7 @@ Match3.Game = CLASS({
 								speed : 1000,
 								accel : 1000
 							});
-						});
+						}
 					}
 				}
 			}
