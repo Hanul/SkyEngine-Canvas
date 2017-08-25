@@ -13,14 +13,12 @@ SkyEngine.Sprite = CLASS({
 		//OPTIONAL: params.srcs
 		//OPTIONAL: params.spriteWidth
 		//OPTIONAL: params.spriteHeight
-		//OPTIONAL: params.frameCount
 		//OPTIONAL: params.fps
 		
 		let src = params.src;
 		let srcs = params.srcs;
 		let spriteWidth = params.spriteWidth;
 		let spriteHeight = params.spriteHeight;
-		let frameCount = params.frameCount;
 		let fps = params.fps;
 		
 		let checkRectRect = SkyEngine.Util.Collision.checkRectRect;
@@ -30,6 +28,7 @@ SkyEngine.Sprite = CLASS({
 		
 		let width;
 		let height;
+		let frameCount;
 		
 		let realFrame = 0;
 		let frame = 0;

@@ -143,7 +143,7 @@ let polygon = SkyEngine.Polygon({
 let ball = SkyEngine.Image({
 	x : -100,
 	speedX : 100,
-	src : SkyEngineSampleForDoc.R('ball.png'),
+	src : Sample.R('ball.png'),
 	collider : SkyEngine.Circle({
 		width : 99,
 		height : 96
@@ -152,7 +152,7 @@ let ball = SkyEngine.Image({
 
 let box = SkyEngine.Image({
 	x : 100,
-	src : SkyEngineSampleForDoc.R('box.png'),
+	src : Sample.R('box.png'),
 	scale : 0.3,
 	collider : SkyEngine.Rect({
 		width : 512,
