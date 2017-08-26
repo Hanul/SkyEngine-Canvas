@@ -59,7 +59,7 @@ SkyEngine.Background = CLASS({
 						
 						let halfScreenHeight = SkyEngine.Screen.getHeight() / 2 / SkyEngine.Screen.getRealScaleY() / self.getRealScaleY();
 						
-						while (followY - halfScreenHeight < _y) {
+						while (followY - halfScreenHeight < _y + self.getRealY()) {
 							_y -= height;
 						}
 						
@@ -84,7 +84,7 @@ SkyEngine.Background = CLASS({
 						
 						let halfScreenWidth = SkyEngine.Screen.getWidth() / 2 / SkyEngine.Screen.getRealScaleX() / self.getRealScaleX();
 						
-						while (followX - halfScreenWidth < _x) {
+						while (followX - halfScreenWidth < _x + self.getRealX()) {
 							_x -= width;
 						}
 						

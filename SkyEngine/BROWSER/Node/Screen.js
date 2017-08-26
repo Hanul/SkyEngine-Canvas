@@ -28,8 +28,10 @@ SkyEngine.Screen = OBJECT({
 		
 		let registeredNodeMap = {};
 		
-		let followXNode;
-		let followYNode;
+		let followingX;
+		let followingY;
+		let followingXTarget;
+		let followingYTarget;
 		
 		// 드로잉 노드 등록
 		let registerNode = self.registerNode = (node) => {
@@ -275,25 +277,48 @@ SkyEngine.Screen = OBJECT({
 			loop.remove();
 		});
 		
-		let followX = self.followX = (node) => {
-			followXNode = node;
+		let followX = self.followX = (params) => {
+			//REQUIRED: params
+			//REQUIRED: params.target
+			//OPtIONAL: params.x
+			
+			followingXTarget = params.target;
+			
+			followingX = params.x;
+			if (followingX === undefined) {
+				followingX = 0;
+			}
 		};
 		
 		let followY = self.followY = (node) => {
-			followYNode = node;
+			//REQUIRED: params
+			//REQUIRED: params.target
+			//OPtIONAL: params.y
+			
+			followingYTarget = params.target;
+			
+			followingY = params.y;
+			if (followingY === undefined) {
+				followingY = 0;
+			}
 		};
 		
 		let follow = self.follow = (node) => {
-			followX(node);
-			followY(node);
+			//REQUIRED: params
+			//REQUIRED: params.target
+			//OPtIONAL: params.x
+			//OPtIONAL: params.y
+			
+			followX(params);
+			followY(params);
 		};
 		
 		let unfollowX = self.unfollowX = (node) => {
-			followXNode = undefined;
+			followingXTarget = undefined;
 		};
 		
 		let unfollowY = self.unfollowY = (node) => {
-			followYNode = undefined;
+			followingYTarget = undefined;
 		};
 		
 		let unfollow = self.unfollow = (node) => {
@@ -303,30 +328,30 @@ SkyEngine.Screen = OBJECT({
 		
 		let getFollowX = self.getFollowX = () => {
 			
-			if (followXNode === undefined) {
+			if (followingXTarget === undefined) {
 				return 0;
 			}
 			
-			if (followXNode.checkIsRemoved() === true) {
-				followXNode = undefined;
+			if (followingXTarget.checkIsRemoved() === true) {
+				followingXTarget = undefined;
 				return 0;
 			}
 			
-			return followXNode.getRealX();
+			return followingXTarget.getRealX() - followingX;
 		};
 		
 		let getFollowY = self.getFollowY = () => {
 			
-			if (followYNode === undefined) {
+			if (followingYTarget === undefined) {
 				return 0;
 			}
 			
-			if (followYNode.checkIsRemoved() === true) {
-				followYNode = undefined;
+			if (followingYTarget.checkIsRemoved() === true) {
+				followingYTarget = undefined;
 				return 0;
 			}
 			
-			return followYNode.getRealY();
+			return followingYTarget.getRealY() - followingY;
 		};
 		
 		let getWidth = self.getWidth = () => {

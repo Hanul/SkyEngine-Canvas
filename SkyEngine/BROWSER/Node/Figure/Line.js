@@ -391,7 +391,7 @@ SkyEngine.Line = CLASS((cls) => {
 			let checkOffScreen;
 			OVERRIDE(self.checkOffScreen, (origin) => {
 				
-				checkOffScreen = self.checkOffScreen = (area) => {
+				checkOffScreen = self.checkOffScreen = () => {
 					
 					if (checkLineRect(
 						
@@ -406,8 +406,8 @@ SkyEngine.Line = CLASS((cls) => {
 						self.getRealSin(),
 						self.getRealCos(),
 						
-						0,
-						0,
+						SkyEngine.Screen.getFollowX(),
+						SkyEngine.Screen.getFollowY(),
 						SkyEngine.Screen.getWidth(),
 						SkyEngine.Screen.getHeight(),
 						1,
@@ -415,10 +415,10 @@ SkyEngine.Line = CLASS((cls) => {
 						0,
 						1) === true) {
 						
-						return true;
+						return false;
 					}
 					
-					return origin(area);
+					return origin();
 				};
 			});
 			

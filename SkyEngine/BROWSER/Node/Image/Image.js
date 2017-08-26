@@ -104,12 +104,12 @@ SkyEngine.Image = CLASS((cls) => {
 			let checkOffScreen;
 			OVERRIDE(self.checkOffScreen, (origin) => {
 				
-				checkOffScreen = self.checkOffScreen = (area) => {
+				checkOffScreen = self.checkOffScreen = () => {
 					
 					if (width === undefined || checkRectRect(
 						
-						0,
-						0,
+						SkyEngine.Screen.getFollowX(),
+						SkyEngine.Screen.getFollowY(),
 						SkyEngine.Screen.getWidth(),
 						SkyEngine.Screen.getHeight(),
 						1,
@@ -129,7 +129,7 @@ SkyEngine.Image = CLASS((cls) => {
 						return false;
 					}
 					
-					return origin(area);
+					return origin();
 				};
 			});
 			

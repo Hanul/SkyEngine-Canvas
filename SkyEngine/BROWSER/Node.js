@@ -1737,7 +1737,7 @@ SkyEngine.Node = CLASS({
 
 				return colliders.every((collider) => {
 						return target.checkIsRemoved() !== true && target.getColliders().every((targetCollider) => {
-							return collider.checkArea(targetCollider) !== true;
+							return collider.checkArea(targetCollider) !== true && targetCollider.checkArea(collider) !== true;
 						});
 					}) !== true ||
 
@@ -1750,7 +1750,7 @@ SkyEngine.Node = CLASS({
 		let checkOffScreen = self.checkOffScreen = () => {
 
 			return childNodes.every((childNode) => {
-				return childNode.checkOffScreen(target) === true;
+				return childNode.checkOffScreen() === true;
 			}) === true;
 		};
 
@@ -1783,7 +1783,9 @@ SkyEngine.Node = CLASS({
 							}
 						}
 					});
-				} else if (target.checkIsRemoved() !== true) {
+				}
+				
+				else if (target.checkIsRemoved() !== true) {
 
 					if (self.checkCollision(target) === true || (self.type !== target.type && target.checkCollision(self) === true)) {
 
@@ -1797,7 +1799,9 @@ SkyEngine.Node = CLASS({
 
 						runPartHandlers(target, target);
 					}
-				} else {
+				}
+				
+				else {
 
 					arr.splice(index, 1);
 
@@ -1948,7 +1952,7 @@ SkyEngine.Node = CLASS({
 
 				if (toAngle !== undefined) {
 
-					if ((rotationSpeed > 0 && angle >= toAngle) || (rotationSpeed < 0 && angle <= toAngle)) {
+					if (angle + toAngle < 360 && ((rotationSpeed > 0 && angle >= toAngle) || (rotationSpeed < 0 && angle <= toAngle))) {
 						angle = toAngle;
 						rotationSpeed = 0;
 						

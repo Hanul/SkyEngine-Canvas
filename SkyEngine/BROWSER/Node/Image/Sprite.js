@@ -156,12 +156,12 @@ SkyEngine.Sprite = CLASS({
 		let checkOffScreen;
 		OVERRIDE(self.checkOffScreen, (origin) => {
 			
-			checkOffScreen = self.checkOffScreen = (area) => {
+			checkOffScreen = self.checkOffScreen = () => {
 				
 				if (width === undefined || checkRectRect(
 					
-					0,
-					0,
+					SkyEngine.Screen.getFollowX(),
+					SkyEngine.Screen.getFollowY(),
 					SkyEngine.Screen.getWidth(),
 					SkyEngine.Screen.getHeight(),
 					1,
@@ -181,7 +181,7 @@ SkyEngine.Sprite = CLASS({
 					return false;
 				}
 				
-				return origin(area);
+				return origin();
 			};
 		});
 		

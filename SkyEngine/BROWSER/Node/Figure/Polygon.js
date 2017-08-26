@@ -232,12 +232,12 @@ SkyEngine.Polygon = CLASS((cls) => {
 			let checkOffScreen;
 			OVERRIDE(self.checkOffScreen, (origin) => {
 				
-				checkOffScreen = self.checkOffScreen = (area) => {
+				checkOffScreen = self.checkOffScreen = () => {
 					
 					if (checkRectPolygon(
 						
-						0,
-						0,
+						SkyEngine.Screen.getFollowX(),
+						SkyEngine.Screen.getFollowY(),
 						SkyEngine.Screen.getWidth(),
 						SkyEngine.Screen.getHeight(),
 						1,
@@ -251,12 +251,12 @@ SkyEngine.Polygon = CLASS((cls) => {
 						self.getRealScaleX(),
 						self.getRealScaleY(),
 						self.getRealSin(),
-						self.getRealCos()) !== true) {
+						self.getRealCos()) === true) {
 						
-						return true;
+						return false;
 					}
 					
-					return origin(area);
+					return origin();
 				};
 			});
 			
