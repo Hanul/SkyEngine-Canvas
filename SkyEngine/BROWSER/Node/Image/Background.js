@@ -12,10 +12,16 @@ SkyEngine.Background = CLASS({
 		//REQUIRED: params.src
 		//OPTIONAL: params.isNotToRepeatX
 		//OPTIONAL: params.isNotToRepeatY
+		//OPTIONAL: params.followCameraRatio
 		
 		let src = params.src;
 		let isNotToRepeatX = params.isNotToRepeatX;
 		let isNotToRepeatY = params.isNotToRepeatY;
+		let followCameraRatio = params.followCameraRatio;
+		
+		if (followCameraRatio === undefined) {
+			followCameraRatio = 0;
+		}
 		
 		let width;
 		let height;
@@ -33,6 +39,35 @@ SkyEngine.Background = CLASS({
 		};
 		
 		img.src = src;
+		
+		let beforeFollowX;
+		let beforeFollowY;
+		
+		let step;
+		OVERRIDE(self.step, (origin) => {
+			
+			step = self.step = (deltaTime) => {
+				
+				if (followCameraRatio !== 1) {
+					
+					let followX = SkyEngine.Screen.getFollowX();
+					let followY = SkyEngine.Screen.getFollowY();
+					
+					if (beforeFollowX !== undefined) {
+						self.setX(self.getX() + (followX - beforeFollowX) * (1 - followCameraRatio) / self.getRealScaleX());
+					}
+					
+					if (beforeFollowY !== undefined) {
+						self.setY(self.getY() + (followY - beforeFollowY) * (1 - followCameraRatio) / self.getRealScaleY());
+					}
+					
+					beforeFollowX = followX;
+					beforeFollowY = followY;
+				}
+				
+				origin(deltaTime);
+			};
+		});
 		
 		let draw;
 		OVERRIDE(self.draw, (origin) => {

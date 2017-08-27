@@ -43,5 +43,6 @@ let earth = SkyEngine.Image({
 - `border` 실루엣의 테두리를 설정할 수 있습니다. `두께 모양 색상` 순서대로 문자열로 지정합니다. 모양으로는 `'solid'`, `'dotted'`, `'dashed'`를 지정할 수 있습니다.
 
 ## 배경 노드
-- `'isNotToRepeatX'` `true`로 설정하면 배경 이미지를 x축으로 반복하지 않습니다.
-- `'isNotToRepeatY'` `true`로 설정하면 배경 이미지를 y축으로 반복하지 않습니다.
+- `isNotToRepeatX` `true`로 설정하면 배경 이미지를 x축으로 반복하지 않습니다.
+- `isNotToRepeatY` `true`로 설정하면 배경 이미지를 y축으로 반복하지 않습니다.
+- `followCameraRatio` 카메라의 움직임에 따라 배경이 얼마만큼 따라갈지 그 비율을 설정합니다. 기본은 0, 즉 카메라의 움직임을 따라가지 않습니다.
