@@ -1497,7 +1497,7 @@ SkyEngine.Node = CLASS({
 				
 				domWrapper = DIV({
 					style : {
-						position : 'fixed'
+						position : 'absolute'
 					}
 				}).appendTo(BODY);
 			}
