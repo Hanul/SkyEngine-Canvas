@@ -11,7 +11,7 @@ SkyEngine.Screen = OBJECT({
 		
 		let wrapper = DIV({
 			style : {
-				position : 'fixed',
+				position : 'absolute',
 				left : 0,
 				top : 0,
 				zIndex : -1
@@ -21,17 +21,20 @@ SkyEngine.Screen = OBJECT({
 		let canvas = CANVAS().appendTo(wrapper);
 		let context = canvas.getContext('2d');
 		
+		let left;
+		let top;
 		let width;
 		let height;
+		let ratio;
 		
 		let deltaTime;
 		
 		let registeredNodeMap = {};
 		
-		let followingX;
-		let followingY;
-		let followingXTarget;
-		let followingYTarget;
+		let cameraFollowCenterX;
+		let cameraFollowCenterY;
+		let cameraFollowXTarget;
+		let cameraFollowYTarget;
 		
 		// 드로잉 노드 등록
 		let registerNode = self.registerNode = (node) => {
@@ -249,7 +252,7 @@ SkyEngine.Screen = OBJECT({
 			
 			context.save();
 			context.scale(devicePixelRatio, devicePixelRatio);
-			context.translate(width / 2 - getFollowX(), height / 2 - getFollowY());
+			context.translate(width / 2 - getCameraFollowX(), height / 2 - getCameraFollowY());
 			
 			drawAll(self, context, self.getAlpha());
 			
@@ -259,12 +262,41 @@ SkyEngine.Screen = OBJECT({
 		// 화면 크기가 변경되는 경우, 캔버스의 크기 또한 변경되어야 합니다.
 		EVENT('resize', RAR(() => {
 			
-			width = WIN_WIDTH();
-			height = WIN_HEIGHT();
+			let winWidth = WIN_WIDTH();
+			let winHeight = WIN_HEIGHT();
+			
+			if (CONFIG.SkyEngine.width !== undefined) {
+				width = CONFIG.SkyEngine.width;
+			} else {
+				width = winWidth;
+			}
+			
+			if (CONFIG.SkyEngine.height !== undefined) {
+				height = CONFIG.SkyEngine.height;
+			} else {
+				height = winHeight;
+			}
+			
+			let widthRatio = winWidth / width;
+			let heightRatio = winHeight / height;
+			
+			if (widthRatio < heightRatio) {
+				ratio = widthRatio;
+			} else {
+				ratio = heightRatio;
+			}
 			
 			canvas.addStyle({
-				width : width,
-				height : height
+				width : width * ratio,
+				height : height * ratio
+			});
+			
+			left = (winWidth - width * ratio) / 2;
+			top = (winHeight - height * ratio) / 2;
+			
+			wrapper.addStyle({
+				left : left,
+				top : top
 			});
 			
 			canvas.setSize({
@@ -277,81 +309,89 @@ SkyEngine.Screen = OBJECT({
 			loop.remove();
 		});
 		
-		let followX = self.followX = (params) => {
+		let cameraFollowX = self.cameraFollowX = (params) => {
 			//REQUIRED: params
 			//REQUIRED: params.target
-			//OPtIONAL: params.x
+			//OPtIONAL: params.centerX
 			
-			followingXTarget = params.target;
+			cameraFollowXTarget = params.target;
 			
-			followingX = params.x;
-			if (followingX === undefined) {
-				followingX = 0;
+			cameraFollowCenterX = params.centerX;
+			if (cameraFollowX === undefined) {
+				cameraFollowX = 0;
 			}
 		};
 		
-		let followY = self.followY = (node) => {
+		let cameraFollowY = self.cameraFollowY = (node) => {
 			//REQUIRED: params
 			//REQUIRED: params.target
-			//OPtIONAL: params.y
+			//OPtIONAL: params.centerY
 			
-			followingYTarget = params.target;
+			cameraFollowYTarget = params.target;
 			
-			followingY = params.y;
-			if (followingY === undefined) {
-				followingY = 0;
+			cameraFollowCenterY = params.centerY;
+			if (cameraFollowY === undefined) {
+				cameraFollowY = 0;
 			}
 		};
 		
-		let follow = self.follow = (node) => {
+		let cameraFollow = self.cameraFollow = (node) => {
 			//REQUIRED: params
 			//REQUIRED: params.target
-			//OPtIONAL: params.x
-			//OPtIONAL: params.y
+			//OPtIONAL: params.centerX
+			//OPtIONAL: params.centerY
 			
-			followX(params);
-			followY(params);
+			cameraFollowX(params);
+			cameraFollowY(params);
 		};
 		
-		let unfollowX = self.unfollowX = (node) => {
-			followingXTarget = undefined;
+		let cameraUnfollowX = self.cameraUnfollowX = (node) => {
+			cameraFollowXTarget = undefined;
 		};
 		
-		let unfollowY = self.unfollowY = (node) => {
-			followingYTarget = undefined;
+		let cameraUnfollowY = self.cameraUnfollowY = (node) => {
+			cameraFollowYTarget = undefined;
 		};
 		
-		let unfollow = self.unfollow = (node) => {
-			unfollowX();
-			unfollowY();
+		let cameraUnfollow = self.cameraUnfollow = (node) => {
+			cameraUnfollowX();
+			cameraUnfollowY();
 		};
 		
-		let getFollowX = self.getFollowX = () => {
+		let getCameraFollowX = self.getCameraFollowX = () => {
 			
-			if (followingXTarget === undefined) {
+			if (cameraFollowXTarget === undefined) {
 				return 0;
 			}
 			
-			if (followingXTarget.checkIsRemoved() === true) {
-				followingXTarget = undefined;
+			if (cameraFollowXTarget.checkIsRemoved() === true) {
+				cameraFollowXTarget = undefined;
 				return 0;
 			}
 			
-			return followingXTarget.getRealX() - followingX;
+			return cameraFollowXTarget.getRealX() - cameraFollowCenterX;
 		};
 		
-		let getFollowY = self.getFollowY = () => {
+		let getCameraFollowY = self.getCameraFollowY = () => {
 			
-			if (followingYTarget === undefined) {
+			if (cameraFollowYTarget === undefined) {
 				return 0;
 			}
 			
-			if (followingYTarget.checkIsRemoved() === true) {
-				followingYTarget = undefined;
+			if (cameraFollowYTarget.checkIsRemoved() === true) {
+				cameraFollowYTarget = undefined;
 				return 0;
 			}
 			
-			return followingYTarget.getRealY() - followingY;
+			return cameraFollowYTarget.getRealY() - cameraFollowCenterY;
+		};
+		
+		let getLeft = self.getLeft = () => {
+			return left;
+		};
+		
+		let getTop = self.getTop = () => {
+			return top;
 		};
 		
 		let getWidth = self.getWidth = () => {
@@ -360,6 +400,10 @@ SkyEngine.Screen = OBJECT({
 		
 		let getHeight = self.getHeight = () => {
 			return height;
+		};
+		
+		let getRatio = self.getRatio = () => {
+			return ratio;
 		};
 		
 		let getCanvasContext = self.getCanvasContext = () => {

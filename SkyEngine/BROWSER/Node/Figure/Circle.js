@@ -205,8 +205,8 @@ SkyEngine.Circle = CLASS((cls) => {
 					
 					if (checkRectCircle(
 						
-						SkyEngine.Screen.getFollowX(),
-						SkyEngine.Screen.getFollowY(),
+						SkyEngine.Screen.getCameraFollowX(),
+						SkyEngine.Screen.getCameraFollowY(),
 						SkyEngine.Screen.getWidth(),
 						SkyEngine.Screen.getHeight(),
 						1,

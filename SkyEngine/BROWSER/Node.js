@@ -1219,13 +1219,6 @@ SkyEngine.Node = CLASS({
 
 				if (speedOrParams.speed !== undefined) {
 					fadingSpeed = -speedOrParams.speed;
-					
-					if (fadeEndHandler !== undefined) {
-						
-						DELAY(1 / Math.abs(fadingSpeed), () => {
-							fadeEndHandler(self);
-						});
-					}
 				}
 
 				if (speedOrParams.accel !== undefined) {
@@ -1237,13 +1230,6 @@ SkyEngine.Node = CLASS({
 				}
 			} else {
 				fadingSpeed = -speedOrParams;
-				
-				if (fadeEndHandler !== undefined) {
-					
-					DELAY(1 / Math.abs(fadingSpeed), () => {
-						fadeEndHandler(self);
-					});
-				}
 			}
 			
 			fadeEndHandler = _fadeEndHandler;
@@ -1497,7 +1483,7 @@ SkyEngine.Node = CLASS({
 				
 				domWrapper = DIV({
 					style : {
-						position : 'fixed'
+						position : 'absolute'
 					}
 				}).appendTo(BODY);
 			}
@@ -1856,8 +1842,9 @@ SkyEngine.Node = CLASS({
 							speedX = 0;
 							
 							if (moveEndHandler !== undefined && speedY === 0) {
-								moveEndHandler();
+								let _moveEndHandler = moveEndHandler;
 								moveEndHandler = undefined;
+								_moveEndHandler();
 							}
 						}
 					}
@@ -1879,8 +1866,9 @@ SkyEngine.Node = CLASS({
 							speedY = 0;
 							
 							if (moveEndHandler !== undefined && speedX === 0) {
-								moveEndHandler();
+								let _moveEndHandler = moveEndHandler;
 								moveEndHandler = undefined;
+								_moveEndHandler();
 							}
 						}
 					}
@@ -1957,8 +1945,9 @@ SkyEngine.Node = CLASS({
 						rotationSpeed = 0;
 						
 						if (rotateEndHandler !== undefined) {
-							rotateEndHandler();
+							let _rotateEndHandler = rotateEndHandler;
 							rotateEndHandler = undefined;
+							_frotateEndHandler();
 						}
 					}
 				}
@@ -1992,8 +1981,9 @@ SkyEngine.Node = CLASS({
 						fadingSpeed = 0;
 						
 						if (fadeEndHandler !== undefined) {
-							fadeEndHandler();
+							let _fadeEndHandler = fadeEndHandler;
 							fadeEndHandler = undefined;
+							_fadeEndHandler();
 						}
 					}
 				}
@@ -2055,10 +2045,12 @@ SkyEngine.Node = CLASS({
 			
 			if (domWrapper !== undefined) {
 				
+				let ratio = SkyEngine.Screen.getRatio();
+				
 				domWrapper.addStyle({
-					left : SkyEngine.Screen.getWidth() / 2 + drawingX - domWrapper.getWidth() / 2,
-					top : SkyEngine.Screen.getHeight() / 2 + drawingY - domWrapper.getHeight() / 2,
-					transform : 'rotate(' + realRadian + 'rad) scale(' + realScaleX + ', ' + realScaleY + ')',
+					left : SkyEngine.Screen.getLeft() + (SkyEngine.Screen.getWidth() / 2 + drawingX) * ratio - domWrapper.getWidth() / 2,
+					top : SkyEngine.Screen.getTop() + (SkyEngine.Screen.getHeight() / 2 + drawingY) * ratio - domWrapper.getHeight() / 2,
+					transform : 'rotate(' + realRadian + 'rad) scale(' + ratio * realScaleX + ', ' + ratio * realScaleY + ')',
 					opacity : context.globalAlpha,
 					filter : context.filter
 				});

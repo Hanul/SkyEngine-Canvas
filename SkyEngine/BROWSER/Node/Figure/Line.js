@@ -406,8 +406,8 @@ SkyEngine.Line = CLASS((cls) => {
 						self.getRealSin(),
 						self.getRealCos(),
 						
-						SkyEngine.Screen.getFollowX(),
-						SkyEngine.Screen.getFollowY(),
+						SkyEngine.Screen.getCameraFollowX(),
+						SkyEngine.Screen.getCameraFollowY(),
 						SkyEngine.Screen.getWidth(),
 						SkyEngine.Screen.getHeight(),
 						1,
