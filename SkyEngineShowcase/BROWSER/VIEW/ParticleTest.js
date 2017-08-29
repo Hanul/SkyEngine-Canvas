@@ -51,7 +51,7 @@ SkyEngineShowcase.ParticleTest = CLASS({
 			e.stop();
 		});
 		
-		let rainInterval = INTERVAL(0.1, () => {
+		let rainInterval = SkyEngine.Interval(0.1, () => {
 			rain.burst();
 		});
 		

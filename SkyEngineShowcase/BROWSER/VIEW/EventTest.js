@@ -50,11 +50,11 @@ SkyEngineShowcase.EventTest = CLASS({
 		
 		circle.moveRight(100);
 		
-		let delay = DELAY(5, () => {
+		let delay = SkyEngine.Delay(5, () => {
 			circle.stopRight();
 			circle.moveDown(100);
 			
-			delay = DELAY(5, () => {
+			delay = SkyEngine.Delay(5, () => {
 				
 				circle.flipX();
 				
@@ -63,24 +63,24 @@ SkyEngineShowcase.EventTest = CLASS({
 				
 				let repeat = RAR(() => {
 				
-					delay = DELAY(5, () => {
+					delay = SkyEngine.Delay(5, () => {
 						
 						circle.stopLeft();
 						circle.moveUp(100);
 						
-						delay = DELAY(5, () => {
+						delay = SkyEngine.Delay(5, () => {
 						
 							circle.flipX();
 							
 							circle.stopUp();
 							circle.moveRight(100);
 							
-							delay = DELAY(5, () => {
+							delay = SkyEngine.Delay(5, () => {
 								
 								circle.stopRight();
 								circle.moveDown(100);
 								
-								delay = DELAY(5, () => {
+								delay = SkyEngine.Delay(5, () => {
 									
 									circle.flipX();
 									

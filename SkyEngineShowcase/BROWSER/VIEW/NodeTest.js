@@ -62,9 +62,9 @@ SkyEngineShowcase.NodeTest = CLASS({
 		
 		leftArm.setScalingSpeedX(1);
 		
-		let delay = DELAY(1, () => {
+		let delay = SkyEngine.Delay(1, () => {
 			leftArm.setScalingSpeedX(-1);
-			delay = DELAY(1, () => {
+			delay = SkyEngine.Delay(1, () => {
 				leftArm.setScalingSpeedX(0);
 			});
 		});

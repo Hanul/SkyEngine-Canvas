@@ -144,11 +144,11 @@ SkyEngineShowcase.CollisionTest = CLASS({
 		
 		circle.moveRight(100);
 		
-		let delay = DELAY(1, () => {
+		let delay = SkyEngine.Delay(1, () => {
 			circle.stopRight();
 			circle.moveDown(100);
 			
-			delay = DELAY(1, () => {
+			delay = SkyEngine.Delay(1, () => {
 				
 				circle.flipX();
 				
@@ -157,24 +157,24 @@ SkyEngineShowcase.CollisionTest = CLASS({
 				
 				let repeat = RAR(() => {
 				
-					delay = DELAY(2, () => {
+					delay = SkyEngine.Delay(2, () => {
 						
 						circle.stopLeft();
 						circle.moveUp(100);
 						
-						delay = DELAY(2, () => {
+						delay = SkyEngine.Delay(2, () => {
 						
 							circle.flipX();
 							
 							circle.stopUp();
 							circle.moveRight(100);
 							
-							delay = DELAY(2, () => {
+							delay = SkyEngine.Delay(2, () => {
 								
 								circle.stopRight();
 								circle.moveDown(100);
 								
-								delay = DELAY(2, () => {
+								delay = SkyEngine.Delay(2, () => {
 									
 									circle.flipX();
 									

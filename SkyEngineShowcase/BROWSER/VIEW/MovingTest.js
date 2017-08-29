@@ -54,11 +54,11 @@ SkyEngineShowcase.MovingTest = CLASS({
 		
 		character.moveRight(100);
 		
-		let delay = DELAY(1, () => {
+		let delay = SkyEngine.Delay(1, () => {
 			character.stopRight();
 			character.moveDown(100);
 			
-			delay = DELAY(1, () => {
+			delay = SkyEngine.Delay(1, () => {
 				
 				character.flipX();
 				
@@ -67,24 +67,24 @@ SkyEngineShowcase.MovingTest = CLASS({
 				
 				let repeat = RAR(() => {
 				
-					delay = DELAY(2, () => {
+					delay = SkyEngine.Delay(2, () => {
 						
 						character.stopLeft();
 						character.moveUp(100);
 						
-						delay = DELAY(2, () => {
+						delay = SkyEngine.Delay(2, () => {
 						
 							character.flipX();
 							
 							character.stopUp();
 							character.moveRight(100);
 							
-							delay = DELAY(2, () => {
+							delay = SkyEngine.Delay(2, () => {
 								
 								character.stopRight();
 								character.moveDown(100);
 								
-								delay = DELAY(2, () => {
+								delay = SkyEngine.Delay(2, () => {
 									
 									character.flipX();
 									

@@ -11,7 +11,7 @@ SkyEngine.Screen = OBJECT({
 		
 		let wrapper = DIV({
 			style : {
-				position : 'absolute',
+				position : 'fixed',
 				left : 0,
 				top : 0,
 				zIndex : -1
@@ -243,6 +243,9 @@ SkyEngine.Screen = OBJECT({
 			if (deltaTime > 0.03) {
 				deltaTime = 0.03;
 			}
+			
+			SkyEngine.Delay.step(deltaTime);
+			SkyEngine.Interval.step(deltaTime);
 			
 			// 모든 노드의 step을 실행합니다.
 			self.step(deltaTime);

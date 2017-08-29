@@ -132,33 +132,33 @@ SkyEngineShowcase.IntersectionTest = CLASS({
 		
 		line2.moveRight(100);
 		
-		let delay = DELAY(1, () => {
+		let delay = SkyEngine.Delay(1, () => {
 			line2.stopRight();
 			line2.moveDown(100);
 			
-			delay = DELAY(1, () => {
+			delay = SkyEngine.Delay(1, () => {
 				
 				line2.stopDown();
 				line2.moveLeft(100);
 				
 				let repeat = RAR(() => {
 				
-					delay = DELAY(2, () => {
+					delay = SkyEngine.Delay(2, () => {
 						
 						line2.stopLeft();
 						line2.moveUp(100);
 						
-						delay = DELAY(2, () => {
+						delay = SkyEngine.Delay(2, () => {
 							
 							line2.stopUp();
 							line2.moveRight(100);
 							
-							delay = DELAY(2, () => {
+							delay = SkyEngine.Delay(2, () => {
 								
 								line2.stopRight();
 								line2.moveDown(100);
 								
-								delay = DELAY(2, () => {
+								delay = SkyEngine.Delay(2, () => {
 									
 									line2.stopDown();
 									line2.moveLeft(100);
