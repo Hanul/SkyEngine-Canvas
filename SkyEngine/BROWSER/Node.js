@@ -1304,6 +1304,10 @@ SkyEngine.Node = CLASS({
 			return isHiding;
 		};
 
+		let checkIsShowing = self.checkIsShowing = () => {
+			return isHiding !== true;
+		};
+
 		let getChildren = self.getChildren = () => {
 			return childNodes;
 		};
@@ -1315,7 +1319,7 @@ SkyEngine.Node = CLASS({
 		let setTarget = self.setTarget = (_targetNode) => {
 			targetNode = _targetNode;
 
-			if (targetNode !== undefined) {
+			if (isRemoved !== true && targetNode !== undefined) {
 
 				genRealProperties();
 
@@ -1536,12 +1540,21 @@ SkyEngine.Node = CLASS({
 		};
 
 		let on = self.on = (eventName, eventHandler) => {
-
-			if (eventMap[eventName] === undefined) {
-				eventMap[eventName] = [];
+			
+			if (isRemoved === true) {
+				if (eventName === 'remove') {
+					eventHandler(EMPTY_E(), self);
+				}
 			}
-
-			eventMap[eventName].push(eventHandler);
+			
+			else {
+					
+				if (eventMap[eventName] === undefined) {
+					eventMap[eventName] = [];
+				}
+	
+				eventMap[eventName].push(eventHandler);
+			}
 		};
 		
 		let checkIsEventExists = self.checkIsEventExists = (eventName) => {
