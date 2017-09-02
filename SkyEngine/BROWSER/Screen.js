@@ -409,6 +409,10 @@ SkyEngine.Screen = OBJECT({
 			return ratio;
 		};
 		
+		let getCanvas = self.getCanvas = () => {
+			return canvas;
+		};
+		
 		let getCanvasContext = self.getCanvasContext = () => {
 			return context;
 		};
