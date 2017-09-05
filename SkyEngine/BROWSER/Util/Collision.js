@@ -685,6 +685,62 @@ SkyEngine('Util').Collision = OBJECT({
 			return false;
 		};
 		
+		let realRoot = (z4, z3, z2, z1, z0) => {
+			
+			if (z0 === 0) {
+				return true;
+			}
+			if (z4 === 0) {
+				if (z3 !== 0) {
+					return true;
+				}
+				if (z2 !== 0) {
+					return (z1 * z1 - 4 * z2 * z0) >= 0;
+				}
+				return z1 !== 0;
+			}
+			
+			let a = z3 / z4;
+			let b = z2 / z4;
+			let c = z1 / z4;
+			let d = z0 / z4;
+			let p = (8 * b - 3 * a * a) / 8;
+			let q = (a * a * a - 4 * a * b + 8 * c) / 8;
+			let r = (-3 * a * a * a * a + 256 * d - 64 * c * a + 16 * a * a * b) / 256;
+			
+			let descrim = 256 * r * r * r - 128 * p * p * r * r + 144 * p * q * q * r - 27 * q * q * q * q + 16 * p * p * p * p * r - 4 * p * p * p * q * q;
+			let P = 8 * p;
+			let D = 64 * r - 16 * p * p;
+			
+			return descrim < 0 || (descrim > 0 && P < 0 && D < 0) || (descrim === 0 && (D !== 0 || P <= 0));
+		};
+		
+		let yIntersect = (aa, ab, ac, ad, ae, af, ba, bb, bc, bd, be, bf) => {
+			
+			let deltaB = (bb /= ba) - (ab /= aa);
+			let deltaC = (bc /= ba) - (ac /= aa);
+			let deltaD = (bd /= ba) - (ad /= aa);
+			let deltaE = (be /= ba) - (ae /= aa);
+			let deltaF = (bf /= ba) - (af /= aa);
+			
+			if (deltaB === 0 && deltaD === 0) {
+				return realRoot(0, 0, deltaC, deltaE, deltaF);
+			}
+			
+			let a3 = ab * bc - bb * ac;
+			let a2 = ab * be + ad * bc - bb * ae - bd * ac;
+			let a1 = ab * bf + ad * be - bb * af - bd * ae;
+			let a0 = ad * bf - bd * af;
+			
+			let A = deltaC * deltaC - a3 * deltaB;
+			let B = 2 * deltaC * deltaE - deltaB * a2 - deltaD * a3;
+			let C = deltaE * deltaE + 2 * deltaC * deltaF - deltaB * a1 - deltaD * a2;
+			let D = 2 * deltaE * deltaF - deltaD * a1 - deltaB * a0;
+			let E = deltaF * deltaF - deltaD * a0;
+			
+			return realRoot(A, B, C, D, E);
+		};
+		
 		let checkCircleCircle = self.checkCircleCircle = (
 			aX, aY,
 			aWidth, aHeight,
@@ -719,6 +775,8 @@ SkyEngine('Util').Collision = OBJECT({
 				return true;
 			}
 			
+			// create bivariate forms
+			
 			let a = aCos * aX + aSin * aY;
 			let c = -aSin * aX + aCos * aY;
 			
@@ -749,41 +807,7 @@ SkyEngine('Util').Collision = OBJECT({
 			let be = (2 * a * bSin / b) - (2 * c * bCos / d);
 			let bf = (a * a / b) + (c * c / d) - 1;
 			
-			let z0 = af * aa * bd * bd + aa * aa * bf * bf - ad * aa * bd * bf + ba * ba * af * af - 2 * aa * bf * ba * af - ad * bd * ba * af + ba * ad * ad * bf;
-			let z1 = be * ad * ad * ba - bf * bd * aa * ab - 2 * aa * bf * ba * ae - af * ba * bb * ad + 2 * bd * bb * aa * af + 2 * be * bf * aa * aa + bd * bd * aa * ae - be * bd * aa * ad - 2 * aa * be * ba * af - af * ba * bd * ab + 2 * af * ae * ba * ba - bf * bb * aa * ad - ae * ba * bd * ad + 2 * bf * ab * ba * d;
-			let z2 = be * be * aa * aa + 2 * bc * bf * aa * aa - ae * ba * bd * ab + bf * ba * ab * ab - ae * ba * bb * ad - bf * bb * aa * ab - 2 * aa * be * ba * ae + 2 * bd * bb * aa * ae - bc * bd * aa * ad - 2 * aa * bc * ba * af + bb * bb * aa * af + 2 * be * ab * ba * ad + ae * ae * ba * ba - ac * ba * bd * ad - be * bb * aa * ad + 2 * af * ac * ba * ba - af * ba * bb * ab + bc * ad * ad * ba + bd * bd * aa * ac - be * bd * aa * ab - 2 * aa * bf * ba * c;
-			let z3 = -2 * aa * ba * ac * be + be * ba * ab * ab + 2 * bc * ab * ba * ad - ac * ba * bb * ad + bb * bb * aa * ae - be * bb * aa * ab - 2 * aa * bc * ba * ae - ae * ba * bb * ab - bc * bb * aa * ad + 2 * be * bc * aa * aa + 2 * ae * ac * ba * ba - ac * ba * bd * ab + 2 * bd * bb * aa * ac - bc * bd * aa * b;
-			let z4 = aa * aa * bc * bc - 2 * aa * bc * ba * ac + ba * ba * ac * ac - ab * aa * bb * bc - ab * bb * ba * ac + ab * ab * ba * bc + ac * aa * bb * bb;
-			
-			if (z0 === 0) {
-				return true;
-			}
-			
-			if (z4 === 0) {
-				if (z3 !== 0) {
-					return true;
-				}
-				
-				if (z2 !== 0) {
-					return (z1 * z1 - 4 * z2 * z0) >= 0;
-				}
-				
-				return z1 !== 0;
-			}
-			
-			let za = z3 / z4;
-		    let zb = z2 / z4;
-		    let zc = z1 / z4;
-		    let zd = z0 / z4;
-		    let zp = (8 * zb - 3 * za * za) / 8;
-			let zq = (za * za * za - 4 * za * zb + 8 * zc) / 8;
-			let zr = (-3 * za * za * za * za + 256 * zd - 64 * zc * za + 16 * za * za * zb) / 256;
-			
-			let descrim = 256 * zr * zr * zr - 128 * zp * zp * zr * zr + 144 * zp * zq * zq * zr - 27 * zq * zq * zq * zq + 16 * zp * zp * zp * zp * zr - 4 * zp * zp * zp * zq * zq;
-			let P = 8 * zp;
-			let D = 64 * zr - 16 * zp * zp;
-
-			return descrim < 0 || (descrim > 0 && P < 0 && D < 0) || (descrim === 0 && (D !== 0 || P <= 0));
+			return yIntersect(aa, ab, ac, ad, ae, af, ba, bb, bc, bd, be, bf) && yIntersect(ac, ab, aa, ae, ad, af, bc, bb, ba, be, bd, bf);
 		};
 		
 		let checkCirclePolygon = self.checkCirclePolygon = (
