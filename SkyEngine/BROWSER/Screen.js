@@ -89,7 +89,7 @@ SkyEngine.Screen = OBJECT({
 					left : 5,
 					top : 5,
 					fontSize : 12,
-					zIndex : -1
+					zIndex : 999999
 				}
 			}).appendTo(BODY);
 			

@@ -1867,7 +1867,9 @@ SkyEngine.Node = CLASS({
 					if (toX !== undefined) {
 
 						if ((speedX > 0 && x > toX) || (speedX < 0 && x < toX)) {
+							x = toX;
 							speedX = 0;
+							accelX = 0;
 							
 							if (moveXEndHandler !== undefined) {
 								let _moveXEndHandler = moveXEndHandler;
@@ -1896,7 +1898,9 @@ SkyEngine.Node = CLASS({
 					if (toY !== undefined) {
 
 						if ((speedY > 0 && y > toY) || (speedY < 0 && y < toY)) {
+							y = toY;
 							speedY = 0;
+							accelY = 0;
 							
 							if (moveYEndHandler !== undefined) {
 								let _moveYEndHandler = moveYEndHandler;
@@ -1944,7 +1948,9 @@ SkyEngine.Node = CLASS({
 				if (toScaleX !== undefined) {
 
 					if ((scalingSpeedX > 0 && scaleX > toScaleX) || (scalingSpeedX < 0 && scaleX < toScaleX)) {
+						scaleX = toScaleX;
 						scalingSpeedX = 0;
+						scalingAccelX = 0;
 					}
 				}
 			}
@@ -1955,7 +1961,9 @@ SkyEngine.Node = CLASS({
 				if (toScaleY !== undefined) {
 
 					if ((scalingSpeedY > 0 && scaleY > toScaleY) || (scalingSpeedY < 0 && scaleY < toScaleY)) {
+						scaleY = toScaleY;
 						scalingSpeedY = 0;
+						scalingAccelY = 0;
 					}
 				}
 			}
@@ -1978,7 +1986,9 @@ SkyEngine.Node = CLASS({
 				if (toAngle !== undefined) {
 
 					if (angle + toAngle < 360 && ((rotationSpeed > 0 && angle >= toAngle) || (rotationSpeed < 0 && angle <= toAngle))) {
+						angle = toAngle;
 						rotationSpeed = 0;
+						rotationAccel = 0;
 						
 						if (rotateEndHandler !== undefined) {
 							let _rotateEndHandler = rotateEndHandler;
@@ -2013,7 +2023,9 @@ SkyEngine.Node = CLASS({
 				if (toAlpha !== undefined) {
 
 					if ((fadingSpeed > 0 && alpha > toAlpha) || (fadingSpeed < 0 && alpha < toAlpha)) {
+						alpha = toAlpha;
 						fadingSpeed = 0;
+						fadingAccel = 0;
 						
 						if (fadeEndHandler !== undefined) {
 							let _fadeEndHandler = fadeEndHandler;
