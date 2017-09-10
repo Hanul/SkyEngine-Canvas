@@ -1444,6 +1444,9 @@ SkyEngine.Node = CLASS({
 		};
 
 		let remove = self.remove = () => {
+			
+			// fire remove event.
+			fireEvent('remove');
 
 			empty();
 			
@@ -1457,9 +1460,6 @@ SkyEngine.Node = CLASS({
 			if (SkyEngine.Screen !== self) {
 				SkyEngine.Screen.unregisterNode(self);
 			}
-			
-			// fire remove event.
-			fireEvent('remove');
 
 			// 모든 이벤트 제거
 			eventMap = undefined;
