@@ -965,7 +965,7 @@ SkyEngine.Node = CLASS({
 			//OPTIONAL: speedOrParams.speed
 			//OPTIONAL: speedOrParams.accel
 			//OPTIONAL: speedOrParams.maxSpeed
-
+			
 			if (CHECK_IS_DATA(speedOrParams) === true) {
 
 				if (speedOrParams.speed !== undefined) {
@@ -1858,10 +1858,40 @@ SkyEngine.Node = CLASS({
 
 			if (minSpeedX !== undefined && speedX < minSpeedX) {
 				speedX = minSpeedX;
+				
+				if (speedX === 0) {
+					
+					if (moveXEndHandler !== undefined) {
+						let _moveXEndHandler = moveXEndHandler;
+						moveXEndHandler = undefined;
+						_moveXEndHandler();
+					}
+					
+					if (moveEndHandler !== undefined && speedY === 0) {
+						let _moveEndHandler = moveEndHandler;
+						moveEndHandler = undefined;
+						_moveEndHandler();
+					}
+				}
 			}
 
 			if (maxSpeedX !== undefined && speedX > maxSpeedX) {
 				speedX = maxSpeedX;
+				
+				if (speedX === 0) {
+					
+					if (moveXEndHandler !== undefined) {
+						let _moveXEndHandler = moveXEndHandler;
+						moveXEndHandler = undefined;
+						_moveXEndHandler();
+					}
+					
+					if (moveEndHandler !== undefined && speedY === 0) {
+						let _moveEndHandler = moveEndHandler;
+						moveEndHandler = undefined;
+						_moveEndHandler();
+					}
+				}
 			}
 
 			if (accelY !== 0) {
@@ -1870,10 +1900,40 @@ SkyEngine.Node = CLASS({
 
 			if (minSpeedY !== undefined && speedY < minSpeedY) {
 				speedY = minSpeedY;
+				
+				if (speedY === 0) {
+					
+					if (moveYEndHandler !== undefined) {
+						let _moveYEndHandler = moveYEndHandler;
+						moveYEndHandler = undefined;
+						_moveYEndHandler();
+					}
+					
+					if (moveEndHandler !== undefined && speedX === 0) {
+						let _moveEndHandler = moveEndHandler;
+						moveEndHandler = undefined;
+						_moveEndHandler();
+					}
+				}
 			}
 
 			if (maxSpeedY !== undefined && speedY > maxSpeedY) {
 				speedY = maxSpeedY;
+				
+				if (speedY === 0) {
+					
+					if (moveYEndHandler !== undefined) {
+						let _moveYEndHandler = moveYEndHandler;
+						moveYEndHandler = undefined;
+						_moveYEndHandler();
+					}
+					
+					if (moveEndHandler !== undefined && speedX === 0) {
+						let _moveEndHandler = moveEndHandler;
+						moveEndHandler = undefined;
+						_moveEndHandler();
+					}
+				}
 			}
 
 			if (speedX !== 0) {
