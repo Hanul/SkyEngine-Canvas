@@ -1695,6 +1695,14 @@ SkyEngine.Node = CLASS({
 
 			touchAreas.push(touchArea);
 			touchArea.setTarget(self);
+			
+			touchArea.on('remove', () => {
+				
+				REMOVE({
+					array : touchAreas,
+					value : touchArea
+				});
+			});
 		};
 
 		let getTouchAreas = self.getTouchAreas = () => {
@@ -1704,12 +1712,20 @@ SkyEngine.Node = CLASS({
 		let getTouchArea = self.getTouchArea = () => {
 			return touchAreas[0];
 		};
-
+		
 		let addCollider = self.addCollider = (collider) => {
 			//REQUIRED: collider
 
 			colliders.push(collider);
 			collider.setTarget(self);
+			
+			collider.on('remove', () => {
+				
+				REMOVE({
+					array : colliders,
+					value : collider
+				});
+			});
 		};
 
 		let getColliders = self.getColliders = () => {
