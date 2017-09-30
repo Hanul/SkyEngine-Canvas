@@ -115,6 +115,8 @@ SkyEngine.Node = CLASS({
 		let isStuckUp;
 		let isStuckDown;
 		
+		let isPaused;
+		
 		let domWrapper;
 
 		let genRealPosition = () => {
@@ -1864,323 +1866,326 @@ SkyEngine.Node = CLASS({
 		};
 
 		let step = self.step = (deltaTime) => {
-
-			beforeX = x;
-			beforeY = y;
-
-			if (accelX !== 0) {
-				speedX += accelX * deltaTime;
-			}
-
-			if (minSpeedX !== undefined && speedX < minSpeedX) {
-				speedX = minSpeedX;
-				
-				if (speedX === 0) {
-					
-					if (moveXEndHandler !== undefined) {
-						let _moveXEndHandler = moveXEndHandler;
-						moveXEndHandler = undefined;
-						_moveXEndHandler();
-					}
-					
-					if (moveEndHandler !== undefined && speedY === 0) {
-						let _moveEndHandler = moveEndHandler;
-						moveEndHandler = undefined;
-						_moveEndHandler();
-					}
-				}
-			}
-
-			if (maxSpeedX !== undefined && speedX > maxSpeedX) {
-				speedX = maxSpeedX;
-				
-				if (speedX === 0) {
-					
-					if (moveXEndHandler !== undefined) {
-						let _moveXEndHandler = moveXEndHandler;
-						moveXEndHandler = undefined;
-						_moveXEndHandler();
-					}
-					
-					if (moveEndHandler !== undefined && speedY === 0) {
-						let _moveEndHandler = moveEndHandler;
-						moveEndHandler = undefined;
-						_moveEndHandler();
-					}
-				}
-			}
-
-			if (accelY !== 0) {
-				speedY += accelY * deltaTime;
-			}
-
-			if (minSpeedY !== undefined && speedY < minSpeedY) {
-				speedY = minSpeedY;
-				
-				if (speedY === 0) {
-					
-					if (moveYEndHandler !== undefined) {
-						let _moveYEndHandler = moveYEndHandler;
-						moveYEndHandler = undefined;
-						_moveYEndHandler();
-					}
-					
-					if (moveEndHandler !== undefined && speedX === 0) {
-						let _moveEndHandler = moveEndHandler;
-						moveEndHandler = undefined;
-						_moveEndHandler();
-					}
-				}
-			}
-
-			if (maxSpeedY !== undefined && speedY > maxSpeedY) {
-				speedY = maxSpeedY;
-				
-				if (speedY === 0) {
-					
-					if (moveYEndHandler !== undefined) {
-						let _moveYEndHandler = moveYEndHandler;
-						moveYEndHandler = undefined;
-						_moveYEndHandler();
-					}
-					
-					if (moveEndHandler !== undefined && speedX === 0) {
-						let _moveEndHandler = moveEndHandler;
-						moveEndHandler = undefined;
-						_moveEndHandler();
-					}
-				}
-			}
-
-			if (speedX !== 0) {
-
-				let dx = speedX * deltaTime;
-
-				if ((dx < 0 && isStuckLeft !== true) || (dx > 0 && isStuckRight !== true)) {
-
-					x += dx;
-
-					if (toX !== undefined) {
-
-						if ((speedX > 0 && x > toX) || (speedX < 0 && x < toX)) {
-							x = toX;
-							speedX = 0;
-							accelX = 0;
-							
-							if (moveXEndHandler !== undefined) {
-								let _moveXEndHandler = moveXEndHandler;
-								moveXEndHandler = undefined;
-								_moveXEndHandler();
-							}
-							
-							if (moveEndHandler !== undefined && speedY === 0) {
-								let _moveEndHandler = moveEndHandler;
-								moveEndHandler = undefined;
-								_moveEndHandler();
-							}
-						}
-					}
-				}
-			}
-
-			if (speedY !== 0) {
-
-				let dy = speedY * deltaTime;
-
-				if ((dy < 0 && isStuckUp !== true) || (dy > 0 && isStuckDown !== true)) {
-
-					y += dy;
-
-					if (toY !== undefined) {
-
-						if ((speedY > 0 && y > toY) || (speedY < 0 && y < toY)) {
-							
-							y = toY;
-							speedY = 0;
-							accelY = 0;
-							
-							if (moveYEndHandler !== undefined) {
-								let _moveYEndHandler = moveYEndHandler;
-								moveYEndHandler = undefined;
-								_moveYEndHandler();
-							}
-							
-							if (moveEndHandler !== undefined && speedX === 0) {
-								let _moveEndHandler = moveEndHandler;
-								moveEndHandler = undefined;
-								_moveEndHandler();
-							}
-						}
-					}
-				}
-			}
-
-			if (scalingAccelX !== 0) {
-				scalingSpeedX += scalingAccelX * deltaTime;
-			}
-
-			if (minScalingSpeedX !== undefined && scalingSpeedX < minScalingSpeedX) {
-				scalingSpeedX = minScalingSpeedX;
-			}
-
-			if (maxScalingSpeedX !== undefined && scalingSpeedX > maxScalingSpeedX) {
-				scalingSpeedX = maxScalingSpeedX;
-			}
-
-			if (scalingAccelY !== 0) {
-				scalingSpeedY += scalingAccelY * deltaTime;
-			}
-
-			if (minScalingSpeedY !== undefined && scalingSpeedY < minScalingSpeedY) {
-				scalingSpeedY = minScalingSpeedY;
-			}
-
-			if (maxScalingSpeedY !== undefined && scalingSpeedY > maxScalingSpeedY) {
-				scalingSpeedY = maxScalingSpeedY;
-			}
-
-			if (scalingSpeedX !== 0) {
-				scaleX += scalingSpeedX * deltaTime;
-
-				if (toScaleX !== undefined) {
-
-					if ((scalingSpeedX > 0 && scaleX > toScaleX) || (scalingSpeedX < 0 && scaleX < toScaleX)) {
-						scaleX = toScaleX;
-						scalingSpeedX = 0;
-						scalingAccelX = 0;
-					}
-				}
-			}
-
-			if (scalingSpeedY !== 0) {
-				scaleY += scalingSpeedY * deltaTime;
-
-				if (toScaleY !== undefined) {
-
-					if ((scalingSpeedY > 0 && scaleY > toScaleY) || (scalingSpeedY < 0 && scaleY < toScaleY)) {
-						scaleY = toScaleY;
-						scalingSpeedY = 0;
-						scalingAccelY = 0;
-					}
-				}
-			}
-
-			if (rotationAccel !== 0) {
-				rotationSpeed += rotationAccel * deltaTime;
-			}
-
-			if (minRotationSpeed !== undefined && rotationSpeed < minRotationSpeed) {
-				rotationSpeed = minRotationSpeed;
-			}
-
-			if (maxRotationSpeed !== undefined && rotationSpeed > maxRotationSpeed) {
-				rotationSpeed = maxRotationSpeed;
-			}
-
-			if (rotationSpeed !== 0) {
-				angle += rotationSpeed * deltaTime;
-
-				if (toAngle !== undefined) {
-
-					if (angle + toAngle < 360 && ((rotationSpeed > 0 && angle >= toAngle) || (rotationSpeed < 0 && angle <= toAngle))) {
-						angle = toAngle;
-						rotationSpeed = 0;
-						rotationAccel = 0;
-						
-						if (rotateEndHandler !== undefined) {
-							let _rotateEndHandler = rotateEndHandler;
-							rotateEndHandler = undefined;
-							_frotateEndHandler();
-						}
-					}
-				}
-
-				if (angle >= 360) {
-					angle = 0;
-				} else if (angle <= 0) {
-					angle = 360;
-				}
-			}
-
-			if (fadingAccel !== 0) {
-				fadingSpeed += fadingAccel * deltaTime;
-			}
-
-			if (minFadingSpeed !== undefined && fadingSpeed < minFadingSpeed) {
-				fadingSpeed = minFadingSpeed;
-			}
-
-			if (maxFadingSpeed !== undefined && fadingSpeed > maxFadingSpeed) {
-				fadingSpeed = maxFadingSpeed;
-			}
-
-			if (fadingSpeed !== 0) {
-				alpha += fadingSpeed * deltaTime;
-
-				if (toAlpha !== undefined) {
-
-					if ((fadingSpeed > 0 && alpha > toAlpha) || (fadingSpeed < 0 && alpha < toAlpha)) {
-						alpha = toAlpha;
-						fadingSpeed = 0;
-						fadingAccel = 0;
-						
-						if (fadeEndHandler !== undefined) {
-							let _fadeEndHandler = fadeEndHandler;
-							fadeEndHandler = undefined;
-							_fadeEndHandler();
-						}
-					}
-				}
-
-				if (alpha > 1) {
-					alpha = 1;
-				} else if (alpha < 0) {
-					alpha = 0;
-				}
-			}
-
-			genRealProperties();
-
-			// 모든 터치 영역에 대해 실행
-			if (isRemoved !== true) {
-				
-				touchAreas.forEach((touchArea) => {
-					touchArea.step(deltaTime);
-				});
-			}
-
-			// 모든 충돌 영역에 대해 실행
-			if (isRemoved !== true) {
-				
-				colliders.forEach((collider) => {
-					collider.step(deltaTime);
-				});
-			}
 			
-			if (isRemoved !== true) {
+			if (isPaused !== true) {
 				
-				// 충돌 체크
-				checkAllCollisions();
-			}
-
-			// 모든 자식 노드들에 대해 실행
-			if (isRemoved !== true) {
-				childNodes.forEach((childNode) => {
-					childNode.step(deltaTime);
-				});
-			}
-
-			if (isRemoved !== true && eventMap.offscreen !== undefined && self.checkOffScreen() === true) {
-				fireEvent('offscreen');
-			}
-
-			if (isRemoved !== true && eventMap.nextstep !== undefined) {
-				fireEvent('nextstep');
-				off('nextstep');
-			}
-
-			if (isRemoved !== true && eventMap.move !== undefined && (x !== beforeX || y !== beforeY)) {
-				fireEvent('move');
+				beforeX = x;
+				beforeY = y;
+	
+				if (accelX !== 0) {
+					speedX += accelX * deltaTime;
+				}
+	
+				if (minSpeedX !== undefined && speedX < minSpeedX) {
+					speedX = minSpeedX;
+					
+					if (speedX === 0) {
+						
+						if (moveXEndHandler !== undefined) {
+							let _moveXEndHandler = moveXEndHandler;
+							moveXEndHandler = undefined;
+							_moveXEndHandler();
+						}
+						
+						if (moveEndHandler !== undefined && speedY === 0) {
+							let _moveEndHandler = moveEndHandler;
+							moveEndHandler = undefined;
+							_moveEndHandler();
+						}
+					}
+				}
+	
+				if (maxSpeedX !== undefined && speedX > maxSpeedX) {
+					speedX = maxSpeedX;
+					
+					if (speedX === 0) {
+						
+						if (moveXEndHandler !== undefined) {
+							let _moveXEndHandler = moveXEndHandler;
+							moveXEndHandler = undefined;
+							_moveXEndHandler();
+						}
+						
+						if (moveEndHandler !== undefined && speedY === 0) {
+							let _moveEndHandler = moveEndHandler;
+							moveEndHandler = undefined;
+							_moveEndHandler();
+						}
+					}
+				}
+	
+				if (accelY !== 0) {
+					speedY += accelY * deltaTime;
+				}
+	
+				if (minSpeedY !== undefined && speedY < minSpeedY) {
+					speedY = minSpeedY;
+					
+					if (speedY === 0) {
+						
+						if (moveYEndHandler !== undefined) {
+							let _moveYEndHandler = moveYEndHandler;
+							moveYEndHandler = undefined;
+							_moveYEndHandler();
+						}
+						
+						if (moveEndHandler !== undefined && speedX === 0) {
+							let _moveEndHandler = moveEndHandler;
+							moveEndHandler = undefined;
+							_moveEndHandler();
+						}
+					}
+				}
+	
+				if (maxSpeedY !== undefined && speedY > maxSpeedY) {
+					speedY = maxSpeedY;
+					
+					if (speedY === 0) {
+						
+						if (moveYEndHandler !== undefined) {
+							let _moveYEndHandler = moveYEndHandler;
+							moveYEndHandler = undefined;
+							_moveYEndHandler();
+						}
+						
+						if (moveEndHandler !== undefined && speedX === 0) {
+							let _moveEndHandler = moveEndHandler;
+							moveEndHandler = undefined;
+							_moveEndHandler();
+						}
+					}
+				}
+	
+				if (speedX !== 0) {
+	
+					let dx = speedX * deltaTime;
+	
+					if ((dx < 0 && isStuckLeft !== true) || (dx > 0 && isStuckRight !== true)) {
+	
+						x += dx;
+	
+						if (toX !== undefined) {
+	
+							if ((speedX > 0 && x > toX) || (speedX < 0 && x < toX)) {
+								x = toX;
+								speedX = 0;
+								accelX = 0;
+								
+								if (moveXEndHandler !== undefined) {
+									let _moveXEndHandler = moveXEndHandler;
+									moveXEndHandler = undefined;
+									_moveXEndHandler();
+								}
+								
+								if (moveEndHandler !== undefined && speedY === 0) {
+									let _moveEndHandler = moveEndHandler;
+									moveEndHandler = undefined;
+									_moveEndHandler();
+								}
+							}
+						}
+					}
+				}
+	
+				if (speedY !== 0) {
+	
+					let dy = speedY * deltaTime;
+	
+					if ((dy < 0 && isStuckUp !== true) || (dy > 0 && isStuckDown !== true)) {
+	
+						y += dy;
+	
+						if (toY !== undefined) {
+	
+							if ((speedY > 0 && y > toY) || (speedY < 0 && y < toY)) {
+								
+								y = toY;
+								speedY = 0;
+								accelY = 0;
+								
+								if (moveYEndHandler !== undefined) {
+									let _moveYEndHandler = moveYEndHandler;
+									moveYEndHandler = undefined;
+									_moveYEndHandler();
+								}
+								
+								if (moveEndHandler !== undefined && speedX === 0) {
+									let _moveEndHandler = moveEndHandler;
+									moveEndHandler = undefined;
+									_moveEndHandler();
+								}
+							}
+						}
+					}
+				}
+	
+				if (scalingAccelX !== 0) {
+					scalingSpeedX += scalingAccelX * deltaTime;
+				}
+	
+				if (minScalingSpeedX !== undefined && scalingSpeedX < minScalingSpeedX) {
+					scalingSpeedX = minScalingSpeedX;
+				}
+	
+				if (maxScalingSpeedX !== undefined && scalingSpeedX > maxScalingSpeedX) {
+					scalingSpeedX = maxScalingSpeedX;
+				}
+	
+				if (scalingAccelY !== 0) {
+					scalingSpeedY += scalingAccelY * deltaTime;
+				}
+	
+				if (minScalingSpeedY !== undefined && scalingSpeedY < minScalingSpeedY) {
+					scalingSpeedY = minScalingSpeedY;
+				}
+	
+				if (maxScalingSpeedY !== undefined && scalingSpeedY > maxScalingSpeedY) {
+					scalingSpeedY = maxScalingSpeedY;
+				}
+	
+				if (scalingSpeedX !== 0) {
+					scaleX += scalingSpeedX * deltaTime;
+	
+					if (toScaleX !== undefined) {
+	
+						if ((scalingSpeedX > 0 && scaleX > toScaleX) || (scalingSpeedX < 0 && scaleX < toScaleX)) {
+							scaleX = toScaleX;
+							scalingSpeedX = 0;
+							scalingAccelX = 0;
+						}
+					}
+				}
+	
+				if (scalingSpeedY !== 0) {
+					scaleY += scalingSpeedY * deltaTime;
+	
+					if (toScaleY !== undefined) {
+	
+						if ((scalingSpeedY > 0 && scaleY > toScaleY) || (scalingSpeedY < 0 && scaleY < toScaleY)) {
+							scaleY = toScaleY;
+							scalingSpeedY = 0;
+							scalingAccelY = 0;
+						}
+					}
+				}
+	
+				if (rotationAccel !== 0) {
+					rotationSpeed += rotationAccel * deltaTime;
+				}
+	
+				if (minRotationSpeed !== undefined && rotationSpeed < minRotationSpeed) {
+					rotationSpeed = minRotationSpeed;
+				}
+	
+				if (maxRotationSpeed !== undefined && rotationSpeed > maxRotationSpeed) {
+					rotationSpeed = maxRotationSpeed;
+				}
+	
+				if (rotationSpeed !== 0) {
+					angle += rotationSpeed * deltaTime;
+	
+					if (toAngle !== undefined) {
+	
+						if (angle + toAngle < 360 && ((rotationSpeed > 0 && angle >= toAngle) || (rotationSpeed < 0 && angle <= toAngle))) {
+							angle = toAngle;
+							rotationSpeed = 0;
+							rotationAccel = 0;
+							
+							if (rotateEndHandler !== undefined) {
+								let _rotateEndHandler = rotateEndHandler;
+								rotateEndHandler = undefined;
+								_frotateEndHandler();
+							}
+						}
+					}
+	
+					if (angle >= 360) {
+						angle = 0;
+					} else if (angle <= 0) {
+						angle = 360;
+					}
+				}
+	
+				if (fadingAccel !== 0) {
+					fadingSpeed += fadingAccel * deltaTime;
+				}
+	
+				if (minFadingSpeed !== undefined && fadingSpeed < minFadingSpeed) {
+					fadingSpeed = minFadingSpeed;
+				}
+	
+				if (maxFadingSpeed !== undefined && fadingSpeed > maxFadingSpeed) {
+					fadingSpeed = maxFadingSpeed;
+				}
+	
+				if (fadingSpeed !== 0) {
+					alpha += fadingSpeed * deltaTime;
+	
+					if (toAlpha !== undefined) {
+	
+						if ((fadingSpeed > 0 && alpha > toAlpha) || (fadingSpeed < 0 && alpha < toAlpha)) {
+							alpha = toAlpha;
+							fadingSpeed = 0;
+							fadingAccel = 0;
+							
+							if (fadeEndHandler !== undefined) {
+								let _fadeEndHandler = fadeEndHandler;
+								fadeEndHandler = undefined;
+								_fadeEndHandler();
+							}
+						}
+					}
+	
+					if (alpha > 1) {
+						alpha = 1;
+					} else if (alpha < 0) {
+						alpha = 0;
+					}
+				}
+	
+				genRealProperties();
+	
+				// 모든 터치 영역에 대해 실행
+				if (isRemoved !== true) {
+					
+					touchAreas.forEach((touchArea) => {
+						touchArea.step(deltaTime);
+					});
+				}
+	
+				// 모든 충돌 영역에 대해 실행
+				if (isRemoved !== true) {
+					
+					colliders.forEach((collider) => {
+						collider.step(deltaTime);
+					});
+				}
+				
+				if (isRemoved !== true) {
+					
+					// 충돌 체크
+					checkAllCollisions();
+				}
+	
+				// 모든 자식 노드들에 대해 실행
+				if (isRemoved !== true) {
+					childNodes.forEach((childNode) => {
+						childNode.step(deltaTime);
+					});
+				}
+	
+				if (isRemoved !== true && eventMap.offscreen !== undefined && self.checkOffScreen() === true) {
+					fireEvent('offscreen');
+				}
+	
+				if (isRemoved !== true && eventMap.nextstep !== undefined) {
+					fireEvent('nextstep');
+					off('nextstep');
+				}
+	
+				if (isRemoved !== true && eventMap.move !== undefined && (x !== beforeX || y !== beforeY)) {
+					fireEvent('move');
+				}
 			}
 		};
 
@@ -2203,6 +2208,14 @@ SkyEngine.Node = CLASS({
 
 		let drawArea = self.drawArea = (context) => {
 			// to implement.
+		};
+		
+		let pause = self.pause = () => {
+			isPaused = true;
+		};
+		
+		let resume = self.resume = () => {
+			isPaused = false;
 		};
 
 		genRealProperties();
