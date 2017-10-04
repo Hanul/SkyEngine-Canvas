@@ -2214,6 +2214,10 @@ SkyEngine.Node = CLASS({
 			isPaused = true;
 		};
 		
+		let checkIsPaused = self.checkIsPaused = () => {
+			return isPaused;
+		};
+		
 		let resume = self.resume = () => {
 			isPaused = false;
 		};

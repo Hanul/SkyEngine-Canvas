@@ -244,11 +244,14 @@ SkyEngine.Screen = OBJECT({
 				deltaTime = 0.03;
 			}
 			
-			SkyEngine.Delay.step(deltaTime);
-			SkyEngine.Interval.step(deltaTime);
-			
-			// 모든 노드의 step을 실행합니다.
-			self.step(deltaTime);
+			if (self.checkIsPaused() !== true) {
+				
+				SkyEngine.Delay.step(deltaTime);
+				SkyEngine.Interval.step(deltaTime);
+				
+				// 모든 노드의 step을 실행합니다.
+				self.step(deltaTime);
+			}
 			
 			// 모든 노드를 그립니다.
 			context.clearRect(0, 0, width * devicePixelRatio, height * devicePixelRatio);
