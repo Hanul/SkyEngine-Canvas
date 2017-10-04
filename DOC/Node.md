@@ -284,6 +284,9 @@ circle.setPosition({
 - `checkIsHiding()`
 - `flipX()`
 - `flipY()`
+- `pause()` 만약 `SkyEngine.Screen`의 `pause`를 실행한 경우, `SkyEngine.Delay` 및 `SkyEngine.Interval` 또한 일시정지 됩니다.
+- `checkIsPaused()`
+- `resume()`
 
 ## 이벤트
 ### `on`
