@@ -62,10 +62,14 @@ SkyEngine.Screen = OBJECT({
 				
 				if (registeredNodeMap[cls.id] !== undefined) {
 					
-					REMOVE({
-						array : registeredNodeMap[cls.id],
-						value : node
-					});
+					let nodes = registeredNodeMap[cls.id];
+					
+					for (let i = 0; i < nodes.length; i += 1) {
+						if (nodes[i] === node) {
+							nodes.splice(i, 1);
+							i -= 1;
+						}
+					}
 					
 					if (registeredNodeMap[cls.id].length === 0) {
 						delete registeredNodeMap[cls.id];
@@ -161,9 +165,11 @@ SkyEngine.Screen = OBJECT({
 			
 			context.restore();
 			
-			node.getChildren().forEach((childNode) => {
-				drawAllArea(childNode, context, color);
-			});
+			let children = node.getChildren();
+			
+			for (let i = 0; i < children.length; i += 1) {
+				drawAllArea(children[i], context, color);
+			}
 		};
 		
 		// 모든 노드를 그립니다.
@@ -194,9 +200,11 @@ SkyEngine.Screen = OBJECT({
 				if (node.checkIsRemoved() !== true) {
 					
 					// 모든 자식 노드를 그립니다.
-					node.getChildren().forEach((childNode) => {
-						drawAll(childNode, context, realAlpha);
-					});
+					let children = node.getChildren();
+					
+					for (let i = 0; i < children.length; i += 1) {
+						drawAll(children[i], context, realAlpha);
+					}
 				}
 				
 				context.restore();
@@ -220,14 +228,18 @@ SkyEngine.Screen = OBJECT({
 					context.stroke();
 					
 					// 터치 영역을 그립니다.
-					node.getTouchAreas().forEach((touchArea) => {
-						drawAllArea(touchArea, context, 'magenta');
-					});
+					let touchAreas = node.getTouchAreas();
+					
+					for (let i = 0; i < touchAreas.length; i += 1) {
+						drawAllArea(drawAllArea[i], context, 'magenta');
+					}
 					
 					// 충돌 영역을 그립니다.
-					node.getColliders().forEach((collider) => {
+					let colliders = node.getColliders();
+					
+					for (let i = 0; i < colliders.length; i += 1) {
 						drawAllArea(collider, context, 'lime');
-					});
+					}
 				}
 			}
 		};

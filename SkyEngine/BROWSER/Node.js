@@ -1329,19 +1329,19 @@ SkyEngine.Node = CLASS({
 				genRealProperties();
 
 				// 모든 터치 영역에 대해 실행
-				self.getTouchAreas().forEach((touchArea) => {
-					touchArea.setTarget(self);
-				});
+				for (let i = 0; i < touchAreas.length; i += 1) {
+					touchAreas[i].setTarget(self);
+				}
 
 				// 모든 충돌 영역에 대해 실행
-				self.getColliders().forEach((collider) => {
-					collider.setTarget(self);
-				});
+				for (let i = 0; i < colliders.length; i += 1) {
+					colliders[i].setTarget(self);
+				}
 
 				// 모든 자식 노드들에 대해 실행
-				self.getChildren().forEach((childNode) => {
-					childNode.setTarget(self);
-				});
+				for (let i = 0; i < childNodes.length; i += 1) {
+					childNodes[i].setTarget(self);
+				}
 			}
 		};
 
@@ -1441,10 +1441,14 @@ SkyEngine.Node = CLASS({
 		
 		let empty = self.empty = () => {
 			
-			childNodes.forEach((childNode) => {
+			for (let i = 0; i < childNodes.length; i += 1) {
+				
+				let childNode = childNodes[i];
+				
 				childNode.setParent(undefined);
 				childNode.remove();
-			});
+			}
+			
 			childNodes = [];
 		};
 
@@ -1470,15 +1474,15 @@ SkyEngine.Node = CLASS({
 			eventMap = undefined;
 
 			// 모든 터치 영역 제거
-			touchAreas.forEach((touchArea) => {
-				touchArea.remove();
-			});
+			for (let i = 0; i < touchAreas.length; i += 1) {
+				touchAreas[i].remove();
+			}
 			touchAreas = undefined;
 
 			// 모든 충돌 영역 제거
-			colliders.forEach((collider) => {
-				collider.remove();
-			});
+			for (let i = 0; i < colliders.length; i += 1) {
+				colliders[i].remove();
+			}
 			colliders = undefined;
 
 			collisionTargets = undefined
@@ -1598,12 +1602,14 @@ SkyEngine.Node = CLASS({
 				eventName = eventNameOrParams.eventName;
 				e = eventNameOrParams.e;
 			}
+			
+			let eventHandlers = eventMap[eventName];
 
-			if (eventMap[eventName] !== undefined) {
-
-				eventMap[eventName].forEach((eventHandler) => {
-					eventHandler(e === undefined ? EMPTY_E() : e, self);
-				});
+			if (eventHandlers !== undefined) {
+				
+				for (let i = 0; i < eventHandlers.length; i += 1) {
+					eventHandlers[i](e === undefined ? EMPTY_E() : e, self);
+				}
 			}
 		};
 
@@ -1633,12 +1639,14 @@ SkyEngine.Node = CLASS({
 		};
 
 		let runMeetHandlers = self.runMeetHandlers = (target, realTarget) => {
+			
+			let meetHandlers = meetHandlerMap[target.id];
 
-			if (meetHandlerMap[target.id] !== undefined) {
+			if (meetHandlers !== undefined) {
 
-				meetHandlerMap[target.id].forEach((handler) => {
-					handler(realTarget);
-				});
+				for (let i = 0; i < meetHandlers.length; i += 1) {
+					meetHandlers[i](realTarget);
+				}
 			}
 		};
 
@@ -1667,11 +1675,13 @@ SkyEngine.Node = CLASS({
 
 		let runPartHandlers = self.runPartHandlers = (target, realTarget) => {
 
-			if (partHandlerMap[target.id] !== undefined) {
+			let partHandlers = partHandlerMap[target.id];
 
-				partHandlerMap[target.id].forEach((handler) => {
-					handler(realTarget);
-				});
+			if (partHandlers !== undefined) {
+
+				for (let i = 0; i < partHandlers.length; i += 1) {
+					partHandlers[i](realTarget);
+				}
 			}
 		};
 
@@ -1722,17 +1732,28 @@ SkyEngine.Node = CLASS({
 		};
 
 		let checkPoint = self.checkPoint = (pointX, pointY) => {
-
-			return childNodes.every((childNode) => {
-				return childNode.checkPoint(pointX, pointY) !== true;
-			}) !== true;
+			
+			for (let i = 0; i < childNodes.length; i += 1) {
+				if (childNodes[i].checkPoint(pointX, pointY) === true) {
+					return true;
+				}
+			}
+			
+			return false;
 		};
 
 		let checkArea = self.checkArea = (area) => {
-
-			return childNodes.every((childNode) => {
-				return childNode.checkArea(area) !== true && area.checkArea(childNode) !== true;
-			}) !== true;
+			
+			for (let i = 0; i < childNodes.length; i += 1) {
+				
+				let childNode = childNodes[i];
+				
+				if (childNode.checkArea(area) === true || area.checkArea(childNode) === true) {
+					return true;
+				}
+			}
+			
+			return false;
 		};
 
 		let checkTouch = self.checkTouch = (touchX, touchY) => {
@@ -1740,14 +1761,20 @@ SkyEngine.Node = CLASS({
 			if (isRemoved === true || self.checkIsHiding() === true) {
 				return false;
 			}
-
-			return touchAreas.every((touchArea) => {
-					return touchArea.checkPoint(touchX, touchY) !== true;
-				}) !== true ||
-
-				childNodes.every((childNode) => {
-					return childNode.checkTouch(touchX, touchY) !== true;
-				}) !== true;
+			
+			for (let i = 0; i < touchAreas.length; i += 1) {
+				if (touchAreas[i].checkPoint(touchX, touchY) === true) {
+					return true;
+				}
+			}
+			
+			for (let i = 0; i < childNodes.length; i += 1) {
+				if (childNodes[i].checkTouch(touchX, touchY) === true) {
+					return true;
+				}
+			}
+			
+			return false;
 		};
 
 		let checkCollision = self.checkCollision = (target) => {
@@ -1757,12 +1784,17 @@ SkyEngine.Node = CLASS({
 			}
 			
 			else if (target.type === CLASS) {
-
-				return SkyEngine.Screen.getRegisteredNodes(target).every((realTarget) => {
-					if (realTarget !== self) {
-						return self.checkCollision(realTarget) !== true;
+				
+				let registeredNodes = SkyEngine.Screen.getRegisteredNodes(target);
+				
+				for (let i = 0; i < registeredNodes.length; i += 1) {
+					
+					let realTarget = registeredNodes[i];
+					
+					if (realTarget !== self && self.checkCollision(realTarget) === true) {
+						return true;
 					}
-				}) !== true;
+				}
 			}
 			
 			else {
@@ -1770,34 +1802,60 @@ SkyEngine.Node = CLASS({
 				if (target.checkIsHiding() === true) {
 					return false;
 				}
-
-				return colliders.every((collider) => {
-						return target.checkIsRemoved() !== true && target.getColliders().every((targetCollider) => {
-							return collider.checkArea(targetCollider) !== true && targetCollider.checkArea(collider) !== true;
-						});
-					}) !== true ||
-
-					childNodes.every((childNode) => {
-						return childNode.checkCollision(target) !== true;
-					}) !== true;
+				
+				for (let i = 0; i < colliders.length; i += 1) {
+					
+					if (target.checkIsRemoved() !== true) {
+						
+						let collider = colliders[i];
+						
+						let targetColliders = target.getColliders();
+						
+						for (let j = 0; j < targetColliders.length; j += 1) {
+							
+							let targetCollider = targetColliders[j];
+							
+							if (collider.checkArea(targetCollider) === true || targetCollider.checkArea(collider) === true) {
+								
+								return true;
+							}
+						}
+					}
+				}
+				
+				for (let i = 0; i < childNodes.length; i += 1) {
+					if (childNodes[i].checkCollision(target) === true) {
+						return true;
+					}
+				}
 			}
+			
+			return false;
 		};
 
 		let checkOffScreen = self.checkOffScreen = () => {
-
-			return childNodes.every((childNode) => {
-				return childNode.checkOffScreen() === true;
-			}) === true;
+			
+			for (let i = 0; i < childNodes.length; i += 1) {
+				if (childNodes[i].checkOffScreen() !== true) {
+					return false;
+				}
+			}
+			
+			return true;
 		};
 
 		let checkAllCollisions = () => {
-
-			collisionTargets.forEach((target, index, arr) => {
-
+			
+			for (let i = 0; i < collisionTargets.length; i += 1) {
+				let target = collisionTargets[i];
+				
 				if (target.type === CLASS) {
-
-					SkyEngine.Screen.getRegisteredNodes(target).forEach((realTarget) => {
-
+					
+					let registeredNodes = SkyEngine.Screen.getRegisteredNodes(target);
+					
+					for (let j = 0; j < registeredNodes.length; j += 1) {
+						let realTarget = registeredNodes[j];
+						
 						if (realTarget !== self) {
 
 							if (realTarget.checkIsRemoved() !== true) {
@@ -1818,7 +1876,7 @@ SkyEngine.Node = CLASS({
 								delete collidingNodeIds[realTarget.id];
 							}
 						}
-					});
+					}
 				}
 				
 				else if (target.checkIsRemoved() !== true) {
@@ -1839,13 +1897,18 @@ SkyEngine.Node = CLASS({
 				
 				else {
 
-					arr.splice(index, 1);
+					collisionTargets.splice(i, 1);
+					i -= 1;
 
 					delete collidingNodeIds[target.id];
 					delete meetHandlerMap[target.id];
 					delete partHandlerMap[target.id];
 				}
-			});
+				
+				if (collisionTargets === undefined) {
+					break;
+				}
+			}
 		};
 
 		let step = self.step = (deltaTime) => {
@@ -2130,18 +2193,16 @@ SkyEngine.Node = CLASS({
 	
 				// 모든 터치 영역에 대해 실행
 				if (isRemoved !== true) {
-					
-					touchAreas.forEach((touchArea) => {
-						touchArea.step(deltaTime);
-					});
+					for (let i = 0; i < touchAreas.length; i += 1) {
+						touchAreas[i].step(deltaTime);
+					}
 				}
 	
 				// 모든 충돌 영역에 대해 실행
 				if (isRemoved !== true) {
-					
-					colliders.forEach((collider) => {
-						collider.step(deltaTime);
-					});
+					for (let i = 0; i < colliders.length; i += 1) {
+						colliders[i].step(deltaTime);
+					}
 				}
 				
 				if (isRemoved !== true) {
@@ -2152,9 +2213,9 @@ SkyEngine.Node = CLASS({
 	
 				// 모든 자식 노드들에 대해 실행
 				if (isRemoved !== true) {
-					childNodes.forEach((childNode) => {
-						childNode.step(deltaTime);
-					});
+					for (let i = 0; i < childNodes.length; i += 1) {
+						childNodes[i].step(deltaTime);
+					}
 				}
 	
 				if (isRemoved !== true && eventMap.offscreen !== undefined && self.checkOffScreen() === true) {

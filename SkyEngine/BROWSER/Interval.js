@@ -3,9 +3,9 @@ SkyEngine.Interval = CLASS((cls) => {
 	let intervals = [];
 	
 	let step = cls.step = (deltaTime) => {
-		intervals.forEach((interval) => {
-			interval.step(deltaTime);
-		});
+		for (let i = 0; i < intervals.length; i += 1) {
+			intervals[i].step(deltaTime);
+		}
 	};
 	
 	return {

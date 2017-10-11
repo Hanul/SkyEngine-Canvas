@@ -419,7 +419,9 @@ SkyEngine.ParticleSystem = CLASS(() => {
 				
 				step = self.step = (deltaTime) => {
 					
-					particleInfos.forEach((particleInfo, i) => {
+					for (let i = 0; i < particleInfos.length; i += 1) {
+						
+						let particleInfo = particleInfos[i];
 						
 						particleInfo.time += deltaTime;
 						
@@ -453,7 +455,11 @@ SkyEngine.ParticleSystem = CLASS(() => {
 								particleInfo.alpha = 0;
 							}
 						}
-					});
+						
+						if (particleInfos === undefined) {
+							break;
+						}
+					}
 					
 					origin(deltaTime);
 				};
@@ -464,7 +470,9 @@ SkyEngine.ParticleSystem = CLASS(() => {
 				
 				draw = self.draw = (context) => {
 					
-					particleInfos.forEach((particleInfo) => {
+					for (let i = 0; i < particleInfos.length; i += 1) {
+						
+						let particleInfo = particleInfos[i];
 						
 						let scale = particleInfo.scale;
 						
@@ -551,7 +559,7 @@ SkyEngine.ParticleSystem = CLASS(() => {
 						}
 						
 						context.restore();
-					});
+					}
 					
 					origin(context);
 				};

@@ -3,9 +3,9 @@ SkyEngine.Delay = CLASS((cls) => {
 	let delays = [];
 	
 	let step = cls.step = (deltaTime) => {
-		delays.forEach((delay) => {
-			delay.step(deltaTime);
-		});
+		for (let i = 0; i < delays.length; i += 1) {
+			delays[i].step(deltaTime);
+		}
 	};
 	
 	return {
