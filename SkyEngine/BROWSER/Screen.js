@@ -175,10 +175,6 @@ SkyEngine.Screen = OBJECT({
 				
 				context.save();
 				
-				if (node.getFilter() !== undefined) {
-					context.filter = node.getFilter();
-				}
-				
 				if (node.getBlendMode() !== undefined) {
 					context.globalCompositeOperation = node.getBlendMode();
 				}

@@ -55,7 +55,6 @@ SkyEngine.Node = CLASS({
 		//OPTIONAL: params.maxFadingSpeed		최대 페이드 속도
 		//OPTIONAL: params.toAlpha				페이드 알파 값 목적지
 		
-		//OPTIONAL: params.filter
 		//OPTIONAL: params.blendMode
 
 		//OPTIONAL: params.collider				충돌 영역. 하나의 영역을 지정하거나, 영역들의 배열을 지정할 수 있습니다.
@@ -107,7 +106,6 @@ SkyEngine.Node = CLASS({
 
 		let partHandlerMap = {};
 
-		let filter;
 		let blendMode;
 
 		let isStuckLeft;
@@ -775,7 +773,6 @@ SkyEngine.Node = CLASS({
 				isHiding = params.isHiding;
 			}
 			
-			filter = params.filter;
 			blendMode = params.blendMode;
 		}
 
@@ -851,20 +848,6 @@ SkyEngine.Node = CLASS({
 		if (SkyEngine.Screen !== self) {
 			SkyEngine.Screen.registerNode(self);
 		}
-
-		let setFilter = self.setFilter = (_filter) => {
-			//REQUIRED: filter
-
-			filter = _filter;
-		};
-
-		let getFilter = self.getFilter = () => {
-			return filter;
-		};
-
-		let removeFilter = self.removeFilter = () => {
-			filter = undefined;
-		};
 
 		let setBlendMode = self.setBlendMode = (_blendMode) => {
 			//REQUIRED: blendMode
@@ -2200,8 +2183,7 @@ SkyEngine.Node = CLASS({
 					left : SkyEngine.Screen.getLeft() + (SkyEngine.Screen.getWidth() / 2 + drawingX) * ratio - domWrapper.getWidth() / 2,
 					top : SkyEngine.Screen.getTop() + (SkyEngine.Screen.getHeight() / 2 + drawingY) * ratio - domWrapper.getHeight() / 2,
 					transform : 'rotate(' + realRadian + 'rad) scale(' + ratio * realScaleX + ', ' + ratio * realScaleY + ')',
-					opacity : context.globalAlpha,
-					filter : context.filter
+					opacity : context.globalAlpha
 				});
 			}
 		};
