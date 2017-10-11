@@ -67,7 +67,7 @@ SkyEngine.Screen = OBJECT({
 					for (let i = 0; i < nodes.length; i += 1) {
 						if (nodes[i] === node) {
 							nodes.splice(i, 1);
-							i -= 1;
+							break;
 						}
 					}
 					
