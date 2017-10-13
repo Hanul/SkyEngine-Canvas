@@ -1350,28 +1350,6 @@ SkyEngine.Node = CLASS({
 			setTarget(parentNode);
 		};
 
-		let appendToParent = () => {
-
-			let parentChildren = parentNode.getChildren();
-
-			let low = 0;
-			let high = parentChildren.length;
-
-			while (low < high) {
-
-				// >>> 1은 2로 나누고 나머지를 버리는 것과 동일
-				let mid = (low + high) >>> 1;
-
-				if (parentChildren[mid].getZIndex() <= zIndex) {
-					low = mid + 1;
-				} else {
-					high = mid;
-				}
-			}
-
-			parentChildren.splice(low, 0, self);
-		};
-
 		let removeFromParent = () => {
 
 			let parentChildren = parentNode.getChildren();
@@ -1417,6 +1395,28 @@ SkyEngine.Node = CLASS({
 					break;
 				}
 			}
+		};
+
+		let appendToParent = () => {
+
+			let parentChildren = parentNode.getChildren();
+
+			let low = 0;
+			let high = parentChildren.length;
+
+			while (low < high) {
+
+				// >>> 1은 2로 나누고 나머지를 버리는 것과 동일
+				let mid = (low + high) >>> 1;
+
+				if (parentChildren[mid].getZIndex() <= zIndex) {
+					low = mid + 1;
+				} else {
+					high = mid;
+				}
+			}
+
+			parentChildren.splice(low, 0, self);
 		};
 
 		let appendTo = self.appendTo = (node) => {
