@@ -12,15 +12,15 @@ SkyEngine.Background = CLASS({
 		//REQUIRED: params.src
 		//OPTIONAL: params.isNotToRepeatX
 		//OPTIONAL: params.isNotToRepeatY
-		//OPTIONAL: params.cameraFollowRatio
+		//OPTIONAL: params.followScreenRatio
 		
 		let src = params.src;
 		let isNotToRepeatX = params.isNotToRepeatX;
 		let isNotToRepeatY = params.isNotToRepeatY;
-		let cameraFollowRatio = params.cameraFollowRatio;
+		let followScreenRatio = params.followScreenRatio;
 		
-		if (cameraFollowRatio === undefined) {
-			cameraFollowRatio = 0;
+		if (followScreenRatio === undefined) {
+			followScreenRatio = 0;
 		}
 		
 		let width;
@@ -40,29 +40,29 @@ SkyEngine.Background = CLASS({
 		
 		img.src = src;
 		
-		let beforeCameraFollowX;
-		let beforeCameraFollowY;
+		let beforeScreenX;
+		let beforeScreenY;
 		
 		let step;
 		OVERRIDE(self.step, (origin) => {
 			
 			step = self.step = (deltaTime) => {
 				
-				if (cameraFollowRatio !== 1) {
+				if (followScreenRatio !== 1) {
 					
-					let cameraFollowX = SkyEngine.Screen.getCameraFollowX();
-					let cameraFollowY = SkyEngine.Screen.getCameraFollowY();
+					let screenX = SkyEngine.Screen.getCameraFollowX() - SkyEngine.Screen.getX();
+					let screenY = SkyEngine.Screen.getCameraFollowY() - SkyEngine.Screen.getY();
 					
-					if (beforeCameraFollowX !== undefined) {
-						self.setX(self.getX() + (cameraFollowX - beforeCameraFollowX) * (1 - cameraFollowRatio) / self.getRealScaleX());
+					if (beforeScreenX !== undefined) {
+						self.setX(self.getX() + (screenX - beforeScreenX) * (1 - followScreenRatio) / self.getRealScaleX());
 					}
 					
-					if (beforeCameraFollowY !== undefined) {
-						self.setY(self.getY() + (cameraFollowY - beforeCameraFollowY) * (1 - cameraFollowRatio) / self.getRealScaleY());
+					if (beforeScreenY !== undefined) {
+						self.setY(self.getY() + (screenY - beforeScreenY) * (1 - followScreenRatio) / self.getRealScaleY());
 					}
 					
-					beforeCameraFollowX = cameraFollowX;
-					beforeCameraFollowY = cameraFollowY;
+					beforeScreenX = screenX;
+					beforeScreenY = screenY;
 				}
 				
 				origin(deltaTime);
@@ -90,15 +90,15 @@ SkyEngine.Background = CLASS({
 						
 						let _y = -height / 2;
 						
-						let cameraFollowY = SkyEngine.Screen.getCameraFollowY() / SkyEngine.Screen.getRealScaleY() / self.getRealScaleY();
+						let screenY = (SkyEngine.Screen.getCameraFollowY() - SkyEngine.Screen.getY()) / SkyEngine.Screen.getRealScaleY() / self.getRealScaleY();
 						
 						let halfScreenHeight = SkyEngine.Screen.getHeight() / 2 / SkyEngine.Screen.getRealScaleY() / self.getRealScaleY();
 						
-						while (cameraFollowY - halfScreenHeight < _y + self.getRealY()) {
+						while (screenY - halfScreenHeight < _y + self.getY()) {
 							_y -= height;
 						}
 						
-						while (_y < cameraFollowY + halfScreenHeight) {
+						while (_y + self.getY() < screenY + halfScreenHeight) {
 							
 							context.drawImage(
 								img,
@@ -115,15 +115,15 @@ SkyEngine.Background = CLASS({
 						
 						let _x = -width / 2;
 						
-						let cameraFollowX = SkyEngine.Screen.getCameraFollowX() / SkyEngine.Screen.getRealScaleX() / self.getRealScaleX();
+						let screenX = (SkyEngine.Screen.getCameraFollowX() - SkyEngine.Screen.getX()) / SkyEngine.Screen.getRealScaleX() / self.getRealScaleX();
 						
 						let halfScreenWidth = SkyEngine.Screen.getWidth() / 2 / SkyEngine.Screen.getRealScaleX() / self.getRealScaleX();
 						
-						while (cameraFollowX - halfScreenWidth < _x + self.getRealX()) {
+						while (screenX - halfScreenWidth < _x + self.getX()) {
 							_x -= width;
 						}
 						
-						while (_x < cameraFollowX + halfScreenWidth) {
+						while (_x + self.getX() < screenX + halfScreenWidth) {
 							
 							context.drawImage(
 								img,
@@ -141,25 +141,25 @@ SkyEngine.Background = CLASS({
 						let _x = -width / 2;
 						let _y = -height / 2;
 						
-						let cameraFollowX = SkyEngine.Screen.getCameraFollowX() / SkyEngine.Screen.getRealScaleX() / self.getRealScaleX();
-						let cameraFollowY = SkyEngine.Screen.getCameraFollowY() / SkyEngine.Screen.getRealScaleY() / self.getRealScaleY();
+						let screenX = (SkyEngine.Screen.getCameraFollowX() - SkyEngine.Screen.getX()) / SkyEngine.Screen.getRealScaleX() / self.getRealScaleX();
+						let screenY = (SkyEngine.Screen.getCameraFollowY() - SkyEngine.Screen.getY()) / SkyEngine.Screen.getRealScaleY() / self.getRealScaleY();
 						
 						let halfScreenWidth = SkyEngine.Screen.getWidth() / 2 / SkyEngine.Screen.getRealScaleX() / self.getRealScaleX();
 						let halfScreenHeight = SkyEngine.Screen.getHeight() / 2 / SkyEngine.Screen.getRealScaleY() / self.getRealScaleY();
 						
-						while (cameraFollowX - halfScreenWidth < _x) {
+						while (screenX - halfScreenWidth < _x + self.getX()) {
 							_x -= width;
 						}
 						
-						while (cameraFollowY - halfScreenHeight < _y) {
+						while (screenY - halfScreenHeight < _y + self.getY()) {
 							_y -= height;
 						}
 						
-						while (_y < cameraFollowY + halfScreenHeight) {
+						while (_y + self.getY() < screenY + halfScreenHeight) {
 							
 							let _x2 = _x;
 							
-							while (_x2 < cameraFollowX + halfScreenWidth) {
+							while (_x2 + self.getX() < screenX + halfScreenWidth) {
 								
 								context.drawImage(
 									img,

@@ -238,7 +238,7 @@ SkyEngine.Screen = OBJECT({
 					let colliders = node.getColliders();
 					
 					for (let i = 0; i < colliders.length; i += 1) {
-						drawAllArea(collider, context, 'lime');
+						drawAllArea(colliders[i], context, 'lime');
 					}
 				}
 			}
@@ -326,34 +326,34 @@ SkyEngine.Screen = OBJECT({
 		let cameraFollowX = self.cameraFollowX = (params) => {
 			//REQUIRED: params
 			//REQUIRED: params.target
-			//OPtIONAL: params.centerX
+			//OPTIONAL: params.centerX
 			
 			cameraFollowXTarget = params.target;
 			
 			cameraFollowCenterX = params.centerX;
-			if (cameraFollowX === undefined) {
-				cameraFollowX = 0;
+			if (cameraFollowCenterX === undefined) {
+				cameraFollowCenterX = 0;
 			}
 		};
 		
 		let cameraFollowY = self.cameraFollowY = (node) => {
 			//REQUIRED: params
 			//REQUIRED: params.target
-			//OPtIONAL: params.centerY
+			//OPTIONAL: params.centerY
 			
 			cameraFollowYTarget = params.target;
 			
 			cameraFollowCenterY = params.centerY;
-			if (cameraFollowY === undefined) {
-				cameraFollowY = 0;
+			if (cameraFollowCenterY === undefined) {
+				cameraFollowCenterY = 0;
 			}
 		};
 		
 		let cameraFollow = self.cameraFollow = (node) => {
 			//REQUIRED: params
 			//REQUIRED: params.target
-			//OPtIONAL: params.centerX
-			//OPtIONAL: params.centerY
+			//OPTIONAL: params.centerX
+			//OPTIONAL: params.centerY
 			
 			cameraFollowX(params);
 			cameraFollowY(params);
