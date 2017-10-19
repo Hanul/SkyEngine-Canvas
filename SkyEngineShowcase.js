@@ -7,15 +7,15 @@ BOOT({
 		title : 'SkyEngine 쇼케이스',
 		
 		isDevMode : true,
-		webServerPort : 8127,
+		webServerPort : 8127
+	},
+	
+	BROWSER_CONFIG : {
+		isNotToConnectServer : true,
 		
 		SkyEngine : {
 			isDebugMode : true
 		}
-	},
-	
-	BROWSER_CONFIG : {
-		isNotToConnectServer : true
 	},
 	
 	NODE_CONFIG : {

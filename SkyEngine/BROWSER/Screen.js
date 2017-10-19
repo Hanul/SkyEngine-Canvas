@@ -85,7 +85,7 @@ SkyEngine.Screen = OBJECT({
 		};
 		
 		// 디버그 모드에서는 FPS 수치 표시
-		if (CONFIG.SkyEngine.isDebugMode === true) {
+		if (BROWSER_CONFIG.SkyEngine.isDebugMode === true) {
 			
 			let fpsDom = DIV({
 				style : {
@@ -210,7 +210,7 @@ SkyEngine.Screen = OBJECT({
 				context.restore();
 				
 				// 개발 모드에서는 중점 및 영역 표시
-				if (node.checkIsRemoved() !== true && CONFIG.SkyEngine.isDebugMode === true) {
+				if (node.checkIsRemoved() !== true && BROWSER_CONFIG.SkyEngine.isDebugMode === true) {
 					
 					// 중점을 그립니다.
 					context.beginPath();
@@ -279,14 +279,14 @@ SkyEngine.Screen = OBJECT({
 			let winWidth = WIN_WIDTH();
 			let winHeight = WIN_HEIGHT();
 			
-			if (CONFIG.SkyEngine.width !== undefined) {
-				width = CONFIG.SkyEngine.width;
+			if (BROWSER_CONFIG.SkyEngine.width !== undefined) {
+				width = BROWSER_CONFIG.SkyEngine.width;
 			} else {
 				width = winWidth;
 			}
 			
-			if (CONFIG.SkyEngine.height !== undefined) {
-				height = CONFIG.SkyEngine.height;
+			if (BROWSER_CONFIG.SkyEngine.height !== undefined) {
+				height = BROWSER_CONFIG.SkyEngine.height;
 			} else {
 				height = winHeight;
 			}
