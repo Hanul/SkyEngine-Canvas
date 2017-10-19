@@ -1917,11 +1917,11 @@ SkyEngine.Node = CLASS({
 				
 				beforeX = x;
 				beforeY = y;
-	
+				
 				if (accelX !== 0) {
 					speedX += accelX * deltaTime;
 				}
-	
+				
 				if (minSpeedX !== undefined && speedX < minSpeedX) {
 					speedX = minSpeedX;
 					
@@ -1940,7 +1940,7 @@ SkyEngine.Node = CLASS({
 						}
 					}
 				}
-	
+				
 				if (maxSpeedX !== undefined && speedX > maxSpeedX) {
 					speedX = maxSpeedX;
 					
@@ -1959,11 +1959,11 @@ SkyEngine.Node = CLASS({
 						}
 					}
 				}
-	
+				
 				if (accelY !== 0) {
 					speedY += accelY * deltaTime;
 				}
-	
+				
 				if (minSpeedY !== undefined && speedY < minSpeedY) {
 					speedY = minSpeedY;
 					
@@ -1982,7 +1982,7 @@ SkyEngine.Node = CLASS({
 						}
 					}
 				}
-	
+				
 				if (maxSpeedY !== undefined && speedY > maxSpeedY) {
 					speedY = maxSpeedY;
 					
@@ -2001,7 +2001,7 @@ SkyEngine.Node = CLASS({
 						}
 					}
 				}
-	
+				
 				if (speedX !== 0) {
 	
 					let dx = speedX * deltaTime;
@@ -2032,7 +2032,7 @@ SkyEngine.Node = CLASS({
 						}
 					}
 				}
-	
+				
 				if (speedY !== 0) {
 	
 					let dy = speedY * deltaTime;
@@ -2064,31 +2064,31 @@ SkyEngine.Node = CLASS({
 						}
 					}
 				}
-	
+				
 				if (scalingAccelX !== 0) {
 					scalingSpeedX += scalingAccelX * deltaTime;
 				}
-	
+				
 				if (minScalingSpeedX !== undefined && scalingSpeedX < minScalingSpeedX) {
 					scalingSpeedX = minScalingSpeedX;
 				}
-	
+				
 				if (maxScalingSpeedX !== undefined && scalingSpeedX > maxScalingSpeedX) {
 					scalingSpeedX = maxScalingSpeedX;
 				}
-	
+				
 				if (scalingAccelY !== 0) {
 					scalingSpeedY += scalingAccelY * deltaTime;
 				}
-	
+				
 				if (minScalingSpeedY !== undefined && scalingSpeedY < minScalingSpeedY) {
 					scalingSpeedY = minScalingSpeedY;
 				}
-	
+				
 				if (maxScalingSpeedY !== undefined && scalingSpeedY > maxScalingSpeedY) {
 					scalingSpeedY = maxScalingSpeedY;
 				}
-	
+				
 				if (scalingSpeedX !== 0) {
 					scaleX += scalingSpeedX * deltaTime;
 	
@@ -2101,12 +2101,12 @@ SkyEngine.Node = CLASS({
 						}
 					}
 				}
-	
+				
 				if (scalingSpeedY !== 0) {
 					scaleY += scalingSpeedY * deltaTime;
-	
+					
 					if (toScaleY !== undefined) {
-	
+						
 						if ((scalingSpeedY > 0 && scaleY > toScaleY) || (scalingSpeedY < 0 && scaleY < toScaleY)) {
 							scaleY = toScaleY;
 							scalingSpeedY = 0;
@@ -2114,19 +2114,19 @@ SkyEngine.Node = CLASS({
 						}
 					}
 				}
-	
+				
 				if (rotationAccel !== 0) {
 					rotationSpeed += rotationAccel * deltaTime;
 				}
-	
+				
 				if (minRotationSpeed !== undefined && rotationSpeed < minRotationSpeed) {
 					rotationSpeed = minRotationSpeed;
 				}
-	
+				
 				if (maxRotationSpeed !== undefined && rotationSpeed > maxRotationSpeed) {
 					rotationSpeed = maxRotationSpeed;
 				}
-	
+				
 				if (rotationSpeed !== 0) {
 					angle += rotationSpeed * deltaTime;
 	
@@ -2151,19 +2151,19 @@ SkyEngine.Node = CLASS({
 						angle = 360;
 					}
 				}
-	
+				
 				if (fadingAccel !== 0) {
 					fadingSpeed += fadingAccel * deltaTime;
 				}
-	
+				
 				if (minFadingSpeed !== undefined && fadingSpeed < minFadingSpeed) {
 					fadingSpeed = minFadingSpeed;
 				}
-	
+				
 				if (maxFadingSpeed !== undefined && fadingSpeed > maxFadingSpeed) {
 					fadingSpeed = maxFadingSpeed;
 				}
-	
+				
 				if (fadingSpeed !== 0) {
 					alpha += fadingSpeed * deltaTime;
 	
@@ -2188,16 +2188,16 @@ SkyEngine.Node = CLASS({
 						alpha = 0;
 					}
 				}
-	
+				
 				genRealProperties();
-	
+				
 				// 모든 터치 영역에 대해 실행
 				if (isRemoved !== true) {
 					for (let i = 0; i < touchAreas.length; i += 1) {
 						touchAreas[i].step(deltaTime);
 					}
 				}
-	
+				
 				// 모든 충돌 영역에 대해 실행
 				if (isRemoved !== true) {
 					for (let i = 0; i < colliders.length; i += 1) {
@@ -2210,23 +2210,23 @@ SkyEngine.Node = CLASS({
 					// 충돌 체크
 					checkAllCollisions();
 				}
-	
+				
 				// 모든 자식 노드들에 대해 실행
 				if (isRemoved !== true) {
 					for (let i = 0; i < childNodes.length; i += 1) {
 						childNodes[i].step(deltaTime);
 					}
 				}
-	
+				
 				if (isRemoved !== true && eventMap.offscreen !== undefined && self.checkOffScreen() === true) {
 					fireEvent('offscreen');
 				}
-	
+				
 				if (isRemoved !== true && eventMap.nextstep !== undefined) {
 					fireEvent('nextstep');
 					off('nextstep');
 				}
-	
+				
 				if (isRemoved !== true && eventMap.move !== undefined && (x !== beforeX || y !== beforeY)) {
 					fireEvent('move');
 				}
