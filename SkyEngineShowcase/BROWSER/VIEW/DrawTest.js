@@ -12,19 +12,19 @@ SkyEngineShowcase.DrawTest = CLASS({
 			startY : -10,
 			endX : 100,
 			endY : 10,
-			border : '5px solid red'
+			border : '5px solid #FF0000'
 		}).appendTo(SkyEngine.Screen);
 		
 		let rect = SkyEngine.Rect({
 			width : 300,
 			height : 200,
-			color : 'green'
+			color : '#008000'
 		}).appendTo(SkyEngine.Screen);
 		
 		let circle = SkyEngine.Circle({
 			width : 300,
 			height : 200,
-			color : 'yellow'
+			color : '#FFFF00'
 		}).appendTo(SkyEngine.Screen);
 		
 		let character = SkyEngine.Sprite({
