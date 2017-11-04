@@ -246,10 +246,8 @@ SkyEngineShowcase.RaycastTest = CLASS({
 			light = SkyEngine.Polygon({
 				points : foundPoints,
 				color : gradient,
-				z : -1
+				zIndex : -1
 			}).appendTo(SkyEngine.Screen);
-			
-			light.setFilter('blur(2px)');
 		};
 		
 		let torch = SkyEngine.Sprite({
