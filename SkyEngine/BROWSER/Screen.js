@@ -231,7 +231,7 @@ SkyEngine.Screen = OBJECT({
 					let touchAreas = node.getTouchAreas();
 					
 					for (let i = 0; i < touchAreas.length; i += 1) {
-						drawAllArea(drawAllArea[i], context, 'magenta');
+						drawAllArea(touchAreas[i], context, 'magenta');
 					}
 					
 					// 충돌 영역을 그립니다.
@@ -298,6 +298,14 @@ SkyEngine.Screen = OBJECT({
 				ratio = widthRatio;
 			} else {
 				ratio = heightRatio;
+			}
+			
+			if (BROWSER_CONFIG.SkyEngine.width === undefined) {
+				width /= ratio;
+			}
+			
+			if (BROWSER_CONFIG.SkyEngine.height === undefined) {
+				height /= ratio;
 			}
 			
 			canvas.addStyle({

@@ -274,5 +274,13 @@ SkyEngine.Sprite = CLASS({
 				origin();
 			};
 		});
+		
+		let getImg = inner.getImg = () => {
+			return img;
+		};
+		
+		let getImgs = inner.getImgs = () => {
+			return imgs;
+		};
 	}
 });

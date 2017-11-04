@@ -191,5 +191,9 @@ SkyEngine.Background = CLASS({
 				origin();
 			};
 		});
+		
+		let getImg = inner.getImg = () => {
+			return img;
+		};
 	}
 });
