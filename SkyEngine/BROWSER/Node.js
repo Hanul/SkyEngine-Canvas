@@ -116,7 +116,7 @@ SkyEngine.Node = CLASS({
 		let isStuckUp;
 		let isStuckDown;
 		
-		let isPaused;
+		let pauseCount = 0;
 		
 		let domWrapper;
 
@@ -1988,7 +1988,7 @@ SkyEngine.Node = CLASS({
 
 		let step = self.step = (deltaTime) => {
 			
-			if (isPaused !== true) {
+			if (pauseCount === 0) {
 				
 				beforeX = x;
 				beforeY = y;
@@ -2353,15 +2353,20 @@ SkyEngine.Node = CLASS({
 		};
 		
 		let pause = self.pause = () => {
-			isPaused = true;
+			pauseCount += 1;
 		};
 		
 		let checkIsPaused = self.checkIsPaused = () => {
-			return isPaused;
+			return pauseCount > 0;
 		};
 		
 		let resume = self.resume = () => {
-			isPaused = false;
+			
+			pauseCount -= 1;
+			
+			if (pauseCount < 0) {
+				pauseCount = 0;
+			}
 		};
 
 		genRealProperties();
