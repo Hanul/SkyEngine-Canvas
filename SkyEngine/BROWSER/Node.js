@@ -63,6 +63,7 @@ SkyEngine.Node = CLASS({
 		//OPTIONAL: params.domStyle
 		//OPTIONAL: params.dom
 		//OPTIONAL: params.on					이벤트
+		//OPTIONAL: params.onDisplayResize
 
 		// properties
 		let x, y, zIndex, centerX, centerY, scaleX, scaleY, angle, alpha;
@@ -119,6 +120,9 @@ SkyEngine.Node = CLASS({
 		let pauseCount = 0;
 		
 		let domWrapper;
+		
+		let onDisplayResize;
+		let displayResizeEvent;
 
 		let genRealPosition = () => {
 
@@ -777,6 +781,8 @@ SkyEngine.Node = CLASS({
 			}
 			
 			blendMode = params.blendMode;
+			
+			onDisplayResize = params.onDisplayResize;
 		}
 
 		// 초기화 되지 않은 파라미터에 기본값 지정
@@ -845,6 +851,19 @@ SkyEngine.Node = CLASS({
 		}
 		if (fadingAccel === undefined) {
 			fadingAccel = 0;
+		}
+		
+		if (onDisplayResize !== undefined) {
+			displayResizeEvent = EVENT('resize', RAR(() => {
+				let result = onDisplayResize();
+				
+				if (result.x !== undefined) {
+					setX(result.x);
+				}
+				if (result.y !== undefined) {
+					setY(result.y);
+				}
+			}));
 		}
 
 		// 노드 등록
@@ -1566,6 +1585,9 @@ SkyEngine.Node = CLASS({
 			}
 
 			isRemoved = true;
+			
+			displayResizeEvent.remove();
+			displayResizeEvent = undefined;
 		};
 
 		let checkIsRemoved = self.checkIsRemoved = () => {
@@ -2174,10 +2196,10 @@ SkyEngine.Node = CLASS({
 							scalingSpeedX = 0;
 							scalingAccelX = 0;
 							
-							if (scaleYEndHandler !== undefined) {
-								let _scaleYEndHandler = scaleYEndHandler;
-								scaleYEndHandler = undefined;
-								_scaleYEndHandler();
+							if (scaleXEndHandler !== undefined) {
+								let _scaleXEndHandler = scaleXEndHandler;
+								scaleXEndHandler = undefined;
+								_scaleXEndHandler();
 							}
 							
 							if (scaleEndHandler !== undefined && scalingSpeedY === 0) {
