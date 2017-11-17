@@ -1586,8 +1586,10 @@ SkyEngine.Node = CLASS({
 
 			isRemoved = true;
 			
-			displayResizeEvent.remove();
-			displayResizeEvent = undefined;
+			if (displayResizeEvent !== undefined) {
+				displayResizeEvent.remove();
+				displayResizeEvent = undefined;
+			}
 		};
 
 		let checkIsRemoved = self.checkIsRemoved = () => {
