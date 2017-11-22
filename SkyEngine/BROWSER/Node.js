@@ -2114,6 +2114,8 @@ SkyEngine.Node = CLASS({
 							if ((speedX > 0 && x > toX) || (speedX < 0 && x < toX)) {
 								
 								x = toX;
+								toX = undefined;
+								
 								speedX = 0;
 								accelX = 0;
 								
@@ -2146,6 +2148,8 @@ SkyEngine.Node = CLASS({
 							if ((speedY > 0 && y > toY) || (speedY < 0 && y < toY)) {
 								
 								y = toY;
+								toY = undefined;
+								
 								speedY = 0;
 								accelY = 0;
 								
