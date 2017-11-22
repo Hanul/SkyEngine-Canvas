@@ -2112,6 +2112,7 @@ SkyEngine.Node = CLASS({
 						if (toX !== undefined) {
 	
 							if ((speedX > 0 && x > toX) || (speedX < 0 && x < toX)) {
+								
 								x = toX;
 								speedX = 0;
 								accelX = 0;
@@ -2135,7 +2136,7 @@ SkyEngine.Node = CLASS({
 				if (speedY !== 0) {
 	
 					let dy = speedY * deltaTime;
-	
+					
 					if ((dy < 0 && isStuckUp !== true) || (dy > 0 && isStuckDown !== true)) {
 	
 						y += dy;
