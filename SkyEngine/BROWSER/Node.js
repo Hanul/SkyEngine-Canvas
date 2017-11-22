@@ -2114,7 +2114,10 @@ SkyEngine.Node = CLASS({
 							if ((speedX > 0 && x > toX) || (speedX < 0 && x < toX)) {
 								
 								x = toX;
+								
 								toX = undefined;
+								minSpeedX = undefined;
+								maxSpeedX = undefined;
 								
 								speedX = 0;
 								accelX = 0;
@@ -2140,7 +2143,7 @@ SkyEngine.Node = CLASS({
 					let dy = speedY * deltaTime;
 					
 					if ((dy < 0 && isStuckUp !== true) || (dy > 0 && isStuckDown !== true)) {
-	
+
 						y += dy;
 	
 						if (toY !== undefined) {
@@ -2148,7 +2151,10 @@ SkyEngine.Node = CLASS({
 							if ((speedY > 0 && y > toY) || (speedY < 0 && y < toY)) {
 								
 								y = toY;
+								
 								toY = undefined;
+								minSpeedY = undefined;
+								maxSpeedY = undefined;
 								
 								speedY = 0;
 								accelY = 0;
@@ -2199,7 +2205,13 @@ SkyEngine.Node = CLASS({
 					if (toScaleX !== undefined) {
 	
 						if ((scalingSpeedX > 0 && scaleX > toScaleX) || (scalingSpeedX < 0 && scaleX < toScaleX)) {
+							
 							scaleX = toScaleX;
+							
+							toScaleX = undefined;
+							minScalingSpeedX = undefined;
+							maxScalingSpeedX = undefined;
+							
 							scalingSpeedX = 0;
 							scalingAccelX = 0;
 							
@@ -2224,7 +2236,13 @@ SkyEngine.Node = CLASS({
 					if (toScaleY !== undefined) {
 						
 						if ((scalingSpeedY > 0 && scaleY > toScaleY) || (scalingSpeedY < 0 && scaleY < toScaleY)) {
+							
 							scaleY = toScaleY;
+							
+							toScaleY = undefined;
+							minScalingSpeedY = undefined;
+							maxScalingSpeedY = undefined;
+							
 							scalingSpeedY = 0;
 							scalingAccelY = 0;
 							
@@ -2261,7 +2279,13 @@ SkyEngine.Node = CLASS({
 					if (toAngle !== undefined) {
 	
 						if (angle + toAngle < 360 && ((rotationSpeed > 0 && angle >= toAngle) || (rotationSpeed < 0 && angle <= toAngle))) {
+							
 							angle = toAngle;
+							
+							toAngle = undefined;
+							minRotationSpeed = undefined;
+							maxRotationSpeed = undefined;
+							
 							rotationSpeed = 0;
 							rotationAccel = 0;
 							
@@ -2298,7 +2322,13 @@ SkyEngine.Node = CLASS({
 					if (toAlpha !== undefined) {
 	
 						if ((fadingSpeed > 0 && alpha > toAlpha) || (fadingSpeed < 0 && alpha < toAlpha)) {
+							
 							alpha = toAlpha;
+							
+							toAlpha = undefined;
+							minFadingSpeed = undefined;
+							maxFadingSpeed = undefined;
+							
 							fadingSpeed = 0;
 							fadingAccel = 0;
 							

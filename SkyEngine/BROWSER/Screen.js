@@ -124,7 +124,7 @@ SkyEngine.Screen = OBJECT({
 						
 						if (
 						node.checkIsEventExists(eventName) === true &&
-						node.checkTouch(e.getLeft() - width / 2, e.getTop() - height / 2) === true) {
+						node.checkTouch((e.getLeft() - WIN_WIDTH() / 2) / ratio, (e.getTop() - WIN_HEIGHT() / 2) / ratio) === true) {
 							
 							let se = SkyEngine.E(e);
 							
