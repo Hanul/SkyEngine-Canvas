@@ -303,7 +303,7 @@ circle.setPosition({
 ### `onPart`
 
 ## 필터
-노드에 블러 효과나 흑백 효과와 같은 그래픽 필터를 적용시킬 수 있습니다.
+노드에 블러 효과나 흑백 효과와 같은 그래픽 필터를 적용시킬 수 있습니다. *(Safari에서는 작동하지 않습니다.)*
 
 https://developer.mozilla.org/en-US/docs/Web/CSS/filter
 
