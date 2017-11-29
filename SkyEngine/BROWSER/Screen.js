@@ -261,6 +261,8 @@ SkyEngine.Screen = OBJECT({
 				self.step(deltaTime);
 			}
 			
+			nonePausableNode.step(deltaTime);
+			
 			// 모든 노드를 그립니다.
 			context.clearRect(0, 0, width * devicePixelRatio, height * devicePixelRatio);
 			
@@ -434,6 +436,12 @@ SkyEngine.Screen = OBJECT({
 		
 		let getCanvasContext = self.getCanvasContext = () => {
 			return context;
+		};
+		
+		let nonePausableNode = SkyEngine.Node();
+		
+		let getNonePausableNode = self.getNonePausableNode = () => {
+			return nonePausableNode;
 		};
 	}
 });
