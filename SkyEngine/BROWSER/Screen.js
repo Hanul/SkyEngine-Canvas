@@ -124,7 +124,7 @@ SkyEngine.Screen = OBJECT({
 						
 						if (
 						node.checkIsEventExists(eventName) === true &&
-						node.checkTouch(e.getLeft() - width / 2, e.getTop() - height / 2) === true) {
+						node.checkTouch((e.getLeft() - WIN_WIDTH() / 2) / ratio, (e.getTop() - WIN_HEIGHT() / 2) / ratio) === true) {
 							
 							let se = SkyEngine.E(e);
 							
@@ -308,6 +308,14 @@ SkyEngine.Screen = OBJECT({
 			
 			if (BROWSER_CONFIG.SkyEngine.height === undefined) {
 				height /= ratio;
+			}
+			
+			if (BROWSER_CONFIG.SkyEngine.maxWidth !== undefined && width > BROWSER_CONFIG.SkyEngine.maxWidth) {
+				width = BROWSER_CONFIG.SkyEngine.maxWidth;
+			}
+			
+			if (BROWSER_CONFIG.SkyEngine.maxHeight !== undefined && height > BROWSER_CONFIG.SkyEngine.maxHeight) {
+				height = BROWSER_CONFIG.SkyEngine.maxHeight;
 			}
 			
 			canvas.addStyle({
