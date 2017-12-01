@@ -866,6 +866,13 @@ SkyEngine.Node = CLASS({
 				if (result.y !== undefined) {
 					setY(result.y);
 				}
+				
+				if (result.scaleX !== undefined) {
+					setScaleX(result.scaleX);
+				}
+				if (result.scaleY !== undefined) {
+					setScaleY(result.scaleY);
+				}
 			}));
 		}
 
