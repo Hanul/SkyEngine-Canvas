@@ -1743,9 +1743,18 @@ SkyEngine.Node = CLASS({
 		
 		let addDomStyle = self.addDomStyle = (domStyle) => {
 			
-			if (domWrapper !== undefined) {
-				domWrapper.addStyle(domStyle);
+			if (domWrapper === undefined) {
+				
+				domWrapper = DIV({
+					style : {
+						position : 'fixed',
+						left : -999999,
+						top : -999999
+					}
+				}).appendTo(BODY);
 			}
+			
+			domWrapper.addStyle(domStyle);
 		};
 		
 		let removeAllDoms = self.removeAllDoms = () => {
