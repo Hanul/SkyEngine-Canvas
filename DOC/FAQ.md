@@ -6,3 +6,11 @@ SkyEngine에 대해 자주 묻는 질문에 대해 정리한 문서입니다. �
 
 ## 3D 게임을 만들수 있나요?
 아니요. 3D 게임을 개발하고자 하는 경우에는 [Godot Engine](https://godotengine.org/), [Unity](https://unity3d.com), [Unreal Engine](https://www.unrealengine.com) 등을 살펴보시기 바랍니다.
+
+## 사용하는데 필요한 배경지식이 있나요?
+네. 기반 언어인 EMCAScript 6을 알아야 합니다. 그리고 SkyEngine은 UPPERCASE를 기반으로 만들어졌기 때문에, UPPERCASE에 대해 알면 크게 도움이 됩니다. UPPERCASE를 기반으로 한 여러가지 서버 기능을 게임에 연동하기 위해서는 필수로 알아야 합니다.
+
+## 왜 만든거죠?
+
+## 누가 이 엔진을 쓰면 좋나요?
+HTML5 기반 게임을 만드려는 게임 개발자나, 게임 개발을 시작하려는 웹 개발자에게 특히 좋습니다.
