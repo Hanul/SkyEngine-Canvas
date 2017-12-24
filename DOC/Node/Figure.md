@@ -3,8 +3,8 @@
 
 ![도형들](https://raw.githubusercontent.com/Hanul/SkyEngine/master/DOC/Node/Figure/figures.png)
 
-## 공통 설정 파라미터
-[노드](../Node.md)의 파라미터 외에 모든 도형 노드들에서 공통으로 설정할 수 있는 파라미터 목록은 다음과 같습니다.
+## 도형 노드 공통 파라미터
+[노드의 파라미터](../Node.md#파라미터) 외에 모든 도형 노드들에서 공통으로 설정할 수 있는 파라미터 목록은 다음과 같습니다.
 
 ### `color`
 도형의 색상을 설정할 수 있습니다.
@@ -69,7 +69,7 @@ let line = SkyEngine.Line({
 }).appendTo(SkyEngine.Screen);
 ```
 
-[노드](../Node.md)의 파라미터와 공통 파라미터 외에 사용 가능한 파라미터는 다음과 같습니다.
+[공통 파라미터](#도형-노드-공통-파라미터) 외에 사용 가능한 파라미터는 다음과 같습니다.
 - `startX` 직선의 시작 x 좌표
 - `startY` 직선의 시작 y 좌표
 - `endX` 직선의 끝 x 좌표
@@ -89,7 +89,7 @@ let rect = SkyEngine.Rect({
 }).appendTo(SkyEngine.Screen);
 ```
 
-[노드](../Node.md)의 파라미터와 공통 파라미터 외에 사용 가능한 파라미터는 다음과 같습니다.
+[공통 파라미터](#도형-노드-공통-파라미터) 외에 사용 가능한 파라미터는 다음과 같습니다.
 - `width` 사각형의 너비
 - `height` 사각형의 높이
 
@@ -106,7 +106,7 @@ let circle = SkyEngine.Circle({
 }).appendTo(SkyEngine.Screen);
 ```
 
-[노드](../Node.md)의 파라미터와 공통 파라미터 외에 사용 가능한 파라미터는 다음과 같습니다.
+[공통 파라미터](#도형-노드-공통-파라미터) 외에 사용 가능한 파라미터는 다음과 같습니다.
 - `width` 원의 너비
 - `height` 원의 높이
 
@@ -131,7 +131,7 @@ let polygon = SkyEngine.Polygon({
 }).appendTo(SkyEngine.Screen);
 ```
 
-[노드](../Node.md)의 파라미터와 공통 파라미터 외에 사용 가능한 파라미터는 다음과 같습니다.
+[공통 파라미터](#도형-노드-공통-파라미터) 외에 사용 가능한 파라미터는 다음과 같습니다.
 - `points` 다각형을 이루는 점들의 좌표들
 
 ## 영역으로 사용되는 도형 노드들
