@@ -85,6 +85,10 @@ SkyEngine의 모든 구성요소는 노드를 확장합니다.
 * [파티클 시스템 노드](DOC/Node/ParticleSystem.md#파티클-시스템-노드)
 * [일회성 파티클 시스템 노드](DOC/Node/ParticleSystem.md#일회성-파티클-시스템-노드)
 
+## UPPERCASE의 기능 중 게임에서 사용할 만한 것들
+* [사운드 재생](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/UPPERCASE-CORE-BROWSER.md#sound)
+* [HTTP 요청 기능](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/UPPERCASE-CORE-BROWSER.md#http-%EC%9A%94%EC%B2%AD-%EA%B8%B0%EB%8A%A5)
+
 ## 기타 문서
 * [자주 묻는 질문](DOC/FAQ.md)
 * [튜토리얼](DOC/Tutorial.md)
