@@ -1,4 +1,4 @@
-# 상태 세트
+# 상태 세트 노드
 게임 캐릭터는 대기, 이동, 공격 등 여러가지 상태를 가질 수 있습니다. 상태 세트 노드를 사용하면 여러가지 상태들을 쉽게 관리할 수 있습니다.
 
 ```javascript
@@ -51,7 +51,7 @@ let robot = SkyEngine.StateSet({
 현재 상태를 가져옵니다.
 
 ## 공격과 이동 예시
-```
+```javascript
 let savedSpeedX;
 let savedState;
 
