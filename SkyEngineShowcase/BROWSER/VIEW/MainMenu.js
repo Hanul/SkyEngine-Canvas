@@ -246,6 +246,18 @@ SkyEngineShowcase.MainMenu = CLASS({
 						marginTop : 15
 					},
 					c : A({
+						c : '상태 세트 테스트',
+						on : {
+							tap : () => {
+								SkyEngineShowcase.GO('test/stateset');
+							}
+						}
+					})
+				}), LI({
+					style : {
+						marginTop : 15
+					},
+					c : A({
 						c : '타일맵 테스트',
 						on : {
 							tap : () => {

@@ -98,6 +98,11 @@ SkyEngineShowcase.MAIN = METHOD({
 		});
 		
 		SkyEngineShowcase.MATCH_VIEW({
+			uri : 'test/stateset',
+			target : SkyEngineShowcase.StateSetTest
+		});
+		
+		SkyEngineShowcase.MATCH_VIEW({
 			uri : 'test/tilemap',
 			target : SkyEngineShowcase.TileMapTest
 		});
