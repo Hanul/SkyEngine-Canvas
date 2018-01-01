@@ -1,6 +1,8 @@
 # 상태 세트 노드
 게임 캐릭터는 대기, 이동, 공격 등 여러가지 상태를 가질 수 있습니다. 상태 세트 노드를 사용하면 여러가지 상태들을 쉽게 관리할 수 있습니다.
 
+![여러 상태들](https://raw.githubusercontent.com/Hanul/SkyEngine/master/DOC/Node/StateSet/states.png)
+
 ```javascript
 let robot = SkyEngine.StateSet({
 	stateNodes : {
