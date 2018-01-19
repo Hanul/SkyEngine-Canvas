@@ -2025,7 +2025,8 @@ SkyEngine.Node = CLASS({
 			return false;
 		};
 
-		let checkCollision = self.checkCollision = (target) => {
+		let checkOneSideCollision = self.checkOneSideCollision = (target) => {
+			//REQUIRED: target
 
 			if (isRemoved === true || self.checkIsHiding() === true) {
 				return false;
@@ -2039,7 +2040,7 @@ SkyEngine.Node = CLASS({
 					
 					let realTarget = registeredNodes[i];
 					
-					if (realTarget !== self && self.checkCollision(realTarget) === true) {
+					if (realTarget !== self && self.checkOneSideCollision(realTarget) === true) {
 						return true;
 					}
 				}
@@ -2072,13 +2073,64 @@ SkyEngine.Node = CLASS({
 				}
 				
 				for (let i = 0; i < childNodes.length; i += 1) {
-					if (childNodes[i].checkCollision(target) === true) {
+					if (childNodes[i].checkOneSideCollision(target) === true) {
 						return true;
 					}
 				}
 			}
 			
 			return false;
+		};
+		
+		let checkCollision = self.checkCollision = (target) => {
+			//REQUIRED: target
+			
+			if (target.type === CLASS) {
+				
+				let registeredNodes = SkyEngine.Screen.getRegisteredNodes(target);
+				
+				for (let i = 0; i < registeredNodes.length; i += 1) {
+					let realTarget = registeredNodes[i];
+					
+					if (realTarget !== self && realTarget.checkIsRemoved() !== true && (self.checkOneSideCollision(realTarget) === true || (self.type !== realTarget.type && realTarget.checkOneSideCollision(self) === true))) {
+						return true;
+					}
+				}
+			}
+			
+			else if (target.checkIsRemoved() !== true && (self.checkOneSideCollision(target) === true || (self.type !== target.type && target.checkOneSideCollision(self) === true))) {
+				return true;
+			}
+			
+			return false;
+		};
+		
+		let checkCollisionPosition = self.checkCollisionPosition = (params) => {
+			//REQUIRED: params
+			//REQUIRED: params.target
+			//OPTIONAL: params.x
+			//OPTIONAL: params.y
+			
+			let target = params.target;
+			let x = params.x;
+			let y = params.y;
+			
+			let originX = getX();
+			let originY = getY();
+			
+			setPosition({
+				x : x,
+				y : y
+			});
+			
+			let r = checkCollision(target);
+			
+			setPosition({
+				x : originX,
+				y : originY
+			});
+			
+			return r;
 		};
 
 		let checkOffScreen = self.checkOffScreen = () => {
@@ -2108,7 +2160,7 @@ SkyEngine.Node = CLASS({
 
 							if (realTarget.checkIsRemoved() !== true) {
 
-								if (self.checkCollision(realTarget) === true || (self.type !== realTarget.type && realTarget.checkCollision(self) === true)) {
+								if (self.checkOneSideCollision(realTarget) === true || (self.type !== realTarget.type && realTarget.checkOneSideCollision(self) === true)) {
 
 									if (isRemoved !== true && collidingNodeIds[realTarget.id] === undefined) {
 										collidingNodeIds[realTarget.id] = true;
@@ -2129,7 +2181,7 @@ SkyEngine.Node = CLASS({
 				
 				else if (target.checkIsRemoved() !== true) {
 
-					if (self.checkCollision(target) === true || (self.type !== target.type && target.checkCollision(self) === true)) {
+					if (self.checkOneSideCollision(target) === true || (self.type !== target.type && target.checkOneSideCollision(self) === true)) {
 
 						if (collidingNodeIds[target.id] === undefined) {
 							collidingNodeIds[target.id] = true;
