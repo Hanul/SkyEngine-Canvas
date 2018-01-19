@@ -62,7 +62,9 @@ SkyEngine.StateSet = CLASS({
 			
 			let stateNode = stateNodes[state];
 			
-			stateNode.show();
+			if (stateNode !== undefined) {
+				stateNode.show();
+			}
 			
 			if (animationEndHandler !== undefined) {
 				stateNode.on('animationend', animationEndHandler);

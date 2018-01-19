@@ -914,6 +914,7 @@ SkyEngine.Node = CLASS({
 			//OPTIONAL: speedOrParams.speed
 			//OPTIONAL: speedOrParams.accel
 			//OPTIONAL: speedOrParams.maxSpeed
+			//OPTIONAL: speedOrParams.toX
 
 			if (CHECK_IS_DATA(speedOrParams) === true) {
 
@@ -921,7 +922,9 @@ SkyEngine.Node = CLASS({
 					speedX = -speedOrParams.speed;
 				}
 
-				if (speedOrParams.accel !== undefined) {
+				if (speedOrParams.accel === undefined) {
+					accelX = 0;
+				} else {
 					accelX = -speedOrParams.accel;
 				}
 				
@@ -931,6 +934,10 @@ SkyEngine.Node = CLASS({
 					minSpeedX = -speedOrParams.maxSpeed;
 				} else {
 					minSpeedX = undefined;
+				}
+
+				if (speedOrParams.toX !== undefined) {
+					toX = speedOrParams.toX;
 				}
 				
 			} else {
@@ -946,6 +953,7 @@ SkyEngine.Node = CLASS({
 				accelX = accel;
 				maxSpeedX = 0;
 			} else if (speedX < 0) {
+				accelX = 0;
 				speedX = 0;
 			}
 		};
@@ -955,6 +963,7 @@ SkyEngine.Node = CLASS({
 			//OPTIONAL: speedOrParams.speed
 			//OPTIONAL: speedOrParams.accel
 			//OPTIONAL: speedOrParams.maxSpeed
+			//OPTIONAL: speedOrParams.toX
 
 			if (CHECK_IS_DATA(speedOrParams) === true) {
 
@@ -962,7 +971,9 @@ SkyEngine.Node = CLASS({
 					speedX = speedOrParams.speed;
 				}
 
-				if (speedOrParams.accel !== undefined) {
+				if (speedOrParams.accel === undefined) {
+					accelX = 0;
+				} else {
 					accelX = speedOrParams.accel;
 				}
 				
@@ -972,6 +983,10 @@ SkyEngine.Node = CLASS({
 					maxSpeedX = speedOrParams.maxSpeed;
 				} else {
 					maxSpeedX = undefined;
+				}
+				
+				if (speedOrParams.toX !== undefined) {
+					toX = speedOrParams.toX;
 				}
 				
 			} else {
@@ -987,6 +1002,7 @@ SkyEngine.Node = CLASS({
 				accelX = -accel;
 				minSpeedX = 0;
 			} else if (speedX > 0) {
+				accelX = 0;
 				speedX = 0;
 			}
 		};
@@ -996,6 +1012,7 @@ SkyEngine.Node = CLASS({
 			//OPTIONAL: speedOrParams.speed
 			//OPTIONAL: speedOrParams.accel
 			//OPTIONAL: speedOrParams.maxSpeed
+			//OPTIONAL: speedOrParams.toY
 			
 			if (CHECK_IS_DATA(speedOrParams) === true) {
 
@@ -1003,7 +1020,9 @@ SkyEngine.Node = CLASS({
 					speedY = -speedOrParams.speed;
 				}
 
-				if (speedOrParams.accel !== undefined) {
+				if (speedOrParams.accel === undefined) {
+					accelY = 0;
+				} else {
 					accelY = -speedOrParams.accel;
 				}
 				
@@ -1013,6 +1032,10 @@ SkyEngine.Node = CLASS({
 					minSpeedY = -speedOrParams.maxSpeed;
 				} else {
 					minSpeedY = undefined;
+				}
+				
+				if (speedOrParams.toY !== undefined) {
+					toY = speedOrParams.toY;
 				}
 				
 			} else {
@@ -1028,6 +1051,7 @@ SkyEngine.Node = CLASS({
 				accelY = accel;
 				maxSpeedY = 0;
 			} else if (speedY < 0) {
+				accelY = 0;
 				speedY = 0;
 			}
 		};
@@ -1037,6 +1061,7 @@ SkyEngine.Node = CLASS({
 			//OPTIONAL: speedOrParams.speed
 			//OPTIONAL: speedOrParams.accel
 			//OPTIONAL: speedOrParams.maxSpeed
+			//OPTIONAL: speedOrParams.toY
 
 			if (CHECK_IS_DATA(speedOrParams) === true) {
 
@@ -1044,7 +1069,9 @@ SkyEngine.Node = CLASS({
 					speedY = speedOrParams.speed;
 				}
 
-				if (speedOrParams.accel !== undefined) {
+				if (speedOrParams.accel === undefined) {
+					accelY = 0;
+				} else {
 					accelY = speedOrParams.accel;
 				}
 				
@@ -1054,6 +1081,10 @@ SkyEngine.Node = CLASS({
 					maxSpeedY = speedOrParams.maxSpeed;
 				} else {
 					maxSpeedY = undefined;
+				}
+				
+				if (speedOrParams.toY !== undefined) {
+					toY = speedOrParams.toY;
 				}
 				
 			} else {
@@ -1069,6 +1100,7 @@ SkyEngine.Node = CLASS({
 				accelY = -accel;
 				minSpeedY = 0;
 			} else if (speedY > 0) {
+				accelY = 0;
 				speedY = 0;
 			}
 		};
