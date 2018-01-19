@@ -230,6 +230,17 @@ SkyEngine.TileMap = CLASS({
 			};
 		});
 		
+		let checkCollisionTile = self.checkCollisionTile = (params) => {
+			//REQUIRED: params
+			//REQUIRED: params.row
+			//REQUIRED: params.col
+			
+			let row = params.row;
+			let col = params.col;
+			
+			return tileMap[row] !== undefined && tileMap[row][col] !== undefined && tileMap[row][col].checkIsInstanceOf(SkyEngine.CollisionTile) === true;
+		};
+		
 		let findPath = self.findPath = (params) => {
 			//REQUIRED: params
 			//REQUIRED: params.startRow
@@ -248,7 +259,10 @@ SkyEngine.TileMap = CLASS({
 			
 			let register = (parent, row, col) => {
 				
-				if (tileMap[row] !== undefined && tileMap[row][col] !== undefined && tileMap[row][col].checkIsInstanceOf(SkyEngine.CollisionTile) === true) {
+				if (checkCollisionTile({
+					row : row,
+					col : col
+				}) === true) {
 					
 					if (costMap[row] === undefined) {
 						costMap[row] = [];

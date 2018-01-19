@@ -2104,34 +2104,6 @@ SkyEngine.Node = CLASS({
 			
 			return false;
 		};
-		
-		let checkCollisionPosition = self.checkCollisionPosition = (params) => {
-			//REQUIRED: params
-			//REQUIRED: params.target
-			//OPTIONAL: params.x
-			//OPTIONAL: params.y
-			
-			let target = params.target;
-			let x = params.x;
-			let y = params.y;
-			
-			let originX = getX();
-			let originY = getY();
-			
-			setPosition({
-				x : x,
-				y : y
-			});
-			
-			let r = checkCollision(target);
-			
-			setPosition({
-				x : originX,
-				y : originY
-			});
-			
-			return r;
-		};
 
 		let checkOffScreen = self.checkOffScreen = () => {
 			
