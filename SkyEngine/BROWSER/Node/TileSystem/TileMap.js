@@ -73,7 +73,7 @@ SkyEngine.TileMap = CLASS({
 			let key = params.key;
 			
 			if (key !== undefined && tileKeySet[key] !== undefined) {
-				tile = tileKeySet[key]();
+				tile = tileKeySet[key](row, col);
 				
 				if (tileKeyMap[row] === undefined) {
 					tileKeyMap[row] = [];
