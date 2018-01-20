@@ -2584,8 +2584,8 @@ SkyEngine.Node = CLASS({
 				let ratio = SkyEngine.Screen.getRatio();
 				
 				domWrapper.addStyle({
-					left : SkyEngine.Screen.getLeft() + (SkyEngine.Screen.getWidth() / 2 + drawingX) * ratio - domWrapper.getWidth() / 2,
-					top : SkyEngine.Screen.getTop() + (SkyEngine.Screen.getHeight() / 2 + drawingY) * ratio - domWrapper.getHeight() / 2,
+					left : SkyEngine.Screen.getLeft() + (SkyEngine.Screen.getWidth() / 2 + drawingX - SkyEngine.Screen.getCameraFollowX()) * ratio - domWrapper.getWidth() / 2,
+					top : SkyEngine.Screen.getTop() + (SkyEngine.Screen.getHeight() / 2 + drawingY - SkyEngine.Screen.getCameraFollowY()) * ratio - domWrapper.getHeight() / 2,
 					transform : 'rotate(' + realRadian + 'rad) scale(' + ratio * realScaleX + ', ' + ratio * realScaleY + ')',
 					opacity : context.globalAlpha,
 					filter : context.filter
