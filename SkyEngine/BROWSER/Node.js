@@ -953,7 +953,9 @@ SkyEngine.Node = CLASS({
 				accelX = accel;
 				maxSpeedX = 0;
 			} else if (speedX < 0) {
-				accelX = 0;
+				if (accelX < 0) {
+					accelX = 0;
+				}
 				speedX = 0;
 			}
 		};
@@ -1002,7 +1004,9 @@ SkyEngine.Node = CLASS({
 				accelX = -accel;
 				minSpeedX = 0;
 			} else if (speedX > 0) {
-				accelX = 0;
+				if (accelX > 0) {
+					accelX = 0;
+				}
 				speedX = 0;
 			}
 		};
@@ -1051,7 +1055,9 @@ SkyEngine.Node = CLASS({
 				accelY = accel;
 				maxSpeedY = 0;
 			} else if (speedY < 0) {
-				accelY = 0;
+				if (accelY < 0) {
+					accelY = 0;
+				}
 				speedY = 0;
 			}
 		};
@@ -1100,7 +1106,9 @@ SkyEngine.Node = CLASS({
 				accelY = -accel;
 				minSpeedY = 0;
 			} else if (speedY > 0) {
-				accelY = 0;
+				if (accelY > 0) {
+					accelY = 0;
+				}
 				speedY = 0;
 			}
 		};
