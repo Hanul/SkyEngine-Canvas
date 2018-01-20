@@ -31,6 +31,9 @@ SkyEngine.Screen = OBJECT({
 		
 		let registeredNodeMap = {};
 		
+		let followX = 0;
+		let followY = 0;
+		
 		let cameraFollowCenterX;
 		let cameraFollowCenterY;
 		let cameraFollowXTarget;
@@ -420,15 +423,15 @@ SkyEngine.Screen = OBJECT({
 		let getCameraFollowX = self.getCameraFollowX = () => {
 			
 			if (cameraFollowXTarget === undefined) {
-				return 0;
+				return followX;
 			}
 			
 			if (cameraFollowXTarget.checkIsRemoved() === true) {
 				cameraFollowXTarget = undefined;
-				return 0;
+				return followX;
 			}
 			
-			let followX = cameraFollowXTarget.getRealX() - cameraFollowCenterX;
+			followX = cameraFollowXTarget.getRealX() - cameraFollowCenterX;
 			
 			if (cameraMinFollowX !== undefined && followX < cameraMinFollowX) {
 				return cameraMinFollowX;
@@ -444,15 +447,15 @@ SkyEngine.Screen = OBJECT({
 		let getCameraFollowY = self.getCameraFollowY = () => {
 			
 			if (cameraFollowYTarget === undefined) {
-				return 0;
+				return followY;
 			}
 			
 			if (cameraFollowYTarget.checkIsRemoved() === true) {
 				cameraFollowYTarget = undefined;
-				return 0;
+				return followY;
 			}
 			
-			let followY = cameraFollowYTarget.getRealY() - cameraFollowCenterY;
+			followY = cameraFollowYTarget.getRealY() - cameraFollowCenterY;
 			
 			if (cameraMinFollowY !== undefined && followY < cameraMinFollowY) {
 				return cameraMinFollowY;

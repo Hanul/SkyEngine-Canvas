@@ -909,12 +909,13 @@ SkyEngine.Node = CLASS({
 			blendMode = undefined;
 		};
 
-		let moveLeft = self.moveLeft = (speedOrParams) => {
+		let moveLeft = self.moveLeft = (speedOrParams, _moveEndHandler) => {
 			//REQUIRED: speedOrParams
 			//OPTIONAL: speedOrParams.speed
 			//OPTIONAL: speedOrParams.accel
 			//OPTIONAL: speedOrParams.maxSpeed
 			//OPTIONAL: speedOrParams.toX
+			//OPTIONAL: moveEndHandler
 
 			if (CHECK_IS_DATA(speedOrParams) === true) {
 
@@ -938,6 +939,7 @@ SkyEngine.Node = CLASS({
 
 				if (speedOrParams.toX !== undefined) {
 					toX = speedOrParams.toX;
+					moveXEndHandler = _moveEndHandler;
 				}
 				
 			} else {
@@ -960,12 +962,13 @@ SkyEngine.Node = CLASS({
 			}
 		};
 
-		let moveRight = self.moveRight = (speedOrParams) => {
+		let moveRight = self.moveRight = (speedOrParams, _moveEndHandler) => {
 			//REQUIRED: speedOrParams
 			//OPTIONAL: speedOrParams.speed
 			//OPTIONAL: speedOrParams.accel
 			//OPTIONAL: speedOrParams.maxSpeed
 			//OPTIONAL: speedOrParams.toX
+			//OPTIONAL: moveEndHandler
 
 			if (CHECK_IS_DATA(speedOrParams) === true) {
 
@@ -989,6 +992,7 @@ SkyEngine.Node = CLASS({
 				
 				if (speedOrParams.toX !== undefined) {
 					toX = speedOrParams.toX;
+					moveXEndHandler = _moveEndHandler;
 				}
 				
 			} else {
@@ -1011,12 +1015,13 @@ SkyEngine.Node = CLASS({
 			}
 		};
 
-		let moveUp = self.moveUp = (speedOrParams) => {
+		let moveUp = self.moveUp = (speedOrParams, _moveEndHandler) => {
 			//REQUIRED: speedOrParams
 			//OPTIONAL: speedOrParams.speed
 			//OPTIONAL: speedOrParams.accel
 			//OPTIONAL: speedOrParams.maxSpeed
 			//OPTIONAL: speedOrParams.toY
+			//OPTIONAL: moveEndHandler
 			
 			if (CHECK_IS_DATA(speedOrParams) === true) {
 
@@ -1040,6 +1045,7 @@ SkyEngine.Node = CLASS({
 				
 				if (speedOrParams.toY !== undefined) {
 					toY = speedOrParams.toY;
+					moveYEndHandler = _moveEndHandler;
 				}
 				
 			} else {
@@ -1062,12 +1068,13 @@ SkyEngine.Node = CLASS({
 			}
 		};
 
-		let moveDown = self.moveDown = (speedOrParams) => {
+		let moveDown = self.moveDown = (speedOrParams, _moveEndHandler) => {
 			//REQUIRED: speedOrParams
 			//OPTIONAL: speedOrParams.speed
 			//OPTIONAL: speedOrParams.accel
 			//OPTIONAL: speedOrParams.maxSpeed
 			//OPTIONAL: speedOrParams.toY
+			//OPTIONAL: moveEndHandler
 
 			if (CHECK_IS_DATA(speedOrParams) === true) {
 
@@ -1091,6 +1098,7 @@ SkyEngine.Node = CLASS({
 				
 				if (speedOrParams.toY !== undefined) {
 					toY = speedOrParams.toY;
+					moveYEndHandler = _moveEndHandler;
 				}
 				
 			} else {
@@ -1125,17 +1133,13 @@ SkyEngine.Node = CLASS({
 			if (params.y === undefined) {
 				
 				toX = params.x;
-				toX < x ? moveLeft(params) : moveRight(params);
-				
-				moveXEndHandler = _moveEndHandler;
+				toX < x ? moveLeft(params, _moveEndHandler) : moveRight(params, _moveEndHandler);
 			}
 			
 			else if (params.x === undefined) {
 				
 				toY = params.y;
-				toY < y ? moveUp(params) : moveDown(params);
-				
-				moveYEndHandler = _moveEndHandler;
+				toY < y ? moveUp(params, _moveEndHandler) : moveDown(params, _moveEndHandler);
 			}
 			
 			else {
@@ -2142,7 +2146,7 @@ SkyEngine.Node = CLASS({
 
 								if (self.checkOneSideCollision(realTarget) === true || (self.type !== realTarget.type && realTarget.checkOneSideCollision(self) === true)) {
 
-									if (isRemoved !== true && collidingNodeIds[realTarget.id] === undefined) {
+									if (isRemoved !== true) {
 										collidingNodeIds[realTarget.id] = true;
 
 										runMeetHandlers(target, realTarget);
