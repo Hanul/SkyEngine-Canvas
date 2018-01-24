@@ -12,20 +12,26 @@ SkyEngineShowcase.TileMapTest = CLASS({
 			centerY : 32 * 3.5,
 			tileWidth : 32,
 			tileHeight : 32,
-			tileKeySet : {
+			tileSet : {
 				grass : () => {
-					return SkyEngine.Image({
-						src : SkyEngineShowcase.R('tile/grass.png')
+					return SkyEngine.CollisionTile({
+						c : SkyEngine.Image({
+							src : SkyEngineShowcase.R('tile/grass.png')
+						})
 					});
 				},
 				dirt : () => {
-					return SkyEngine.Image({
-						src : SkyEngineShowcase.R('tile/dirt.png')
+					return SkyEngine.Tile({
+						c : SkyEngine.Image({
+							src : SkyEngineShowcase.R('tile/dirt.png')
+						})
 					});
 				},
 				stone : () => {
-					return SkyEngine.Image({
-						src : SkyEngineShowcase.R('tile/stone.png')
+					return SkyEngine.CollisionTile({
+						c : SkyEngine.Image({
+							src : SkyEngineShowcase.R('tile/stone.png')
+						})
 					});
 				},
 			},
@@ -38,16 +44,6 @@ SkyEngineShowcase.TileMapTest = CLASS({
 				['grass', 'dirt',  'grass', 'dirt',  'grass', 'grass', 'grass', 'grass'],
 				['grass', 'dirt',  'dirt',  'dirt',  'grass', 'stone', 'stone', 'stone'],
 				['grass', 'grass', 'grass', 'grass', 'grass', 'stone', 'stone', 'stone']
-			],
-			collisionMap : [
-				[1, 0, 1, 1, 1, 1, 1, 1],
-				[1, 0, 1, 0, 0, 0, 1, 1],
-				[1, 0, 1, 0, 1, 0, 1, 1],
-				[1, 0, 1, 0, 1, 0, 1, 1],
-				[1, 0, 1, 0, 1, 0, 0, 0],
-				[1, 0, 1, 0, 1, 1, 1, 1],
-				[1, 0, 0, 0, 1, 1, 1, 1],
-				[1, 1, 1, 1, 1, 1, 1, 1]
 			]
 		}).appendTo(SkyEngine.Screen);
 		
@@ -59,7 +55,7 @@ SkyEngineShowcase.TileMapTest = CLASS({
 		});
 		
 		EACH(path, (point) => {
-			console.log(point.row, point.col);
+			tileMap.getTile(point).setAlpha('0.5');
 		});
 		
 		let isomatricTileMap = SkyEngine.IsometricTileMap({
@@ -68,23 +64,29 @@ SkyEngineShowcase.TileMapTest = CLASS({
 			scale : 0.8,
 			tileWidth : 64,
 			tileHeight : 33,
-			tileKeySet : {
+			tileSet : {
 				grass : () => {
-					return SkyEngine.Image({
-						centerY : 10,
-						src : SkyEngineShowcase.R('tile/igrass.png')
+					return SkyEngine.Tile({
+						c : SkyEngine.Image({
+							centerY : 10,
+							src : SkyEngineShowcase.R('tile/igrass.png')
+						})
 					});
 				},
 				water : () => {
-					return SkyEngine.Image({
-						centerY : 16,
-						src : SkyEngineShowcase.R('tile/iwater.png')
+					return SkyEngine.CollisionTile({
+						c : SkyEngine.Image({
+							centerY : 16,
+							src : SkyEngineShowcase.R('tile/iwater.png')
+						})
 					});
 				},
 				sand : () => {
-					return SkyEngine.Image({
-						centerY : 16,
-						src : SkyEngineShowcase.R('tile/isand.png')
+					return SkyEngine.Tile({
+						c : SkyEngine.Image({
+							centerY : 16,
+							src : SkyEngineShowcase.R('tile/isand.png')
+						})
 					});
 				}
 			},
@@ -107,28 +109,19 @@ SkyEngineShowcase.TileMapTest = CLASS({
 					['water', 'water', 'water', 'water', 'water', 'water', 'water', 'water'],
 				['water', 'water', 'water', 'water', 'water', 'water', 'water', 'water'],
 					['water', 'water', 'water', 'water', 'water', 'water', 'water', 'water']
-			],
-			collisionMap : [
-				[0, 0, 0, 0, 0, 0, 0, 0],
-					[0, 0, 0, 0, 0, 0, 0, 0],
-				[0, 0, 0, 0, 0, 0, 0, 0],
-					[0, 0, 0, 0, 0, 0, 0, 0],
-				[0, 0, 0, 0, 0, 0, 0, 0],
-					[0, 0, 0, 0, 0, 0, 0, 0],
-				[0, 0, 0, 0, 0, 0, 0, 0],
-					[0, 0, 0, 0, 0, 0, 0, 0],
-				[0, 0, 0, 0, 0, 0, 0, 0],
-					[0, 0, 0, 0, 0, 0, 0, 0],
-				[0, 0, 0, 0, 0, 0, 0, 0],
-					[0, 0, 0, 0, 0, 0, 0, 0],
-				[0, 0, 0, 0, 0, 0, 0, 0],
-					[0, 0, 0, 0, 0, 0, 0, 0],
-				[0, 0, 0, 0, 0, 0, 0, 0],
-					[1, 1, 1, 1, 1, 1, 1, 1],
-				[1, 1, 1, 1, 1, 1, 1, 1],
-					[1, 1, 1, 1, 1, 1, 1, 1]
 			]
 		}).appendTo(SkyEngine.Screen);
+		
+		let path2 = isomatricTileMap.findPath({
+			startRow : 0,
+			startCol : 0,
+			endRow : 13,
+			endCol : 7
+		});
+		
+		EACH(path2, (point) => {
+			isomatricTileMap.getTile(point).setAlpha('0.5');
+		});
 		
 		let hexagonTileMap = SkyEngine.HexagonTileMap({
 			x : 400,
@@ -138,30 +131,40 @@ SkyEngineShowcase.TileMapTest = CLASS({
 			tileWidth : 110,
 			tileHeight : 128,
 			overlapHeight : 31,
-			tileKeySet : {
+			tileSet : {
 				grass : () => {
-					return SkyEngine.Image({
-						src : SkyEngineShowcase.R('tile/hgrass.png')
+					return SkyEngine.Tile({
+						c : SkyEngine.Image({
+							src : SkyEngineShowcase.R('tile/hgrass.png')
+						})
 					});
 				},
 				water : () => {
-					return SkyEngine.Image({
-						src : SkyEngineShowcase.R('tile/hwater.png')
+					return SkyEngine.CollisionTile({
+						c : SkyEngine.Image({
+							src : SkyEngineShowcase.R('tile/hwater.png')
+						})
 					});
 				},
 				sand : () => {
-					return SkyEngine.Image({
-						src : SkyEngineShowcase.R('tile/hsand.png')
+					return SkyEngine.Tile({
+						c : SkyEngine.Image({
+							src : SkyEngineShowcase.R('tile/hsand.png')
+						})
 					});
 				},
 				mountain : () => {
-					return SkyEngine.Image({
-						src : SkyEngineShowcase.R('tile/hmountain.png')
+					return SkyEngine.CollisionTile({
+						c : SkyEngine.Image({
+							src : SkyEngineShowcase.R('tile/hmountain.png')
+						})
 					});
 				},
 				fire : () => {
-					return SkyEngine.Image({
-						src : SkyEngineShowcase.R('tile/hfire.png')
+					return SkyEngine.CollisionTile({
+						c : SkyEngine.Image({
+							src : SkyEngineShowcase.R('tile/hfire.png')
+						})
 					});
 				}
 			},
@@ -174,18 +177,19 @@ SkyEngineShowcase.TileMapTest = CLASS({
 				['grass', 'water', 'grass', 'water', 'grass', 'grass', 'grass',    'grass'   ],
 				['grass', 'water', 'water', 'water', 'grass', 'grass', 'fire',     'fire'    ],
 				['grass', 'grass', 'grass', 'grass', 'grass', 'fire',  'fire',     'fire'    ]
-			],
-			collisionMap : [
-				[1, 0, 1, 1, 1, 1, 1, 1],
-				[1, 0, 1, 0, 0, 0, 1, 1],
-				[1, 0, 1, 0, 1, 0, 1, 1],
-				[1, 0, 1, 0, 1, 0, 1, 1],
-				[1, 0, 1, 0, 1, 0, 0, 0],
-				[1, 0, 1, 0, 1, 1, 1, 1],
-				[1, 0, 0, 0, 1, 1, 1, 1],
-				[1, 1, 1, 1, 1, 1, 1, 1]
 			]
 		}).appendTo(SkyEngine.Screen);
+		
+		let path3 = hexagonTileMap.findPath({
+			startRow : 0,
+			startCol : 0,
+			endRow : 5,
+			endCol : 7
+		});
+		
+		EACH(path3, (point) => {
+			hexagonTileMap.getTile(point).setAlpha('0.5');
+		});
 		
 		inner.on('close', () => {
 			tileMap.remove();

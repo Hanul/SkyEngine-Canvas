@@ -37,7 +37,7 @@ SkyEngine.TileMap = CLASS({
 			return tileHeight;
 		};
 		
-		let addTile = self.addTile = (params) => {
+		let createTile = inner.createTile = (params) => {
 			//REQUIRED: params
 			//REQUIRED: params.row
 			//REQUIRED: params.col
@@ -60,17 +60,43 @@ SkyEngine.TileMap = CLASS({
 			
 			if (tile !== undefined) {
 				
-				tile.setPosition({
-					x : col * tileWidth,
-					y : row * tileHeight
-				});
-				
 				self.append(tile);
 				
 				if (tileMap[row] === undefined) {
 					tileMap[row] = [];
 				}
 				tileMap[row][col] = tile;
+			}
+			
+			return tile;
+		};
+		
+		let addTile = self.addTile = (params) => {
+			//REQUIRED: params
+			//REQUIRED: params.row
+			//REQUIRED: params.col
+			//OPTIONAL: params.tile
+			//OPTIONAL: params.key
+			
+			let row = params.row;
+			let col = params.col;
+			
+			let tile = createTile(params);
+			
+			if (tile !== undefined) {
+				
+				tile.setPosition({
+					x : col * tileWidth,
+					y : row * tileHeight
+				});
+				
+				// 충돌체 추가
+				if (tile.checkIsInstanceOf(SkyEngine.CollisionTile) === true) {
+					tile.addCollider(SkyEngine.Rect({
+						width : tileWidth,
+						height : tileHeight
+					}));
+				}
 			}
 		};
 		
@@ -259,10 +285,13 @@ SkyEngine.TileMap = CLASS({
 			
 			let register = (parent, row, col) => {
 				
-				if (checkCollisionTile({
+				if (getTile({
 					row : row,
 					col : col
-				}) === true) {
+				}) !== undefined && checkCollisionTile({
+					row : row,
+					col : col
+				}) !== true) {
 					
 					if (costMap[row] === undefined) {
 						costMap[row] = [];
