@@ -1132,14 +1132,18 @@ SkyEngine.Node = CLASS({
 
 			if (params.y === undefined) {
 				
-				toX = params.x;
-				toX < x ? moveLeft(params, _moveEndHandler) : moveRight(params, _moveEndHandler);
+				params.toX = params.x;
+				delete params.x;
+				
+				params.toX < x ? moveLeft(params, _moveEndHandler) : moveRight(params, _moveEndHandler);
 			}
 			
 			else if (params.x === undefined) {
 				
-				toY = params.y;
-				toY < y ? moveUp(params, _moveEndHandler) : moveDown(params, _moveEndHandler);
+				params.toY = params.y;
+				delete params.y;
+				
+				params.toY < y ? moveUp(params, _moveEndHandler) : moveDown(params, _moveEndHandler);
 			}
 			
 			else {
