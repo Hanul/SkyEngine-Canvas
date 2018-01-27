@@ -27,6 +27,11 @@ SkyEngine.Image = CLASS((cls) => {
 			let width;
 			let height;
 			
+			let cropTop = 0;
+			let cropRight = 0;
+			let cropBottom = 0;
+			let cropLeft = 0;
+			
 			let img = new Image();
 			
 			img.onload = () => {
@@ -140,10 +145,14 @@ SkyEngine.Image = CLASS((cls) => {
 					
 					context.drawImage(
 						img,
-						-width / 2,
-						-height / 2,
-						width,
-						height);
+						cropLeft,
+						cropTop,
+						width - cropLeft - cropRight,
+						height - cropTop - cropBottom,
+						-width / 2 + cropLeft,
+						-height / 2 + cropTop,
+						width - cropLeft - cropRight,
+						height - cropTop - cropBottom);
 					
 					origin(context);
 				};
@@ -234,6 +243,27 @@ SkyEngine.Image = CLASS((cls) => {
 			
 			let getImg = inner.getImg = () => {
 				return img;
+			};
+			
+			let crop = self.crop = (params) => {
+				//REQUIRED: params
+				//REQUIRED: params.top
+				//REQUIRED: params.right
+				//REQUIRED: params.bottom
+				//REQUIRED: params.left
+				
+				if (params.top !== undefined) {
+					cropTop = params.top;
+				}
+				if (params.right !== undefined) {
+					cropRight = params.right;
+				}
+				if (params.bottom !== undefined) {
+					cropBottom = params.bottom;
+				}
+				if (params.left !== undefined) {
+					cropLeft = params.left;
+				}
 			};
 		}
 	};
