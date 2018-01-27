@@ -271,6 +271,12 @@ SkyEngine.Screen = OBJECT({
 				
 				// 모든 노드의 step을 실행합니다.
 				self.step(deltaTime);
+				
+				let fixedNodes = getRegisteredNodes(SkyEngine.FixedNode);
+				
+				for (let i = 0; i < fixedNodes.length; i += 1) {
+					fixedNodes[i].fixPosition();
+				}
 			}
 			
 			nonePausableNode.step(deltaTime);
