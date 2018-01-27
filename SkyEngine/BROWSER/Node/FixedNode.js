@@ -21,21 +21,28 @@ SkyEngine.FixedNode = CLASS({
 			followScreenRatio = 0;
 		}
 		
-		let originX;
-		let originY;
+		let beforeScreenX = 0;
+		let beforeScreenY = 0;
 		
-		let fixPosition = self.fixPosition = () => {
+		let step;
+		OVERRIDE(self.step, (origin) => {
 			
-			if (followScreenRatio !== 1) {
+			step = self.step = (deltaTime) => {
 				
-				if (originX === undefined) {
-					originX = self.getX();
-					originY = self.getY();
+				if (followScreenRatio !== 1) {
+					
+					let screenX = SkyEngine.Screen.getCameraFollowX() - SkyEngine.Screen.getX();
+					let screenY = SkyEngine.Screen.getCameraFollowY() - SkyEngine.Screen.getY();
+					
+					self.setX(self.getX() + (screenX - beforeScreenX) * (1 - followScreenRatio) / self.getRealScaleX());
+					self.setY(self.getY() + (screenY - beforeScreenY) * (1 - followScreenRatio) / self.getRealScaleY());
+					
+					beforeScreenX = screenX;
+					beforeScreenY = screenY;
 				}
 				
-				self.setX(originX + SkyEngine.Screen.getCameraFollowX() - SkyEngine.Screen.getX());
-				self.setY(originY + SkyEngine.Screen.getCameraFollowY() - SkyEngine.Screen.getY());
-			}
-		};
+				origin(deltaTime);
+			};
+		});
 	}
 });

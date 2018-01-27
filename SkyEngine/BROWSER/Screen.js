@@ -275,7 +275,7 @@ SkyEngine.Screen = OBJECT({
 				let fixedNodes = getRegisteredNodes(SkyEngine.FixedNode);
 				
 				for (let i = 0; i < fixedNodes.length; i += 1) {
-					fixedNodes[i].fixPosition();
+					fixedNodes[i].step(0);
 				}
 			}
 			
