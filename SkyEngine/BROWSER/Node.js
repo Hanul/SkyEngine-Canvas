@@ -1433,15 +1433,22 @@ SkyEngine.Node = CLASS({
 		};
 
 		let fadeIn = self.fadeIn = (speedOrParams, _fadeEndHandler) => {
-			//REQUIRED: speedOrParams
+			//OPTIONAL: speedOrParams
 			//OPTIONAL: speedOrParams.speed
 			//OPTIONAL: speedOrParams.accel
 			//OPTIONAL: speedOrParams.maxSpeed
 			//OPTIONAL: fadeEndHandler
 			
+			if (alpha === 1) {
+				alpha = 0;
+			}
 			toAlpha = 1;
 
-			if (CHECK_IS_DATA(speedOrParams) === true) {
+			if (speedOrParams === undefined) {
+				fadingSpeed = 2;
+			}
+			
+			else if (CHECK_IS_DATA(speedOrParams) === true) {
 
 				if (speedOrParams.speed !== undefined) {
 					fadingSpeed = speedOrParams.speed;
@@ -1454,7 +1461,14 @@ SkyEngine.Node = CLASS({
 				if (speedOrParams.maxSpeed !== undefined) {
 					maxFadingSpeed = speedOrParams.maxSpeed;
 				}
-			} else {
+			}
+			
+			else if (isNaN(speedOrParams) === true) {
+				_fadeEndHandler = speedOrParams;
+				fadingSpeed = 2;
+			}
+			
+			else {
 				fadingSpeed = speedOrParams;
 			}
 			
@@ -1462,7 +1476,7 @@ SkyEngine.Node = CLASS({
 		};
 
 		let fadeOut = self.fadeOut = (speedOrParams, _fadeEndHandler) => {
-			//REQUIRED: speedOrParams
+			//OPTIONAL: speedOrParams
 			//OPTIONAL: speedOrParams.speed
 			//OPTIONAL: speedOrParams.accel
 			//OPTIONAL: speedOrParams.maxSpeed
@@ -1470,7 +1484,11 @@ SkyEngine.Node = CLASS({
 			
 			toAlpha = 0;
 
-			if (CHECK_IS_DATA(speedOrParams) === true) {
+			if (speedOrParams === undefined) {
+				fadingSpeed = -2;
+			}
+			
+			else if (CHECK_IS_DATA(speedOrParams) === true) {
 
 				if (speedOrParams.speed !== undefined) {
 					fadingSpeed = -speedOrParams.speed;
@@ -1483,7 +1501,14 @@ SkyEngine.Node = CLASS({
 				if (speedOrParams.maxSpeed !== undefined) {
 					minFadingSpeed = -speedOrParams.maxSpeed;
 				}
-			} else {
+			}
+			
+			else if (isNaN(speedOrParams) === true) {
+				_fadeEndHandler = speedOrParams;
+				fadingSpeed = -2;
+			}
+			
+			else {
 				fadingSpeed = -speedOrParams;
 			}
 			

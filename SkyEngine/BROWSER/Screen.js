@@ -371,7 +371,7 @@ SkyEngine.Screen = OBJECT({
 			cameraMaxFollowX = params.maxX;
 		};
 		
-		let cameraFollowY = self.cameraFollowY = (node) => {
+		let cameraFollowY = self.cameraFollowY = (params) => {
 			//REQUIRED: params
 			//REQUIRED: params.target
 			//OPTIONAL: params.centerY
@@ -389,7 +389,7 @@ SkyEngine.Screen = OBJECT({
 			cameraMaxFollowY = params.maxY;
 		};
 		
-		let cameraFollow = self.cameraFollow = (node) => {
+		let cameraFollow = self.cameraFollow = (params) => {
 			//REQUIRED: params
 			//REQUIRED: params.target
 			//OPTIONAL: params.centerX

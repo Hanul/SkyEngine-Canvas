@@ -32,19 +32,33 @@ SkyEngine.Image = CLASS((cls) => {
 			let cropBottom = 0;
 			let cropLeft = 0;
 			
-			let img = new Image();
+			let img;
 			
-			img.onload = () => {
+			let setSrc = self.setSrc = (_src) => {
+				src = _src;
 				
-				width = img.width;
-				height = img.height;
+				let tempImg = new Image();
 				
-				img.onload = undefined;
+				if (img === undefined) {
+					img = tempImg;
+				}
 				
-				self.fireEvent('load');
+				tempImg.onload = () => {
+					
+					width = tempImg.width;
+					height = tempImg.height;
+					
+					tempImg.onload = undefined;
+					
+					img = tempImg;
+					
+					self.fireEvent('load');
+				};
+				
+				tempImg.src = src;
 			};
 			
-			img.src = src;
+			setSrc(src);
 			
 			let checkPoint;
 			OVERRIDE(self.checkPoint, (origin) => {
