@@ -174,7 +174,9 @@ SkyEngine.Node = CLASS({
 		let setZIndex = self.setZIndex = (_zIndex) => {
 			//REQUIRED: _zIndex
 
-			if (parentNode !== undefined) {
+			if (parentNode === undefined) {
+				zIndex = _zIndex;
+			} else {
 				removeFromParent();
 				zIndex = _zIndex;
 				appendToParent();
@@ -232,6 +234,13 @@ SkyEngine.Node = CLASS({
 			//REQUIRED: speedX
 
 			speedX = _speedX;
+			
+			if (speedX < minSpeedX) {
+				minSpeedX = undefined;
+			}
+			if (speedX > maxSpeedX) {
+				maxSpeedX = undefined;
+			}
 		};
 
 		let getSpeedX = self.getSpeedX = () => {
@@ -242,6 +251,13 @@ SkyEngine.Node = CLASS({
 			//REQUIRED: speedY
 
 			speedY = _speedY;
+			
+			if (speedY < minSpeedY) {
+				minSpeedY = undefined;
+			}
+			if (speedY > maxSpeedY) {
+				maxSpeedY = undefined;
+			}
 		};
 
 		let getSpeedY = self.getSpeedY = () => {
@@ -372,6 +388,13 @@ SkyEngine.Node = CLASS({
 			//REQUIRED: scalingSpeedX
 
 			scalingSpeedX = _scalingSpeedX;
+			
+			if (scalingSpeedX < minScalingSpeedX) {
+				minScalingSpeedX = undefined;
+			}
+			if (scalingSpeedX > maxScalingSpeedX) {
+				maxScalingSpeedX = undefined;
+			}
 		};
 
 		let getScalingSpeedX = self.getScalingSpeedX = () => {
@@ -382,6 +405,13 @@ SkyEngine.Node = CLASS({
 			//REQUIRED: scalingSpeedY
 
 			scalingSpeedY = _scalingSpeedY;
+			
+			if (scalingSpeedY < minScalingSpeedY) {
+				minScalingSpeedY = undefined;
+			}
+			if (scalingSpeedY > maxScalingSpeedY) {
+				maxScalingSpeedY = undefined;
+			}
 		};
 
 		let getScalingSpeedY = self.getScalingSpeedY = () => {
@@ -531,6 +561,13 @@ SkyEngine.Node = CLASS({
 			//REQUIRED: rotationSpeed
 
 			rotationSpeed = _rotationSpeed;
+			
+			if (rotationSpeed < minRotationSpeed) {
+				minRotationSpeed = undefined;
+			}
+			if (rotationSpeed > maxRotationSpeed) {
+				maxRotationSpeed = undefined;
+			}
 		};
 
 		let getRotationSpeed = self.getRotationSpeed = () => {
@@ -591,6 +628,13 @@ SkyEngine.Node = CLASS({
 			//REQUIRED: fadingSpeed
 
 			fadingSpeed = _fadingSpeed;
+			
+			if (fadingSpeed < minFadingSpeed) {
+				minFadingSpeed = undefined;
+			}
+			if (fadingSpeed > maxFadingSpeed) {
+				maxFadingSpeed = undefined;
+			}
 		};
 
 		let getFadingSpeed = self.getFadingSpeed = () => {
@@ -2587,6 +2631,9 @@ SkyEngine.Node = CLASS({
 				if (isRemoved !== true) {
 					for (let i = 0; i < childNodes.length; i += 1) {
 						childNodes[i].step(deltaTime);
+						if (childNodes === undefined) {
+							break;
+						}
 					}
 				}
 				
