@@ -157,16 +157,21 @@ SkyEngine.Image = CLASS((cls) => {
 				
 				draw = self.draw = (context) => {
 					
-					context.drawImage(
-						img,
-						cropLeft,
-						cropTop,
-						width - cropLeft - cropRight,
-						height - cropTop - cropBottom,
-						-width / 2 + cropLeft,
-						-height / 2 + cropTop,
-						width - cropLeft - cropRight,
-						height - cropTop - cropBottom);
+					let w = width - cropLeft - cropRight;
+					let h = height - cropTop - cropBottom;
+					
+					if (w > 0 && h > 0) {
+						context.drawImage(
+							img,
+							cropLeft,
+							cropTop,
+							w,
+							h,
+							-width / 2 + cropLeft,
+							-height / 2 + cropTop,
+							w,
+							h);
+					}
 					
 					origin(context);
 				};
