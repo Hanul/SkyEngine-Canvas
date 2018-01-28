@@ -125,6 +125,9 @@ SkyEngine.Node = CLASS({
 		
 		let onDisplayResize;
 		let displayResizeEvent;
+		
+		let minCollisionWidth = BROWSER_CONFIG.SkyEngine.minCollisionWidth;
+		let minCollisionHeight = BROWSER_CONFIG.SkyEngine.minCollisionHeight;
 
 		let genRealPosition = () => {
 
@@ -2217,18 +2220,25 @@ SkyEngine.Node = CLASS({
 
 							if (realTarget.checkIsRemoved() !== true) {
 
-								if (self.checkOneSideCollision(realTarget) === true || (self.type !== realTarget.type && realTarget.checkOneSideCollision(self) === true)) {
+								if (
+									(minCollisionWidth === undefined || Math.abs(realX - realTarget.getRealX()) < minCollisionWidth) &&
+									(minCollisionHeight === undefined || Math.abs(realY - realTarget.getRealY()) < minCollisionHeight) &&
+									(self.checkOneSideCollision(realTarget) === true || (self.type !== realTarget.type && realTarget.checkOneSideCollision(self) === true))
+								) {
 
 									if (isRemoved !== true) {
 										collidingNodeIds[realTarget.id] = true;
 
 										runMeetHandlers(target, realTarget);
 									}
-								} else if (isRemoved !== true && collidingNodeIds[realTarget.id] !== undefined) {
+								}
+								
+								else if (isRemoved !== true && collidingNodeIds[realTarget.id] !== undefined) {
 									delete collidingNodeIds[realTarget.id];
 
 									runPartHandlers(target, realTarget);
 								}
+								
 							} else {
 								delete collidingNodeIds[realTarget.id];
 							}
@@ -2238,14 +2248,20 @@ SkyEngine.Node = CLASS({
 				
 				else if (target.checkIsRemoved() !== true) {
 
-					if (self.checkOneSideCollision(target) === true || (self.type !== target.type && target.checkOneSideCollision(self) === true)) {
+					if (
+						(minCollisionWidth === undefined || Math.abs(realX - target.getRealX()) < minCollisionWidth) &&
+						(minCollisionHeight === undefined || Math.abs(realY - target.getRealY()) < minCollisionHeight) &&
+						(self.checkOneSideCollision(target) === true || (self.type !== target.type && target.checkOneSideCollision(self) === true))
+					) {
 
 						if (collidingNodeIds[target.id] === undefined) {
 							collidingNodeIds[target.id] = true;
 
 							runMeetHandlers(target, target);
 						}
-					} else if (collidingNodeIds[target.id] !== undefined) {
+					}
+					
+					else if (collidingNodeIds[target.id] !== undefined) {
 						delete collidingNodeIds[target.id];
 
 						runPartHandlers(target, target);
