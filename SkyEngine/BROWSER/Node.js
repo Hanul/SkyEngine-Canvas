@@ -57,6 +57,7 @@ SkyEngine.Node = CLASS({
 		
 		//OPTIONAL: params.filter
 		//OPTIONAL: params.blendMode
+		//OPTIONAL: params.isToCheckCollision
 
 		//OPTIONAL: params.collider				충돌 영역. 하나의 영역을 지정하거나, 영역들의 배열을 지정할 수 있습니다.
 		//OPTIONAL: params.touchArea			터치 영역. 하나의 영역을 지정하거나, 영역들의 배열을 지정할 수 있습니다.
@@ -113,6 +114,7 @@ SkyEngine.Node = CLASS({
 
 		let filter;
 		let blendMode;
+		let isToCheckCollision;
 
 		let isStuckLeft;
 		let isStuckRight;
@@ -831,6 +833,7 @@ SkyEngine.Node = CLASS({
 			
 			filter = params.filter;
 			blendMode = params.blendMode;
+			isToCheckCollision = params.isToCheckCollision;
 			
 			onDisplayResize = params.onDisplayResize;
 		}
@@ -2221,8 +2224,12 @@ SkyEngine.Node = CLASS({
 							if (realTarget.checkIsRemoved() !== true) {
 
 								if (
-									(minCollisionWidth === undefined || Math.abs(realX - realTarget.getRealX()) < minCollisionWidth) &&
-									(minCollisionHeight === undefined || Math.abs(realY - realTarget.getRealY()) < minCollisionHeight) &&
+									(
+										realTarget.checkIsToCheckCollision() === true || (
+											(minCollisionWidth === undefined || Math.abs(realX - realTarget.getRealX()) < minCollisionWidth) &&
+											(minCollisionHeight === undefined || Math.abs(realY - realTarget.getRealY()) < minCollisionHeight)
+										)
+									) &&
 									(self.checkOneSideCollision(realTarget) === true || (self.type !== realTarget.type && realTarget.checkOneSideCollision(self) === true))
 								) {
 
@@ -2249,8 +2256,12 @@ SkyEngine.Node = CLASS({
 				else if (target.checkIsRemoved() !== true) {
 
 					if (
-						(minCollisionWidth === undefined || Math.abs(realX - target.getRealX()) < minCollisionWidth) &&
-						(minCollisionHeight === undefined || Math.abs(realY - target.getRealY()) < minCollisionHeight) &&
+						(
+							target.checkIsToCheckCollision() === true || (
+								(minCollisionWidth === undefined || Math.abs(realX - target.getRealX()) < minCollisionWidth) &&
+								(minCollisionHeight === undefined || Math.abs(realY - target.getRealY()) < minCollisionHeight)
+							)
+						) &&
 						(self.checkOneSideCollision(target) === true || (self.type !== target.type && target.checkOneSideCollision(self) === true))
 					) {
 
@@ -2704,6 +2715,10 @@ SkyEngine.Node = CLASS({
 			if (pauseCount < 0) {
 				pauseCount = 0;
 			}
+		};
+		
+		let checkIsToCheckCollision = self.checkIsToCheckCollision = () => {
+			return isToCheckCollision;
 		};
 
 		genRealProperties();
