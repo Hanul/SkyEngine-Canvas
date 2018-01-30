@@ -57,16 +57,19 @@ SkyEngine.Node = CLASS({
 		
 		//OPTIONAL: params.filter
 		//OPTIONAL: params.blendMode
-		//OPTIONAL: params.isToCheckCollision
 
 		//OPTIONAL: params.collider				충돌 영역. 하나의 영역을 지정하거나, 영역들의 배열을 지정할 수 있습니다.
 		//OPTIONAL: params.touchArea			터치 영역. 하나의 영역을 지정하거나, 영역들의 배열을 지정할 수 있습니다.
-		//OPTIONAL: params.c					자식 노드. 하나의 노드를 지정하거나, 노드들의 배열을 지정할 수 있습니다.
-		//OPTIONAL: params.domStyle
-		//OPTIONAL: params.dom
+		
 		//OPTIONAL: params.on					이벤트
 		//OPTIONAL: params.onDisplayResize
-
+		
+		//OPTIONAL: params.domStyle
+		//OPTIONAL: params.dom
+		
+		//OPTIONAL: params.c					자식 노드. 하나의 노드를 지정하거나, 노드들의 배열을 지정할 수 있습니다.
+		//OPTIONAL: params.isToCheckCollision
+		
 		// properties
 		let x, y, zIndex, centerX, centerY, scaleX, scaleY, angle, alpha;
 		let speedX, speedY, scalingSpeedX, scalingSpeedY, rotationSpeed, fadingSpeed;
