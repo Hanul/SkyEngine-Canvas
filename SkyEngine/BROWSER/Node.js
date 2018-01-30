@@ -131,8 +131,8 @@ SkyEngine.Node = CLASS({
 		let onDisplayResize;
 		let displayResizeEvent;
 		
-		let minCollisionWidth = BROWSER_CONFIG.SkyEngine.minCollisionWidth;
-		let minCollisionHeight = BROWSER_CONFIG.SkyEngine.minCollisionHeight;
+		let maxCollisionWidth = BROWSER_CONFIG.SkyEngine.maxCollisionWidth;
+		let maxCollisionHeight = BROWSER_CONFIG.SkyEngine.maxCollisionHeight;
 
 		let genRealPosition = () => {
 
@@ -2229,8 +2229,8 @@ SkyEngine.Node = CLASS({
 								if (
 									(
 										realTarget.checkIsToCheckCollision() === true || (
-											(minCollisionWidth === undefined || Math.abs(realX - realTarget.getRealX()) < minCollisionWidth) &&
-											(minCollisionHeight === undefined || Math.abs(realY - realTarget.getRealY()) < minCollisionHeight)
+											(maxCollisionWidth === undefined || Math.abs(realX - realTarget.getRealX()) < maxCollisionWidth) &&
+											(maxCollisionHeight === undefined || Math.abs(realY - realTarget.getRealY()) < maxCollisionHeight)
 										)
 									) &&
 									(self.checkOneSideCollision(realTarget) === true || (self.type !== realTarget.type && realTarget.checkOneSideCollision(self) === true))
@@ -2261,8 +2261,8 @@ SkyEngine.Node = CLASS({
 					if (
 						(
 							target.checkIsToCheckCollision() === true || (
-								(minCollisionWidth === undefined || Math.abs(realX - target.getRealX()) < minCollisionWidth) &&
-								(minCollisionHeight === undefined || Math.abs(realY - target.getRealY()) < minCollisionHeight)
+								(maxCollisionWidth === undefined || Math.abs(realX - target.getRealX()) < maxCollisionWidth) &&
+								(maxCollisionHeight === undefined || Math.abs(realY - target.getRealY()) < maxCollisionHeight)
 							)
 						) &&
 						(self.checkOneSideCollision(target) === true || (self.type !== target.type && target.checkOneSideCollision(self) === true))
