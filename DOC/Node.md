@@ -337,7 +337,41 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/filter
 ![필터](https://raw.githubusercontent.com/Hanul/SkyEngine/master/DOC/Node/filter.png)
 
 ```javascript
-// 여러 효과 동시에 적용
+let rect = SkyEngine.Rect({
+	width : 300,
+	height : 200,
+	color : '#00CC66'
+}).appendTo(SkyEngine.Screen);
+
+let circle = SkyEngine.Circle({
+	width : 300,
+	height : 200,
+	color : '#FFCC33'
+}).appendTo(SkyEngine.Screen);
+
+let character = SkyEngine.Sprite({
+	srcs : [
+		SkyEngineShowcase.R('robot/run1.png'),
+		SkyEngineShowcase.R('robot/run2.png'),
+		SkyEngineShowcase.R('robot/run3.png'),
+		SkyEngineShowcase.R('robot/run4.png'),
+		SkyEngineShowcase.R('robot/run5.png'),
+		SkyEngineShowcase.R('robot/run6.png'),
+		SkyEngineShowcase.R('robot/run7.png'),
+		SkyEngineShowcase.R('robot/run8.png')
+	],
+	fps : 10,
+	scale : 0.2,
+	dom : DIV({
+		style : {
+			color : 'red',
+			fontSize : 300
+		},
+		c : 'Test'
+	})
+}).appendTo(SkyEngine.Screen);
+
+SkyEngine.Screen.setFilter('grayscale(100%)');
 ```
 
 ## 블렌드 모드
@@ -349,7 +383,19 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
 [UPPERCASE의 상속](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/OOP.md#%EC%83%81%EC%86%8D)을 사용하여 노드를 확장할 수 있습니다.
 
 ```javascript
+let rect = SkyEngine.Rect({
+	width : 300,
+	height : 200,
+	color : '#0000FF'
+}).appendTo(SkyEngine.Screen);
 
+let circle = SkyEngine.Circle({
+	width : 320,
+	height : 220,
+	color : '#FFFF00'
+}).appendTo(SkyEngine.Screen);
+
+circle.setBlendMode('multiply');
 ```
 
 ## 내장 확장 노드
