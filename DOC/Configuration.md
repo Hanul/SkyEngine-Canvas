@@ -1,0 +1,41 @@
+작성중
+
+# 설정
+[UPPERCASE의 프로젝트 실행을 위한 코드](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/CREATE_PROJECT.md#%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%8B%A4%ED%96%89%EC%9D%84-%EC%9C%84%ED%95%9C-%EC%BD%94%EB%93%9C-%EC%9E%91%EC%84%B1)의 `BROWSER_CONFIG` 부분에 `SkyEngine` 설정을 등록합니다.
+
+```javascript
+require(process.env.UPPERCASE_PATH + '/LOAD.js');
+
+BOOT({
+	CONFIG : {
+		...
+	},
+	
+	BROWSER_CONFIG : {
+		SkyEngine : {
+			isDebugMode : true,
+			width : 720,
+			height : 1280
+		}
+	},
+	
+	NODE_CONFIG : {
+		...
+	}
+});
+```
+
+아래와 같은 설정들을 사용할 수 있습니다.
+- `isDebugMode` 디버그 모드. `true`로 지정하면 활성화됩니다. [디버그 모드](#디버그-모드) 항목을 참고해주시기 바랍니다.
+- `width` 게임의 고정 너비. [게임 화면 크기](#게임-화면-크기) 항목을 참고해주시기 바랍니다.
+- `height` 게임의 고정 높이. [게임 화면 크기](#게임-화면-크기) 항목을 참고해주시기 바랍니다.
+- `maxWidth` 게임 화면이 가변적인 경우 최대 너비. [게임 화면 크기](#게임-화면-크기) 항목을 참고해주시기 바랍니다.
+- `maxHeight` 게임 화면이 가변적인 경우 최대 높이. [게임 화면 크기](#게임-화면-크기) 항목을 참고해주시기 바랍니다.
+- `maxCollisionWidth` 최대 충돌 계산 너비. [최대 충돌 계산 크기](#최대-충돌-계산-크기) 항목을 참고해주시기 바랍니다.
+- `maxCollisionHeight` 최대 충돌 계산 높이. [최대 충돌 계산 크기](#최대-충돌-계산-크기) 항목을 참고해주시기 바랍니다.
+
+## 디버그 모드
+
+## 게임 화면 크기
+
+## 최대 충돌 계산 크기

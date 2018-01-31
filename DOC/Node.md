@@ -55,7 +55,7 @@ SkyEngine의 모든 구성요소는 노드입니다. 즉 SkyEngine을 기반으�
 ### 위치 관련 파라미터
 - `x` x 좌표
 - `y` y 좌표
-- `z` 노드의 드로우 순서를 결정하기 위한 z 인덱스
+- `zIndex` 노드의 드로우 순서를 결정하기 위한 z 인덱스
 - `speedX` x 좌표 이동 속도
 - `speedY` y 좌표 이동 속도
 - `accelX` x 좌표 이동 가속도
@@ -104,24 +104,30 @@ SkyEngine의 모든 구성요소는 노드입니다. 즉 SkyEngine을 기반으�
 - `toAlpha` 페이드 알파 값 목적지
 
 ### 그래픽 관련 파라미터
+- `filter` 이 설정을 통해 노드에 [`CanvasRenderingContext2D.filter`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter)를 적용할 수 있습니다.
+- `blendMode` 이 설정을 통해 노드에 [`CanvasRenderingContext2D.globalCompositeOperation`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation)를 적용할 수 있습니다.
 
 ### 영역 관련 파라미터
-
-### 이벤트 관련 파라미터
-
-### DOM 관련 파라미터
-
-### 기타 파라미터
 - `collider` 충돌 영역. 하나의 영역을 지정하거나, 영역들의 배열을 지정할 수 있습니다. 영역에 대한 자세한 내용은 [영역 설정 문서](Node/Area.md)를 참고해주시기 바랍니다.
 - `touchArea` 터치 영역. 하나의 영역을 지정하거나, 영역들의 배열을 지정할 수 있습니다. 영역에 대한 자세한 내용은 [영역 설정 문서](Node/Area.md)를 참고해주시기 바랍니다.
-- `c` 자식 노드. 하나의 노드를 지정하거나, 노드들의 배열을 지정할 수 있습니다.
+
+### 이벤트 관련 파라미터
 - `on` 이벤트. 이벤트에 대한 자세한 내용은 [이벤트 항목](#이벤트)을 참고해주시기 바랍니다.
+- `onDisplayResize` 화면 크기가 변경될 때 실행되는 함수를 지정할 수 있습니다. 자세한 내용은 [이벤트 항목](#이벤트)을 참고해주시기 바랍니다.
+
+### DOM 관련 파라미터
+- `dom` 노드를 따라다니는 [DOM 객체](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/UPPERCASE-CORE-BROWSER.md#dom-%EA%B0%9D%EC%B2%B4-%EC%83%9D%EC%84%B1)를 지정할 수 있습니다. 노드의 크기가 변경되거나, 움직이거나, 회전하여도 똑같이 반영됩니다.
+- `domStyle` `dom`으로 지정한 [DOM 객체](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/UPPERCASE-CORE-BROWSER.md#dom-%EA%B0%9D%EC%B2%B4-%EC%83%9D%EC%84%B1)의 스타일을 지정합니다.
+
+### 기타 파라미터
+- `c` 자식 노드. 하나의 노드를 지정하거나, 노드들의 배열을 지정할 수 있습니다.
+- `isToCheckCollision` `true`로 지정하면 [최대 충돌 계산 크기 설정](Configuration.md#최대-충돌-계산-크기)에 관계없이 해당 노드는 충돌 계산을 하게끔 강제합니다.
 
 ## 함수
-노드에 사용 가능한 함수들은 다음과 같습니다.
+노드에서 사용 가능한 함수들은 다음과 같습니다.
 
 ### 파라미터 설정 함수
-이하 파라미터 설정 함수들은 노드 생성 이후 파라미터를 추가로 지정하고자 하는 경우 사용합니다.
+이하 파라미터 설정 함수들은 노드 생성 이후 파라미터를 새로 지정하고자 할 때 사용합니다.
 ```javascript
 let circle = SkyEngine.Circle({
 	width : 50,
@@ -143,7 +149,7 @@ circle.setPosition({
 - `getY()`
 - `setZ(z)`
 - `getZ()`
-- `setPosition({x:, y:, z:})` x, y, z를 한번에 지정합니다.
+- `setPosition({x:, y:, zIndex:})` x, y, zIndex를 한번에 지정합니다.
 - `setSpeedX(speedX)`
 - `getSpeedX()`
 - `setSpeedY(speedY)`
@@ -227,78 +233,82 @@ circle.setPosition({
 
 ### 노드 관계 함수
 노드 트리를 구성하는데 사용되는 함수들입니다.
-- `append(node)`
-- `appendTo(node)`
-- `getParent()`
-- `getChildren()`
-- `remove()`
-- `checkIsRemoved()`
+- `append(node)` 주어진 노드를 자식 노드로 추가합니다.
+- `appendTo(node)` 주어진 노드의 자식 노드로 추가됩니다.
+- `getParent()` 부모 노드를 가져옵니다.
+- `getChildren()` 자식 노드 배열을 가져옵니다.
+- `remove()` 노드를 삭제합니다.
+- `checkIsRemoved()` 삭제된 노드인지 확인합니다.
+
+### 영역 관련 함수
+- `addTouchArea(touchArea)` 터치 영역을 추가합니다.
+- `getTouchAreas()` 터치 영역 배열을 가져옵니다.
+- `getTouchArea()` 터치 영역 하나를 가져옵니다.
+- `addCollider(collider)` 충돌 영역을 추가합니다.
+- `getColliders()` 충돌 영역 배열을 가져옵니다.
+- `getCollider()` 충돌 영역 하나를 가져옵니다.
 
 ### 이벤트 관련 함수
 이벤트에 대한 자세한 내용은 [이벤트 항목](#이벤트)을 참고해주시기 바랍니다.
-- `on(eventName, eventHandler)`
-- `off(eventName, eventHandler)`
-- `fireEvent(eventName)`
-- `onMeet(target, handler)`
-- `offMeet(target, handler)`
-- `onPart(target, handler)`
-- `offPart(target, handler)`
-- `addTouchArea(touchArea)`
-- `getTouchAreas()`
-- `addCollider(collider)`
-- `getCollider()`
-- `getColliders()`
+- `on(eventName, eventHandler)` 이벤트를 등록합니다.
+- `off(eventName, eventHandler)` 등록된 이벤트를 해제합니다.
+- `fireEvent(eventName)` 이벤트를 강제로 발생시킵니다.
+- `onMeet(target, handler)`  `target` 노드와 만나면 발생하는 이벤트를 등록합니다.
+- `offMeet(target, handler)` `onMeet`으로 등록한 이벤트를 해제합니다.
+- `onPart(target, handler)` `target` 노드에서 떨어지면 발생하는 이벤트를 등록합니다.
+- `offPart(target, handler)` `onPart`로 등록한 이벤트를 해제합니다.
 
 ### 이동 관련 함수
-- `moveLeft(speed)` `moveLeft({speed:, accel:, maxSpeed:})`
-- `stopLeft()` `stopLeft(accel)`
-- `moveRight(speed)` `moveRight({speed:, accel:, maxSpeed:})`
-- `stopRight()` `stopRight(accel)`
-- `moveUp(speed)` `moveUp({speed:, accel:, maxSpeed:})`
-- `stopUp()` `stopUp(accel)`
-- `moveDown(speed)` `moveDown({speed:, accel:, maxSpeed:})`
-- `stopDown()` `stopDown(accel)`
-- `moveTo({toX:, toY:, speed:, accel:, maxSpeed:})`
-- `stuckLeft()`
-- `unstuckLeft()`
-- `stuckRight()`
-- `unstuckRight()`
-- `stuckUp()`
-- `unstuckUp()`
-- `stuckDown()`
+- `moveLeft(speed)` `moveLeft({speed:, accel:, maxSpeed:})` 왼쪽으로 이동합니다.
+- `stopLeft()` `stopLeft(accel)` 왼쪽으로의 이동을 멈춥니다. `accel`을 지정하면 가속도에 따라 서서히 멈추게 할 수 있습니다.
+- `moveRight(speed)` `moveRight({speed:, accel:, maxSpeed:})` 오른쪽으로 이동합니다.
+- `stopRight()` `stopRight(accel)` 오른쪽으로의 이동을 멈춥니다. `accel`을 지정하면 가속도에 따라 서서히 멈추게 할 수 있습니다.
+- `moveUp(speed)` `moveUp({speed:, accel:, maxSpeed:})` 위로 이동합니다.
+- `stopUp()` `stopUp(accel)` 위로의 이동을 멈춥니다. `accel`을 지정하면 가속도에 따라 서서히 멈추게 할 수 있습니다.
+- `moveDown(speed)` `moveDown({speed:, accel:, maxSpeed:})` 아래로 이동합니다.
+- `stopDown()` `stopDown(accel)` 아래로의 이동을 멈춥니다. `accel`을 지정하면 가속도에 따라 서서히 멈추게 할 수 있습니다.
+- `moveTo({toX:, toY:, speed:, accel:, maxSpeed:})` 특정 위치로 이동합니다.
+- `stuckLeft()` 왼쪽으로의 이동을 차단합니다. (내부적으로 속도와 가속도를 유지합니다.)
+- `unstuckLeft()` 왼쪽 이동의 차단을 해제합니다.
+- `stuckRight()` 오른쪽으로의 이동을 차단합니다. (내부적으로 속도와 가속도를 유지합니다.)
+- `unstuckRight()` 오른쪽 이동의 차단을 해제합니다.
+- `stuckUp()` 위로의 이동을 차단합니다. (내부적으로 속도와 가속도를 유지합니다.)
+- `unstuckUp()` 위로 이동의 차단을 해제합니다.
+- `stuckDown()` 아래로의 이동을 차단합니다. (내부적으로 속도와 가속도를 유지합니다.)
+- `unstuckDown()` 아래로 이동의 차단을 해제합니다.
 
 ### 회전 관련 함수
-- `rotate(speed)` `rotate({speed:, accel:, maxSpeed:})`
-- `stopRotation()` `stopRotation(accel)`
-- `rotateTo({toAngle:, speed:, accel:, minSpeed:, maxSpeed:})`
+- `rotate(speed)` `rotate({speed:, accel:, maxSpeed:})` 노드를 회전시킵니다.
+- `stopRotation()` `stopRotation(accel)` 회전을 멈춥니다.
+- `rotateTo({toAngle:, speed:, accel:, minSpeed:, maxSpeed:})` 특정 각도까지 회전합니다.
 
 ### 페이드 관련 함수
-- `fadeIn(speed)` `fadeIn({speed:, accel:, maxSpeed:})`
-- `fadeOut(speed)` `fadeOut({speed:, accel:, maxSpeed:})`
-- `stopFading()` `stopFading(accel)`
-- `fadeTo({toAlpha:, accel:, minSpeed:, maxSpeed:})`
+- `fadeIn(speed)` `fadeIn({speed:, accel:, maxSpeed:})` 노드가 서서히 나타납니다.
+- `fadeOut(speed)` `fadeOut({speed:, accel:, maxSpeed:})` 노드가 서서히 사라잡니다.
+- `stopFading()` `stopFading(accel)` 페이드를 중지합니다.
+- `fadeTo({toAlpha:, accel:, minSpeed:, maxSpeed:})` 특정 알파 값 까지 페이드합니다.
 
 ### 필터 관련 함수
 필터에 대한 자세한 내용은 [필터 항목](#필터)을 참고해주시기 바랍니다.
-- `setFilter(filter)`
-- `getFilter()`
-- `removeFilter()`
+- `setFilter(filter)` 노드에 [`CanvasRenderingContext2D.filter`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter)를 적용합니다.
+- `getFilter()` `setFilter`로 지정한 값을 가져옵니다.
+- `removeFilter()` 필터를 제거합니다.
 
 ### 블렌드 모드 관련 함수
 블렌드 모드에 대한 자세한 내용은 [블렌드 모드 항목](#블렌드-모드)을 참고해주시기 바랍니다.
-- `setBlendMode(blendMode)`
-- `getBlendMode()`
-- `removeBlendMode()`
+- `setBlendMode(blendMode)` 노드에 [`CanvasRenderingContext2D.globalCompositeOperation`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation)를 적용합니다.
+- `getBlendMode()` `setBlendMode`로 지정한 값을 가져옵니다.
+- `removeBlendMode()` 블렌드 모드를 제거합니다.
 
 ### 기타 함수
-- `hide()`
-- `show()`
-- `checkIsHiding()`
-- `flipX()`
-- `flipY()`
-- `pause()` 만약 `SkyEngine.Screen`의 `pause`를 실행한 경우, `SkyEngine.Delay` 및 `SkyEngine.Interval` 또한 일시정지 됩니다.
-- `checkIsPaused()`
-- `resume()`
+- `hide()` 노드를 숨깁니다.
+- `show()` 숨겨진 노드를 다시 보입니다.
+- `checkIsHiding()` 노드가 숨겨져 있는지 확인합니다.
+- `flipX()` 노드를 x축으로 반전시킵니다.
+- `flipY()` 노드를 y축으로 반전시킵니다.
+- `pause()` 노드의 모든 변화를 일시정지합니다. 참고로 `SkyEngine.Screen`를 `pause`한 경우, `SkyEngine.Delay` 및 `SkyEngine.Interval` 또한 일시정지 됩니다.
+- `checkIsPaused()` 노드가 일시정지 되었는지 확인합니다.
+- `resume()` 일시정지를 해제합니다.
 
 ## 이벤트
 ### `on`
@@ -314,10 +324,14 @@ circle.setPosition({
 
 ### `onPart`
 
+### `onDisplayResize`
+
 ## 필터
 노드에 블러 효과나 흑백 효과와 같은 그래픽 필터를 적용시킬 수 있습니다. *(Safari에서는 작동하지 않습니다.)*
 
 https://developer.mozilla.org/en-US/docs/Web/CSS/filter
+
+캡쳐 이미지 추가
 
 ```javascript
 // 여러 효과 동시에 적용
@@ -326,10 +340,17 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/filter
 ## 블렌드 모드
 https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation
 
+캡쳐 이미지 추가
 
 ## 노드 확장하기
+[UPPERCASE의 상속](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/OOP.md#%EC%83%81%EC%86%8D)을 사용하여 노드를 확장할 수 있습니다.
+
+```javascript
+
+```
 
 ## 내장 확장 노드
+SkyEngine이 내장하고 있는 확장 노드의 종류는 다음과 같습니다.
 ### [도형](Node/Figure.md)
 * [직선 노드](Node/Figure.md#직선-노드)
 * [사각형 노드](Node/Figure.md#사각형-노드)
