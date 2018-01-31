@@ -334,7 +334,7 @@ circle.setPosition({
 
 https://developer.mozilla.org/en-US/docs/Web/CSS/filter
 
-캡쳐 이미지 추가
+![필터](https://raw.githubusercontent.com/Hanul/SkyEngine/master/DOC/Node/filter.png)
 
 ```javascript
 // 여러 효과 동시에 적용
@@ -343,7 +343,7 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/filter
 ## 블렌드 모드
 https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation
 
-캡쳐 이미지 추가
+![블렌드 모드](https://raw.githubusercontent.com/Hanul/SkyEngine/master/DOC/Node/blendmode.png)
 
 ## 노드 확장하기
 [UPPERCASE의 상속](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/OOP.md#%EC%83%81%EC%86%8D)을 사용하여 노드를 확장할 수 있습니다.

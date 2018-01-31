@@ -31,7 +31,6 @@ SkyEngineShowcase.FilterTest = CLASS({
 			],
 			fps : 10,
 			scale : 0.2,
-			alpha : 0.5,
 			dom : DIV({
 				style : {
 					color : 'red',
