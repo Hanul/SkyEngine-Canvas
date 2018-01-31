@@ -306,25 +306,28 @@ circle.setPosition({
 - `checkIsHiding()` 노드가 숨겨져 있는지 확인합니다.
 - `flipX()` 노드를 x축으로 반전시킵니다.
 - `flipY()` 노드를 y축으로 반전시킵니다.
-- `pause()` 노드의 모든 변화를 일시정지합니다. 참고로 `SkyEngine.Screen`를 `pause`한 경우, `SkyEngine.Delay` 및 `SkyEngine.Interval` 또한 일시정지 됩니다.
+- `pause()` 노드의 모든 변화를 일시정지합니다. 참고로, `SkyEngine.Screen`를 `pause`한 경우, `SkyEngine.Delay` 및 `SkyEngine.Interval` 또한 일시정지 됩니다.
 - `checkIsPaused()` 노드가 일시정지 되었는지 확인합니다.
 - `resume()` 일시정지를 해제합니다.
 
 ## 이벤트
 ### `on`
-- `'tap'`
-- `'touchstart'`
-- `'touchend'`
+- `'tap'` 노드를 터치했을 때
+- `'touchstart'` 노드에 손을 댈 때
+- `'touchend'` 노드에서 손을 뗐을 때
 - `'offscreen'` 노드가 화면을 벗어날 때
 - `'nextstep'` 다음 프레임으로 넘어갈 때
 - `'move'` 노드가 움직일 때
-- `'remove'` 
+- `'remove'` 노드가 삭제될 때
 
 ### `onMeet`
+특정 노드와 만날 때 발생하는 이벤트를 등록합니다.
 
 ### `onPart`
+특정 노드로부터 떨어질 때 발생하는 이벤트를 등록합니다.
 
 ### `onDisplayResize`
+브라우저의 화면 크기가 변경될 때 발생하는 이벤트를 등록합니다.
 
 ## 필터
 노드에 블러 효과나 흑백 효과와 같은 그래픽 필터를 적용시킬 수 있습니다. *(Safari에서는 작동하지 않습니다.)*
