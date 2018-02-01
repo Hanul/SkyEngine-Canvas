@@ -90,6 +90,7 @@ SkyEngine의 모든 구성요소는 노드를 확장합니다.
 * [HTTP 요청 기능](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/UPPERCASE-CORE-BROWSER.md#http-%EC%9A%94%EC%B2%AD-%EA%B8%B0%EB%8A%A5)
 
 ## 기타 문서
+* [설정](DOC/Configuration.md)
 * [자주 묻는 질문](DOC/FAQ.md)
 * [튜토리얼](DOC/Tutorial.md)
 * [UI 개발](DOC/UI.md)
