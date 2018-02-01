@@ -2228,7 +2228,7 @@ SkyEngine.Node = CLASS({
 
 								if (
 									(
-										realTarget.checkIsToCheckCollision() === true || (
+										checkIsToCheckCollision() === true || realTarget.checkIsToCheckCollision() === true || (
 											(maxCollisionWidth === undefined || Math.abs(realX - realTarget.getRealX()) < maxCollisionWidth) &&
 											(maxCollisionHeight === undefined || Math.abs(realY - realTarget.getRealY()) < maxCollisionHeight)
 										)
@@ -2260,7 +2260,7 @@ SkyEngine.Node = CLASS({
 
 					if (
 						(
-							target.checkIsToCheckCollision() === true || (
+							checkIsToCheckCollision() === true || target.checkIsToCheckCollision() === true || (
 								(maxCollisionWidth === undefined || Math.abs(realX - target.getRealX()) < maxCollisionWidth) &&
 								(maxCollisionHeight === undefined || Math.abs(realY - target.getRealY()) < maxCollisionHeight)
 							)
