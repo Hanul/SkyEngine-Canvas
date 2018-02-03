@@ -1,5 +1,3 @@
-작성중
-
 # 노드
 ```javascript
 SkyEngine.Node({
@@ -306,9 +304,27 @@ circle.setPosition({
 - `resume()` 일시정지를 해제합니다.
 
 ## 이벤트
-이벤트를 등록하는 다양한 방법이 있습니다.
+노드에 이벤트를 등록합니다.
 
 ### `on(eventName, eventHandler)`
+
+```javascript
+let rect = SkyEngine.Rect({
+	width : 60,
+	height : 40,
+	color : '#008000',
+	touchArea : SkyEngine.Rect({
+		width : 60,
+		height : 40
+	})
+}).appendTo(SkyEngine.Screen);
+
+// 사각형을 터치합니다.
+rect.on('tap', (e) => {
+	console.log('This is Rect! (' + e.getX() + ', ' + e.getY() + ')');
+});
+```
+
 - `'tap'` 노드를 터치했을 때
 - `'touchstart'` 노드에 손을 댈 때
 - `'touchend'` 노드에서 손을 뗐을 때
@@ -317,19 +333,43 @@ circle.setPosition({
 - `'move'` 노드가 움직일 때
 - `'remove'` 노드가 삭제될 때
 
+`on`으로 등록한 이벤트는 `off` 함수로 제거할 수 있습니다.
+
 ### `onMeet(targetNode, eventHandler)`
 특정 노드와 만날 때 발생하는 이벤트를 등록합니다.
 
-### `onPart`
+```javascript
+hero.onMeet(Game.Enemy, () => {
+	// die.
+});
+```
+
+`onMeet`으로 등록한 이벤트는 `offMeet` 함수로 제거할 수 있습니다.
+
+### `onPart(targetNode, eventHandler)`
 특정 노드로부터 떨어질 때 발생하는 이벤트를 등록합니다.
 
+`onPart`로 등록한 이벤트는 `offPart` 함수로 제거할 수 있습니다.
+
 ### `onDisplayResize`
-브라우저의 화면 크기가 변경될 때 발생하는 이벤트를 등록합니다.
+브라우저의 화면 크기가 변경될 때 발생하는 이벤트를 등록합니다. [UPPERCASE의 `onDisplayResize`](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/UPPERCASE-CORE-BROWSER/STYLE-LIST.md#%ED%81%AC%EA%B8%B0-%EA%B4%80%EB%A0%A8)와 사용 방법이 비슷합니다.
+
+```javascript
+let rect = SkyEngine.Rect({
+	color : '#008000',
+	onDisplayResize : (width, height) => {
+		
+		// 사각형의 크기를 화면의 1/10으로 지정
+		return {
+			width : width / 10,
+			height : height / 10
+		};
+	}
+}).appendTo(SkyEngine.Screen);
+```
 
 ## 필터
-노드에 블러 효과나 흑백 효과와 같은 그래픽 필터를 적용시킬 수 있습니다. *(Safari에서는 작동하지 않습니다.)*
-
-https://developer.mozilla.org/en-US/docs/Web/CSS/filter
+노드에 블러 효과나 흑백 효과와 같은 그래픽 필터를 적용시킬 수 있습니다. *(Safari는 [`CanvasRenderingContext2D.filter`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter)를 지원하지 않으므로 사용할 수 없습니다.)*
 
 ![필터](https://raw.githubusercontent.com/Hanul/SkyEngine/master/DOC/Node/filter.png)
 
@@ -372,7 +412,7 @@ SkyEngine.Screen.setFilter('grayscale(100%)');
 ```
 
 ## 블렌드 모드
-https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation
+기존의 도형 뒤에 새로운 도형을 그리거나, 도형의 일정한 영역을 보이지 않도록 하는 등의 효과를 위해 [`CanvasRenderingContext2D.globalCompositeOperation`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation)을 사용하는 블렌드 모드를 적용할 수 있습니다.
 
 ![블렌드 모드](https://raw.githubusercontent.com/Hanul/SkyEngine/master/DOC/Node/blendmode.png)
 
@@ -393,10 +433,44 @@ circle.setBlendMode('multiply');
 ```
 
 ## 노드 확장하기
-[UPPERCASE의 상속](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/OOP.md#%EC%83%81%EC%86%8D)을 사용하여 노드를 확장할 수 있습니다.
+[UPPERCASE의 상속 기능](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/OOP.md#%EC%83%81%EC%86%8D)을 사용하여 노드를 확장시킬 수 있습니다.
+
+```javascript
+Game.Hero = CLASS({
+	
+	preset : () => {
+		return SkyEngine.Node;
+	},
+	
+	init : (inner, self, params) => {
+		//REQUIRED: params
+		//REQUIRED: params.hp
+		//REQUIRED: params.damage
+		
+		let hp = params.hp;
+		let damage = params.damage;
+		
+		self.append(SkyEngine.Image({
+			src : Game.R('hero.png')
+		}));
+		
+		self.addCollider(SkyEngine.Rect({
+			y : 15,
+			width : 40,
+			height : 60
+		}));
+		
+		self.onMeet(Game.Enemy, () => {
+			// die.
+		});
+		
+		...
+	}
+});
+```
 
 ## 내장 확장 노드
-SkyEngine이 내장하고 있는 확장 노드의 종류는 다음과 같습니다.
+SkyEngine에서 자체적으로 지원하는 확장 노드의 종류는 다음과 같습니다.
 ### [도형](Node/Figure.md)
 * [직선 노드](Node/Figure.md#직선-노드)
 * [사각형 노드](Node/Figure.md#사각형-노드)

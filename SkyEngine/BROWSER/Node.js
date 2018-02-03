@@ -911,7 +911,7 @@ SkyEngine.Node = CLASS({
 		
 		if (onDisplayResize !== undefined) {
 			displayResizeEvent = EVENT('resize', RAR(() => {
-				let result = onDisplayResize();
+				let result = onDisplayResize(WIN_WIDTH(), WIN_HEIGHT());
 				
 				if (result.x !== undefined) {
 					setX(result.x);
@@ -925,6 +925,13 @@ SkyEngine.Node = CLASS({
 				}
 				if (result.scaleY !== undefined) {
 					setScaleY(result.scaleY);
+				}
+				
+				if (result.width !== undefined && self.setWidth !== undefined) {
+					self.setWidth(result.width);
+				}
+				if (result.height !== undefined && self.setHeight !== undefined) {
+					self.setHeight(result.height);
 				}
 			}));
 		}
