@@ -57,8 +57,11 @@ SkyEngine은 다음과 같은 것들로 구성되어 있습니다.
 ### [노드](DOC/Node.md)
 SkyEngine의 모든 구성요소는 노드를 확장합니다.
 
-### [스크린 노드](DOC/Screen.md)
+### [스크린 노드](DOC/Node/Screen.md)
 게임 화면 전체를 다루는 노드입니다. 오로지 하나만 존재할 수 있으며 모든 노드는 스크린 노드의 하위 노드로 구성됩니다.
+
+### [위치 고정 노드](DOC/Node/FixedNode.md)
+스크린 노드의 위치와 관계 없이 고정된 위치를 유지하는 노드입니다. 배경이나 UI를 추가할 때 유용하게 사용할 수 있습니다.
 
 ### [도형](DOC/Node/Figure.md)
 * [직선 노드](DOC/Node/Figure.md#직선-노드)
@@ -84,6 +87,12 @@ SkyEngine의 모든 구성요소는 노드를 확장합니다.
 ### [파티클 시스템](DOC/Node/ParticleSystem.md)
 * [파티클 시스템 노드](DOC/Node/ParticleSystem.md#파티클-시스템-노드)
 * [일회성 파티클 시스템 노드](DOC/Node/ParticleSystem.md#일회성-파티클-시스템-노드)
+
+### [`SkyEngine.Delay`](DOC/Delay.md)
+
+### [`SkyEngine.Interval`](DOC/Interval.md)
+
+### [`SkyEngine.TextBorderShadow`](DOC/TextBorderShadow.md)
 
 ## UPPERCASE의 기능 중 게임에서 사용할 만한 것들
 * [사운드 재생](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/UPPERCASE-CORE-BROWSER.md#sound)
