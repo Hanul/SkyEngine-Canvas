@@ -89,10 +89,13 @@ SkyEngine의 모든 구성요소는 노드를 확장합니다.
 * [일회성 파티클 시스템 노드](DOC/Node/ParticleSystem.md#일회성-파티클-시스템-노드)
 
 ### [`SkyEngine.Delay`](DOC/Delay.md)
+주어진 초가 흐른 뒤에 함수를 실행하는 클래스
 
 ### [`SkyEngine.Interval`](DOC/Interval.md)
+주어진 초 마다 함수를 반복해서 실행하는 클래스
 
 ### [`SkyEngine.TextBorderShadow`](DOC/TextBorderShadow.md)
+`textShadow` 스타일을 이용해 글자의 테두리를 만들어주는 메소드
 
 ## UPPERCASE의 기능 중 게임에서 사용할 만한 것들
 * [사운드 재생](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/UPPERCASE-CORE-BROWSER.md#sound)
@@ -104,6 +107,9 @@ SkyEngine의 모든 구성요소는 노드를 확장합니다.
 * [튜토리얼](DOC/Tutorial.md)
 * [UI 개발](DOC/UI.md)
 * [API 문서](API/README.md)
+
+## 포럼
+[SkyEngine 포럼](https://forum.inos.io/skyengine)
 
 ## 라이센스
 [MIT](LICENSE)
