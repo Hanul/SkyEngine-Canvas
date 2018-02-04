@@ -51,6 +51,9 @@ UPPERCASE 설치 과정 없이, SkyEngine을 다운로드 받아 웹 페이지�
 ```
 Stand-alone 모드에서는 UPPERCASE의 서버 관련 기술들을 사용할 수 없습니다.
 
+## 앱으로 포팅하기
+SkyEngine으로 만든 게임을 앱으로 포팅하기 위해서는 [UPPERCASE의 하이브리드 앱 만들기 문서](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/HYBRID_APP.md)를 참고하시기 바랍니다.
+
 ## 구성 요소
 SkyEngine은 다음과 같은 것들로 구성되어 있습니다.
 
