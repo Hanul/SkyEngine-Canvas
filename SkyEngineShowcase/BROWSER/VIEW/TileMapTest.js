@@ -67,9 +67,9 @@ SkyEngineShowcase.TileMapTest = CLASS({
 		});
 		
 		let isomatricTileMap = SkyEngine.IsometricTileMap({
+			scale : 0.8,
 			centerX : 64 * 4,
 			centerY : 33 * 4,
-			scale : 0.8,
 			tileWidth : 64,
 			tileHeight : 33,
 			tileSet : {

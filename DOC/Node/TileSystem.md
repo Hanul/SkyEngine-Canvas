@@ -16,10 +16,48 @@
 
 일반적인 사각형 타일 맵을 생성합니다.
 
-이미지
+![타일 맵](https://raw.githubusercontent.com/Hanul/SkyEngine/master/DOC/Node/TileSystem/tilemap.png)
 
 ```javascript
-
+let tileMap = SkyEngine.TileMap({
+	centerX : 32 * 3.5,
+	centerY : 32 * 3.5,
+	tileWidth : 32,
+	tileHeight : 32,
+	tileSet : {
+		grass : () => {
+			return SkyEngine.CollisionTile({
+				c : SkyEngine.Image({
+					src : SkyEngineShowcase.R('tile/grass.png')
+				})
+			});
+		},
+		dirt : () => {
+			return SkyEngine.Tile({
+				c : SkyEngine.Image({
+					src : SkyEngineShowcase.R('tile/dirt.png')
+				})
+			});
+		},
+		stone : () => {
+			return SkyEngine.CollisionTile({
+				c : SkyEngine.Image({
+					src : SkyEngineShowcase.R('tile/stone.png')
+				})
+			});
+		},
+	},
+	tileKeyMap : [
+		['grass', 'dirt',  'grass', 'grass', 'grass', 'grass', 'grass', 'grass'],
+		['grass', 'dirt',  'grass', 'dirt',  'dirt',  'dirt',  'grass', 'grass'],
+		['grass', 'dirt',  'grass', 'dirt',  'grass', 'dirt',  'grass', 'grass'],
+		['grass', 'dirt',  'grass', 'dirt',  'grass', 'dirt',  'grass', 'grass'],
+		['grass', 'dirt',  'grass', 'dirt',  'grass', 'dirt',  'dirt',  'dirt' ],
+		['grass', 'dirt',  'grass', 'dirt',  'grass', 'grass', 'grass', 'grass'],
+		['grass', 'dirt',  'dirt',  'dirt',  'grass', 'stone', 'stone', 'stone'],
+		['grass', 'grass', 'grass', 'grass', 'grass', 'stone', 'stone', 'stone']
+	]
+}).appendTo(SkyEngine.Screen);
 ```
 
 타일 맵 노드들이 공통으로 사용하는 파라미터 목록은 다음과 같습니다.
@@ -42,10 +80,61 @@
 
 Isomatric 타일 맵을 생성합니다.
 
-이미지
+![Isomatric 타일 맵](https://raw.githubusercontent.com/Hanul/SkyEngine/master/DOC/Node/TileSystem/isomatrictilemap.png)
 
 ```javascript
-
+let isomatricTileMap = SkyEngine.IsometricTileMap({
+	centerX : 64 * 4,
+	centerY : 33 * 4,
+	tileWidth : 64,
+	tileHeight : 33,
+	tileSet : {
+		grass : () => {
+			return SkyEngine.Tile({
+				c : SkyEngine.Image({
+					centerY : 10,
+					src : SkyEngineShowcase.R('tile/igrass.png')
+				})
+			});
+		},
+		water : () => {
+			return SkyEngine.CollisionTile({
+				c : SkyEngine.Image({
+					centerY : 16,
+					src : SkyEngineShowcase.R('tile/iwater.png')
+				})
+			});
+		},
+		sand : () => {
+			return SkyEngine.Tile({
+				c : SkyEngine.Image({
+					centerY : 16,
+					src : SkyEngineShowcase.R('tile/isand.png')
+				})
+			});
+		}
+	},
+	tileKeyMap : [
+		['grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass'],
+			['grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass'],
+		['sand',  'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass'],
+			['sand',  'grass', 'grass', 'grass', 'grass', 'grass', 'grass', 'grass'],
+		['water', 'sand',  'grass', 'grass', 'grass', 'grass', 'grass', 'grass'],
+			['water', 'sand',  'grass', 'grass', 'grass', 'grass', 'grass', 'grass'],
+		['water', 'sand',  'grass', 'grass', 'grass', 'grass', 'grass', 'grass'],
+			['water', 'sand',  'grass', 'grass', 'grass', 'grass', 'grass', 'grass'],
+		['water', 'water', 'sand',  'sand',  'grass', 'grass', 'grass', 'grass'],
+			['water', 'water', 'sand',  'sand',  'grass', 'grass', 'grass', 'grass'],
+		['water', 'water', 'water', 'water', 'sand',  'grass', 'grass', 'grass'],
+			['water', 'water', 'water', 'water', 'sand',  'grass', 'grass', 'grass'],
+		['water', 'water', 'water', 'water', 'water', 'sand',  'sand',  'grass'],
+			['water', 'water', 'water', 'water', 'water', 'sand',  'sand',  'sand' ],
+		['water', 'water', 'water', 'water', 'water', 'water', 'water', 'sand' ],
+			['water', 'water', 'water', 'water', 'water', 'water', 'water', 'water'],
+		['water', 'water', 'water', 'water', 'water', 'water', 'water', 'water'],
+			['water', 'water', 'water', 'water', 'water', 'water', 'water', 'water']
+	]
+}).appendTo(SkyEngine.Screen);
 ```
 
 ## Hexagon 타일 맵 노드
@@ -53,10 +142,63 @@ Isomatric 타일 맵을 생성합니다.
 
 Haxegon 타일 맵을 생성합니다.
 
-이미지
+![Haxegon 타일 맵](https://raw.githubusercontent.com/Hanul/SkyEngine/master/DOC/Node/TileSystem/hexagontilemap.png)
 
 ```javascript
-
+let hexagonTileMap = SkyEngine.HexagonTileMap({
+	centerX : 110 * 3.5,
+	centerY : (128 - 31) * 3.5,
+	tileWidth : 110,
+	tileHeight : 128,
+	overlapHeight : 31,
+	tileSet : {
+		grass : () => {
+			return SkyEngine.Tile({
+				c : SkyEngine.Image({
+					src : SkyEngineShowcase.R('tile/hgrass.png')
+				})
+			});
+		},
+		water : () => {
+			return SkyEngine.CollisionTile({
+				c : SkyEngine.Image({
+					src : SkyEngineShowcase.R('tile/hwater.png')
+				})
+			});
+		},
+		sand : () => {
+			return SkyEngine.Tile({
+				c : SkyEngine.Image({
+					src : SkyEngineShowcase.R('tile/hsand.png')
+				})
+			});
+		},
+		mountain : () => {
+			return SkyEngine.CollisionTile({
+				c : SkyEngine.Image({
+					src : SkyEngineShowcase.R('tile/hmountain.png')
+				})
+			});
+		},
+		fire : () => {
+			return SkyEngine.CollisionTile({
+				c : SkyEngine.Image({
+					src : SkyEngineShowcase.R('tile/hfire.png')
+				})
+			});
+		}
+	},
+	tileKeyMap : [
+		['sand',  'water', 'sand',  'grass', 'grass', 'grass', 'mountain', 'mountain'],
+		['sand',  'water', 'sand',  'water', 'water', 'water', 'grass',    'mountain'],
+		['sand',  'water', 'sand',  'water', 'grass', 'water', 'grass',    'grass'   ],
+		['sand',  'water', 'grass', 'water', 'grass', 'water', 'grass',    'grass'   ],
+		['sand',  'water', 'grass', 'water', 'grass', 'water', 'water',    'water'   ],
+		['grass', 'water', 'grass', 'water', 'grass', 'grass', 'grass',    'grass'   ],
+		['grass', 'water', 'water', 'water', 'grass', 'grass', 'fire',     'fire'    ],
+		['grass', 'grass', 'grass', 'grass', 'grass', 'fire',  'fire',     'fire'    ]
+	]
+}).appendTo(SkyEngine.Screen);
 ```
 
 Hexagon 타일 맵에서는 `overlapHeight` 파라미터를 통해 타일들 끼리 겹치는 정도를 지정할 수 있습니다.
