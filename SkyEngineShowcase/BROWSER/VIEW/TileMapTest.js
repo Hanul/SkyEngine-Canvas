@@ -58,6 +58,14 @@ SkyEngineShowcase.TileMapTest = CLASS({
 			tileMap.getTile(point).setAlpha('0.5');
 		});
 		
+		tileMap.moveTile({
+			fromRow : 0,
+			fromCol : 1,
+			toRow : 4,
+			toCol : 7,
+			speed : 100
+		});
+		
 		let isomatricTileMap = SkyEngine.IsometricTileMap({
 			centerX : 64 * 4,
 			centerY : 33 * 4,
@@ -121,6 +129,14 @@ SkyEngineShowcase.TileMapTest = CLASS({
 		
 		EACH(path2, (point) => {
 			isomatricTileMap.getTile(point).setAlpha('0.5');
+		});
+		
+		isomatricTileMap.moveTile({
+			fromRow : 0,
+			fromCol : 0,
+			toRow : 13,
+			toCol : 7,
+			speed : 200
 		});
 		
 		let hexagonTileMap = SkyEngine.HexagonTileMap({
@@ -189,6 +205,14 @@ SkyEngineShowcase.TileMapTest = CLASS({
 		
 		EACH(path3, (point) => {
 			hexagonTileMap.getTile(point).setAlpha('0.5');
+		});
+		
+		hexagonTileMap.moveTile({
+			fromRow : 0,
+			fromCol : 0,
+			toRow : 5,
+			toCol : 7,
+			speed : 300
 		});
 		
 		inner.on('close', () => {

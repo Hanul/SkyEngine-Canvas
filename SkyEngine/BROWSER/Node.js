@@ -2135,7 +2135,7 @@ SkyEngine.Node = CLASS({
 			
 			else if (target.type === CLASS) {
 				
-				let registeredNodes = SkyEngine.Screen.getRegisteredNodes(target);
+				let registeredNodes = SkyEngine.Screen.findNodesByClass(target);
 				
 				for (let i = 0; i < registeredNodes.length; i += 1) {
 					
@@ -2188,7 +2188,7 @@ SkyEngine.Node = CLASS({
 			
 			if (target.type === CLASS) {
 				
-				let registeredNodes = SkyEngine.Screen.getRegisteredNodes(target);
+				let registeredNodes = SkyEngine.Screen.findNodesByClass(target);
 				
 				for (let i = 0; i < registeredNodes.length; i += 1) {
 					let realTarget = registeredNodes[i];
@@ -2224,7 +2224,7 @@ SkyEngine.Node = CLASS({
 				
 				if (target.type === CLASS) {
 					
-					let registeredNodes = SkyEngine.Screen.getRegisteredNodes(target);
+					let registeredNodes = SkyEngine.Screen.findNodesByClass(target);
 					
 					for (let j = 0; j < registeredNodes.length; j += 1) {
 						let realTarget = registeredNodes[j];

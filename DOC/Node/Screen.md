@@ -9,4 +9,28 @@
 let someNode = SkyEngine.Node(...).appendTo(SkyEngine.Screen);
 ```
 
-스크린 노드를 일시정지 하면, 게임이 잠시 멈추게 됩니다.
+따라서 스크린 노드를 `pause` 함수로 일시정지 하면, 게임 전체가 일시정지하게 됩니다.
+
+## 화면 이동 관련 함수
+주인공 캐릭터 등을 화면이 따라다녀야 하는 경우 사용하는 함수들입니다.
+
+```javascript
+// 플랫포머 게임의 경우
+```
+
+```javascript
+// 레이싱 게임의 경우
+```
+
+- `cameraFollow({target:})` `cameraFollow({target:, centerX:, centerY:, minX:, minY:, maxX:, maxY:})` 화면이 특정 노드를 따라 움직입니다.
+- `cameraFollowX({target:})` `cameraFollowX({target:, centerX:, minX:, maxX:})` 화면이 특정 노드의 x축에 따라 움직입니다.
+- `cameraFollowY({target:})` `cameraFollowY({target:, centerY:, minY:, maxY:})` 화면이 특정 노드의 y축에 따라 움직입니다.
+- `cameraUnfollow()` 화면이 더 이상 노드를 따라다니지 않습니다.
+- `cameraUnfollowX()` 화면이 x축에 대해 더 이상 노드를 따라다니지 않습니다.
+- `cameraUnfollowY()` 화면이 y축에 대해 더 이상 노드를 따라다니지 않습니다.
+- `getCameraFollowingX()` 화면이 특정 노드를 따라다니는 경우 x축으로 얼마나 이동했는지 가져옵니다.
+- `getCameraFollowingY()`  화면이 특정 노드를 따라다니는 경우 y축으로 얼마나 이동했는지 가져옵니다.
+
+## 기타 함수
+- `findNodesByClass(cls)` 특정 클래스의 노드들을 가져옵니다.
+- `getNonePausableNode()` 스크린 노드를 일시정지 한 경우에도 일시정지 되지 않는 노드를 가져옵니다.

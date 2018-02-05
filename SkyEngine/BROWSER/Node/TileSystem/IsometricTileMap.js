@@ -1,5 +1,5 @@
 /*
- * 아이소메트릭 타일맵 노드
+ * Isometric 타일맵 노드
  */
 SkyEngine.IsometricTileMap = CLASS({
 	
@@ -48,6 +48,79 @@ SkyEngine.IsometricTileMap = CLASS({
 								y : 0
 							}]
 						}));
+					}
+				}
+			};
+		});
+		
+		let moveTile;
+		OVERRIDE(self.moveTile, (origin) => {
+			
+			moveTile = self.moveTile = (params, endHandler) => {
+				//REQUIRED: params
+				//REQUIRED: params.fromRow
+				//REQUIRED: params.fromCol
+				//REQUIRED: params.toRow
+				//REQUIRED: params.toCol
+				//OPTIONAL: params.speed
+				//OPTIONAL: params.accel
+				//OPTIONAL: endHandler
+				
+				let fromRow = params.fromRow;
+				let fromCol = params.fromCol;
+				let toRow = params.toRow;
+				let toCol = params.toCol;
+				let speed = params.speed;
+				let accel = params.accel;
+				
+				let swapResult = inner.swapTile(params);
+				
+				let fromTile = swapResult.fromTile;
+				let toTile = swapResult.toTile;
+				
+				if (fromTile !== undefined) {
+					
+					if (speed !== undefined || accel !== undefined) {
+						
+						fromTile.moveTo({
+							x : toCol * self.getTileWidth() + (toRow % 2) * self.getTileWidth() / 2,
+							y : toRow * self.getTileHeight() / 2,
+							speed : speed,
+							accel : accel
+						}, endHandler);
+						
+						endHandler = undefined;
+					}
+					
+					else {
+						
+						fromTile.setPosition({
+							x : toCol * self.getTileWidth() + (toRow % 2) * self.getTileWidth() / 2,
+							y : toRow * self.getTileHeight() / 2
+						});
+					}
+				}
+				
+				if (toTile !== undefined) {
+					
+					if (speed !== undefined || accel !== undefined) {
+						
+						toTile.moveTo({
+							x : fromCol * self.getTileWidth() + (fromRow % 2) * self.getTileWidth() / 2,
+							y : fromRow * self.getTileHeight() / 2,
+							speed : speed,
+							accel : accel
+						}, endHandler);
+						
+						endHandler = undefined;
+					}
+					
+					else {
+						
+						toTile.setPosition({
+							x : fromCol * self.getTileWidth() + (fromRow % 2) * self.getTileWidth() / 2,
+							y : fromRow * self.getTileHeight() / 2
+						});
 					}
 				}
 			};

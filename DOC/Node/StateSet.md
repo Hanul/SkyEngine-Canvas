@@ -42,15 +42,10 @@ let robot = SkyEngine.StateSet({
 - `stateNodes` 상태 별 노드
 - `baseState` 기본 상태 이름
 
-상태 세트 노드의 메소드들은 다음과 같습니다.
-## `setStateNode({state:, node:})`
-특정 상태의 노드를 지정합니다.
-
-## `setState(state)`
-상태를 지정합니다.
-
-## `getState()`
-현재 상태를 가져옵니다.
+상태 세트 노드에서 사용 가능한 함수들은 다음과 같습니다.
+- `setStateNode({state:, node:})` 특정 상태의 노드를 지정합니다.
+- `setState(state)` 상태를 지정합니다.
+- `getState()` 현재 상태를 가져옵니다.
 
 ## 공격과 이동 예시
 ```javascript

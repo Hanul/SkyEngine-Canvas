@@ -9,11 +9,11 @@ SkyEngine.TileMap = CLASS({
 
 	init : (inner, self, params) => {
 		//REQUIRED: params
-		//REQUIRED: params.tileWidth
-		//REQUIRED: params.tileHeight
-		//OPTIONAL: params.tileMap
-		//OPTIONAL: params.tileSet
-		//OPTIONAL: params.tileKeyMap
+		//REQUIRED: params.tileWidth	타일의 너비
+		//REQUIRED: params.tileHeight	타일의 높이
+		//OPTIONAL: params.tileMap		타일 맵을 구성하는 타일들의 2차원 배열
+		//OPTIONAL: params.tileSet		tileKeyMap으로 타일 맵을 구성하기 위한 타일과 타일에 해당하는 키의 목록
+		//OPTIONAL: params.tileKeyMap	tileSet에 선언한 타일들과 키를 기반으로 타일 맵을 구성하기 위한 키들의 2차원 배열
 		
 		let tileWidth = params.tileWidth;
 		let tileHeight = params.tileHeight;
@@ -126,22 +126,17 @@ SkyEngine.TileMap = CLASS({
 			}
 		};
 		
-		let moveTile = self.moveTile = (params, endHandler) => {
+		let swapTile = inner.swapTile = (params) => {
 			//REQUIRED: params
 			//REQUIRED: params.fromRow
 			//REQUIRED: params.fromCol
 			//REQUIRED: params.toRow
 			//REQUIRED: params.toCol
-			//OPTIONAL: params.speed
-			//OPTIONAL: params.accel
-			//OPTIONAL: endHandler
 			
 			let fromRow = params.fromRow;
 			let fromCol = params.fromCol;
 			let toRow = params.toRow;
 			let toCol = params.toCol;
-			let speed = params.speed;
-			let accel = params.accel;
 			
 			let t;
 			
@@ -169,6 +164,53 @@ SkyEngine.TileMap = CLASS({
 				toTile = tileMap[toRow][toCol];
 			}
 			
+			if (tileMap[toRow] === undefined) {
+				tileMap[toRow] = [];
+			}
+			tileMap[toRow][toCol] = fromTile;
+			
+			if (toTile === undefined) {
+				if (tileMap[fromRow] !== undefined) {
+					tileMap[fromRow][fromCol] = undefined;
+				}
+			}
+			
+			else {
+				
+				if (tileMap[fromRow] === undefined) {
+					tileMap[fromRow] = [];
+				}
+				tileMap[fromRow][fromCol] = toTile;
+			}
+			
+			return {
+				fromTile : fromTile,
+				toTile : toTile
+			};
+		};
+		
+		let moveTile = self.moveTile = (params, endHandler) => {
+			//REQUIRED: params
+			//REQUIRED: params.fromRow
+			//REQUIRED: params.fromCol
+			//REQUIRED: params.toRow
+			//REQUIRED: params.toCol
+			//OPTIONAL: params.speed
+			//OPTIONAL: params.accel
+			//OPTIONAL: endHandler
+			
+			let fromRow = params.fromRow;
+			let fromCol = params.fromCol;
+			let toRow = params.toRow;
+			let toCol = params.toCol;
+			let speed = params.speed;
+			let accel = params.accel;
+			
+			let swapResult = swapTile(params);
+			
+			let fromTile = swapResult.fromTile;
+			let toTile = swapResult.toTile;
+			
 			if (fromTile !== undefined) {
 				
 				if (speed !== undefined || accel !== undefined) {
@@ -181,8 +223,10 @@ SkyEngine.TileMap = CLASS({
 					}, endHandler);
 					
 					endHandler = undefined;
+				}
+				
+				else {
 					
-				} else {
 					fromTile.setPosition({
 						x : toCol * tileWidth,
 						y : toRow * tileHeight
@@ -190,16 +234,7 @@ SkyEngine.TileMap = CLASS({
 				}
 			}
 			
-			if (tileMap[toRow] === undefined) {
-				tileMap[toRow] = [];
-			}
-			tileMap[toRow][toCol] = fromTile;
-			
-			if (toTile === undefined) {
-				if (tileMap[fromRow] !== undefined) {
-					tileMap[fromRow][fromCol] = undefined;
-				}
-			} else {
+			if (toTile !== undefined) {
 				
 				if (speed !== undefined || accel !== undefined) {
 					
@@ -211,18 +246,15 @@ SkyEngine.TileMap = CLASS({
 					}, endHandler);
 					
 					endHandler = undefined;
+				}
+				
+				else {
 					
-				} else {
 					toTile.setPosition({
 						x : fromCol * tileWidth,
 						y : fromRow * tileHeight
 					});
 				}
-				
-				if (tileMap[fromRow] === undefined) {
-					tileMap[fromRow] = [];
-				}
-				tileMap[fromRow][fromCol] = toTile;
 			}
 		};
 		

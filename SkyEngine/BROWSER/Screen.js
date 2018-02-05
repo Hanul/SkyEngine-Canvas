@@ -88,7 +88,7 @@ SkyEngine.Screen = OBJECT({
 			}
 		};
 		
-		let getRegisteredNodes = self.getRegisteredNodes = (cls) => {
+		let findNodesByClass = self.findNodesByClass = (cls) => {
 			return registeredNodeMap[cls.id] === undefined ? [] : registeredNodeMap[cls.id];
 		};
 		
@@ -272,7 +272,7 @@ SkyEngine.Screen = OBJECT({
 				// 모든 노드의 step을 실행합니다.
 				self.step(deltaTime);
 				
-				let fixedNodes = getRegisteredNodes(SkyEngine.FixedNode);
+				let fixedNodes = findNodesByClass(SkyEngine.FixedNode);
 				
 				for (let i = 0; i < fixedNodes.length; i += 1) {
 					fixedNodes[i].step(0);
@@ -401,27 +401,27 @@ SkyEngine.Screen = OBJECT({
 			//OPTIONAL: params.centerX
 			//OPTIONAL: params.centerY
 			//OPTIONAL: params.minX
-			//OPTIONAL: params.maxX
 			//OPTIONAL: params.minY
+			//OPTIONAL: params.maxX
 			//OPTIONAL: params.maxY
 			
 			cameraFollowX(params);
 			cameraFollowY(params);
 		};
 		
-		let cameraUnfollowX = self.cameraUnfollowX = (node) => {
+		let cameraUnfollowX = self.cameraUnfollowX = () => {
 			cameraFollowXTarget = undefined;
 			cameraMinFollowX = undefined;
 			cameraMaxFollowX = undefined;
 		};
 		
-		let cameraUnfollowY = self.cameraUnfollowY = (node) => {
+		let cameraUnfollowY = self.cameraUnfollowY = () => {
 			cameraFollowYTarget = undefined;
 			cameraMinFollowY = undefined;
 			cameraMaxFollowY = undefined;
 		};
 		
-		let cameraUnfollow = self.cameraUnfollow = (node) => {
+		let cameraUnfollow = self.cameraUnfollow = () => {
 			cameraUnfollowX();
 			cameraUnfollowY();
 		};

@@ -252,15 +252,15 @@ circle.setPosition({
 - `offPart(target, handler)` `onPart`로 등록한 이벤트를 해제합니다.
 
 ### 이동 관련 함수
-- `moveLeft(speed)` `moveLeft({speed:, accel:, maxSpeed:})` 왼쪽으로 이동합니다.
+- `moveLeft(speed)` `moveLeft({speed:, accel:, maxSpeed:}, moveEndHandler)` 왼쪽으로 이동합니다.
 - `stopLeft()` `stopLeft(accel)` 왼쪽으로의 이동을 멈춥니다. `accel`을 지정하면 가속도에 따라 서서히 멈추게 할 수 있습니다.
-- `moveRight(speed)` `moveRight({speed:, accel:, maxSpeed:})` 오른쪽으로 이동합니다.
+- `moveRight(speed)` `moveRight({speed:, accel:, maxSpeed:}, moveEndHandler)` 오른쪽으로 이동합니다.
 - `stopRight()` `stopRight(accel)` 오른쪽으로의 이동을 멈춥니다. `accel`을 지정하면 가속도에 따라 서서히 멈추게 할 수 있습니다.
-- `moveUp(speed)` `moveUp({speed:, accel:, maxSpeed:})` 위로 이동합니다.
+- `moveUp(speed)` `moveUp({speed:, accel:, maxSpeed:}, moveEndHandler)` 위로 이동합니다.
 - `stopUp()` `stopUp(accel)` 위로의 이동을 멈춥니다. `accel`을 지정하면 가속도에 따라 서서히 멈추게 할 수 있습니다.
-- `moveDown(speed)` `moveDown({speed:, accel:, maxSpeed:})` 아래로 이동합니다.
+- `moveDown(speed)` `moveDown({speed:, accel:, maxSpeed:}, moveEndHandler)` 아래로 이동합니다.
 - `stopDown()` `stopDown(accel)` 아래로의 이동을 멈춥니다. `accel`을 지정하면 가속도에 따라 서서히 멈추게 할 수 있습니다.
-- `moveTo({toX:, toY:, speed:, accel:, maxSpeed:})` 특정 위치로 이동합니다.
+- `moveTo({toX:, toY:, speed:, accel:, maxSpeed:}, moveEndHandler)` 특정 위치로 이동합니다.
 - `stuckLeft()` 왼쪽으로의 이동을 차단합니다. (내부적으로 속도와 가속도를 유지합니다.)
 - `unstuckLeft()` 왼쪽 이동의 차단을 해제합니다.
 - `stuckRight()` 오른쪽으로의 이동을 차단합니다. (내부적으로 속도와 가속도를 유지합니다.)
@@ -335,7 +335,7 @@ rect.on('tap', (e) => {
 
 `on`으로 등록한 이벤트는 `off` 함수로 제거할 수 있습니다.
 
-### `onMeet(targetNode, eventHandler)`
+### `onMeet(target, eventHandler)`
 특정 노드와 만날 때 발생하는 이벤트를 등록합니다.
 
 ```javascript
@@ -346,7 +346,7 @@ hero.onMeet(Game.Enemy, () => {
 
 `onMeet`으로 등록한 이벤트는 `offMeet` 함수로 제거할 수 있습니다.
 
-### `onPart(targetNode, eventHandler)`
+### `onPart(target, eventHandler)`
 특정 노드로부터 떨어질 때 발생하는 이벤트를 등록합니다.
 
 `onPart`로 등록한 이벤트는 `offPart` 함수로 제거할 수 있습니다.
