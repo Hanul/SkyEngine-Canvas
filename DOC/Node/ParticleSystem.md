@@ -6,16 +6,56 @@
 ## 파티클 시스템 노드
 파티클을 생성합니다.
 
-이미지1
+![파티클 시스템 노드](https://raw.githubusercontent.com/Hanul/SkyEngine/master/DOC/Node/ParticleSystem/particlesystem.png)
 
 ```javascript
+let particle = SkyEngine.ParticleSystem({
+	particleSrc : SkyEngineShowcase.R('star.png'),
+	minParticleCount : 50,
+	maxParticleCount : 100,
+	minParticleLifetime : 0.2,
+	maxParticleLifetime : 0.5,
+	minParticleDirection : 0,
+	maxParticleDirection : 360,
+	minParticleSpeed : 100,
+	maxParticleSpeed : 300,
+	minParticleScale : 0.05,
+	maxParticleScale : 0.2,
+	particleRotationSpeed : 1000,
+	particleFadingSpeed : -2
+}).appendTo(SkyEngine.Screen);
 
+EVENT('touchstart', (e) => {
+	particle.burst();
+});
 ```
 
-이미지2
+![파티클 시스템 노드2](https://raw.githubusercontent.com/Hanul/SkyEngine/master/DOC/Node/ParticleSystem/particlesystem2.png)
 
 ```javascript
+let rain = SkyEngine.ParticleSystem({
+	particleFigure : 'line',
+	particleStartX : -20,
+	particleStartY : -50,
+	particleEndX : 20,
+	particleEndY : 50,
+	particleBorder : '1px solid #ffffff',
+	minParticleX : -SkyEngine.Screen.getWidth() / 2 - 100,
+	maxParticleX : SkyEngine.Screen.getWidth() / 2,
+	minParticleCount : 50,
+	maxParticleCount : 100,
+	particleLifetime : 1,
+	minParticleSpeed : 300,
+	maxParticleSpeed : 700,
+	minParticleScale : 0.3,
+	maxParticleScale : 0.7,
+	minParticleDirection : 75,
+	maxParticleDirection : 75
+}).appendTo(SkyEngine.Screen);
 
+SkyEngine.Interval(0.1, () => {
+	rain.burst();
+});
 ```
 
 사용 가능한 파라미터는 다음과 같습니다.
@@ -87,10 +127,38 @@
 ## 일회성 파티클 시스템 노드
 파티클을 1회 생성하고 사라집니다.
 
-이미지3
+![일회성 파티클 시스템 노드](https://raw.githubusercontent.com/Hanul/SkyEngine/master/DOC/Node/ParticleSystem/particlesystemonce.png)
 
 ```javascript
-
+EVENT('touchstart', (e) => {
+	
+	SkyEngine.ParticleSystemOnce({
+		x : e.getLeft() - SkyEngine.Screen.getWidth() / 2,
+		y : e.getTop() - SkyEngine.Screen.getHeight() / 2,
+		particleFigure : 'circle',
+		particleWidth : 5,
+		particleHeight : 5,
+		particleAccelY : 200,
+		minParticleColorR : 0,
+		maxParticleColorR : 255,
+		minParticleColorG : 0,
+		maxParticleColorG : 255,
+		minParticleColorB : 0,
+		maxParticleColorB : 255,
+		minParticleCount : 200,
+		maxParticleCount : 300,
+		minParticleLifetime : 1,
+		maxParticleLifetime : 2,
+		minParticleDirection : 0,
+		maxParticleDirection : 360,
+		minParticleSpeed : 50,
+		maxParticleSpeed : 100,
+		minParticleScale : 0.5,
+		maxParticleScale : 1,
+		particleFadingSpeed : -1,
+		blendMode : 'lighter'
+	}).appendTo(SkyEngine.Screen);
+});
 ```
 
 사용 가능한 파라미터는 파티클 시스템 노드와 동일합니다.
