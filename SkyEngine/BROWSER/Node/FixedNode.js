@@ -9,7 +9,7 @@ SkyEngine.FixedNode = CLASS({
 	
 	init : (inner, self, params) => {
 		//OPTIONAL: params
-		//OPTIONAL: params.followScreenRatio
+		//OPTIONAL: params.followScreenRatio	스크린을 따라가는 비율을 지정합니다. 지정하지 않으면 스크린을 따라가지 않습니다.
 		
 		let followScreenRatio;
 		

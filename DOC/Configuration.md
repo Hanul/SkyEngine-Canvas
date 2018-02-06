@@ -1,7 +1,7 @@
 작성중
 
 # 설정
-[UPPERCASE의 프로젝트 실행을 위한 코드](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/CREATE_PROJECT.md#%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%8B%A4%ED%96%89%EC%9D%84-%EC%9C%84%ED%95%9C-%EC%BD%94%EB%93%9C-%EC%9E%91%EC%84%B1)의 `BROWSER_CONFIG` 부분에 `SkyEngine` 설정을 등록합니다.
+[UPPERCASE의 프로젝트 실행을 위한 코드](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/CREATE_PROJECT.md#프로젝트-실행을-위한-코드-작성)의 `BROWSER_CONFIG` 부분에 `SkyEngine` 설정을 등록합니다.
 
 ```javascript
 require(process.env.UPPERCASE_PATH + '/LOAD.js');
@@ -25,7 +25,7 @@ BOOT({
 });
 ```
 
-아래와 같은 설정들을 사용할 수 있습니다.
+SkyEngine에는 아래와 같은 설정들을 사용할 수 있습니다.
 - `isDebugMode` 디버그 모드. `true`로 지정하면 활성화됩니다. [디버그 모드](#디버그-모드) 항목을 참고해주시기 바랍니다.
 - `width` 게임의 고정 너비. [게임 화면 크기](#게임-화면-크기) 항목을 참고해주시기 바랍니다.
 - `height` 게임의 고정 높이. [게임 화면 크기](#게임-화면-크기) 항목을 참고해주시기 바랍니다.
@@ -36,7 +36,9 @@ BOOT({
 
 ## 디버그 모드
 
+
 ## 게임 화면 크기
+
 
 ## 최대 충돌 계산 범위
 게임의 성능을 최적화 하기 위해 최대 충돌 계산 범위를 지정합니다. 이러면 충돌을 계산할 때, 정해진 범위 내의 노드만 계산합니다.
