@@ -1,7 +1,5 @@
-작성중
-
 # 파티클 시스템
-파티클을 게임에서 타격감을 더욱 증대시키기 위한 타격 이펙트나, 폭발, 충돌 등의 각종 효과들에서 유용하게 사용할 수 있습니다. SkyEngine의 파티클 시스템을 사용하면 쉽게 파티클을 생성하고 조작할 수 있습니다.
+파티클은 게임에서 타격감을 더욱 증대시키기 위한 타격 이펙트나, 폭발, 충돌 등의 각종 효과들을 구현하는데 유용하게 사용될 수 있습니다. SkyEngine의 파티클 시스템을 사용하면 쉽게 파티클을 생성하고 조작할 수 있습니다.
 
 ## 파티클 시스템 노드
 파티클을 생성합니다.
@@ -25,6 +23,7 @@ let particle = SkyEngine.ParticleSystem({
 	particleFadingSpeed : -2
 }).appendTo(SkyEngine.Screen);
 
+// 화면을 터치하면 발동됩니다.
 EVENT('touchstart', (e) => {
 	particle.burst();
 });
@@ -53,6 +52,7 @@ let rain = SkyEngine.ParticleSystem({
 	maxParticleDirection : 75
 }).appendTo(SkyEngine.Screen);
 
+// 0.1초마다 계속해서 발동됩니다.
 SkyEngine.Interval(0.1, () => {
 	rain.burst();
 });
@@ -161,4 +161,4 @@ EVENT('touchstart', (e) => {
 });
 ```
 
-사용 가능한 파라미터는 파티클 시스템 노드와 동일합니다.
+사용 가능한 파라미터와 이벤트는 [파티클 시스템 노드](#파티클-시스템-노드)와 동일합니다.
