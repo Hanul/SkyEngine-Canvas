@@ -1,5 +1,3 @@
-***이 문서는 작성중인 문서입니다.***
-
 # 설정
 [UPPERCASE의 프로젝트 실행을 위한 코드](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/CREATE_PROJECT.md#프로젝트-실행을-위한-코드-작성)의 `BROWSER_CONFIG` 부분에 `SkyEngine` 설정을 등록합니다.
 
@@ -40,20 +38,20 @@ SkyEngine에는 다음과 같은 설정들을 사용할 수 있습니다.
 - 게임 성능의 지표가 되는 FPS 수치를 화면의 좌측 상단에 표시합니다.
 - 노드들의 중점을 표시하고 터치 영역과 충돌 영역을 표시합니다.
 
-이미지
+![디버그 모드](https://raw.githubusercontent.com/Hanul/SkyEngine/master/DOC/Configuration/debugmode.png)
 
 ## 게임 화면 크기
 `width`와 `height` 설정을 지정하게 되면 게임 화면 크기를 고정합니다. 이 때 브라우저의 크기를 조절하면 게임 화면 크기가 고정비율로 확대 혹은 축소됩니다.
 
-이미지
+![고정 크기](https://raw.githubusercontent.com/Hanul/SkyEngine/master/DOC/Configuration/fixedsize.png)
 
 `maxWidth`를 설정하게 되면 브라우저의 크기가 조절될 때 게임 화면의 너비가 브라우저의 너비와 동일하게 커지다가, `maxWidth` 이상으로 커지면 더 이상 게임 화면이 커지지 않고 고정됩니다.
 
-이미지
+![최대 크기](https://raw.githubusercontent.com/Hanul/SkyEngine/master/DOC/Configuration/maxsize.png)
 
 `maxHeight`를 설정하게 되면 `maxWidth`와 마찬가지로 브라우저의 크기가 조절될 때 게임 화면의 높이가 브라우저의 높이와 동일하게 커지다가, `maxHeight` 이상으로 커지면 더 이상 게임 화면이 커지지 않고 고정됩니다.
 
 ## 최대 충돌 계산 범위
 게임의 성능을 최적화 하기 위해 `maxCollisionWidth`와 `maxCollisionHeight`를 설정하여 최대 충돌 계산 범위를 지정합니다. 이러면 충돌을 계산할 때, 정해진 범위 내의 노드들만 계산합니다.
 
-이미지
+![최대 충돌 계산 범위](https://raw.githubusercontent.com/Hanul/SkyEngine/master/DOC/Configuration/maxcollisionsize.png)
