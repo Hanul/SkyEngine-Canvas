@@ -128,7 +128,7 @@ SkyEngine의 모든 구성요소는 노드를 확장합니다.
 ## 기타 문서
 * [설정](DOC/Configuration.md)
 * [자주 묻는 질문](DOC/FAQ.md)
-* [튜토리얼](DOC/Tutorial.md)
+* [샘플 프로젝트](DOC/Samples.md)
 * [UI 개발](DOC/UI.md)
 * [API 문서](API/README.md)
 

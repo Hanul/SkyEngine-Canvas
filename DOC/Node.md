@@ -109,7 +109,7 @@ SkyEngine의 모든 구성요소는 노드입니다. 즉 SkyEngine을 기반으�
 - `onDisplayResize` 화면 크기가 변경될 때 실행되는 함수를 지정할 수 있습니다. 자세한 내용은 [이벤트 항목](#이벤트)을 참고해주시기 바랍니다.
 
 ### DOM 관련 파라미터
-- `dom` 노드를 따라다니는 [DOM 객체](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/UPPERCASE-CORE-BROWSER.md#dom-%EA%B0%9D%EC%B2%B4-%EC%83%9D%EC%84%B1)를 지정할 수 있습니다. 노드의 크기가 변경되거나, 움직이거나, 회전하여도 똑같이 반영됩니다.
+- `dom` 노드를 따라다니는 [DOM 객체](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/UPPERCASE-CORE-BROWSER.md#dom-객체-생성)를 지정할 수 있습니다. 노드의 크기가 변경되거나, 움직이거나, 회전하여도 똑같이 반영됩니다.
 - `domStyle` `dom`으로 지정한 [DOM 객체](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/UPPERCASE-CORE-BROWSER.md#dom-%EA%B0%9D%EC%B2%B4-%EC%83%9D%EC%84%B1)의 스타일을 지정합니다.
 
 ### 기타 파라미터
@@ -302,6 +302,7 @@ circle.setPosition({
 - `pause()` 노드의 모든 변화를 일시정지합니다. 참고로, `SkyEngine.Screen`를 `pause`한 경우, `SkyEngine.Delay` 및 `SkyEngine.Interval` 또한 일시정지 됩니다.
 - `checkIsPaused()` 노드가 일시정지 되었는지 확인합니다.
 - `resume()` 일시정지를 해제합니다.
+- `addDom(dom)` [DOM 객체](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/UPPERCASE-CORE-BROWSER.md#dom-객체-생성)를 노드에 추가합니다. 
 
 ## 이벤트
 노드에 이벤트를 등록합니다.
