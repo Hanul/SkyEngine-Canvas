@@ -1,4 +1,4 @@
-작성중
+***이 문서는 작성중인 문서입니다.***
 
 # 설정
 [UPPERCASE의 프로젝트 실행을 위한 코드](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/CREATE_PROJECT.md#프로젝트-실행을-위한-코드-작성)의 `BROWSER_CONFIG` 부분에 `SkyEngine` 설정을 등록합니다.
