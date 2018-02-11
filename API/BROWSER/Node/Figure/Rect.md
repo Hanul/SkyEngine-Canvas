@@ -1,4 +1,4 @@
-# `CLASS ` SkyEngine.Rect
+# `CLASS` SkyEngine.Rect
 사각형 노드
 
 ## Mom CLASS
@@ -6,8 +6,8 @@
 
 ## Parameters
 * `REQUIRED` *params*
-* `REQUIRED` *params.width*
-* `REQUIRED` *params.height*
+* `REQUIRED` *params.width* 사각형의 너비
+* `REQUIRED` *params.height* 사각형의 높이
 
 ## Static Members
 
@@ -15,11 +15,11 @@
 
 ## Public Members
 
-### `setWidth(_width)`
+### `setWidth(width)`
 
 ### `getWidth()`
 
-### `setHeight(_height)`
+### `setHeight(height)`
 
 ### `getHeight()`
 

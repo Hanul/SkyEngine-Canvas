@@ -1,11 +1,11 @@
-# `CLASS ` SkyEngine.Node
+# `CLASS` SkyEngine.Node
 노드 트리를 구성하기 위한 노드 클래스
 
 ## Parameters
 * `OPTIONAL` *params*
 * `OPTIONAL` *params.x* x 좌표
 * `OPTIONAL` *params.y* y 좌표
-* `OPTIONAL` *params.z* 노드의 드로우 순서를 결정하기 위한 z 인덱스
+* `OPTIONAL` *params.zIndex* 노드의 드로우 순서를 결정하기 위한 z 인덱스
 * `OPTIONAL` *params.centerX* 중점의 x 좌표
 * `OPTIONAL` *params.centerY* 중점의 y 좌표
 * `OPTIONAL` *params.speedX* x 좌표 이동 속도
@@ -48,118 +48,124 @@
 * `OPTIONAL` *params.minFadingSpeed* 최소 페이드 속도
 * `OPTIONAL` *params.maxFadingSpeed* 최대 페이드 속도
 * `OPTIONAL` *params.toAlpha* 페이드 알파 값 목적지
+* `OPTIONAL` *params.filter* 이 설정을 통해 노드에 CanvasRenderingContext2D.filter를 적용할 수 있습니다.
+* `OPTIONAL` *params.blendMode* 이 설정을 통해 노드에 CanvasRenderingContext2D.globalCompositeOperation를 적용할 수 있습니다.
 * `OPTIONAL` *params.collider* 충돌 영역. 하나의 영역을 지정하거나, 영역들의 배열을 지정할 수 있습니다.
 * `OPTIONAL` *params.touchArea* 터치 영역. 하나의 영역을 지정하거나, 영역들의 배열을 지정할 수 있습니다.
-* `OPTIONAL` *params.c* 자식 노드. 하나의 노드를 지정하거나, 노드들의 배열을 지정할 수 있습니다.
 * `OPTIONAL` *params.on* 이벤트
+* `OPTIONAL` *params.onDisplayResize* 화면 크기가 변경될 때 실행되는 함수를 지정할 수 있습니다.
+* `OPTIONAL` *params.domStyle* dom으로 지정한 DOM 객체의 스타일을 지정합니다.
+* `OPTIONAL` *params.dom* 노드를 따라다니는 DOM 객체를 지정할 수 있습니다. 노드의 크기가 변경되거나, 움직이거나, 회전하여도 똑같이 반영됩니다.
+* `OPTIONAL` *params.c* 자식 노드. 하나의 노드를 지정하거나, 노드들의 배열을 지정할 수 있습니다.
+* `OPTIONAL` *params.isToCheckCollision* true로 지정하면 최대 충돌 계산 크기 설정에 관계없이 해당 노드는 충돌 계산을 하게끔 강제합니다.
 
 ## Public Members
 
-### `setX(_x)`
+### `setX(x)`
 #### Parameters
 * `REQUIRED` *x*
 
 ### `getX()`
 
-### `setY(_y)`
+### `setY(y)`
 #### Parameters
 * `REQUIRED` *y*
 
 ### `getY()`
 
-### `setZ(_z)`
+### `setZIndex(zIndex)`
 #### Parameters
-* `REQUIRED` *z*
+* `REQUIRED` *_zIndex*
 
-### `getZ()`
+### `getZIndex()`
 
 ### `setPosition(position)`
-x, y, z를 한번에 지정합니다.
+x, y, zIndex를 한번에 지정합니다.
 #### Parameters
 * `REQUIRED` *position*
 * `OPTIONAL` *position.x*
 * `OPTIONAL` *position.y*
-* `OPTIONAL` *position.z*
+* `OPTIONAL` *position.zIndex*
 
-### `setCenterX(_centerX)`
+### `setCenterX(centerX)`
 #### Parameters
 * `REQUIRED` *centerX*
 
 ### `getCenterX()`
 
-### `setCenterY(_centerY)`
+### `setCenterY(centerY)`
 #### Parameters
 * `REQUIRED` *centerY*
 
 ### `getCenterY()`
 
-### `setSpeedX(_speedX)`
+### `setSpeedX(speedX)`
 #### Parameters
 * `REQUIRED` *speedX*
 
 ### `getSpeedX()`
 
-### `setSpeedY(_speedY)`
+### `setSpeedY(speedY)`
 #### Parameters
 * `REQUIRED` *speedY*
 
 ### `getSpeedY()`
 
-### `setAccelX(_accelX)`
+### `setAccelX(accelX)`
 #### Parameters
 * `REQUIRED` *accelX*
 
 ### `getAccelX()`
 
-### `setAccelY(_accelY)`
+### `setAccelY(accelY)`
 #### Parameters
 * `REQUIRED` *accelY*
 
 ### `getAccelY()`
 
-### `setMinSpeedX(_minSpeedX)`
+### `setMinSpeedX(minSpeedX)`
 #### Parameters
 * `REQUIRED` *minSpeedX*
 
 ### `getMinSpeedX()`
 
-### `setMinSpeedY(_minSpeedY)`
+### `setMinSpeedY(minSpeedY)`
 #### Parameters
 * `REQUIRED` *minSpeedY*
 
 ### `getMinSpeedY()`
 
-### `setMaxSpeedX(_maxSpeedX)`
+### `setMaxSpeedX(maxSpeedX)`
 #### Parameters
 * `REQUIRED` *maxSpeedX*
 
 ### `getMaxSpeedX()`
 
-### `setMaxSpeedY(_maxSpeedY)`
+### `setMaxSpeedY(maxSpeedY)`
 #### Parameters
 * `REQUIRED` *maxSpeedY*
 
 ### `getMaxSpeedY()`
 
-### `setToX(_toX)`
+### `setToX(toX)`
 #### Parameters
 * `REQUIRED` *toX*
 
 ### `getToX()`
 
-### `setToY(_toY)`
+### `setToY(toY)`
 #### Parameters
 * `REQUIRED` *toY*
 
 ### `getToY()`
 
-### `setScaleX(_scaleX)`
+### `setScaleX(scaleX)`
 #### Parameters
 * `REQUIRED` *scaleX*
 
 ### `getScaleX()`
 
-### `setScaleY(_scaleY)`
+### `setScaleY(scaleY)`
 #### Parameters
 * `REQUIRED` *scaleY*
 
@@ -170,13 +176,13 @@ x 스케일과 y 스케일을 동시에 설정합니다.
 #### Parameters
 * `REQUIRED` *scale*
 
-### `setScalingSpeedX(_scalingSpeedX)`
+### `setScalingSpeedX(scalingSpeedX)`
 #### Parameters
 * `REQUIRED` *scalingSpeedX*
 
 ### `getScalingSpeedX()`
 
-### `setScalingSpeedY(_scalingSpeedY)`
+### `setScalingSpeedY(scalingSpeedY)`
 #### Parameters
 * `REQUIRED` *scalingSpeedY*
 
@@ -187,13 +193,13 @@ x 스케일과 y 스케일이 커지는 속도를 동시에 설정합니다.
 #### Parameters
 * `REQUIRED` *scalingSpeed*
 
-### `setScalingAccelX(_scalingAccelX)`
+### `setScalingAccelX(scalingAccelX)`
 #### Parameters
 * `REQUIRED` *scalingAccelX*
 
 ### `getScalingAccelX()`
 
-### `setScalingAccelY(_scalingAccelY)`
+### `setScalingAccelY(scalingAccelY)`
 #### Parameters
 * `REQUIRED` *scalingAccelY*
 
@@ -204,13 +210,13 @@ x 스케일과 y 스케일이 커지는 가속도를 동시에 설정합니다.
 #### Parameters
 * `REQUIRED` *scalingAccel*
 
-### `setMinScalingSpeedX(_minScalingSpeedX)`
+### `setMinScalingSpeedX(minScalingSpeedX)`
 #### Parameters
 * `REQUIRED` *minScalingSpeedX*
 
 ### `getMinScalingSpeedX()`
 
-### `setMinScalingSpeedY(_minScalingSpeedY)`
+### `setMinScalingSpeedY(minScalingSpeedY)`
 #### Parameters
 * `REQUIRED` *minScalingSpeedY*
 
@@ -221,13 +227,13 @@ x 스케일과 y 스케일이 커지는 최소 속도를 동시에 설정합니�
 #### Parameters
 * `REQUIRED` *minScalingSpeed*
 
-### `setMaxScalingSpeedX(_maxScalingSpeedX)`
+### `setMaxScalingSpeedX(maxScalingSpeedX)`
 #### Parameters
 * `REQUIRED` *maxScalingSpeedX*
 
 ### `getMaxScalingSpeedX()`
 
-### `setMaxScalingSpeedY(_maxScalingSpeedY)`
+### `setMaxScalingSpeedY(maxScalingSpeedY)`
 #### Parameters
 * `REQUIRED` *maxScalingSpeedY*
 
@@ -238,13 +244,13 @@ x 스케일과 y 스케일이 커지는 최대 속도를 동시에 설정합니�
 #### Parameters
 * `REQUIRED` *maxScalingSpeed*
 
-### `setToScaleX(_toScaleX)`
+### `setToScaleX(toScaleX)`
 #### Parameters
 * `REQUIRED` *toScaleX*
 
 ### `getToScaleX()`
 
-### `setToScaleY(_toScaleY)`
+### `setToScaleY(toScaleY)`
 #### Parameters
 * `REQUIRED` *toScaleY*
 
@@ -255,73 +261,73 @@ x 스케일과 y 스케일의 목적지를 동시에 설정합니다.
 #### Parameters
 * `REQUIRED` *toScale*
 
-### `setAngle(_angle)`
+### `setAngle(angle)`
 #### Parameters
 * `REQUIRED` *angle*
 
 ### `getAngle()`
 
-### `setRotationSpeed(_rotationSpeed)`
+### `setRotationSpeed(rotationSpeed)`
 #### Parameters
 * `REQUIRED` *rotationSpeed*
 
 ### `getRotationSpeed()`
 
-### `setRotationAccel(_rotationAccel)`
+### `setRotationAccel(rotationAccel)`
 #### Parameters
 * `REQUIRED` *rotationAccel*
 
 ### `getRotationAccel()`
 
-### `setMinRotationSpeed(_minRotationSpeed)`
+### `setMinRotationSpeed(minRotationSpeed)`
 #### Parameters
 * `REQUIRED` *minRotationSpeed*
 
 ### `getMinRotationSpeed()`
 
-### `setMaxRotationSpeed(_maxRotationSpeed)`
+### `setMaxRotationSpeed(maxRotationSpeed)`
 #### Parameters
 * `REQUIRED` *maxRotationSpeed*
 
 ### `getMaxRotationSpeed()`
 
-### `setToAngle(_toAngle)`
+### `setToAngle(toAngle)`
 #### Parameters
 * `REQUIRED` *toAngle*
 
 ### `getToAngle()`
 
-### `setAlpha(_alpha)`
+### `setAlpha(alpha)`
 #### Parameters
 * `REQUIRED` *alpha*
 
 ### `getAlpha()`
 
-### `setFadingSpeed(_fadingSpeed)`
+### `setFadingSpeed(fadingSpeed)`
 #### Parameters
 * `REQUIRED` *fadingSpeed*
 
 ### `getFadingSpeed()`
 
-### `setFadingAccel(_fadingAccel)`
+### `setFadingAccel(fadingAccel)`
 #### Parameters
 * `REQUIRED` *fadingAccel*
 
 ### `getFadingAccel()`
 
-### `setMinFadingSpeed(_minFadingSpeed)`
+### `setMinFadingSpeed(minFadingSpeed)`
 #### Parameters
 * `REQUIRED` *minFadingSpeed*
 
 ### `getMinFadingSpeed()`
 
-### `setMaxFadingSpeed(_maxFadingSpeed)`
+### `setMaxFadingSpeed(maxFadingSpeed)`
 #### Parameters
 * `REQUIRED` *maxFadingSpeed*
 
 ### `getMaxFadingSpeed()`
 
-### `setToAlpha(_toAlpha)`
+### `setToAlpha(toAlpha)`
 #### Parameters
 * `REQUIRED` *toAlpha*
 
@@ -349,15 +355,15 @@ x 스케일과 y 스케일의 목적지를 동시에 설정합니다.
 
 ### `getBeforeY()`
 
-### `setFilter(_filterStyle)`
+### `setFilter(filter)`
 #### Parameters
-* `REQUIRED` *filterStyle*
+* `REQUIRED` *filter*
 
 ### `getFilter()`
 
 ### `removeFilter()`
 
-### `setBlendMode(_blendMode)`
+### `setBlendMode(blendMode)`
 #### Parameters
 * `REQUIRED` *blendMode*
 
@@ -365,58 +371,77 @@ x 스케일과 y 스케일의 목적지를 동시에 설정합니다.
 
 ### `removeBlendMode()`
 
-### `moveLeft(speedOrParams)`
+### `moveLeft(speedOrParams, moveEndHandler)`
 #### Parameters
 * `REQUIRED` *speedOrParams*
 * `OPTIONAL` *speedOrParams.speed*
 * `OPTIONAL` *speedOrParams.accel*
 * `OPTIONAL` *speedOrParams.maxSpeed*
+* `OPTIONAL` *speedOrParams.toX*
+* `OPTIONAL` *moveEndHandler*
 
 ### `stopLeft(accel)`
 #### Parameters
 * `OPTIONAL` *accel*
 
-### `moveRight(speedOrParams)`
+### `moveRight(speedOrParams, moveEndHandler)`
 #### Parameters
 * `REQUIRED` *speedOrParams*
 * `OPTIONAL` *speedOrParams.speed*
 * `OPTIONAL` *speedOrParams.accel*
 * `OPTIONAL` *speedOrParams.maxSpeed*
+* `OPTIONAL` *speedOrParams.toX*
+* `OPTIONAL` *moveEndHandler*
 
 ### `stopRight(accel)`
 #### Parameters
 * `OPTIONAL` *accel*
 
-### `moveUp(speedOrParams)`
+### `moveUp(speedOrParams, moveEndHandler)`
 #### Parameters
 * `REQUIRED` *speedOrParams*
 * `OPTIONAL` *speedOrParams.speed*
 * `OPTIONAL` *speedOrParams.accel*
 * `OPTIONAL` *speedOrParams.maxSpeed*
+* `OPTIONAL` *speedOrParams.toY*
+* `OPTIONAL` *moveEndHandler*
 
 ### `stopUp(accel)`
 #### Parameters
 * `OPTIONAL` *accel*
 
-### `moveDown(speedOrParams)`
+### `moveDown(speedOrParams, moveEndHandler)`
 #### Parameters
 * `REQUIRED` *speedOrParams*
 * `OPTIONAL` *speedOrParams.speed*
 * `OPTIONAL` *speedOrParams.accel*
 * `OPTIONAL` *speedOrParams.maxSpeed*
+* `OPTIONAL` *speedOrParams.toY*
+* `OPTIONAL` *moveEndHandler*
 
 ### `stopDown(accel)`
 #### Parameters
 * `OPTIONAL` *accel*
 
-### `moveTo(params)`
+### `moveTo(params, moveEndHandler)`
 #### Parameters
 * `REQUIRED` *params*
-* `OPTIONAL` *params.toX*
-* `OPTIONAL` *params.toY*
+* `OPTIONAL` *params.x*
+* `OPTIONAL` *params.y*
 * `OPTIONAL` *params.speed*
 * `OPTIONAL` *params.accel*
 * `OPTIONAL` *params.maxSpeed*
+* `OPTIONAL` *moveEndHandler*
+
+### `scaleTo(params, scaleEndHandler)`
+#### Parameters
+* `REQUIRED` *params*
+* `OPTIONAL` *params.x*
+* `OPTIONAL` *params.y*
+* `OPTIONAL` *params.speed*
+* `OPTIONAL` *params.accel*
+* `OPTIONAL` *params.maxSpeed*
+* `OPTIONAL` *scaleEndHandler*
 
 ### `stuckLeft()`
 
@@ -446,7 +471,7 @@ x 스케일과 y 스케일의 목적지를 동시에 설정합니다.
 #### Parameters
 * `OPTIONAL` *accel*
 
-### `rotateTo(params)`
+### `rotateTo(params, rotateEndHandler)`
 #### Parameters
 * `REQUIRED` *params*
 * `REQUIRED` *params.toAngle*
@@ -454,30 +479,33 @@ x 스케일과 y 스케일의 목적지를 동시에 설정합니다.
 * `OPTIONAL` *params.accel*
 * `OPTIONAL` *params.minSpeed*
 * `OPTIONAL` *params.maxSpeed*
+* `OPTIONAL` *rotateEndHandler*
 
 ### `flipX()`
 
 ### `flipY()`
 
-### `fadeIn(speedOrParams)`
+### `fadeIn(speedOrParams, fadeEndHandler)`
 #### Parameters
-* `REQUIRED` *speedOrParams*
+* `OPTIONAL` *speedOrParams*
 * `OPTIONAL` *speedOrParams.speed*
 * `OPTIONAL` *speedOrParams.accel*
 * `OPTIONAL` *speedOrParams.maxSpeed*
+* `OPTIONAL` *fadeEndHandler*
 
-### `fadeOut(speedOrParams)`
+### `fadeOut(speedOrParams, fadeEndHandler)`
 #### Parameters
-* `REQUIRED` *speedOrParams*
+* `OPTIONAL` *speedOrParams*
 * `OPTIONAL` *speedOrParams.speed*
 * `OPTIONAL` *speedOrParams.accel*
 * `OPTIONAL` *speedOrParams.maxSpeed*
+* `OPTIONAL` *fadeEndHandler*
 
 ### `stopFading(accel)`
 #### Parameters
 * `OPTIONAL` *accel*
 
-### `fadeTo(params)`
+### `fadeTo(params, fadeEndHandler)`
 #### Parameters
 * `REQUIRED` *params*
 * `REQUIRED` *params.toAlpha*
@@ -485,6 +513,7 @@ x 스케일과 y 스케일의 목적지를 동시에 설정합니다.
 * `OPTIONAL` *params.accel*
 * `OPTIONAL` *params.minSpeed*
 * `OPTIONAL` *params.maxSpeed*
+* `OPTIONAL` *fadeEndHandler*
 
 ### `hide()`
 
@@ -492,13 +521,15 @@ x 스케일과 y 스케일의 목적지를 동시에 설정합니다.
 
 ### `checkIsHiding()`
 
+### `checkIsShowing()`
+
 ### `getChildren()`
 
 ### `getParent()`
 
-### `setTarget(_targetNode)`
+### `setTarget(targetNode)`
 
-### `setParent(_parentNode)`
+### `setParent(parentNode)`
 
 ### `appendTo(node)`
 #### Parameters
@@ -508,15 +539,33 @@ x 스케일과 y 스케일의 목적지를 동시에 설정합니다.
 #### Parameters
 * `REQUIRED` *node*
 
+### `empty()`
+
 ### `remove()`
 
 ### `checkIsRemoved()`
 
+### `addDom(dom)`
+#### Parameters
+* `REQUIRED` *dom*
+
+### `getDomWrapper()`
+
+### `addDomStyle(domStyle)`
+
+### `removeAllDoms()`
+
 ### `on(eventName, eventHandler)`
+
+### `checkIsEventExists(eventName)`
 
 ### `off(eventName, eventHandler)`
 
-### `fireEvent(eventName)`
+### `fireEvent(eventNameOrParams)`
+#### Parameters
+* `REQUIRED` *eventNameOrParams*
+* `REQUIRED` *eventNameOrParams.eventName*
+* `OPTIONAL` *eventNameOrParams.e*
 
 ### `onMeet(target, handler)`
 
@@ -552,7 +601,13 @@ x 스케일과 y 스케일의 목적지를 동시에 설정합니다.
 
 ### `checkTouch(touchX, touchY)`
 
+### `checkOneSideCollision(target)`
+#### Parameters
+* `REQUIRED` *target*
+
 ### `checkCollision(target)`
+#### Parameters
+* `REQUIRED` *target*
 
 ### `checkOffScreen()`
 
@@ -562,7 +617,10 @@ x 스케일과 y 스케일의 목적지를 동시에 설정합니다.
 
 ### `drawArea(context)`
 
-### `clone(appendParams)`
-#### Parameters
-* `OPTIONAL` *appendParams*
-* `OPTIONAL` *appendParams.exceptChildNodes*
+### `pause()`
+
+### `checkIsPaused()`
+
+### `resume()`
+
+### `checkIsToCheckCollision()`

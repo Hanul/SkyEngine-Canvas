@@ -1,4 +1,4 @@
-# `OBJECT ` SkyEngineUtil.Collision
+# `OBJECT` SkyEngineUtil.Collision
 
 ## Public Members
 

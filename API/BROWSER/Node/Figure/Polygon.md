@@ -1,4 +1,4 @@
-# `CLASS ` SkyEngine.Polygon
+# `CLASS` SkyEngine.Polygon
 폴리곤 노드
 
 ## Mom CLASS
@@ -6,7 +6,7 @@
 
 ## Parameters
 * `REQUIRED` *params*
-* `REQUIRED` *params.points*
+* `REQUIRED` *params.points* 다각형을 이루는 점들의 좌표들
 
 ## Static Members
 

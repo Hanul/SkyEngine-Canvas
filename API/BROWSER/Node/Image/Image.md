@@ -1,4 +1,4 @@
-# `CLASS ` SkyEngine.Image
+# `CLASS` SkyEngine.Image
 이미지 노드
 
 ## Mom CLASS
@@ -7,3 +7,15 @@
 ## Parameters
 * `REQUIRED` *params*
 * `REQUIRED` *params.src*
+
+## Public Members
+
+### `setSrc(src)`
+
+### `crop(params)`
+#### Parameters
+* `REQUIRED` *params*
+* `REQUIRED` *params.top*
+* `REQUIRED` *params.right*
+* `REQUIRED` *params.bottom*
+* `REQUIRED` *params.left*

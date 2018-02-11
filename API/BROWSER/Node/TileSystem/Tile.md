@@ -1,4 +1,4 @@
-# `CLASS ` SkyEngine.Tile
+# `CLASS` SkyEngine.Tile
 타일 노드
 
 ## Mom CLASS

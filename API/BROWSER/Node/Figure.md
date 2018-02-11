@@ -1,4 +1,4 @@
-# `CLASS ` SkyEngine.Figure
+# `CLASS` SkyEngine.Figure
 도형 노드
 
 ## Mom CLASS

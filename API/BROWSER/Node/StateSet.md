@@ -1,4 +1,4 @@
-# `CLASS ` SkyEngine.StateSet
+# `CLASS` SkyEngine.StateSet
 상태 세트 노드
 
 ## Mom CLASS
@@ -17,8 +17,9 @@
 * `REQUIRED` *params.state*
 * `REQUIRED` *params.node*
 
-### `setState(_state)`
-
-### `setToState(_toState)`
+### `setState(state, animationEndHandler)`
+#### Parameters
+* `REQUIRED` *state*
+* `OPTIONAL` *animationEndHandler*
 
 ### `getState()`

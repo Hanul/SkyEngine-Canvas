@@ -1,5 +1,5 @@
-# `CLASS ` SkyEngine.HexagonTileMap
-헥사곤 타일맵 노드
+# `CLASS` SkyEngine.HexagonTileMap
+Hexagon 타일맵 노드
 
 ## Mom CLASS
 `SkyEngine.TileMap`
