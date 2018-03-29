@@ -413,12 +413,16 @@ SkyEngine.Screen = OBJECT({
 			cameraFollowXTarget = undefined;
 			cameraMinFollowX = undefined;
 			cameraMaxFollowX = undefined;
+			
+			followX = 0;
 		};
 		
 		let cameraUnfollowY = self.cameraUnfollowY = () => {
 			cameraFollowYTarget = undefined;
 			cameraMinFollowY = undefined;
 			cameraMaxFollowY = undefined;
+			
+			followY = 0;
 		};
 		
 		let cameraUnfollow = self.cameraUnfollow = () => {
