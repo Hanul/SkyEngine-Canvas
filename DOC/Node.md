@@ -303,6 +303,8 @@ circle.setPosition({
 - `checkIsPaused()` 노드가 일시정지 되었는지 확인합니다.
 - `resume()` 일시정지를 해제합니다.
 - `addDom(dom)` [DOM 객체](https://github.com/Hanul/UPPERCASE/blob/master/DOC/GUIDE/UPPERCASE-CORE-BROWSER.md#dom-객체-생성)를 노드에 추가합니다. 
+- `delay(seconds, func)` 주어진 초가 흐른 뒤에 함수를 실행합니다. 중간에 노드가 삭제되면 실행되지 않습니다.
+- `interval(seconds, func)` 주어진 초 마다 함수를 반복해서 실행합니다. 중간에 노드가 삭제되면 실행되지 않습니다.
 
 ## 이벤트
 노드에 이벤트를 등록합니다.

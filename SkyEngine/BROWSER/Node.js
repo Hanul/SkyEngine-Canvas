@@ -2730,6 +2730,26 @@ SkyEngine.Node = CLASS({
 		let checkIsToCheckCollision = self.checkIsToCheckCollision = () => {
 			return isToCheckCollision;
 		};
+		
+		let delay = self.delay = (seconds, func) => {
+			
+			let _delay = SkyEngine.Delay(seconds, func);
+			
+			on('remove', () => {
+				_delay.remove();
+				_delay = undefined;
+			});
+		};
+		
+		let interval = self.interval = (seconds, func) => {
+			
+			let _interval = SkyEngine.Interval(seconds, func);
+			
+			on('remove', () => {
+				_interval.remove();
+				_interval = undefined;
+			});
+		};
 
 		genRealProperties();
 	},
