@@ -9,8 +9,8 @@ SkyEngineShowcase.ParticleTest2 = CLASS({
 		let touchEvent = EVENT('touchstart', (e) => {
 			
 			SkyEngine.ParticleSystemOnce({
-				x : e.getLeft() - SkyEngine.Screen.getWidth() / 2,
-				y : e.getTop() - SkyEngine.Screen.getHeight() / 2,
+				x : (e.getLeft() - WIN_WIDTH() / 2) / SkyEngine.Screen.getRatio(),
+				y : (e.getTop() - WIN_HEIGHT() / 2) / SkyEngine.Screen.getRatio(),
 				particleFigure : 'circle',
 				particleWidth : 5,
 				particleHeight : 5,
