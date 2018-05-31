@@ -158,6 +158,7 @@ SkyEngine.ParticleSystem = CLASS(() => {
 			let particleFadingSpeed = params.particleFadingSpeed;
 			let minParticleFadingSpeed = params.minParticleFadingSpeed;
 			let maxParticleFadingSpeed = params.maxParticleFadingSpeed;
+			let particleFadingAccel = params.particleFadingAccel;
 			
 			let minParticleRotationSpeedRadian;
 			let maxParticleRotationSpeedRadian;
@@ -450,6 +451,10 @@ SkyEngine.ParticleSystem = CLASS(() => {
 							particleInfo.radian += particleInfo.rotationSpeedRadian * deltaTime;
 							
 							particleInfo.alpha += particleInfo.fadingSpeed * deltaTime;
+							
+							if (particleFadingAccel !== undefined) {
+								particleInfo.fadingSpeed += particleFadingAccel * deltaTime;
+							}
 							
 							if (particleInfo.alpha < 0) {
 								particleInfo.alpha = 0;

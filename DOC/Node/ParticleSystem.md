@@ -60,7 +60,7 @@ SkyEngine.Interval(0.1, () => {
 
 사용 가능한 파라미터는 다음과 같습니다.
 - `particleSrc` 파티클이 이미지인 경우, 파티클 이미지의 경로
-- `particleFigure` 파티클이 이미지가 아닌 경우, 파티클의 형태` (line, rect, circle, polygon 중 하나)
+- `particleFigure` 파티클이 이미지가 아닌 경우, 파티클의 형태 (`line`, `rect`, `circle`, `polygon` 중 하나)
 - `particleStartX` 파티클의 형태가 line인 경우, 시작점의 x 좌표
 - `particleStartY` 파티클의 형태가 line인 경우, 시작점의 y 좌표
 - `particleEndX` 파티클의 형태가 line인 경우, 끝점의 x 좌표
@@ -120,6 +120,7 @@ SkyEngine.Interval(0.1, () => {
 - `particleFadingSpeed` 파티클의 페이딩 속도
 - `minParticleFadingSpeed` 파티클의 최소 페이딩 속도
 - `minParticleFadingSpeed` 파티클의 최대 페이딩 속도
+- `particleFadingAccel` 파티클의 페이딩 가속도
 
 ### 이벤트
 - `'load'` 파티클 이미지 로딩이 완료되었을 때
