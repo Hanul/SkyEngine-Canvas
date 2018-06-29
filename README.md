@@ -84,6 +84,8 @@ SkyEngine의 모든 구성요소는 노드를 확장합니다.
 ### [스크린 노드](DOC/Node/Screen.md)
 게임 화면 전체를 다루는 노드입니다. 오로지 하나만 존재할 수 있으며 모든 노드는 스크린 노드의 하위 노드로 구성됩니다.
 
+* [서브스크린 노드](DOC/Node/SubScreen.md)
+
 ### [위치 고정 노드](DOC/Node/FixedNode.md)
 스크린 노드의 위치와 관계 없이 고정된 위치를 유지하는 노드입니다. 배경이나 UI를 추가할 때 유용하게 사용할 수 있습니다.
 
@@ -117,6 +119,9 @@ SkyEngine의 모든 구성요소는 노드를 확장합니다.
 
 ### [`SkyEngine.Interval`](DOC/Interval.md)
 주어진 초 마다 함수를 반복해서 실행하는 클래스
+
+### [`SkyEngine.CreateGradient`](DOC/CreateGradient.md)
+그라디언트 색상을 만들어주는 메소드
 
 ### [`SkyEngine.TextBorderShadow`](DOC/TextBorderShadow.md)
 `textShadow` 스타일을 이용해 글자의 테두리를 만들어주는 메소드

@@ -116,5 +116,15 @@ SkyEngineShowcase.MAIN = METHOD({
 			uri : 'test/particle2',
 			target : SkyEngineShowcase.ParticleTest2
 		});
+		
+		SkyEngineShowcase.MATCH_VIEW({
+			uri : 'test/gradient',
+			target : SkyEngineShowcase.CreateGradientTest
+		});
+		
+		SkyEngineShowcase.MATCH_VIEW({
+			uri : 'test/subscreen',
+			target : SkyEngineShowcase.SubScreenTest
+		});
 	}
 });
