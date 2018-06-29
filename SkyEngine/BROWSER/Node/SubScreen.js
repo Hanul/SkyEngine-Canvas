@@ -12,10 +12,12 @@ SkyEngine.SubScreen = CLASS({
 		//OPTIONAL: params.style
 		//REQUIRED: params.width
 		//REQUIRED: params.height
+		//OPTIONAL: params.isDebugMode
 		
 		let style = params.style;
 		let width = params.width;
 		let height = params.height;
+		let isDebugMode = params.isDebugMode;
 		
 		let wrapper = DIV({
 			style : COMBINE([{
@@ -46,7 +48,7 @@ SkyEngine.SubScreen = CLASS({
 		let cameraMaxFollowY;
 		
 		// 디버그 모드에서는 FPS 수치 표시
-		if (BROWSER_CONFIG.SkyEngine.isDebugMode === true) {
+		if (isDebugMode === true || BROWSER_CONFIG.SkyEngine.isDebugMode === true) {
 			
 			let fpsDom = DIV({
 				style : {
@@ -175,7 +177,7 @@ SkyEngine.SubScreen = CLASS({
 				context.restore();
 				
 				// 개발 모드에서는 중점 및 영역 표시
-				if (node.checkIsRemoved() !== true && BROWSER_CONFIG.SkyEngine.isDebugMode === true) {
+				if (node.checkIsRemoved() !== true && (isDebugMode === true || BROWSER_CONFIG.SkyEngine.isDebugMode === true)) {
 					
 					// 중점을 그립니다.
 					context.beginPath();
