@@ -30,7 +30,6 @@ SkyEngine.SubScreen = CLASS({
 		
 		let left;
 		let top;
-		let ratio;
 		
 		let deltaTime;
 		
@@ -87,7 +86,7 @@ SkyEngine.SubScreen = CLASS({
 						
 						if (
 						node.checkIsEventExists(eventName) === true &&
-						node.checkTouch((e.getLeft() - WIN_WIDTH() / 2) / ratio, (e.getTop() - WIN_HEIGHT() / 2) / ratio) === true) {
+						node.checkTouch(e.getLeft() - canvas.getLeft() - width / 2, e.getTop() - canvas.getTop() - height / 2) === true) {
 							
 							let se = SkyEngine.E(e);
 							
@@ -409,10 +408,6 @@ SkyEngine.SubScreen = CLASS({
 		
 		let getHeight = self.getHeight = () => {
 			return height;
-		};
-		
-		let getRatio = self.getRatio = () => {
-			return ratio;
 		};
 		
 		let getCanvas = self.getCanvas = () => {
