@@ -131,6 +131,7 @@ SkyEngine.Screen = OBJECT({
 						REVERSE_EACH(node.getChildren(), check);
 						
 						if (
+						node.checkIsRemoved() !== true &&
 						node.checkIsEventExists(eventName) === true &&
 						node.checkTouch((e.getLeft() - WIN_WIDTH() / 2) / ratio, (e.getTop() - WIN_HEIGHT() / 2) / ratio) === true) {
 							

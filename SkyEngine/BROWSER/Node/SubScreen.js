@@ -85,6 +85,7 @@ SkyEngine.SubScreen = CLASS({
 						REVERSE_EACH(node.getChildren(), check);
 						
 						if (
+						node.checkIsRemoved() !== true &&
 						node.checkIsEventExists(eventName) === true &&
 						node.checkTouch(e.getLeft() - canvas.getLeft() - width / 2, e.getTop() - canvas.getTop() - height / 2) === true) {
 							
