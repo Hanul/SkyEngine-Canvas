@@ -50,7 +50,11 @@ SkyEngine.Sprite = CLASS({
 				height = img.height;
 				
 				if (spriteWidth === undefined) {
-					spriteWidth = width;
+					if (frameCount !== undefined) {
+						spriteWidth = width / frameCount;
+					} else {
+						spriteWidth = width;
+					}
 				}
 				
 				if (spriteHeight === undefined) {

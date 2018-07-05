@@ -1210,8 +1210,8 @@ SkyEngine.Node = CLASS({
 				toX = params.x;
 				toY = params.y;
 				
-				let dx = (toX - x);
-				let dy = (toY - y);
+				let dx = toX - x;
+				let dy = toY - y;
 
 				let length = Math.sqrt(dx * dx + dy * dy);
 
