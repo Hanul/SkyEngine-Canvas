@@ -113,7 +113,7 @@ SkyEngine.Interval(0.1, () => {
 - `maxParticleAngle` 파티클의 최대 각도
 - `particleRotationSpeed` 파티클의 회전 속도
 - `minParticleRotationSpeed` 파티클의 최소 회전 속도
-- `minParticleRotationSpeed` 파티클의 최대 회전 속도
+- `maxParticleRotationSpeed` 파티클의 최대 회전 속도
 - `particleAlpha` 파티클의 투명도
 - `minParticleAlpha` 파티클의 최소 투명도
 - `maxParticleAlpha` 파티클의 최대 투명도
