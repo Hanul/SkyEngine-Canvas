@@ -78,7 +78,7 @@ SkyEngine.ParticleSystem = CLASS(() => {
 			//OPTIONAL: params.maxParticleAngle				파티클의 최대 각도
 			//OPTIONAL: params.particleRotationSpeed		파티클의 회전 속도
 			//OPTIONAL: params.minParticleRotationSpeed		파티클의 최소 회전 속도
-			//OPTIONAL: params.minParticleRotationSpeed		파티클의 최대 회전 속도
+			//OPTIONAL: params.maxParticleRotationSpeed		파티클의 최대 회전 속도
 	
 			//OPTIONAL: params.particleAlpha				파티클의 투명도
 			//OPTIONAL: params.minParticleAlpha				파티클의 최소 투명도
@@ -299,7 +299,7 @@ SkyEngine.ParticleSystem = CLASS(() => {
 			if (maxParticleRotationSpeed === undefined) {
 				maxParticleRotationSpeed = particleRotationSpeed;
 			}
-			maxParticleRotationSpeedRadian = minParticleRotationSpeed * Math.PI / 180;
+			maxParticleRotationSpeedRadian = maxParticleRotationSpeed * Math.PI / 180;
 			
 			if (particleAlpha === undefined) {
 				particleAlpha = 1;
