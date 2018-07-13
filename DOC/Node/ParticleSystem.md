@@ -119,7 +119,7 @@ SkyEngine.Interval(0.1, () => {
 - `maxParticleAlpha` 파티클의 최대 투명도
 - `particleFadingSpeed` 파티클의 페이딩 속도
 - `minParticleFadingSpeed` 파티클의 최소 페이딩 속도
-- `minParticleFadingSpeed` 파티클의 최대 페이딩 속도
+- `maxParticleFadingSpeed` 파티클의 최대 페이딩 속도
 - `particleFadingAccel` 파티클의 페이딩 가속도
 
 ### 이벤트

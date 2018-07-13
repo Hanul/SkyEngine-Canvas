@@ -85,7 +85,7 @@ SkyEngine.ParticleSystem = CLASS(() => {
 			//OPTIONAL: params.maxParticleAlpha				파티클의 최대 투명도
 			//OPTIONAL: params.particleFadingSpeed			파티클의 페이딩 속도
 			//OPTIONAL: params.minParticleFadingSpeed		파티클의 최소 페이딩 속도
-			//OPTIONAL: params.minParticleFadingSpeed		파티클의 최대 페이딩 속도
+			//OPTIONAL: params.maxParticleFadingSpeed		파티클의 최대 페이딩 속도
 			
 			let particleSrc = params.particleSrc;
 			
