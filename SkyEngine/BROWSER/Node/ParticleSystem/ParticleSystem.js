@@ -64,6 +64,9 @@ SkyEngine.ParticleSystem = CLASS(() => {
 			//OPTIONAL: params.maxParticleSpeed				파티클의 최대 속도
 			//OPTIONAL: params.particleAccelX				파티클의 x 가속도
 			//OPTIONAL: params.particleAccelY				파티클의 y 가속도
+			//OPTIONAL: params.particleAccel				파티클의 가속도
+			//OPTIONAL: params.minParticleAccel				파티클의 최소 가속도
+			//OPTIONAL: params.maxParticleAccel				파티클의 최대 가속도
 			
 			//OPTIONAL: params.particleScale				파티클의 스케일
 			//OPTIONAL: params.minParticleScale				파티클의 최소 스케일
@@ -86,6 +89,7 @@ SkyEngine.ParticleSystem = CLASS(() => {
 			//OPTIONAL: params.particleFadingSpeed			파티클의 페이딩 속도
 			//OPTIONAL: params.minParticleFadingSpeed		파티클의 최소 페이딩 속도
 			//OPTIONAL: params.maxParticleFadingSpeed		파티클의 최대 페이딩 속도
+			//OPTIONAL: params.particleFadingAccel			파티클의 페이딩 가속도
 			
 			let particleSrc = params.particleSrc;
 			
@@ -134,8 +138,11 @@ SkyEngine.ParticleSystem = CLASS(() => {
 			let particleSpeed = params.particleSpeed;
 			let minParticleSpeed = params.minParticleSpeed;
 			let maxParticleSpeed = params.maxParticleSpeed;
+			let particleAccel = params.particleAccel;
 			let particleAccelX = params.particleAccelX;
 			let particleAccelY = params.particleAccelY;
+			let minParticleAccel = params.minParticleAccel;
+			let maxParticleAccel = params.maxParticleAccel;
 			
 			let particleScale = params.particleScale;
 			let minParticleScale = params.minParticleScale;
@@ -257,6 +264,16 @@ SkyEngine.ParticleSystem = CLASS(() => {
 			}
 			if (particleAccelY === undefined) {
 				particleAccelY = 0;
+			}
+			if (particleAccel === undefined) {
+				particleAccel = 0;
+			}
+			
+			if (minParticleAccel === undefined) {
+				minParticleAccel = particleAccel;
+			}
+			if (maxParticleAccel === undefined) {
+				maxParticleAccel = particleAccel;
 			}
 			
 			if (particleScale === undefined) {
@@ -381,6 +398,7 @@ SkyEngine.ParticleSystem = CLASS(() => {
 					let cos = Math.cos(direction);
 					
 					let speed = random(minParticleSpeed, maxParticleSpeed);
+					let accel = random(minParticleAccel, maxParticleAccel);
 					
 					let particleInfo = {
 						time : 0,
@@ -391,6 +409,8 @@ SkyEngine.ParticleSystem = CLASS(() => {
 						direction : direction,
 						speedX : speed * cos,
 						speedY : speed * sin,
+						accelX : accel * cos,
+						accelY : accel * sin,
 						scale : random(minParticleScale, maxParticleScale),
 						rotationSpeedRadian : random(minParticleRotationSpeedRadian, maxParticleRotationSpeedRadian),
 						radian : random(minParticleAngle, maxParticleAngle) * Math.PI / 180,
@@ -438,6 +458,9 @@ SkyEngine.ParticleSystem = CLASS(() => {
 							
 							particleInfo.speedX += particleAccelX * deltaTime;
 							particleInfo.speedY += particleAccelY * deltaTime;
+							
+							particleInfo.speedX += particleInfo.accelX * deltaTime;
+							particleInfo.speedY += particleInfo.accelY * deltaTime;
 							
 							particleInfo.x += particleInfo.speedX * deltaTime;
 							particleInfo.y += particleInfo.speedY * deltaTime;

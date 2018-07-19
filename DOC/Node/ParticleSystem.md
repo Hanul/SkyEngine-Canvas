@@ -101,6 +101,9 @@ SkyEngine.Interval(0.1, () => {
 - `maxParticleSpeed` 파티클의 최대 속도
 - `particleAccelX` 파티클의 x 가속도
 - `particleAccelY` 파티클의 y 가속도
+- `particleAccel` 파티클의 가속도
+- `minParticleAccel` 파티클의 최소 가속도
+- `maxParticleAccel` 파티클의 최대 가속도
 - `particleScale` 파티클의 스케일
 - `minParticleScale` 파티클의 최소 스케일
 - `maxParticleScale` 파티클의 최대 스케일
