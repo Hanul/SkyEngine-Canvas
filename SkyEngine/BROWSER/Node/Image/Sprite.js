@@ -291,5 +291,13 @@ SkyEngine.Sprite = CLASS({
 		let getRealFrame = inner.getRealFrame = () => {
 			return realFrame;
 		};
+		
+		let getSpriteWidth = self.getSpriteWidth = () => {
+			return spriteWidth;
+		};
+		
+		let getSpriteHeight = self.getSpriteHeight = () => {
+			return spriteHeight;
+		};
 	}
 });
