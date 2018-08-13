@@ -1912,6 +1912,8 @@ SkyEngine.Node = CLASS({
 		};
 
 		let on = self.on = (eventName, eventHandler) => {
+			//REQUIRED: eventName
+			//REQUIRED: eventHandler
 			
 			if (isRemoved === true) {
 				if (eventName === 'remove') {
@@ -1930,10 +1932,14 @@ SkyEngine.Node = CLASS({
 		};
 		
 		let checkIsEventExists = self.checkIsEventExists = (eventName) => {
+			//REQUIRED: eventName
+			
 			return eventMap[eventName] !== undefined;
 		};
 
 		let off = self.off = (eventName, eventHandler) => {
+			//REQUIRED: eventName
+			//OPTIONAL: eventHandler
 
 			if (isRemoved !== true && eventMap[eventName] !== undefined) {
 
