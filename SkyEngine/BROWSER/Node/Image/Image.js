@@ -14,8 +14,30 @@ SkyEngine.Image = CLASS((cls) => {
 		init : (inner, self, params) => {
 			//REQUIRED: params
 			//REQUIRED: params.src
+			//OPTIONAL: params.cropTop
+			//OPTIONAL: params.cropRight
+			//OPTIONAL: params.cropBottom
+			//OPTIONAL: params.cropLeft
 			
 			let src = params.src;
+			
+			let cropTop = params.cropTop;
+			let cropRight = params.cropRight;
+			let cropBottom = params.cropBottom;
+			let cropLeft = params.cropLeft;
+			
+			if (cropTop === undefined) {
+				cropTop = 0;
+			}
+			if (cropRight === undefined) {
+				cropRight = 0;
+			}
+			if (cropBottom === undefined) {
+				cropBottom = 0;
+			}
+			if (cropLeft === undefined) {
+				cropLeft = 0;
+			}
 			
 			let checkRectRect = SkyEngine.Util.Collision.checkRectRect;
 			
@@ -26,11 +48,6 @@ SkyEngine.Image = CLASS((cls) => {
 			
 			let width;
 			let height;
-			
-			let cropTop = 0;
-			let cropRight = 0;
-			let cropBottom = 0;
-			let cropLeft = 0;
 			
 			let img;
 			
