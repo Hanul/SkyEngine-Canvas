@@ -2763,6 +2763,8 @@ SkyEngine.Node = CLASS({
 				_delay.remove();
 				_delay = undefined;
 			});
+			
+			return _delay;
 		};
 		
 		let interval = self.interval = (seconds, func) => {
@@ -2773,6 +2775,8 @@ SkyEngine.Node = CLASS({
 				_interval.remove();
 				_interval = undefined;
 			});
+			
+			return _interval;
 		};
 
 		genRealProperties();
