@@ -2789,7 +2789,9 @@ SkyEngine.Node = CLASS({
 			if (params.c !== undefined) {
 				if (CHECK_IS_ARRAY(params.c) === true) {
 					EACH(params.c, (childNode) => {
-						self.append(childNode);
+						if (childNode !== undefined) {
+							self.append(childNode);
+						}
 					});
 				} else {
 					self.append(params.c);
