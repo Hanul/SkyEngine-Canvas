@@ -329,8 +329,16 @@ SkyEngine.Screen = OBJECT({
 				height /= ratio;
 			}
 			
+			if (BROWSER_CONFIG.SkyEngine.minWidth !== undefined && width < BROWSER_CONFIG.SkyEngine.minWidth) {
+				width = BROWSER_CONFIG.SkyEngine.minWidth;
+			}
+			
 			if (BROWSER_CONFIG.SkyEngine.maxWidth !== undefined && width > BROWSER_CONFIG.SkyEngine.maxWidth) {
 				width = BROWSER_CONFIG.SkyEngine.maxWidth;
+			}
+			
+			if (BROWSER_CONFIG.SkyEngine.minHeight !== undefined && height < BROWSER_CONFIG.SkyEngine.minHeight) {
+				height = BROWSER_CONFIG.SkyEngine.minHeight;
 			}
 			
 			if (BROWSER_CONFIG.SkyEngine.maxHeight !== undefined && height > BROWSER_CONFIG.SkyEngine.maxHeight) {
