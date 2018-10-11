@@ -262,6 +262,14 @@ SkyEngine.Silhouette = CLASS((cls) => {
 			let getPolygonPoints = inner.getPolygonPoints = () => {
 				return polygonPoints;
 			};
+			
+			let getWidth = self.getWidth = () => {
+				return width;
+			};
+			
+			let getHeight = self.getHeight = () => {
+				return height;
+			};
 		}
 	};
 });

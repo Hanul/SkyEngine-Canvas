@@ -15,7 +15,7 @@ let creature = SkyEngine.Image({
 ```
 
 ## 공통 이벤트
-- `'load'` 이미지 로딩이 완료되었을 때
+- `'load'` 이미지 로딩이 완료되었을 때. `load` 이벤트가 발생한 이후에는 `getWidth`, `getHeight` 함수를 통해 이미지 크기를 가져올 수 있습니다.
 
 ## 이미지 노드
 이미지를 생성합니다.

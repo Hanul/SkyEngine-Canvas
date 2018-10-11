@@ -301,6 +301,14 @@ SkyEngine.Image = CLASS((cls) => {
 					cropLeft = params.left;
 				}
 			};
+			
+			let getWidth = self.getWidth = () => {
+				return width;
+			};
+			
+			let getHeight = self.getHeight = () => {
+				return height;
+			};
 		}
 	};
 });
