@@ -300,16 +300,21 @@ SkyEngine.Screen = OBJECT({
 			let winWidth = WIN_WIDTH();
 			let winHeight = WIN_HEIGHT();
 			
+			let isToFixWidth = false;
+			let isToFixHeight = false;
+			
 			if (BROWSER_CONFIG.SkyEngine.width !== undefined) {
 				width = BROWSER_CONFIG.SkyEngine.width;
 			} else {
 				width = winWidth;
+				isToFixWidth = true;
 			}
 			
 			if (BROWSER_CONFIG.SkyEngine.height !== undefined) {
 				height = BROWSER_CONFIG.SkyEngine.height;
 			} else {
 				height = winHeight;
+				isToFixHeight = true;
 			}
 			
 			let widthRatio = winWidth / width;
@@ -321,24 +326,35 @@ SkyEngine.Screen = OBJECT({
 				ratio = heightRatio;
 			}
 			
-			if (BROWSER_CONFIG.SkyEngine.width === undefined) {
+			if (BROWSER_CONFIG.SkyEngine.minWidth !== undefined && width / ratio < BROWSER_CONFIG.SkyEngine.minWidth) {
+				width = BROWSER_CONFIG.SkyEngine.minWidth;
+				isToFixWidth = false;
+			}
+			
+			if (BROWSER_CONFIG.SkyEngine.minHeight !== undefined && height / ratio < BROWSER_CONFIG.SkyEngine.minHeight) {
+				height = BROWSER_CONFIG.SkyEngine.minHeight;
+				isToFixHeight = false;
+			}
+			
+			widthRatio = winWidth / width;
+			heightRatio = winHeight / height;
+			
+			if (widthRatio < heightRatio) {
+				ratio = widthRatio;
+			} else {
+				ratio = heightRatio;
+			}
+			
+			if (isToFixWidth === true) {
 				width /= ratio;
 			}
 			
-			if (BROWSER_CONFIG.SkyEngine.height === undefined) {
+			if (isToFixHeight === true) {
 				height /= ratio;
-			}
-			
-			if (BROWSER_CONFIG.SkyEngine.minWidth !== undefined && width < BROWSER_CONFIG.SkyEngine.minWidth) {
-				width = BROWSER_CONFIG.SkyEngine.minWidth;
 			}
 			
 			if (BROWSER_CONFIG.SkyEngine.maxWidth !== undefined && width > BROWSER_CONFIG.SkyEngine.maxWidth) {
 				width = BROWSER_CONFIG.SkyEngine.maxWidth;
-			}
-			
-			if (BROWSER_CONFIG.SkyEngine.minHeight !== undefined && height < BROWSER_CONFIG.SkyEngine.minHeight) {
-				height = BROWSER_CONFIG.SkyEngine.minHeight;
 			}
 			
 			if (BROWSER_CONFIG.SkyEngine.maxHeight !== undefined && height > BROWSER_CONFIG.SkyEngine.maxHeight) {
