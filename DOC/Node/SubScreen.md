@@ -11,6 +11,7 @@
 - [CreateGradient](../CreateGradient.md) 사용 불가
 - 모든 노드의 `checkCollision` 및 `checkOffScreen` 함수 사용 불가
 - DOM 추가 불가
+- 성능을 많이 필요로하므로, **모바일 환경에서는 사용 불가**
 
 [스크린 노드](Screen.md)에는 있으나, 서브스크린 노드에는 없는 함수 목록은 다음과 같습니다.
 
