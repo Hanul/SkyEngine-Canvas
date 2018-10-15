@@ -2814,7 +2814,9 @@ SkyEngine.Node = CLASS({
 
 			if (params.on !== undefined) {
 				EACH(params.on, (eventHandler, eventName) => {
-					self.on(eventName, eventHandler);
+					if (eventHandler !== undefined) {
+						self.on(eventName, eventHandler);
+					}
 				});
 			}
 
