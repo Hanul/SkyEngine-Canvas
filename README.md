@@ -1,3 +1,5 @@
+***HTML5 Canvas 2D를 사용하는 이 프로젝트는 더 이상 업데이트되지 않습니다. SkyEngine은 이제 PixiJS를 기반으로 합니다. 자세한 내용은 [SkyEngine 저장소](https://github.com/Hanul/SkyEngine)를 참고해주시기 바랍니다.***
+
 # ![SkyEngine Logo](https://raw.githubusercontent.com/Hanul/SkyEngine/master/logo.png)
 SkyEngine은 [UPPERCASE](http://uppercase.io) 기반 2D 게임 엔진입니다.
 
