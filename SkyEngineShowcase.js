@@ -7,7 +7,7 @@ BOOT({
 		title : 'SkyEngine 쇼케이스',
 		
 		isDevMode : true,
-		webServerPort : 8127
+		webServerPort : 8128
 	},
 	
 	BROWSER_CONFIG : {
