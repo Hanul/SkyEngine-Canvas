@@ -20,8 +20,6 @@ SkyEngineShowcase.RaycastTest = CLASS({
 			    point.angleSquare = Math.PI + Math.PI - point.angleSquare;
 			}
 		};
-			
-			let lines = [];
 		
 		// 빛을 생성합니다.
 		let genLight = () => {
@@ -360,11 +358,7 @@ SkyEngineShowcase.RaycastTest = CLASS({
 		
 		let keydownEvent = EVENT('keydown', (e) => {
 			
-			if (e.getKey().toUpperCase() === 'A') {
-				torch.setState('shoot');
-			}
-			
-			else if (e.getKey() === 'ArrowUp') {
+			if (e.getKey() === 'ArrowUp') {
 				torch.moveUp(200);
 			} else if (e.getKey() === 'ArrowDown') {
 				torch.moveDown(200);
@@ -377,11 +371,7 @@ SkyEngineShowcase.RaycastTest = CLASS({
 		
 		let keyupEvent = EVENT('keyup', (e) => {
 			
-			if (e.getKey().toUpperCase() === 'A') {
-				torch.setToState('idle');
-			}
-			
-			else if (e.getKey() === 'ArrowUp') {
+			if (e.getKey() === 'ArrowUp') {
 				torch.stopUp();
 			} else if (e.getKey() === 'ArrowDown') {
 				torch.stopDown();

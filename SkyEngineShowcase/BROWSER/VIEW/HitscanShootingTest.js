@@ -157,7 +157,7 @@ SkyEngineShowcase.HitscanShootingTest = CLASS({
 		let keyupEvent = EVENT('keyup', (e) => {
 			
 			if (e.getKey().toUpperCase() === 'A') {
-				hero.setToState('idle');
+				hero.setState('idle');
 			}
 			
 			else if (e.getKey() === 'ArrowUp') {
